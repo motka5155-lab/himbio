@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Химбио без зубрёжки</title>
+<meta name="description" content="Бесплатный тренажёр по органике к ЕГЭ от Матвея · канал matvéri">
+<script>
+/* Телеграм передаёт тему и стартовый параметр в адресе. Читаем сразу, до отрисовки. */
+(function () {
+  try {
+    var hp = new URLSearchParams(location.hash.slice(1));
+    var tp = hp.get("tgWebAppThemeParams");
+    if (tp) {
+      var bg = JSON.parse(tp).bg_color;
+      if (bg && /^#[0-9a-f]{6}$/i.test(bg)) {
+        var n = parseInt(bg.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+        document.documentElement.dataset.theme = (0.2126 * r + 0.7152 * g + 0.0722 * b) < 128 ? "dark" : "light";
+      }
+    }
+    var sp = hp.get("tgWebAppStartParam");
+    if (sp) window.HB_START = sp;
+  } catch (e) {}
+})();
+</script>
+<script async id="tg-sdk" src="https://telegram.org/js/telegram-web-app.js"></script>
+<!--
+  ХИМБИО БЕЗ ЗУБРЁЖКИ · v2.0
+  v2.0 (18.10.2026): переезд в Телеграм. Тренажёр — мини-приложение бота, открывается подписчикам канала matvéri (t.me/matveri_md).
+  Подписку проверяет бот (worker.js) при каждом открытии; если проверка недоступна, тренажёр не блокируется.
+  Правило версий: новый модуль или заметная новая функция → +0.1 (1.1, 1.2…); крупная перестройка (например, переезд в Телеграм) → 2.0;
+  мелкие правки текста и дизайна номер не меняют.
+  Приложение-тренажёр для ЕГЭ по химии и биологии.
+  Модуль «Карта превращений органики» (реакции проверены вручную 11.10.2026):
+
+   1. Этан → хлорэтан:            CH3–CH3 + Cl2 —(hν)→ CH3–CH2Cl + HCl
+   2. Хлорэтан → этанол:          CH3–CH2Cl + NaOH(водн.) —(t)→ CH3–CH2OH + NaCl
+   3. Хлорэтан → этилен:          CH3–CH2Cl + KOH(спирт.) —(t)→ CH2=CH2 + KCl + H2O
+   4. Этилен → хлорэтан:          CH2=CH2 + HCl → CH3–CH2Cl
+   5. Этан → этилен:              CH3–CH3 —(t, кат.)→ CH2=CH2 + H2
+   6. Этилен → этан:              CH2=CH2 + H2 —(Ni, t)→ CH3–CH3
+   7. Этилен → этанол:            CH2=CH2 + H2O —(H3PO4, t, p)→ CH3–CH2OH
+   8. Этанол → этилен:            CH3–CH2OH —(H2SO4 конц., t > 140 °C)→ CH2=CH2 + H2O
+   9. Этанол → диэтиловый эфир:   2CH3–CH2OH —(H2SO4 конц., t < 140 °C)→ C2H5–O–C2H5 + H2O
+  10. Этанол → хлорэтан:          CH3–CH2OH + HCl —(t)→ CH3–CH2Cl + H2O
+  11. Этанол → этаналь:           CH3–CH2OH + CuO —(t)→ CH3–CHO + Cu + H2O
+  12. Этаналь → этанол:           CH3–CHO + H2 —(Ni, t)→ CH3–CH2OH
+  13. Этаналь → уксусная кислота: CH3–CHO + 2Cu(OH)2 —(t)→ CH3–COOH + Cu2O↓ + 2H2O
+  14. Этанол → уксусная кислота:  5CH3–CH2OH + 4KMnO4 + 6H2SO4 —(t)→ 5CH3–COOH + 4MnSO4 + 2K2SO4 + 11H2O
+  15. Уксусная к-та → этилацетат: CH3–COOH + C2H5OH ⇄(H2SO4 конц., t) CH3–COO–C2H5 + H2O
+  16. Этилацетат → уксусная к-та: CH3–COO–C2H5 + H2O ⇄(H+, t) CH3–COOH + C2H5OH
+  17. Этилен → ацетилен:          CH2=CH2 —(t, кат.)→ HC≡CH + H2
+  18. Ацетилен → этилен:          HC≡CH + H2 —(Pd, t)→ CH2=CH2
+  19. Ацетилен → этаналь:         HC≡CH + H2O —(Hg2+, H+)→ CH3–CHO   (реакция Кучерова)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Onest:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: шапка приложения (предмет + вкладки) → список модулей / модуль «лист в клетку» с карточкой / ловушки. Стиль «Тетрадь». */
+:root {
+  --bg: #F5F7FB;
+  --paper: #FFFFFF;
+  --grid: #E4EAF5;
+  --ink: #17213A;
+  --ink-2: #56627D;
+  --line: #D6DDEA;
+  --surface: #FFFFFF;
+  --surface-2: #EFF2F8;
+  --edge: #8C98B0;
+  --accent: #C2185B;
+  --accent-soft: #FBE4EE;
+  --on-accent: #FFFFFF;
+  --ok: #24804E;
+  --ok-soft: #E1F3E8;
+  --bad: #C0392B;
+  --bad-soft: #FBE6E3;
+  --shadow: 0 1px 2px rgba(23, 33, 58, .08), 0 6px 18px rgba(23, 33, 58, .06);
+
+  --hc: #4A6FA5;   --hc-t: #E7EEF9;
+  --hal: #B7791F;  --hal-t: #FBF0DB;
+  --alc: #2F855A;  --alc-t: #E2F3E8;
+  --eth: #3B7F94;  --eth-t: #E0EFF4;
+  --ald: #6B46C1;  --ald-t: #EEE8FA;
+  --acid: #C05621; --acid-t: #FCEADF;
+  --est: #2C7A7B;  --est-t: #DDF1F0;
+
+  --font-display: "Unbounded", "Onest", system-ui, sans-serif;
+  --font-body: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E131E; --paper: #141B29; --grid: #1D2637; --ink: #E7ECF6; --ink-2: #9BA7C0;
+    --line: #2A3448; --surface: #172032; --surface-2: #1E283C; --edge: #6F7D98;
+    --accent: #F2709C; --accent-soft: #3A1B2A; --on-accent: #22101A;
+    --ok: #5CCB8C; --ok-soft: #17321F; --bad: #F2786B; --bad-soft: #3A1D1A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    --hc: #8FB0E3; --hc-t: #1C2A43; --hal: #E3B862; --hal-t: #33291A; --alc: #6CCB95; --alc-t: #173322;
+    --eth: #75B9CE; --eth-t: #16303A; --ald: #AA8DEB; --ald-t: #292142; --acid: #EE9567; --acid-t: #3A2418;
+    --est: #5EC5C1; --est-t: #143331;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E131E; --paper: #141B29; --grid: #1D2637; --ink: #E7ECF6; --ink-2: #9BA7C0;
+  --line: #2A3448; --surface: #172032; --surface-2: #1E283C; --edge: #6F7D98;
+  --accent: #F2709C; --accent-soft: #3A1B2A; --on-accent: #22101A;
+  --ok: #5CCB8C; --ok-soft: #17321F; --bad: #F2786B; --bad-soft: #3A1D1A;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  --hc: #8FB0E3; --hc-t: #1C2A43; --hal: #E3B862; --hal-t: #33291A; --alc: #6CCB95; --alc-t: #173322;
+  --eth: #75B9CE; --eth-t: #16303A; --ald: #AA8DEB; --ald-t: #292142; --acid: #EE9567; --acid-t: #3A2418;
+  --est: #5EC5C1; --est-t: #143331;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.5 var(--font-body); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+sub, sup { font-size: .72em; line-height: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 18px 40px; }
+:is(button, [role="button"]):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── шапка приложения ── */
+.app-head { display: grid; gap: 14px; }
+.brand { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand h1 { margin: 0; font: 700 clamp(22px, 5.2vw, 34px)/1.05 var(--font-display); letter-spacing: -.01em; }
+.ver { font: 600 12px/1 var(--font-mono); padding: 6px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.subj { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); max-width: 420px; }
+.subj button { border: 0; background: transparent; cursor: pointer; padding: 10px 12px; border-radius: 999px; font-weight: 700; font-size: 15px; color: var(--ink-2); transition: background .2s, color .2s; }
+.subj button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tabs button { cursor: pointer; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font: 600 12.5px/1 var(--font-mono); color: var(--ink-2); }
+.tabs button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+.view { margin-top: 18px; }
+
+/* ── список модулей ── */
+.intro { margin: 0 0 16px; max-width: 62ch; color: var(--ink-2); }
+.group { display: grid; gap: 10px; margin-bottom: 22px; }
+.group h2 { margin: 0; font: 600 11.5px/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.mods { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) { .mods { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .mods { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.mod {
+  width: 100%; text-align: left; cursor: pointer; display: grid; gap: 6px; align-content: start;
+  padding: 14px 14px 13px; border-radius: 14px; border: 1.5px solid var(--alc); background: var(--alc-t);
+}
+.mod b { font-size: 16px; line-height: 1.25; }
+.mod .st { font: 600 12px/1.3 var(--font-mono); color: var(--alc); }
+.mod p { margin: 0; font-size: 13.5px; color: var(--ink-2); }
+.mod.soon { border: 1.5px dashed var(--edge); background: var(--surface); }
+.mod.soon .st { color: var(--ink-2); }
+.mod:hover { box-shadow: var(--shadow); }
+.ask-topic { margin: 4px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--accent-soft); font-size: 14px; max-width: 70ch; }
+.ask-topic b { color: var(--accent); }
+.empty-state { padding: 22px 16px; border-radius: 16px; border: 1.5px dashed var(--edge); background: var(--surface); display: grid; gap: 6px; max-width: 640px; }
+.empty-state b { font-size: 16px; }
+.empty-state p { margin: 0; color: var(--ink-2); font-size: 14px; }
+
+/* ── модуль ── */
+.mod-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.back { border: 0; background: transparent; padding: 4px 0; cursor: pointer; font: 600 13px var(--font-mono); color: var(--ink-2); }
+.mod-title { margin: 2px 0 0; font: 700 clamp(18px, 4.4vw, 24px)/1.15 var(--font-display); }
+.mode-note { margin: 0; font-size: 13.5px; color: var(--ink-2); }
+.linkbtn { border: 0; background: transparent; padding: 0; cursor: pointer; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); }
+  .panel { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); max-height: calc(100vh - 32px); overflow: auto; }
+}
+.sheet {
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 18px 18px; border: 1px solid var(--line); border-radius: 18px; padding: 10px 6px 14px; min-width: 0;
+}
+#map { display: block; width: 100%; max-width: 540px; height: auto; margin: 0 auto; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.legend { list-style: none; margin: 8px 8px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 12px; justify-content: center; }
+.legend li { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
+.legend i { width: 10px; height: 10px; border-radius: 3px; background: var(--c-t); border: 1.5px solid var(--c); }
+
+/* SVG */
+.node { cursor: pointer; transition: opacity .25s; outline: none; }
+.node rect { fill: var(--c-t); stroke: var(--c); stroke-width: 1.5; transition: stroke-width .2s, stroke .2s; }
+.node .f { font: 600 13.5px var(--font-body); fill: var(--ink); }
+.node .n { font: 500 9.6px var(--font-body); fill: var(--ink-2); }
+.node.dim { opacity: .3; }
+.node.hl rect { stroke-width: 2.6; }
+.node.sel rect { stroke: var(--accent); stroke-width: 2.8; }
+.node:focus-visible rect { stroke: var(--accent); stroke-width: 3; }
+.node.ok rect { stroke: var(--ok); stroke-width: 3; fill: var(--ok-soft); }
+.node.bad { animation: shake .38s; }
+.node.bad rect { stroke: var(--bad); stroke-width: 3; }
+.node.pulse rect { animation: pulse 1.2s ease-out 1; }
+@keyframes shake { 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+@keyframes pulse { 0% { stroke-width: 6; } 100% { stroke-width: 3; } }
+.edge { transition: opacity .25s; }
+.edge .vis { stroke: var(--edge); stroke-width: 1.6; fill: none; marker-end: url(#ah); }
+.edge .hit { stroke: transparent; stroke-width: 16; fill: none; pointer-events: stroke; cursor: pointer; }
+.edge.dim { opacity: .16; }
+.edge.sel .vis { stroke: var(--accent); stroke-width: 2.4; marker-end: url(#ah-sel); stroke-dasharray: 6 5; animation: flow .7s linear infinite; }
+.edge.hl .vis { stroke: var(--ink-2); stroke-width: 2; }
+@keyframes flow { to { stroke-dashoffset: -11; } }
+.badge { cursor: pointer; outline: none; }
+.badge circle { fill: var(--paper); stroke: var(--edge); stroke-width: 1.2; transition: fill .2s, stroke .2s; }
+.badge text { font: 600 9.5px var(--font-mono); fill: var(--ink-2); }
+.edge.sel .badge circle { fill: var(--accent); stroke: var(--accent); }
+.edge.sel .badge text { fill: var(--on-accent); }
+.badge:focus-visible circle { stroke: var(--accent); stroke-width: 2.4; }
+.quiz-on .edge .hit, .quiz-on .badge { pointer-events: none; }
+.quiz-on .badge { opacity: 0; }
+.quiz-on .edge.sel .badge { opacity: 1; }
+#dot { fill: var(--accent); pointer-events: none; }
+
+/* панель */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px; min-width: 0; z-index: 2; }
+.card { display: grid; gap: 14px; animation: rise .3s ease-out; }
+@keyframes rise { from { opacity: .35; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.num { font: 600 12px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.pill { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.pill.cls { background: var(--c-t); color: var(--c); }
+.card-title { margin: 0; font: 700 20px/1.2 var(--font-body); text-wrap: balance; }
+.card-title.formula { font-size: 28px; }
+.sub { margin: -8px 0 0; color: var(--ink-2); }
+.route { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.chip { display: inline-flex; align-items: baseline; gap: 6px; padding: 6px 10px; border-radius: 10px; cursor: pointer; background: var(--c-t); border: 1.5px solid var(--c); font-size: 13px; color: var(--ink); }
+.chip b { font-weight: 600; font-size: 14px; }
+.chip span { color: var(--ink-2); }
+.to { color: var(--ink-2); font-size: 18px; }
+.eq { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 8px; padding: 16px 14px 14px; border-radius: 14px; background: var(--surface-2); font: 500 17px/1.35 var(--font-body); overflow-x: auto; }
+.eq.small { font-size: 15px; padding: 12px; }
+.term { white-space: nowrap; }
+.plus { color: var(--ink-2); }
+.arrow { display: inline-flex; flex-direction: column; align-items: stretch; min-width: 46px; padding-bottom: 7px; }
+.arrow .cond { font: 500 11px/1.25 var(--font-mono); color: var(--accent); text-align: center; padding: 0 4px 4px; white-space: nowrap; }
+.shaft { position: relative; height: 2px; background: var(--ink); margin-right: 2px; }
+.shaft::after { content: ""; position: absolute; right: -2px; top: -4px; border-left: 8px solid var(--ink); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+.shaft.back { margin: 5px 0 0 2px; }
+.shaft.back::after { right: auto; left: -2px; border-left: 0; border-right: 8px solid var(--ink); }
+.facts { margin: 0; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 520px) { .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.facts div { min-width: 0; }
+.facts dt { font: 600 11px/1.3 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 3px; }
+.facts dd { margin: 0; font-size: 14px; }
+.facts.two { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 520px) { .facts.two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.trap { border-radius: 14px; padding: 12px 14px; background: var(--accent-soft); }
+.trap strong { display: block; font: 600 11px/1.3 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.trap p { margin: 0; font-size: 14px; }
+.alt { display: grid; gap: 8px; }
+.alt-label { margin: 0; font-size: 13px; color: var(--ink-2); }
+.ask { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ask small { color: var(--ink-2); font-size: 12.5px; }
+h3 { margin: 0; font: 600 11px/1.3 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.links { list-style: none; margin: -6px 0 0; padding: 0; display: grid; gap: 6px; }
+.link-row { width: 100%; display: flex; align-items: baseline; gap: 10px; text-align: left; cursor: pointer; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+.link-row:hover { border-color: var(--edge); }
+.link-row .k { font: 600 12px var(--font-mono); color: var(--accent); min-width: 1.6em; }
+.link-row .m { min-width: 0; }
+.link-row .m small { display: block; color: var(--ink-2); font-size: 12px; }
+.empty { margin: -6px 0 0; color: var(--ink-2); font-size: 14px; }
+.q { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; padding: 16px 14px 14px; border-radius: 14px; background: var(--surface-2); }
+.qmark { font: 700 24px/1 var(--font-display); color: var(--accent); padding-bottom: 4px; }
+.hint { margin: 0; color: var(--ink-2); font-size: 14px; }
+.feedback { display: grid; gap: 10px; }
+.fb { margin: 0; padding: 10px 12px; border-radius: 12px; font-size: 14px; }
+.fb.good { background: var(--ok-soft); color: var(--ok); }
+.fb.wrong { background: var(--bad-soft); color: var(--bad); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 9px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.score { font: 600 12px/1 var(--font-mono); color: var(--ok); }
+.final { font: 700 34px/1.1 var(--font-display); margin: 0; }
+
+/* список реакций модуля */
+.all { margin-top: 26px; }
+.all h2 { margin: 0 0 4px; font: 700 18px/1.2 var(--font-display); }
+.all > p { margin: 0 0 12px; color: var(--ink-2); max-width: 62ch; }
+.rx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) { .rx-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .rx-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.rx-item { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; text-align: left; cursor: pointer; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); }
+.rx-item:hover { border-color: var(--edge); }
+.rx-n { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1.2px solid var(--edge); font: 600 11px var(--font-mono); color: var(--ink-2); font-variant-numeric: tabular-nums; flex: none; }
+.rx-item.cur { border-color: var(--accent); }
+.rx-item.cur .rx-n { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.rx-t { font-weight: 600; font-size: 14px; }
+.rx-s { display: block; font-size: 12.5px; color: var(--ink-2); }
+
+/* ловушки */
+.traps { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .traps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.trap-card { display: grid; gap: 8px; padding: 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); align-content: start; }
+.trap-card .top { display: flex; align-items: center; gap: 10px; }
+.trap-card .top b { font-size: 15px; }
+.trap-card p { margin: 0; font-size: 14px; }
+.trap-card .src { font: 600 11.5px/1.3 var(--font-mono); color: var(--ink-2); }
+.trap-card .linkbtn { justify-self: start; font-size: 13.5px; }
+
+/* телефон: сводка внизу, пока карточка ниже экрана */
+.peek { position: fixed; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); z-index: 5; max-height: 40vh; overflow: auto; display: grid; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; box-shadow: var(--shadow); animation: rise .25s ease-out; }
+.peek-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%; text-align: left; border: 0; background: transparent; padding: 0; cursor: pointer; }
+.peek-row .rx-n { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.peek-row b { display: block; font-size: 14px; }
+.peek-row small { display: block; font-size: 12px; color: var(--ink-2); }
+.peek-go { font: 600 12px var(--font-mono); color: var(--accent); white-space: nowrap; }
+.peek .eq { padding: 10px 10px 8px; font-size: 14px; }
+.peek .q { padding: 10px; gap: 8px; }
+.peek .q .chip { font-size: 12px; padding: 4px 8px; }
+.peek .fb { padding: 8px 10px; font-size: 13px; }
+@media (min-width: 900px) { .peek { display: none !important; } }
+
+.toast { position: fixed; left: 16px; right: 16px; margin: 0 auto; width: fit-content; max-width: 420px; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); z-index: 6; padding: 10px 14px; border-radius: 12px; background: var(--ink); color: var(--bg); font-size: 14px; box-shadow: var(--shadow); animation: rise .2s ease-out; }
+
+.foot { margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 13px; }
+.foot p { margin: 0; max-width: 70ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .peek, .toast { animation: none; }
+  .edge.sel .vis { animation: none; stroke-dasharray: none; }
+  .node.bad, .node.pulse rect { animation: none; }
+  #dot { display: none; }
+}
+
+/* ── v2.0: экран подписки (мини-приложение в Телеграме) ── */
+body { margin: 0; }
+body.locked { overflow: hidden; }
+body.locked .wrap { filter: blur(7px) saturate(.9); pointer-events: none; user-select: none; }
+.gate { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 16px;
+  background: rgba(23, 33, 58, .18); background: color-mix(in srgb, var(--bg) 50%, transparent); }
+body:not(.locked) .gate { display: none; }
+.gate-card { width: min(100%, 400px); display: grid; gap: 12px; padding: 22px 20px 20px; border-radius: 20px;
+  background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--accent); box-shadow: var(--shadow); animation: rise .25s ease-out; }
+.gate-card > div { display: grid; gap: 12px; }
+.gate-kicker { margin: 0; font: 600 12px/1 var(--font-mono); color: var(--accent); }
+.gate h2 { margin: 0; font: 700 21px/1.2 var(--font-display); text-wrap: balance; }
+.gate p { margin: 0; color: var(--ink-2); }
+.gate .btn { width: 100%; padding: 13px 14px; font-size: 15px; text-align: center; text-decoration: none; display: block; color: var(--ink); }
+.gate .btn.primary { color: var(--on-accent); }
+.gate .btn[disabled] { opacity: .6; cursor: progress; }
+.gate-note { min-height: 1.4em; font-size: 13.5px; }
+.gate-note.bad { color: var(--bad); }
+.gate-card > .gate-busy { display: flex; align-items: center; gap: 10px; color: var(--ink-2); font-weight: 600; }
+.gate [hidden] { display: none !important; }
+.spin { width: 18px; height: 18px; flex: none; border-radius: 50%; border: 2.5px solid var(--line); border-top-color: var(--accent); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .gate-card { animation: none; } .spin { animation-duration: 2.4s; } }
+</style>
+</head>
+<body class="locked">
+
+<div class="wrap">
+  <header class="app-head">
+    <div class="brand">
+      <h1>Химбио без зубрёжки</h1>
+      <span class="ver" id="ver">v2.0</span>
+    </div>
+    <div class="subj" role="group" aria-label="Предмет">
+      <button type="button" id="s-chem" aria-pressed="true">Химия</button>
+      <button type="button" id="s-bio" aria-pressed="false">Биология</button>
+    </div>
+    <div class="tabs" role="group" aria-label="Раздел">
+      <button type="button" id="t-learn" aria-pressed="true">Изучать</button>
+      <button type="button" id="t-quiz" aria-pressed="false">Проверь себя</button>
+      <button type="button" id="t-traps" aria-pressed="false">Ловушки ЕГЭ</button>
+    </div>
+  </header>
+
+  <!-- список модулей -->
+  <section class="view" id="v-list" aria-live="polite"></section>
+
+  <!-- ловушки -->
+  <section class="view" id="v-traps" hidden></section>
+
+  <!-- модуль: карта превращений -->
+  <section class="view" id="v-map" hidden>
+    <div class="mod-head">
+      <div>
+        <button type="button" class="back" id="back">← к модулям</button>
+        <h2 class="mod-title" id="map-title">Карта превращений органики</h2>
+      </div>
+      <p class="mode-note" id="mode-note"></p>
+    </div>
+    <div class="layout">
+      <section class="sheet" aria-label="Карта превращений">
+        <svg id="map" viewBox="0 0 384 552" role="group" aria-label="Карта превращений: вещества и реакции между ними">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" style="fill: var(--edge)"></path>
+            </marker>
+            <marker id="ah-sel" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" style="fill: var(--accent)"></path>
+            </marker>
+          </defs>
+          <g id="edges"></g>
+          <g id="nodes"></g>
+          <circle id="dot" r="3.6" cx="-20" cy="-20"></circle>
+        </svg>
+        <ul class="legend" id="legend"></ul>
+      </section>
+      <aside class="panel" id="panel" aria-live="polite"></aside>
+    </div>
+    <section class="all" id="all" aria-labelledby="all-h">
+      <h2 id="all-h">Все реакции</h2>
+      <p>Тот же набор списком. Нажми на строку, чтобы открыть реакцию на карте.</p>
+      <ol class="rx-list" id="rx-list"></ol>
+    </section>
+  </section>
+
+  <div class="peek" id="peek" hidden></div>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <footer class="foot">
+    <p>Версия 2.0. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 92, H = 48;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ════════ МОДУЛИ ПРИЛОЖЕНИЯ ════════ */
+  const MODULES = {
+    chem: [
+      { group: "Органика", id: "organika", title: "Карта превращений органики", desc: "Этан, этанол, этаналь, кислота, эфиры: что во что превращается и при каких условиях.", st: "19 реакций · готово", ready: true },
+      { group: "Органика", id: "uglevodorody", title: "Углеводороды", desc: "Алканы, алкены, алкины, арены: свойства и получение.", st: "скоро" },
+      { group: "Органика", id: "izomeriya", title: "Изомерия", desc: "Структурная и пространственная изомерия на моделях.", st: "скоро" },
+      { group: "Неорганика", id: "gidroliz", title: "Гидролиз солей", desc: "Какая среда у раствора соли и как это увидеть по индикатору.", st: "скоро" },
+      { group: "Неорганика", id: "elektroliz", title: "Электролиз", desc: "Что выделяется на катоде и аноде.", st: "скоро" },
+    ],
+    bio: [
+      { group: "Ботаника", id: "cikly", title: "Жизненные циклы растений", desc: "Где n, а где 2n: мхи, папоротники, голосеменные, цветковые.", st: "скоро" },
+      { group: "Генетика", id: "genetika", title: "Задачи на скрещивание", desc: "Решётка Пеннета, которую можно собрать руками.", st: "скоро" },
+    ],
+  };
+
+  /* ════════ ДАННЫЕ МОДУЛЯ «КАРТА ПРЕВРАЩЕНИЙ» ════════ */
+  const CLS = {
+    hc: { label: "Углеводороды" }, hal: { label: "Галогеналканы" }, alc: { label: "Спирты" },
+    eth: { label: "Простые эфиры" }, ald: { label: "Альдегиды" }, acid: { label: "Карбоновые кислоты" }, est: { label: "Сложные эфиры" },
+  };
+  const NODES = [
+    { id: "ethane",    f: "CH3–CH3",     name: "этан",             alt: "",                  cls: "hc",   x: 58,  y: 40,  klass: "Алканы", gen: "C_{n}H_{2n+2}" },
+    { id: "ethylene",  f: "CH2=CH2",     name: "этилен",           alt: "этен",              cls: "hc",   x: 192, y: 128, klass: "Алкены", gen: "C_{n}H_{2n}" },
+    { id: "acetylene", f: "HC≡CH",       name: "ацетилен",         alt: "этин",              cls: "hc",   x: 326, y: 40,  klass: "Алкины", gen: "C_{n}H_{2n−2}" },
+    { id: "chloro",    f: "CH3–CH2Cl",   name: "хлорэтан",         alt: "этилхлорид",        cls: "hal",  x: 58,  y: 222, klass: "Галогеналканы", gen: "C_{n}H_{2n+1}Hal" },
+    { id: "ethanol",   f: "C2H5OH",      name: "этанол",           alt: "этиловый спирт",    cls: "alc",  x: 192, y: 310, klass: "Предельные одноатомные спирты", gen: "C_{n}H_{2n+1}OH" },
+    { id: "ethanal",   f: "CH3–CHO",     name: "этаналь",          alt: "уксусный альдегид", cls: "ald",  x: 326, y: 222, klass: "Альдегиды", gen: "R–CHO" },
+    { id: "ether",     f: "C2H5–O–C2H5", name: "диэтиловый эфир",  alt: "этоксиэтан",        cls: "eth",  x: 58,  y: 410, klass: "Простые эфиры", gen: "R–O–R′" },
+    { id: "acid",      f: "CH3COOH",     name: "уксусная кислота", alt: "этановая кислота",  cls: "acid", x: 326, y: 410, klass: "Предельные одноосновные карбоновые кислоты", gen: "C_{n}H_{2n+1}COOH" },
+    { id: "ester",     f: "CH3COOC2H5",  name: "этилацетат",       alt: "этиловый эфир уксусной кислоты", cls: "est", x: 192, y: 508, klass: "Сложные эфиры", gen: "R–COO–R′" },
+  ];
+  const N = Object.fromEntries(NODES.map((n, i) => [n.id, { ...n, i }]));
+  const RX = [
+    { id: 1, from: "ethane", to: "chloro", title: "Галогенирование алкана",
+      eq: { l: "CH3–CH3 + Cl2", c: "hν", r: "CH3–CH2Cl + HCl" },
+      reag: "Cl2", cond: "свет (hν)", type: "Замещение, радикальный механизм",
+      trap: "Условие hν (свет) обязательно пишут над стрелкой: в темноте при комнатной температуре алканы с хлором не реагируют.", q: "+ Cl2, hν" },
+    { id: 2, from: "chloro", to: "ethanol", title: "Щелочной гидролиз галогеналкана",
+      eq: { l: "CH3–CH2Cl + NaOH_{(водн.)}", c: "t", r: "CH3–CH2OH + NaCl" },
+      reag: "NaOH, водный раствор", cond: "нагревание (t)", type: "Замещение (нуклеофильное)",
+      trap: "Водный раствор щёлочи даёт спирт, спиртовой раствор даёт алкен (реакция 3). Одна из самых частых ловушек ЕГЭ.", q: "+ NaOH (водн. р-р), t" },
+    { id: 3, from: "chloro", to: "ethylene", title: "Дегидрогалогенирование",
+      eq: { l: "CH3–CH2Cl + KOH_{(спирт.)}", c: "t", r: "CH2=CH2 + KCl + H2O" },
+      reag: "KOH, спиртовой раствор", cond: "нагревание (t)", type: "Отщепление (элиминирование)",
+      trap: "Спиртовой раствор щёлочи даёт алкен, водный даёт спирт (реакция 2). У несимметричных галогеналканов водород уходит от менее гидрогенизированного соседнего атома углерода (правило Зайцева).", q: "+ KOH (спирт. р-р), t" },
+    { id: 4, from: "ethylene", to: "chloro", title: "Гидрогалогенирование алкена",
+      eq: { l: "CH2=CH2 + HCl", c: "", r: "CH3–CH2Cl" },
+      reag: "HCl (хлороводород)", cond: "особых условий не требуется", type: "Присоединение (электрофильное)",
+      trap: "У этилена оба атома углерода одинаковые, поэтому продукт один. У пропена работает правило Марковникова: водород идёт к более гидрогенизированному атому углерода, получается 2-хлорпропан.", q: "+ HCl" },
+    { id: 5, from: "ethane", to: "ethylene", title: "Дегидрирование алкана",
+      eq: { l: "CH3–CH3", c: "t, кат.", r: "CH2=CH2 + H2" },
+      reag: "—", cond: "нагревание, катализатор (Ni, Pt, Cr2O3)", type: "Отщепление (дегидрирование)", q: "t, кат. (Ni, Pt, Cr2O3)" },
+    { id: 6, from: "ethylene", to: "ethane", title: "Гидрирование алкена",
+      eq: { l: "CH2=CH2 + H2", c: "Ni, t", r: "CH3–CH3" },
+      reag: "H2", cond: "катализатор (Ni, Pt, Pd), нагревание", type: "Присоединение (гидрирование), восстановление", q: "+ H2, кат. Ni, t" },
+    { id: 7, from: "ethylene", to: "ethanol", title: "Гидратация алкена",
+      eq: { l: "CH2=CH2 + H2O", c: "H3PO4, t, p", r: "CH3–CH2OH" },
+      reag: "H2O", cond: "кислотный катализатор (H3PO4 или H2SO4), нагревание, давление", type: "Присоединение (гидратация)",
+      trap: "У пропена гидратация идёт по правилу Марковникова: OH присоединяется к среднему атому углерода, получается пропанол-2.", q: "+ H2O, кат. H3PO4, t, p" },
+    { id: 8, from: "ethanol", to: "ethylene", title: "Внутримолекулярная дегидратация",
+      eq: { l: "CH3–CH2OH", c: "H2SO4 (конц.), t > 140 °C", r: "CH2=CH2 + H2O" },
+      reag: "H2SO4 (конц.), водоотнимающее средство", cond: "t > 140 °C", type: "Отщепление (элиминирование)",
+      trap: "Смотри на температуру. Выше 140 °C получается алкен, ниже 140 °C — простой эфир (реакция 9). Реагент один и тот же.", q: "H2SO4 (конц.), t > 140 °C" },
+    { id: 9, from: "ethanol", to: "ether", title: "Межмолекулярная дегидратация",
+      eq: { l: "2CH3–CH2OH", c: "H2SO4 (конц.), t < 140 °C", r: "C2H5–O–C2H5 + H2O" },
+      reag: "H2SO4 (конц.)", cond: "t < 140 °C", type: "Дегидратация (межмолекулярная)",
+      trap: "Две молекулы спирта отщепляют одну молекулу воды. Ниже 140 °C получается простой эфир, выше — алкен (реакция 8).", q: "H2SO4 (конц.), t < 140 °C" },
+    { id: 10, from: "ethanol", to: "chloro", title: "Замещение гидроксогруппы на галоген",
+      eq: { l: "CH3–CH2OH + HCl", c: "t", r: "CH3–CH2Cl + H2O" },
+      reag: "HCl (хлороводород)", cond: "нагревание (t)", type: "Замещение",
+      trap: "Реакция обратима. В цепочках часто встречается вариант с HBr: C2H5OH + HBr → C2H5Br + H2O.", q: "+ HCl, t" },
+    { id: 11, from: "ethanol", to: "ethanal", title: "Окисление спирта оксидом меди(II)",
+      eq: { l: "CH3–CH2OH + CuO", c: "t", r: "CH3–CHO + Cu + H2O" },
+      reag: "CuO", cond: "нагревание (t)", type: "Окисление",
+      trap: "Признак: чёрный CuO превращается в красную медь. Первичный спирт даёт альдегид, вторичный — кетон.",
+      alt: [{ label: "Другой способ: дегидрирование на медном катализаторе", l: "CH3–CH2OH", c: "Cu, t", r: "CH3–CHO + H2" }], q: "+ CuO, t" },
+    { id: 12, from: "ethanal", to: "ethanol", title: "Восстановление альдегида",
+      eq: { l: "CH3–CHO + H2", c: "Ni, t", r: "CH3–CH2OH" },
+      reag: "H2", cond: "катализатор (Ni, Pt, Pd), нагревание", type: "Присоединение (гидрирование), восстановление", q: "+ H2, кат. Ni, t" },
+    { id: 13, from: "ethanal", to: "acid", title: "Окисление альдегида гидроксидом меди(II)",
+      eq: { l: "CH3–CHO + 2Cu(OH)2", c: "t", r: "CH3–COOH + Cu2O↓ + 2H2O" },
+      reag: "Cu(OH)2, свежеосаждённый", cond: "нагревание (t)", type: "Окисление (качественная реакция на альдегиды)",
+      trap: "Признак: голубой осадок Cu(OH)2 при нагревании становится кирпично-красным осадком Cu2O.",
+      alt: [{ label: "«Серебряное зеркало». В аммиачной среде получается соль аммония, а не кислота", l: "CH3–CHO + 2[Ag(NH3)2]OH", c: "t", r: "CH3–COONH4 + 2Ag↓ + 3NH3 + H2O" }], q: "+ Cu(OH)2, t" },
+    { id: 14, from: "ethanol", to: "acid", title: "Окисление спирта перманганатом калия",
+      eq: { l: "5CH3–CH2OH + 4KMnO4 + 6H2SO4", c: "t", r: "5CH3–COOH + 4MnSO4 + 2K2SO4 + 11H2O" },
+      reag: "KMnO4 в кислой среде (H2SO4)", cond: "нагревание (t)", type: "Окисление (ОВР)",
+      trap: "Коэффициенты подбирают электронным балансом: C^{−1} → C^{+3}, отдаёт 4 электрона, ×5; Mn^{+7} → Mn^{+2}, принимает 5 электронов, ×4.", q: "+ KMnO4, H2SO4, t" },
+    { id: 15, from: "acid", to: "ester", title: "Этерификация",
+      eq: { l: "CH3–COOH + C2H5OH", c: "H2SO4 (конц.), t", r: "CH3–COO–C2H5 + H2O", rev: true },
+      reag: "C2H5OH (этанол)", cond: "H2SO4 (конц.) как катализатор, нагревание", type: "Этерификация (замещение), обратимая",
+      trap: "Реакция обратима. Концентрированная H2SO4 связывает воду и смещает равновесие в сторону эфира.", q: "+ C2H5OH, H2SO4 (конц.), t" },
+    { id: 16, from: "ester", to: "acid", title: "Кислотный гидролиз сложного эфира",
+      eq: { l: "CH3–COO–C2H5 + H2O", c: "H^{+}, t", r: "CH3–COOH + C2H5OH", rev: true },
+      reag: "H2O", cond: "кислая среда (H^{+}), нагревание", type: "Гидролиз (обратимый)",
+      trap: "В кислой среде гидролиз обратим. В щелочной среде он необратим и даёт соль, а не кислоту.",
+      alt: [{ label: "Щелочной гидролиз (омыление)", l: "CH3–COO–C2H5 + NaOH", c: "t", r: "CH3–COONa + C2H5OH" }],
+      q: "+ H2O, H^{+}, t", accept: ["acid", "ethanol"] },
+    { id: 17, from: "ethylene", to: "acetylene", title: "Дегидрирование алкена",
+      eq: { l: "CH2=CH2", c: "t, кат.", r: "HC≡CH + H2" },
+      reag: "—", cond: "нагревание, катализатор (Ni, Pt)", type: "Отщепление (дегидрирование)", q: "t, кат. (Ni, Pt)" },
+    { id: 18, from: "acetylene", to: "ethylene", title: "Частичное гидрирование алкина",
+      eq: { l: "HC≡CH + H2", c: "Pd, t", r: "CH2=CH2" },
+      reag: "H2, 1 моль на 1 моль ацетилена", cond: "катализатор (Pd), нагревание", type: "Присоединение (гидрирование)",
+      trap: "Берут 1 моль H2 на 1 моль ацетилена. С избытком водорода на никеле гидрирование идёт до этана.", q: "+ H2 (1 моль), кат. Pd, t" },
+    { id: 19, from: "acetylene", to: "ethanal", title: "Реакция Кучерова",
+      eq: { l: "HC≡CH + H2O", c: "Hg^{2+}, H^{+}", r: "CH3–CHO" },
+      reag: "H2O", cond: "соли ртути(II), например HgSO4, в кислой среде", type: "Присоединение (гидратация)",
+      trap: "Сначала образуется неустойчивый виниловый спирт CH2=CH–OH, он сразу превращается в альдегид. Из гомологов ацетилена получаются кетоны: из пропина — ацетон.", q: "+ H2O, Hg^{2+}, H^{+}" },
+  ];
+  const R = Object.fromEntries(RX.map(r => [r.id, r]));
+
+  /* ════════ ФОРМУЛЫ ════════ */
+  function seg(s) {
+    const out = [];
+    const re = /_\{([^}]*)\}|\^\{([^}]*)\}/g;
+    let last = 0, m;
+    const auto = (str) => {
+      const r2 = /([A-Za-z\)\]])(\d+)/g;
+      let l2 = 0, m2;
+      while ((m2 = r2.exec(str))) {
+        const cut = m2.index + 1;
+        out.push({ t: str.slice(l2, cut), k: "n" });
+        out.push({ t: m2[2], k: "sub" });
+        l2 = cut + m2[2].length;
+      }
+      if (l2 < str.length) out.push({ t: str.slice(l2), k: "n" });
+    };
+    while ((m = re.exec(s))) {
+      if (m.index > last) auto(s.slice(last, m.index));
+      if (m[1] !== undefined) out.push({ t: m[1], k: "sub" }); else out.push({ t: m[2], k: "sup" });
+      last = re.lastIndex;
+    }
+    if (last < s.length) auto(s.slice(last));
+    return out;
+  }
+  const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const chem = (s) => seg(s || "").map(x => x.k === "n" ? esc(x.t) : `<${x.k}>${esc(x.t)}</${x.k}>`).join("");
+  const plain = (s) => (s || "").replace(/_\{([^}]*)\}/g, "$1").replace(/\^\{([^}]*)\}/g, "$1");
+  function svgChem(el, s, size) {
+    let shift = 0;
+    for (const x of seg(s)) {
+      const ts = document.createElementNS(NS, "tspan");
+      const target = x.k === "sub" ? size * 0.24 : x.k === "sup" ? -size * 0.32 : 0;
+      if (target !== shift) ts.setAttribute("dy", (target - shift).toFixed(2));
+      shift = target;
+      if (x.k !== "n") ts.setAttribute("font-size", (size * 0.72).toFixed(2));
+      ts.textContent = x.t;
+      el.appendChild(ts);
+    }
+  }
+  const cvar = (cls) => `--c: var(--${cls}); --c-t: var(--${cls}-t)`;
+  const terms = (side) => side.split(" + ").map(t => `<span class="term">${chem(t)}</span>`).join('<span class="plus">+</span>');
+  function eqHTML(e, small) {
+    const shafts = e.rev ? '<span class="shaft"></span><span class="shaft back"></span>' : '<span class="shaft"></span>';
+    return `<div class="eq${small ? " small" : ""}">${terms(e.l)}<span class="arrow" aria-label="${e.rev ? "обратимо" : "даёт"}"><span class="cond">${chem(e.c) || "&nbsp;"}</span>${shafts}</span>${terms(e.r)}</div>`;
+  }
+
+  /* ════════ КАРТА ════════ */
+  const svg = document.getElementById("map");
+  const gE = document.getElementById("edges"), gN = document.getElementById("nodes"), dot = document.getElementById("dot");
+  const pairs = {};
+  RX.forEach(r => { const k = [r.from, r.to].sort().join("|"); pairs[k] = (pairs[k] || 0) + 1; });
+  function exitT(px, py, dx, dy, cx, cy, hw, hh) {
+    let tx = Infinity, ty = Infinity;
+    if (dx > 0) tx = (cx + hw - px) / dx; else if (dx < 0) tx = (cx - hw - px) / dx;
+    if (dy > 0) ty = (cy + hh - py) / dy; else if (dy < 0) ty = (cy - hh - py) / dy;
+    return Math.min(tx, ty);
+  }
+  const geo = {}, edgeEls = {}, nodeEls = {};
+  RX.forEach(r => {
+    const A = N[r.from], B = N[r.to];
+    const lo = A.i < B.i ? A : B, hi = A.i < B.i ? B : A;
+    let ux = hi.x - lo.x, uy = hi.y - lo.y; const L = Math.hypot(ux, uy); ux /= L; uy /= L;
+    const nx = -uy, ny = ux;
+    const paired = pairs[[r.from, r.to].sort().join("|")] > 1;
+    const side = A === lo ? 1 : -1;
+    const off = paired ? 6 * side : 0;
+    const px = A.x + nx * off, py = A.y + ny * off, qx = B.x + nx * off, qy = B.y + ny * off;
+    const dx = qx - px, dy = qy - py;
+    const t1 = exitT(px, py, dx, dy, A.x, A.y, W / 2 + 3, H / 2 + 3);
+    const t2 = exitT(qx, qy, -dx, -dy, B.x, B.y, W / 2 + 4, H / 2 + 4);
+    const x1 = px + dx * t1, y1 = py + dy * t1, x2 = qx - dx * t2, y2 = qy - dy * t2;
+    const bo = paired ? 11 * side : 0;
+    const bx = (x1 + x2) / 2 + nx * bo, by = (y1 + y2) / 2 + ny * bo;
+    geo[r.id] = { x1, y1, x2, y2 };
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "edge"); g.dataset.id = r.id;
+    const mk = (cls) => {
+      const ln = document.createElementNS(NS, "line");
+      ln.setAttribute("class", cls);
+      ln.setAttribute("x1", x1.toFixed(1)); ln.setAttribute("y1", y1.toFixed(1));
+      ln.setAttribute("x2", x2.toFixed(1)); ln.setAttribute("y2", y2.toFixed(1));
+      return ln;
+    };
+    g.appendChild(mk("vis"));
+    const hit = mk("hit"); g.appendChild(hit);
+    const b = document.createElementNS(NS, "g");
+    b.setAttribute("class", "badge"); b.setAttribute("tabindex", "0"); b.setAttribute("role", "button");
+    b.setAttribute("aria-label", `Реакция ${r.id}: ${N[r.from].name} → ${N[r.to].name}`);
+    const c = document.createElementNS(NS, "circle");
+    c.setAttribute("cx", bx.toFixed(1)); c.setAttribute("cy", by.toFixed(1)); c.setAttribute("r", "9");
+    const tx = document.createElementNS(NS, "text");
+    tx.setAttribute("x", bx.toFixed(1)); tx.setAttribute("y", (by + 3.4).toFixed(1)); tx.setAttribute("text-anchor", "middle");
+    tx.textContent = r.id;
+    b.appendChild(c); b.appendChild(tx); g.appendChild(b);
+    const open = (ev) => { ev.stopPropagation(); if (mode === "study") selectEdge(r.id); };
+    hit.addEventListener("click", open);
+    b.addEventListener("click", open);
+    b.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(ev); } });
+    gE.appendChild(g); edgeEls[r.id] = g;
+  });
+  NODES.forEach(n => {
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "node"); g.setAttribute("style", cvar(n.cls));
+    g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", n.name);
+    const rc = document.createElementNS(NS, "rect");
+    rc.setAttribute("x", n.x - W / 2); rc.setAttribute("y", n.y - H / 2); rc.setAttribute("width", W); rc.setAttribute("height", H); rc.setAttribute("rx", "11");
+    const fs = n.f.length >= 10 ? 12 : 13.5;
+    const f = document.createElementNS(NS, "text");
+    f.setAttribute("class", "f"); f.setAttribute("x", n.x); f.setAttribute("y", n.y - 2); f.setAttribute("text-anchor", "middle");
+    f.style.fontSize = fs + "px"; svgChem(f, n.f, fs);
+    const nm = document.createElementNS(NS, "text");
+    nm.setAttribute("class", "n"); nm.setAttribute("x", n.x); nm.setAttribute("y", n.y + 14); nm.setAttribute("text-anchor", "middle");
+    if (n.name.length > 12) nm.style.fontSize = "8.8px";
+    nm.textContent = n.name;
+    g.appendChild(rc); g.appendChild(f); g.appendChild(nm);
+    const act = (ev) => { ev.stopPropagation(); onNode(n.id); };
+    g.addEventListener("click", act);
+    g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); act(ev); } });
+    gN.appendChild(g); nodeEls[n.id] = g;
+  });
+  svg.addEventListener("click", () => { if (mode === "study") showIntro(); });
+  document.getElementById("legend").innerHTML = Object.entries(CLS).map(([k, v]) => `<li style="${cvar(k)}"><i></i>${v.label}</li>`).join("");
+
+  let selEdge = null;
+  function clearMarks() {
+    Object.values(edgeEls).forEach(e => e.classList.remove("dim", "sel", "hl"));
+    Object.values(nodeEls).forEach(e => e.classList.remove("dim", "sel", "hl", "ok", "bad", "pulse"));
+    selEdge = null; markList(null);
+  }
+  function markEdge(id) {
+    clearMarks();
+    const r = R[id];
+    Object.entries(edgeEls).forEach(([k, e]) => { if (+k !== id) e.classList.add("dim"); });
+    edgeEls[id].classList.add("sel");
+    Object.entries(nodeEls).forEach(([k, e]) => { if (k !== r.from && k !== r.to) e.classList.add("dim"); });
+    nodeEls[r.from].classList.add("hl"); nodeEls[r.to].classList.add("hl");
+    selEdge = id; markList(id);
+  }
+  const t0 = performance.now();
+  function tick(now) {
+    if (selEdge && !reduceMotion && !vMap.hidden) {
+      const g = geo[selEdge];
+      const p = ((now - t0) % 1300) / 1300;
+      const e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      dot.setAttribute("cx", (g.x1 + (g.x2 - g.x1) * e).toFixed(1));
+      dot.setAttribute("cy", (g.y1 + (g.y2 - g.y1) * e).toFixed(1));
+    } else { dot.setAttribute("cx", "-20"); dot.setAttribute("cy", "-20"); }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  /* ════════ ПАНЕЛЬ И СВОДКА ════════ */
+  const panel = document.getElementById("panel");
+  const peek = document.getElementById("peek");
+  const vMap = document.getElementById("v-map");
+  const narrow = window.matchMedia("(max-width: 899px)");
+  let peekHTML = "";
+  /* сводка видна, пока верх карточки ниже экрана (минус 140px) */
+  function syncPeek() {
+    const below = !vMap.hidden && panel.getBoundingClientRect().top > window.innerHeight - 140;
+    peek.hidden = !(narrow.matches && below && peekHTML);
+  }
+  function setPeek(html) {
+    peekHTML = html; peek.innerHTML = html;
+    peek.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => panel.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" })));
+    peek.querySelectorAll("[data-next]").forEach(b => b.addEventListener("click", nextQ));
+    syncPeek();
+  }
+  let peekPending = false;
+  const onScroll = () => { if (!peekPending) { peekPending = true; requestAnimationFrame(() => { peekPending = false; syncPeek(); }); } };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  if (narrow.addEventListener) narrow.addEventListener("change", syncPeek);
+  const peekRow = (lead, title, sub) => `<button type="button" class="peek-row" data-go>${lead}<span><b>${title}</b><small>${sub}</small></span><span class="peek-go">Подробнее ↓</span></button>`;
+  const chip = (id) => { const n = N[id]; return `<button type="button" class="chip" data-node="${id}" style="${cvar(n.cls)}"><b>${chem(n.f)}</b><span>${n.name}</span></button>`; };
+
+  const toastEl = document.getElementById("toast");
+  let toastT = 0;
+  function toast(msg) { toastEl.textContent = msg; toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { toastEl.hidden = true; }, 2600); }
+
+  function aiPrompt(r) {
+    return `Я готовлюсь к ЕГЭ по химии. Объясни простыми словами реакцию: ${plain(r.eq.l)} → ${plain(r.eq.r)}` +
+      `${r.eq.c ? ` (условия: ${plain(r.eq.c)})` : ""}. Тип реакции: ${r.type}. Почему она идёт именно так, ` +
+      `что важно указать в ответе на ЕГЭ и какие тут бывают ошибки?`;
+  }
+  async function copyText(text, btn) {
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = "Скопировано ✓";
+      toast("Вопрос скопирован. Вставь его в любой чат с нейросетью.");
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly", ""); ta.style.width = "100%"; ta.rows = 4;
+      btn.replaceWith(ta); ta.focus(); ta.select();
+      toast("Не получилось скопировать автоматически. Текст выделен, скопируй его вручную.");
+    }
+  }
+
+  function reactionCard(r) {
+    const alt = (r.alt || []).map(a => `<div class="alt"><p class="alt-label">${chem(a.label)}</p>${eqHTML(a, true)}</div>`).join("");
+    return `
+      <div class="card">
+        <div class="card-head"><span class="num">Реакция ${r.id} из ${RX.length}</span><span class="pill">${r.type.split(" (")[0].split(",")[0]}</span></div>
+        <h2 class="card-title">${r.title}</h2>
+        <div class="route">${chip(r.from)}<span class="to">→</span>${chip(r.to)}</div>
+        ${eqHTML(r.eq)}
+        <dl class="facts">
+          <div><dt>Реагенты</dt><dd>${chem(r.reag)}</dd></div>
+          <div><dt>Условия</dt><dd>${chem(r.cond)}</dd></div>
+          <div><dt>Тип реакции</dt><dd>${r.type}</dd></div>
+        </dl>
+        ${r.trap ? `<div class="trap"><strong>Ловушка ЕГЭ</strong><p>${chem(r.trap)}</p></div>` : ""}
+        ${alt}
+      </div>`;
+  }
+  function wireChips() {
+    panel.querySelectorAll("[data-node]").forEach(b => b.addEventListener("click", () => { if (mode === "study") selectNode(b.dataset.node); }));
+    panel.querySelectorAll("[data-rx]").forEach(b => b.addEventListener("click", () => { if (mode === "study") selectEdge(+b.dataset.rx); }));
+  }
+  function selectEdge(id) {
+    markEdge(id);
+    const r = R[id];
+    panel.innerHTML = reactionCard(r); wireChips(); panel.scrollTop = 0;
+    setPeek(peekRow(`<span class="rx-n">${r.id}</span>`, `${N[r.from].name} → ${N[r.to].name}`, r.title) + eqHTML(r.eq, true));
+  }
+  function selectNode(id) {
+    clearMarks();
+    const n = N[id];
+    const inc = RX.filter(r => r.to === id), out = RX.filter(r => r.from === id);
+    const linked = new Set([id]);
+    Object.entries(edgeEls).forEach(([k, e]) => {
+      const r = R[k];
+      if (r.from === id || r.to === id) { e.classList.add("hl"); linked.add(r.from); linked.add(r.to); } else e.classList.add("dim");
+    });
+    Object.entries(nodeEls).forEach(([k, e]) => { if (!linked.has(k)) e.classList.add("dim"); });
+    nodeEls[id].classList.add("sel");
+    const row = (r, dir) => {
+      const other = dir === "in" ? N[r.from] : N[r.to];
+      return `<li><button type="button" class="link-row" data-rx="${r.id}"><span class="k">${r.id}</span><span class="m">${dir === "in" ? "из" : "в"}: ${other.name}<small>${chem(r.q)}</small></span></button></li>`;
+    };
+    panel.innerHTML = `
+      <div class="card">
+        <div class="card-head"><span class="num">Вещество</span><span class="pill cls" style="${cvar(n.cls)}">${CLS[n.cls].label}</span></div>
+        <h2 class="card-title formula">${chem(n.f)}</h2>
+        <p class="sub">${n.name}${n.alt ? " · " + n.alt : ""}</p>
+        <dl class="facts two">
+          <div><dt>Класс</dt><dd>${n.klass}</dd></div>
+          <div><dt>Общая формула</dt><dd>${chem(n.gen)}</dd></div>
+        </dl>
+        <h3>Получают</h3>
+        ${inc.length ? `<ul class="links">${inc.map(r => row(r, "in")).join("")}</ul>` : `<p class="empty">На этой карте его ни из чего не получают.</p>`}
+        <h3>Превращается</h3>
+        ${out.length ? `<ul class="links">${out.map(r => row(r, "out")).join("")}</ul>` : `<p class="empty">Дальше на этой карте не превращается.</p>`}
+      </div>`;
+    wireChips(); panel.scrollTop = 0;
+    setPeek(peekRow(`<span class="rx-n" style="${cvar(n.cls)};background:var(--c-t);border-color:var(--c);color:var(--c)">•</span>`, `${chem(n.f)} · ${n.name}`, `Получают: ${inc.length}. Превращается: ${out.length}.`));
+  }
+  function showIntro() {
+    setPeek("");
+    clearMarks();
+    panel.innerHTML = `
+      <div class="card">
+        <div class="card-head"><span class="num">Как пользоваться</span></div>
+        <h2 class="card-title">Выбери стрелку или вещество</h2>
+        <p class="sub" style="margin:0">Номер на стрелке открывает реакцию: уравнение, условия над стрелкой и тип. Вещество показывает, откуда оно берётся и во что превращается.</p>
+      </div>`;
+  }
+  function onNode(id) { if (mode === "study") selectNode(id); else answer(id); }
+
+  const list = document.getElementById("rx-list");
+  list.innerHTML = RX.map(r => `
+    <li><button type="button" class="rx-item" data-rx="${r.id}">
+      <span class="rx-n">${r.id}</span>
+      <span><span class="rx-t">${N[r.from].name} → ${N[r.to].name}</span><span class="rx-s">${chem(r.q)}</span></span>
+    </button></li>`).join("");
+  list.querySelectorAll("[data-rx]").forEach(b => b.addEventListener("click", () => { selectEdge(+b.dataset.rx); scrollToTopOf(vMap); }));
+  function markList(id) { list.querySelectorAll(".rx-item").forEach(b => b.classList.toggle("cur", +b.dataset.rx === id)); }
+
+  /* ════════ «ПРОВЕРЬ СЕБЯ» ════════ */
+  let mode = "study";
+  const quiz = { order: [], i: 0, right: 0, tries: 0, done: false };
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function startQuiz() { quiz.order = shuffle(RX.map(r => r.id)); quiz.i = 0; quiz.right = 0; showQuestion(); }
+  function quizPeek(fb, nextBtn) {
+    const r = R[quiz.order[quiz.i]];
+    setPeek(`<div class="q">${chip(r.from)}<span class="arrow"><span class="cond">${chem(r.q)}</span><span class="shaft"></span></span><span class="qmark">?</span></div>` +
+      (fb || "") + (nextBtn ? `<div class="actions"><button type="button" class="btn primary" data-next>${nextBtn}</button></div>` : ""));
+  }
+  function showQuestion() {
+    clearMarks();
+    quiz.tries = 0; quiz.done = false;
+    const r = R[quiz.order[quiz.i]];
+    Object.values(edgeEls).forEach(e => e.classList.add("dim"));
+    nodeEls[r.from].classList.add("hl");
+    panel.innerHTML = `
+      <div class="card">
+        <div class="card-head"><span class="num">Вопрос ${quiz.i + 1} из ${quiz.order.length}</span><span class="score">Верно: ${quiz.right}</span></div>
+        <h2 class="card-title">Что получится?</h2>
+        <div class="q">${chip(r.from)}<span class="arrow"><span class="cond">${chem(r.q)}</span><span class="shaft"></span></span><span class="qmark">?</span></div>
+        <p class="hint">Нажми на карте вещество, которое получится.</p>
+        <div class="feedback" id="fb"></div>
+        <div class="actions" id="qa"><button type="button" class="btn" id="q-show">Показать ответ</button></div>
+      </div>`;
+    document.getElementById("q-show").addEventListener("click", () => reveal(false));
+    panel.scrollTop = 0;
+    quizPeek("");
+  }
+  function nextQ() { quiz.i++; if (quiz.i >= quiz.order.length) finish(); else showQuestion(); }
+  function answer(id) {
+    if (quiz.done) return;
+    const r = R[quiz.order[quiz.i]];
+    if (id === r.from) return;
+    if ((r.accept || [r.to]).includes(id)) {
+      if (quiz.tries === 0) quiz.right++;
+      nodeEls[id].classList.add("ok", "pulse");
+      reveal(true);
+    } else {
+      quiz.tries++;
+      const el = nodeEls[id];
+      el.classList.remove("bad"); void el.getBoundingClientRect(); el.classList.add("bad");
+      setTimeout(() => el.classList.remove("bad"), 450);
+      const fb = `<p class="fb wrong">Это не ${N[id].name}. Подсказка: ${r.type.toLowerCase()}.</p>`;
+      document.getElementById("fb").innerHTML = fb;
+      quizPeek(fb);
+    }
+  }
+  function reveal(good) {
+    quiz.done = true;
+    const r = R[quiz.order[quiz.i]];
+    Object.values(edgeEls).forEach(e => e.classList.add("dim"));
+    edgeEls[r.id].classList.remove("dim"); edgeEls[r.id].classList.add("sel");
+    selEdge = r.id;
+    if (!good) nodeEls[r.to].classList.add("ok", "pulse");
+    const last = quiz.i + 1 >= quiz.order.length;
+    const msg = good
+      ? `<p class="fb good">${quiz.tries === 0 ? "Верно!" : "Верно, со второй попытки."} Реакция ${r.id}: ${r.title.toLowerCase()}.</p>`
+      : `<p class="fb wrong">Правильный ответ: ${N[r.to].name}. Реакция ${r.id}: ${r.title.toLowerCase()}.</p>`;
+    document.getElementById("fb").innerHTML = msg + eqHTML(r.eq, true) + (r.trap ? `<div class="trap"><strong>Ловушка ЕГЭ</strong><p>${chem(r.trap)}</p></div>` : "");
+    document.querySelector("#panel .score").textContent = `Верно: ${quiz.right}`;
+    document.getElementById("qa").innerHTML = `<button type="button" class="btn primary" id="q-next">${last ? "Итог" : "Следующий вопрос"}</button>`;
+    document.getElementById("q-next").addEventListener("click", nextQ);
+    quizPeek(msg + eqHTML(r.eq, true), last ? "Итог" : "Следующий вопрос");
+  }
+  function finish() {
+    clearMarks();
+    panel.innerHTML = `
+      <div class="card">
+        <div class="card-head"><span class="num">Итог</span></div>
+        <p class="final">${quiz.right} из ${quiz.order.length}</p>
+        <p class="sub" style="margin:0">Столько реакций ты угадал с первой попытки. Ошибки лучше разобрать во вкладке «Изучать»: там у каждой реакции есть ловушка ЕГЭ.</p>
+        <div class="actions"><button type="button" class="btn primary" id="q-again">Пройти ещё раз</button><button type="button" class="btn" id="q-study">Открыть карту</button></div>
+      </div>`;
+    document.getElementById("q-again").addEventListener("click", startQuiz);
+    document.getElementById("q-study").addEventListener("click", () => go({ tab: "learn", module: "organika" }));
+    setPeek(peekRow(`<span class="rx-n">✓</span>`, `Итог: ${quiz.right} из ${quiz.order.length}`, "Угадано с первой попытки"));
+  }
+
+  /* ════════ ПРИЛОЖЕНИЕ: ПРЕДМЕТ · ВКЛАДКА · МОДУЛЬ ════════ */
+  const state = { subject: "chem", tab: "learn", module: null };
+  const vList = document.getElementById("v-list"), vTraps = document.getElementById("v-traps");
+  const btn = { chem: s("s-chem"), bio: s("s-bio"), learn: s("t-learn"), quiz: s("t-quiz"), traps: s("t-traps") };
+  function s(id) { return document.getElementById(id); }
+  btn.chem.addEventListener("click", () => go({ subject: "chem", module: null }));
+  btn.bio.addEventListener("click", () => go({ subject: "bio", module: null }));
+  btn.learn.addEventListener("click", () => go({ tab: "learn", module: null }));
+  btn.quiz.addEventListener("click", () => go({ tab: "quiz" }));
+  btn.traps.addEventListener("click", () => go({ tab: "traps", module: null }));
+  document.getElementById("back").addEventListener("click", () => go({ tab: "learn", module: null }));
+
+  function scrollToTopOf(el) {
+    const top = el.getBoundingClientRect().top + window.scrollY - 12;
+    if (window.scrollY > top) window.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
+  }
+
+  function go(patch, opts = {}) {
+    const prev = { ...state };
+    Object.assign(state, patch);
+    ["chem", "bio"].forEach(k => btn[k].setAttribute("aria-pressed", state.subject === k));
+    ["learn", "quiz", "traps"].forEach(k => btn[k].setAttribute("aria-pressed", state.tab === k));
+
+    const chemQuiz = state.subject === "chem" && state.tab === "quiz";
+    const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
+    vMap.hidden = !showMap;
+    vList.hidden = showMap || state.tab === "traps";
+    vTraps.hidden = state.tab !== "traps";
+
+    if (showMap) {
+      const nextMode = chemQuiz ? "quiz" : "study";
+      svg.classList.toggle("quiz-on", nextMode === "quiz");
+      document.getElementById("back").hidden = nextMode === "quiz";
+      document.getElementById("all").hidden = nextMode === "quiz";
+      document.getElementById("map-title").textContent = nextMode === "quiz" ? "Проверь себя: карта органики" : "Карта превращений органики";
+      document.getElementById("mode-note").innerHTML = nextMode === "quiz"
+        ? `${RX.length} вопросов вперемешку. <button type="button" class="linkbtn" id="to-learn">Открыть карту</button>`
+        : `<button type="button" class="linkbtn" id="to-quiz">Проверь себя по этой карте</button>`;
+      const tl = document.getElementById("to-learn"), tq = document.getElementById("to-quiz");
+      if (tl) tl.addEventListener("click", () => go({ tab: "learn", module: "organika" }));
+      if (tq) tq.addEventListener("click", () => go({ tab: "quiz" }));
+      const switched = nextMode !== mode || prev.module !== state.module || prev.tab !== state.tab || prev.subject !== state.subject;
+      mode = nextMode;
+      if (mode === "quiz" && (switched || !quiz.order.length)) startQuiz();
+      else if (mode === "study" && !opts.keepSelection && (switched || selEdge === null)) selectEdge(8);
+    } else {
+      setPeek("");
+      if (state.tab === "traps") renderTraps(); else renderList();
+    }
+    syncPeek();
+    if (!opts.noScroll) scrollToTopOf(document.querySelector(".app-head"));
+  }
+
+  function renderList() {
+    if (state.subject === "bio" && state.tab === "quiz") {
+      vList.innerHTML = `<div class="empty-state"><b>Проверка по биологии появится вместе с первым модулем</b><p>Сейчас готов модуль по химии. Пока можно проверить себя по карте органики.</p><button type="button" class="btn" id="go-chem-quiz" style="justify-self:start">Проверить себя по химии</button></div>`;
+      document.getElementById("go-chem-quiz").addEventListener("click", () => go({ subject: "chem", tab: "quiz" }));
+      return;
+    }
+    const mods = MODULES[state.subject];
+    const groups = [...new Set(mods.map(m => m.group))];
+    const intro = state.subject === "chem"
+      ? "Выбери модуль. Готовые открываются сразу, остальные в работе."
+      : "Модули по биологии в работе. Первым выйдет тот, который выберут подписчики.";
+    vList.innerHTML = `<p class="intro">${intro}</p>` + groups.map(g => `
+      <div class="group">
+        <h2>${g}</h2>
+        <div class="mods">${mods.filter(m => m.group === g).map(m => `
+          <button type="button" class="mod${m.ready ? "" : " soon"}" data-mod="${m.id}">
+            <b>${m.title}</b><p>${m.desc}</p><span class="st">${m.st}</span>
+          </button>`).join("")}</div>
+      </div>`).join("") +
+      `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
+    vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
+      const m = mods.find(x => x.id === b.dataset.mod);
+      if (m.ready) go({ tab: "learn", module: m.id });
+      else toast(`«${m.title}» в работе. Голосуй за эту тему в канале matvéri, если хочешь её раньше.`);
+    }));
+  }
+
+  function renderTraps() {
+    if (state.subject === "bio") {
+      vTraps.innerHTML = `<div class="empty-state"><b>Ловушки по биологии появятся с первым модулем</b><p>Пока здесь собраны ловушки по химии.</p><button type="button" class="btn" id="go-chem-traps" style="justify-self:start">Смотреть ловушки по химии</button></div>`;
+      document.getElementById("go-chem-traps").addEventListener("click", () => go({ subject: "chem", tab: "traps" }));
+      return;
+    }
+    const items = RX.filter(r => r.trap);
+    vTraps.innerHTML = `<p class="intro">Все ловушки ЕГЭ из готовых модулей в одном месте. Сейчас их ${items.length}, с каждым новым модулем станет больше.</p>
+      <div class="traps">${items.map(r => `
+        <article class="trap-card">
+          <div class="top"><span class="rx-n">${r.id}</span><b>${N[r.from].name} → ${N[r.to].name}</b></div>
+          <span class="src">Карта органики · ${r.title}</span>
+          <p>${chem(r.trap)}</p>
+          <button type="button" class="linkbtn" data-open="${r.id}">Открыть реакцию на карте</button>
+        </article>`).join("")}</div>`;
+    vTraps.querySelectorAll("[data-open]").forEach(b => b.addEventListener("click", () => {
+      go({ tab: "learn", module: "organika" }, { keepSelection: true });
+      selectEdge(+b.dataset.open);
+    }));
+  }
+
+  /* старт: #organika, #quiz, #lovushki, #bio, #r8 */
+  const h = window.HB_START || location.hash.slice(1);
+  const mh = /^r(\d{1,2})$/.exec(h);
+  if (h === "quiz") go({ tab: "quiz" }, { noScroll: true });
+  else if (h === "lovushki") go({ tab: "traps" }, { noScroll: true });
+  else if (h === "bio") go({ subject: "bio" }, { noScroll: true });
+  else if (h === "organika") go({ module: "organika" }, { noScroll: true });
+  else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
+  else go({}, { noScroll: true });
+})();
+</script>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h1">
+  <div class="gate-card">
+    <div class="gate-busy" id="gate-busy"><span class="spin" aria-hidden="true"></span><span>Проверяю подписку…</span></div>
+    <div id="gate-need" hidden>
+      <p class="gate-kicker">тренажёр от Матвея</p>
+      <h2 id="gate-h1">Открывается подписчикам канала matvéri</h2>
+      <p>Тренажёр бесплатный. Взамен прошу одно: подписку на мой канал. Там выходят новые модули и я пишу, как сам готовлюсь к ЕГЭ.</p>
+      <button type="button" class="btn primary" id="gate-sub">Подписаться на канал</button>
+      <button type="button" class="btn" id="gate-check">Я подписался, проверить</button>
+      <p class="gate-note" id="gate-note" role="status"></p>
+    </div>
+    <div id="gate-out" hidden>
+      <p class="gate-kicker">тренажёр от Матвея</p>
+      <h2 id="gate-h2">Тренажёр живёт в Телеграме</h2>
+      <p>Открой его через моего бота. Это бесплатно, нужна только подписка на канал matvéri.</p>
+      <a class="btn primary" id="gate-open" href="https://t.me/matveri_md">Открыть в Телеграме</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════ v2.0: ТЕЛЕГРАМ И ПРОВЕРКА ПОДПИСКИ ════════
+   В Телеграме: спрашиваем бота (адрес приходит в ?api=…), есть ли подписка. Нет — экран подписки.
+   Если бот не ответил или сломался — тренажёр открывается, мешать людям из-за поломки нельзя.
+   Вне Телеграма: экран «Тренажёр живёт в Телеграме». */
+(() => {
+  const CHANNEL_URL = "https://t.me/matveri_md";
+  const BOT_URL = "https://t.me/Matveri_himbio_bot";
+  const body = document.body, wrap = document.querySelector(".wrap");
+  const $ = id => document.getElementById(id);
+  const busy = $("gate-busy"), need = $("gate-need"), out = $("gate-out"), note = $("gate-note"), btnCheck = $("gate-check");
+  let state = "busy";
+
+  const tg = () => (window.Telegram && window.Telegram.WebApp) || null;
+  const hp = new URLSearchParams(location.hash.slice(1));
+  const initData = (tg() && tg().initData) || hp.get("tgWebAppData") || "";
+  const api = (new URLSearchParams(location.search).get("api") || "").replace(/\/$/, "");
+
+  function show(which) {
+    state = which;
+    busy.hidden = which !== "busy";
+    need.hidden = which !== "need";
+    out.hidden = which !== "out";
+    $("gate").setAttribute("aria-labelledby", which === "out" ? "gate-h2" : "gate-h1");
+  }
+  function lock() { body.classList.add("locked"); wrap.inert = true; }
+  function unlock() { body.classList.remove("locked"); wrap.inert = false; state = "open"; }
+
+  function openTg(url) {
+    const w = tg();
+    if (w && w.openTelegramLink) { try { w.openTelegramLink(url); return; } catch (e) {} }
+    location.href = url;
+  }
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a[data-tglink]");
+    if (a && initData) { e.preventDefault(); openTg(a.href); }
+  });
+
+  function syncTelegram() {
+    const w = tg();
+    if (!w) return;
+    try { w.ready(); w.expand(); } catch (e) {}
+    const paint = () => {
+      document.documentElement.dataset.theme = w.colorScheme === "dark" ? "dark" : "light";
+      const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+      try { w.setHeaderColor(bg); w.setBackgroundColor(bg); } catch (e) {}
+    };
+    paint();
+    try {
+      w.onEvent("themeChanged", paint);
+      w.onEvent("activated", () => { if (state === "need") check(false); });
+    } catch (e) {}
+  }
+
+  async function check(manual) {
+    if (manual) { btnCheck.disabled = true; btnCheck.textContent = "Проверяю…"; note.textContent = ""; }
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 7000);
+    try {
+      const res = await fetch(api + "/check", { method: "POST", headers: { "content-type": "text/plain" }, body: initData, signal: ctrl.signal });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.member === false) {
+        show("need");
+        if (manual) { note.textContent = "Пока не вижу подписки. Подпишись и нажми ещё раз."; note.className = "gate-note bad"; }
+      } else if (res.status === 401) {
+        show("need");
+        if (manual) { note.textContent = "Не получилось проверить. Закрой тренажёр и открой заново через бота."; note.className = "gate-note bad"; }
+      } else {
+        unlock();          // подписка есть или проверка недоступна
+      }
+    } catch (e) {
+      unlock();            // бот не ответил: не мешаем
+    } finally {
+      clearTimeout(timer);
+      if (manual) { btnCheck.disabled = false; btnCheck.textContent = "Я подписался, проверить"; }
+    }
+  }
+
+  $("gate-sub").addEventListener("click", () => openTg(CHANNEL_URL));
+  btnCheck.addEventListener("click", () => check(true));
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && state === "need") check(false); });
+
+  try {
+    if (!initData) {
+      $("gate-open").href = BOT_URL.startsWith("https://") ? BOT_URL : CHANNEL_URL;
+      lock(); show("out");
+      return;
+    }
+    if (tg()) syncTelegram();
+    else { const sdk = $("tg-sdk"); if (sdk) sdk.addEventListener("load", syncTelegram); }
+    if (!api) { unlock(); return; }   // открыли не через бота: не блокируем
+    lock(); show("busy"); check(false);
+  } catch (e) {
+    unlock();
+  }
+})();
+</script>
+</body>
+</html>
