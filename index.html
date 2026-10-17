@@ -165,7 +165,7 @@ sub, sup { font-size: .72em; line-height: 0; }
 .mode-note { margin: 0; font-size: 13.5px; color: var(--ink-2); }
 .linkbtn { border: 0; background: transparent; padding: 0; cursor: pointer; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
-@media (min-width: 900px) {
+@media (min-width: 760px) {
   .layout { grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); }
   .panel { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); max-height: calc(100vh - 32px); overflow: auto; }
 }
@@ -309,7 +309,7 @@ h3 { margin: 0; font: 600 11px/1.3 var(--font-mono); letter-spacing: .06em; text
 .peek .q { padding: 10px; gap: 8px; }
 .peek .q .chip { font-size: 12px; padding: 4px 8px; }
 .peek .fb { padding: 8px 10px; font-size: 13px; }
-@media (min-width: 900px) { .peek { display: none !important; } }
+@media (min-width: 760px) { .peek { display: none !important; } }
 
 .toast { position: fixed; left: 16px; right: 16px; margin: 0 auto; width: fit-content; max-width: 420px; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); z-index: 6; padding: 10px 14px; border-radius: 12px; background: var(--ink); color: var(--bg); font-size: 14px; box-shadow: var(--shadow); animation: rise .2s ease-out; }
 
@@ -346,6 +346,23 @@ body:not(.locked) .gate { display: none; }
 .spin { width: 18px; height: 18px; flex: none; border-radius: 50%; border: 2.5px solid var(--line); border-top-color: var(--accent); animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .gate-card { animation: none; } .spin { animation-duration: 2.4s; } }
+
+/* ── v2.0: отступы Телеграма. На планшете тренажёр открывается на весь экран, а сверху лежат кнопки Телеграма ── */
+:root {
+  --tg-top: calc(var(--tg-safe-area-inset-top, 0px) + var(--tg-content-safe-area-inset-top, 0px));
+  --tg-bottom: max(env(safe-area-inset-bottom, 0px), var(--tg-safe-area-inset-bottom, 0px));
+}
+.wrap { padding-top: calc(18px + var(--tg-top)); padding-bottom: calc(40px + var(--tg-bottom));
+  padding-left: calc(16px + var(--tg-safe-area-inset-left, 0px)); padding-right: calc(16px + var(--tg-safe-area-inset-right, 0px)); }
+.gate { padding-top: calc(16px + var(--tg-top)); }
+.peek { bottom: calc(var(--tg-bottom) + 12px); }
+.toast { bottom: calc(var(--tg-bottom) + 20px); }
+@media (min-width: 760px) {
+  .panel { top: calc(var(--tg-top) + 16px); max-height: calc(100vh - var(--tg-top) - 32px); }
+  .app-head { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: center; column-gap: 16px; }
+  .app-head .brand { grid-column: 1 / -1; }
+  #map { max-height: calc(100vh - var(--tg-top) - 56px); }
+}
 </style>
 </head>
 <body class="locked">
@@ -689,7 +706,7 @@ body:not(.locked) .gate { display: none; }
   const panel = document.getElementById("panel");
   const peek = document.getElementById("peek");
   const vMap = document.getElementById("v-map");
-  const narrow = window.matchMedia("(max-width: 899px)");
+  const narrow = window.matchMedia("(max-width: 759px)");
   let peekHTML = "";
   /* сводка видна, пока верх карточки ниже экрана (минус 140px) */
   function syncPeek() {
@@ -1066,6 +1083,11 @@ body:not(.locked) .gate { display: none; }
     const w = tg();
     if (!w) return;
     try { w.ready(); w.expand(); } catch (e) {}
+    // Планшет: открываем на весь экран, как у НОО. На телефоне и компьютере оставляем обычное окно.
+    try {
+      const tablet = (w.platform === "ios" || w.platform === "android") && Math.min(screen.width, screen.height) >= 600;
+      if (tablet && w.isVersionAtLeast && w.isVersionAtLeast("8.0") && w.requestFullscreen && !w.isFullscreen) w.requestFullscreen();
+    } catch (e) {}
     const paint = () => {
       document.documentElement.dataset.theme = w.colorScheme === "dark" ? "dark" : "light";
       const bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
