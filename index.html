@@ -1026,16 +1026,16 @@ body:not(.locked) .gate { display: none; }
     <div class="gate-busy" id="gate-busy"><span class="spin" aria-hidden="true"></span><span>Проверяю подписку…</span></div>
     <div id="gate-need" hidden>
       <p class="gate-kicker">тренажёр от Матвея</p>
-      <h2 id="gate-h1">Открывается подписчикам канала matvéri</h2>
-      <p>Тренажёр бесплатный. Взамен прошу одно: подписку на мой канал. Там выходят новые модули и я пишу, как сам готовлюсь к ЕГЭ.</p>
-      <button type="button" class="btn primary" id="gate-sub">Подписаться на канал</button>
-      <button type="button" class="btn" id="gate-check">Я подписался, проверить</button>
+      <h2 id="gate-h1">Открывается для тех, кто со мной в канале</h2>
+      <p>Сделал его, потому что органика бесила меня самого. Пользуйся бесплатно. В канале matvéri выходят новые темы и я рассказываю, как сам готовлюсь к ЕГЭ.</p>
+      <button type="button" class="btn primary" id="gate-sub">Перейти в канал</button>
+      <button type="button" class="btn" id="gate-check">Я в канале, открыть</button>
       <p class="gate-note" id="gate-note" role="status"></p>
     </div>
     <div id="gate-out" hidden>
       <p class="gate-kicker">тренажёр от Матвея</p>
       <h2 id="gate-h2">Тренажёр живёт в Телеграме</h2>
-      <p>Открой его через моего бота. Это бесплатно, нужна только подписка на канал matvéri.</p>
+      <p>Открой его через моего бота. Он бесплатный и открывается для тех, кто со мной в канале matvéri.</p>
       <a class="btn primary" id="gate-open" href="https://t.me/matveri_md">Открыть в Телеграме</a>
     </div>
   </div>
@@ -1109,7 +1109,7 @@ body:not(.locked) .gate { display: none; }
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.member === false) {
         show("need");
-        if (manual) { note.textContent = "Пока не вижу подписки. Подпишись и нажми ещё раз."; note.className = "gate-note bad"; }
+        if (manual) { note.textContent = "Пока не вижу тебя в канале. Загляни в matvéri и нажми ещё раз."; note.className = "gate-note bad"; }
       } else if (res.status === 401) {
         show("need");
         if (manual) { note.textContent = "Не получилось проверить. Закрой тренажёр и открой заново через бота."; note.className = "gate-note bad"; }
@@ -1120,7 +1120,7 @@ body:not(.locked) .gate { display: none; }
       unlock();            // бот не ответил: не мешаем
     } finally {
       clearTimeout(timer);
-      if (manual) { btnCheck.disabled = false; btnCheck.textContent = "Я подписался, проверить"; }
+      if (manual) { btnCheck.disabled = false; btnCheck.textContent = "Я в канале, открыть"; }
     }
   }
 
