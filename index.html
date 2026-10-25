@@ -18,8 +18,8 @@
         document.documentElement.dataset.theme = (0.2126 * r + 0.7152 * g + 0.0722 * b) < 128 ? "dark" : "light";
       }
     }
-    var sp = hp.get("tgWebAppStartParam");
-    if (sp) window.HB_START = sp;
+    var sp = hp.get("tgWebAppStartParam") || new URLSearchParams(location.search).get("start");   /* ?start=cards — от кнопки бота */
+    if (sp && /^[a-z0-9]{1,12}$/.test(sp)) window.HB_START = sp;
   } catch (e) {}
 })();
 </script>
