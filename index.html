@@ -25,7 +25,8 @@
 </script>
 <script async id="tg-sdk" src="https://telegram.org/js/telegram-web-app.js"></script>
 <!--
-  ХИМБИО БЕЗ ЗУБРЁЖКИ · v2.2
+  ХИМБИО БЕЗ ЗУБРЁЖКИ · v3.0
+  v3.0: задание 22 — химическое равновесие (Ле Шателье); гидролиз солей; электролиз растворов. localStorage hb.lch.v1, hb.salt.v1.
   v2.2: раздел «Карточки» — тривиальные названия, кислоты и остатки, радикалы, полимеры (по материалам репетитора Аси Подгорновой).
   Выученные карточки хранятся в localStorage (ключ hb.cards.v1).
   v2.1: раздел «Задание 32: цепочки» — цепочки по шагам (выбор из вариантов или решение в тетради), условия над стрелкой, реакции по классам.
@@ -686,6 +687,162 @@ body:not(.locked) .gate { display: none; }
 @media (prefers-reduced-motion: reduce) { .cd-mover, .cd-mover.out-yes, .cd-mover.out-no, .cd-mover.in, .cd-mover.in-back { animation: none; transition: none; } }
 #v-cards { overflow-x: clip; }
 .cd-credit a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+/* ── v3.0: Задание 22 — равновесие ── */
+.l-start { display: grid; gap: 8px; max-width: 520px; padding: 14px; margin-bottom: 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface); }
+.l-start .btn { width: 100%; padding: 12px 14px; font-size: 15px; }
+.l-start .cd-total { margin: 0; }
+.l-rules { display: grid; gap: 8px; max-width: 620px; }
+.l-rules div { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.l-rules b { font: 600 14.5px/1.3 var(--font-body); }
+.l-rules span { font-size: 13.5px; line-height: 1.4; color: var(--ink-2); }
+.l-card { margin: 14px 0 10px; padding: 16px 14px 10px; border-radius: 20px; border: 1.5px solid var(--line); box-shadow: var(--shadow); text-align: center;
+  background-color: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 22px 22px; }
+.l-eq { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; font: 600 clamp(16px, 4.6vw, 21px)/1.35 var(--font-body); }
+.l-eq .ph { font-size: .62em; font-weight: 500; color: var(--ink-2); margin-left: 1px; }
+.l-side { padding: 2px 6px; border-radius: 8px; transition: background .4s, transform .4s; }
+.l-side.grow { background: var(--ok-soft); transform: scale(1.06); }
+.l-q { color: var(--accent); }
+.l-arr { display: inline-grid; line-height: .7; font-size: 1.1em; }
+.l-arr i { font-style: normal; transition: transform .4s, color .4s; }
+.l-arr.d1 i:first-child, .l-arr.d-1 i:last-child { transform: scaleX(1.6); color: var(--ok); }
+.l-factor { display: inline-block; margin: 14px 0 6px; padding: 9px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font: 700 15px/1.25 var(--font-body); animation: lPop .45s cubic-bezier(.2, .9, .3, 1.3); }
+@keyframes lPop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+.l-beam { display: block; width: 200px; max-width: 70%; margin: 4px auto 0; }
+.l-beam line { stroke: var(--ink-2); stroke-width: 3; stroke-linecap: round; }
+.l-beam rect { fill: var(--surface-2); stroke: var(--edge); }
+.l-beam text { font: 600 10px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+.l-beam .fulcrum { fill: var(--edge); }
+.l-beam .beam { transition: transform .6s cubic-bezier(.3, 1.4, .5, 1); }
+.l-ask { margin: 6px 0 8px; font: 700 16px/1.3 var(--font-body); }
+.l-slider { max-width: 520px; margin: 0 auto 12px; }
+.l-track { position: relative; height: 44px; border-radius: 999px; background: linear-gradient(90deg, var(--bad-soft), var(--surface-2) 40%, var(--surface-2) 60%, var(--ok-soft)); border: 1px solid var(--line); touch-action: none; cursor: pointer; }
+.l-track::before, .l-track::after { content: ""; position: absolute; top: 12px; bottom: 12px; width: 2px; background: var(--line); }
+.l-track::before { left: 33.3%; } .l-track::after { left: 66.6%; }
+.l-thumb { position: absolute; top: 4px; left: calc(50% - 18px); width: 36px; height: 36px; border-radius: 50%; background: var(--surface); border: 2px dashed var(--edge); box-shadow: var(--shadow); transition: left .25s cubic-bezier(.3, 1.3, .5, 1), background .2s; }
+.l-slider[data-pick="-1"] .l-thumb { left: calc(16.6% - 18px); background: var(--accent); border: 2px solid var(--accent); }
+.l-slider[data-pick="0"] .l-thumb { left: calc(50% - 18px); background: var(--ink-2); border: 2px solid var(--ink-2); }
+.l-slider[data-pick="1"] .l-thumb { left: calc(83.3% - 18px); background: var(--accent); border: 2px solid var(--accent); }
+.l-stops { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+.l-stops button { cursor: pointer; padding: 8px 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font: 600 12.5px/1.25 var(--font-body); color: var(--ink-2); }
+.l-slider[data-pick="-1"] [data-lp="-1"], .l-slider[data-pick="0"] [data-lp="0"], .l-slider[data-pick="1"] [data-lp="1"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.l-slider.locked { pointer-events: none; }
+.l-act .btn { width: 100%; max-width: 520px; padding: 13px; font-size: 15px; }
+.l-act .btn[disabled] { opacity: .45; }
+@media (prefers-reduced-motion: reduce) { .l-factor, .l-beam .beam, .l-thumb, .l-side, .l-arr i { animation: none; transition: none; } }
+
+/* ── v3.0: гидролиз и электролиз ── */
+.s-card { padding-bottom: 14px; }
+.s-f { margin: 0; font: 700 clamp(26px, 8vw, 34px)/1.15 var(--font-body); }
+.s-name { margin: 2px 0 0; font-size: 14px; color: var(--ink-2); }
+.s-ions { margin: 8px auto 0; max-width: 460px; font-size: 13.5px; line-height: 1.45; color: var(--ink-2); animation: lPop .4s ease-out; }
+.s-opts { max-width: 520px; margin: 0 auto 12px; }
+.s-opts .z-opt { justify-content: center; text-align: center; min-height: 48px; }
+.s-opts .z-opt .ft b small { font-size: 12px; color: var(--ink-2); font-weight: 500; margin-left: 4px; }
+.g-vis { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 10px; }
+.g-tube { width: 46px; height: 92px; flex: none; }
+.g-glass { fill: none; stroke: var(--edge); stroke-width: 2.5; stroke-linecap: round; }
+.g-liq { transition: fill .7s ease; }
+.g-liq.on { animation: gSwirl .9s ease-out; }
+@keyframes gSwirl { from { opacity: .3; } to { opacity: 1; } }
+.g-drop { fill: var(--accent); animation: gDrip 1.6s ease-in infinite; }
+@keyframes gDrip { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 80% { transform: translateY(30px); opacity: 1; } 100% { transform: translateY(34px); opacity: 0; } }
+.g-ph { position: relative; width: 170px; text-align: left; }
+.g-scale { display: flex; justify-content: space-between; height: 14px; padding: 0 4px; border-radius: 7px; font: 600 9px/14px var(--font-body); color: #fff; background: linear-gradient(90deg, #e5484d, #f08c2e 25%, #f2c94c 40%, #6cc070 50%, #3e9bd8 65%, #3e7bfa 80%, #7b4bd0); }
+.g-mk { position: absolute; top: -5px; width: 4px; height: 24px; margin-left: -2px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--paper); animation: lPop .45s cubic-bezier(.2, .9, .3, 1.3); }
+.g-ph small { display: block; margin-top: 6px; font-size: 12.5px; color: var(--ink-2); }
+.e-cell { display: block; width: 260px; max-width: 88%; margin: 10px auto 0; }
+.e-glass { fill: none; stroke: var(--edge); stroke-width: 2.5; }
+.e-sol { opacity: .55; transition: fill .5s; }
+.e-halo { opacity: 0; animation: eHalo 1.2s ease-out forwards; }
+@keyframes eHalo { to { opacity: .55; } }
+.e-wire { stroke: var(--ink-2); stroke-width: 2; }
+.e-el { fill: #4b4f57; }
+.e-dep { opacity: 0; animation: eDep .9s ease-out forwards; }
+@keyframes eDep { from { opacity: 0; transform: scaleY(.3); } to { opacity: .95; transform: none; } }
+.e-dep { transform-box: fill-box; transform-origin: bottom; }
+.e-b { fill: #fff; stroke: var(--edge); stroke-width: .8; opacity: 0; animation: eRise 1.6s ease-in infinite; }
+@keyframes eRise { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: .9; } 100% { transform: translateY(-58px); opacity: 0; } }
+.e-lbl { font: 600 10px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+@media (prefers-reduced-motion: reduce) { .g-drop, .e-b, .g-liq.on, .e-halo, .e-dep, .g-mk, .s-ions { animation: none; } .e-halo { opacity: .55; } .e-dep { opacity: .95; } .e-b { opacity: .9; } }
+
+/* ── v3.0: углеводороды ── */
+.h-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+.h-chip { cursor: pointer; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font: 600 13.5px/1.2 var(--font-body); color: var(--ink-2); }
+.h-chip small { opacity: .7; font-weight: 500; }
+.h-chip.on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.h-card { padding: 16px 10px 14px; }
+.h-rx { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 10px; min-height: 70px; }
+.h-f { font: 600 clamp(16px, 4.6vw, 20px)/1.35 var(--font-body); white-space: nowrap; }
+.h-mol { display: inline-block; line-height: 0; }
+.h-mol svg { max-width: 100%; height: auto; }
+.h-arr { display: inline-grid; justify-items: center; gap: 2px; min-width: 64px; max-width: 150px; }
+.h-arr small { font-size: 12px; line-height: 1.25; color: var(--accent); font-weight: 600; text-align: center; }
+.h-arr i { position: relative; width: 100%; height: 2px; background: var(--ink-2); border-radius: 1px; }
+.h-arr i::after { content: ""; position: absolute; right: -1px; top: -4px; border: 5px solid transparent; border-left: 8px solid var(--ink-2); border-right: 0; }
+.h-slot { display: inline-grid; place-items: center; width: 64px; height: 48px; border-radius: 12px; border: 2px dashed var(--edge); color: var(--ink-2); font: 700 22px var(--font-body); animation: hPulse 1.6s ease-in-out infinite; }
+@keyframes hPulse { 50% { border-color: var(--accent); color: var(--accent); } }
+.h-prod { display: inline-block; animation: hIn .55s cubic-bezier(.2, .9, .3, 1.25); }
+@keyframes hIn { from { opacity: 0; transform: translateX(-26px) scale(.7); } to { opacity: 1; transform: none; } }
+mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; padding: 0 2px; box-shadow: 0 0 0 0 var(--ok); animation: hGlow 1.4s .45s ease-out; }
+@keyframes hGlow { 0% { box-shadow: 0 0 0 0 var(--ok); } 100% { box-shadow: 0 0 0 10px transparent; } }
+.h-type { display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font: 700 12.5px/1.3 var(--font-body); animation: lPop .45s .3s both; }
+.h-opts .z-opt { min-height: 56px; }
+.h-opts .h-f { font-size: 16.5px; white-space: normal; }
+@media (prefers-reduced-motion: reduce) { .h-slot, .h-prod, mark.h-new, .h-type { animation: none; } }
+.h-mol svg { max-height: 96px; width: auto; }
+
+/* ── v3.0: изомерия ── */
+.i-card { padding: 16px 10px 14px; }
+.i-pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; }
+.i-m { display: grid; justify-items: center; gap: 6px; min-width: 0; }
+.i-m .h-f { white-space: normal; text-align: center; overflow-wrap: anywhere; font-size: clamp(14px, 4vw, 18px); }
+.i-n { padding: 3px 8px; border-radius: 8px; background: var(--surface-2); color: var(--ink-2); font: 600 12.5px/1.3 var(--font-body); text-align: center; animation: lPop .4s .5s both; }
+.i-sign { display: grid; place-items: center; min-width: 40px; max-width: 86px; padding: 6px 8px; border-radius: 12px; border: 2px dashed var(--edge); font: 700 15px/1.2 var(--font-body); color: var(--ink-2); text-align: center; }
+.i-pair[class*=" k"] .i-sign { border: 0; background: var(--accent-soft); color: var(--accent); font-size: 12.5px; animation: lPop .45s .25s both; }
+.i-pair.k0 .i-sign { font-size: 26px; background: var(--ok-soft); color: var(--ok); }
+.i-pair.k0 .i-n { background: var(--ok-soft); color: var(--ok); }
+.i-pair.k0 .i-b > span:first-child { animation: iSpin .9s cubic-bezier(.3, .9, .4, 1); }
+@keyframes iSpin { from { transform: rotateY(180deg) scale(.85); } to { transform: none; } }
+.i-pair.k2 .i-b > span:first-child { animation: iFlip .9s cubic-bezier(.3, .9, .4, 1); }
+@keyframes iFlip { 0% { transform: rotateX(0); } 50% { transform: rotateX(80deg); } 100% { transform: none; } }
+.i-pair.k3 .i-b > span:first-child { animation: iGrow .7s cubic-bezier(.2, .9, .3, 1.3); }
+@keyframes iGrow { from { transform: scale(.75); } to { transform: none; } }
+.i-q { margin: 0; font: 700 clamp(16px, 4.6vw, 19px)/1.35 var(--font-body); }
+.i-list { display: grid; gap: 8px; margin-top: 12px; text-align: left; }
+.i-it { display: grid; grid-template-columns: 26px 1fr; align-items: center; gap: 2px 10px; padding: 8px 10px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); opacity: 0; animation: iIn .45s ease-out forwards; }
+.i-it b { grid-row: span 2; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font: 700 13px var(--font-body); }
+.i-it .h-f { font-size: 15.5px; white-space: normal; }
+.i-it small { color: var(--ink-2); font-size: 12.5px; }
+.i-it .h-mol svg { max-height: 70px; }
+@keyframes iIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.i-nums { grid-template-columns: repeat(4, 1fr); }
+.i-nums .z-opt .ft b { font-size: 20px; }
+@media (prefers-reduced-motion: reduce) { .i-n, .i-sign, .i-pair .i-b > span, .i-it { animation: none !important; opacity: 1; } }
+
+/* ── v3.0: проверь себя / ловушки ── */
+.k-h { margin: 4px 0 6px; }
+.k-hero { display: grid; gap: 6px; max-width: 560px; padding: 16px; margin-bottom: 18px; border-radius: 18px; border: 1.5px solid var(--accent); background: var(--accent-soft); }
+.k-hero b { font: 700 18px/1.25 var(--font-body); color: var(--ink); }
+.k-hero span { font-size: 14px; color: var(--ink-2); }
+.k-hero .k-best { color: var(--ink); }
+.k-hero .btn { margin-top: 6px; width: 100%; padding: 13px; font-size: 15.5px; }
+.k-rows { display: grid; gap: 8px; max-width: 620px; }
+.k-row { display: grid; grid-template-columns: 1fr 70px 18px; align-items: center; gap: 10px; width: 100%; text-align: left; cursor: pointer; padding: 11px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); }
+.k-row:not(:has(.cd-bar)) { grid-template-columns: 1fr 18px; }
+.k-name { display: grid; gap: 2px; min-width: 0; }
+.k-name b { font: 600 15px/1.25 var(--font-body); }
+.k-name small { font-size: 12.5px; color: var(--ink-2); }
+.k-go { color: var(--ink-2); font-weight: 700; }
+.k-topic { display: inline-block; margin-top: 12px; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); font: 700 12px/1.4 var(--font-body); }
+.k-topic + .l-card { margin-top: 8px; }
+.k-per { display: grid; gap: 6px; max-width: 420px; margin: 10px auto; text-align: left; }
+.k-pr { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 8px 10px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; }
+.k-pr .cd-bar { grid-column: 1 / -1; }
+.k-pr.weak { border-color: var(--bad); background: var(--bad-soft); }
+.k-weak { font-size: 14.5px; }
+.k-th { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 22px; }
+.k-th .linkbtn { font-size: 13px; }
 </style>
 </head>
 <body class="locked">
@@ -722,7 +879,7 @@ body:not(.locked) .gate { display: none; }
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v2.2</span>
+      <span class="ver" id="ver">v3.0</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -778,12 +935,18 @@ body:not(.locked) .gate { display: none; }
 
   <section class="view" id="v-z32" hidden></section>
   <section class="view" id="v-cards" hidden></section>
+  <section class="view" id="v-lechat" hidden></section>
+  <section class="view" id="v-gidroliz" hidden></section>
+  <section class="view" id="v-elektroliz" hidden></section>
+  <section class="view" id="v-uglevodorody" hidden></section>
+  <section class="view" id="v-izomeriya" hidden></section>
+  <section class="view" id="v-check" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 2.2. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 3.0. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -797,12 +960,13 @@ body:not(.locked) .gate { display: none; }
   const MODULES = {
     chem: [
       { group: "ЕГЭ · вторая часть", id: "z32", title: "Задание 32: цепочки", desc: "Цепочки превращений органики как на ЕГЭ. Решаешь по шагам, тренажёр проверяет и объясняет ошибки.", st: "74 цепочки · готово", ready: true, rel: "2026-10-21" },
+      { group: "ЕГЭ · первая часть", id: "lechat", title: "Задание 22: химическое равновесие", desc: "Принцип Ле Шателье на ползунке: куда сместится равновесие при нагреве, давлении, концентрации, катализаторе.", st: "19 реакций · бесконечные задания", ready: true, rel: "2026-10-31" },
       { group: "Запоминалки", id: "cards", title: "Карточки: тривиальные названия", desc: "193 карточки: тривиальные названия, кислоты и остатки, радикалы, полимеры. Переворачиваешь и проверяешь себя.", st: "193 карточки · готово", ready: true, rel: "2026-10-25" },
       { group: "Органика", id: "organika", title: "Карта превращений органики", desc: "Этан, этанол, этаналь, кислота, эфиры: что во что превращается и при каких условиях.", st: "19 реакций · готово", ready: true, rel: "2026-10-17" },
-      { group: "Органика", id: "uglevodorody", title: "Углеводороды", desc: "Алканы, алкены, алкины, арены: свойства и получение.", st: "скоро" },
-      { group: "Органика", id: "izomeriya", title: "Изомерия", desc: "Структурная и пространственная изомерия на моделях.", st: "скоро" },
-      { group: "Неорганика", id: "gidroliz", title: "Гидролиз солей", desc: "Какая среда у раствора соли и как это увидеть по индикатору.", st: "скоро" },
-      { group: "Неорганика", id: "elektroliz", title: "Электролиз", desc: "Что выделяется на катоде и аноде.", st: "скоро" },
+      { group: "Органика", id: "uglevodorody", title: "Углеводороды", desc: "Вещество + реагент → продукт: Марковников, Зайцев, Кучеров, KMnO₄, арены. Подсветка того, что изменилось.", st: "50 реакций · 5 классов", ready: true, rel: "2026-10-31" },
+      { group: "Органика", id: "izomeriya", title: "Изомерия", desc: "Одно вещество, изомеры, цис-транс или гомологи? И сколько изомеров у формулы — с разбором каждого.", st: "30 пар · 15 формул", ready: true, rel: "2026-10-31" },
+      { group: "Неорганика", id: "gidroliz", title: "Гидролиз солей", desc: "Какая среда у раствора соли, какого цвета станет индикатор и по какому иону идёт гидролиз.", st: "62 соли · бесконечные задания", ready: true, rel: "2026-10-31" },
+      { group: "Неорганика", id: "elektroliz", title: "Электролиз", desc: "Что выделяется на катоде и аноде при электролизе растворов солей, кислот и щелочей.", st: "40 растворов · бесконечные задания", ready: true, rel: "2026-10-31" },
     ],
     bio: [
       { group: "Ботаника", id: "cikly", title: "Жизненные циклы растений", desc: "Где n, а где 2n: мхи, папоротники, голосеменные, цветковые.", st: "скоро" },
@@ -1272,7 +1436,7 @@ body:not(.locked) .gate { display: none; }
   btn.chem.addEventListener("click", () => go({ subject: "chem", module: null }));
   btn.bio.addEventListener("click", () => go({ subject: "bio", module: null }));
   btn.learn.addEventListener("click", () => go({ tab: "learn", module: null }));
-  btn.quiz.addEventListener("click", () => go({ tab: "quiz" }));
+  btn.quiz.addEventListener("click", () => go({ tab: "quiz", module: null }));
   btn.traps.addEventListener("click", () => go({ tab: "traps", module: null }));
   document.getElementById("back").addEventListener("click", () => go({ tab: "learn", module: null }));
 
@@ -1287,14 +1451,26 @@ body:not(.locked) .gate { display: none; }
     ["chem", "bio"].forEach(k => btn[k].setAttribute("aria-pressed", state.subject === k));
     ["learn", "quiz", "traps"].forEach(k => btn[k].setAttribute("aria-pressed", state.tab === k));
 
-    const chemQuiz = state.subject === "chem" && state.tab === "quiz";
+    const chemQuiz = state.subject === "chem" && state.tab === "quiz" && state.module === "mapquiz";
+    const showK = state.subject === "chem" && state.tab === "quiz" && state.module !== "mapquiz";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
+    const showL = state.subject === "chem" && state.tab === "learn" && state.module === "lechat";
+    const showG = state.subject === "chem" && state.tab === "learn" && state.module === "gidroliz";
+    const showE = state.subject === "chem" && state.tab === "learn" && state.module === "elektroliz";
+    const showH = state.subject === "chem" && state.tab === "learn" && state.module === "uglevodorody";
+    const showI = state.subject === "chem" && state.tab === "learn" && state.module === "izomeriya";
     vMap.hidden = !showMap;
     vZ.hidden = !showZ;
     vC.hidden = !showC;
-    vList.hidden = showMap || showZ || showC || state.tab === "traps";
+    vL.hidden = !showL;
+    vG.hidden = !showG;
+    vE.hidden = !showE;
+    vH.hidden = !showH;
+    vI.hidden = !showI;
+    vK.hidden = !showK;
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1308,7 +1484,7 @@ body:not(.locked) .gate { display: none; }
         : `<button type="button" class="linkbtn" id="to-quiz">Проверь себя по этой карте</button>`;
       const tl = document.getElementById("to-learn"), tq = document.getElementById("to-quiz");
       if (tl) tl.addEventListener("click", () => go({ tab: "learn", module: "organika" }));
-      if (tq) tq.addEventListener("click", () => go({ tab: "quiz" }));
+      if (tq) tq.addEventListener("click", () => go({ tab: "quiz", module: "mapquiz" }));
       const switched = nextMode !== mode || prev.module !== state.module || prev.tab !== state.tab || prev.subject !== state.subject;
       mode = nextMode;
       if (mode === "quiz" && (switched || !quiz.order.length)) startQuiz();
@@ -1317,6 +1493,12 @@ body:not(.locked) .gate { display: none; }
       setPeek("");
       if (showZ) zRender();
       else if (showC) cRender();
+      else if (showL) lRender();
+      else if (showG) gRender();
+      else if (showE) eRender();
+      else if (showH) hRender();
+      else if (showI) iRender();
+      else if (showK) kRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -1326,13 +1508,14 @@ body:not(.locked) .gate { display: none; }
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Проверка по биологии появится вместе с первым модулем</b><p>Сейчас готов модуль по химии. Пока можно проверить себя по карте органики.</p><button type="button" class="btn" id="go-chem-quiz" style="justify-self:start">Проверить себя по химии</button></div>`;
-      document.getElementById("go-chem-quiz").addEventListener("click", () => go({ subject: "chem", tab: "quiz" }));
+      document.getElementById("go-chem-quiz").addEventListener("click", () => go({ subject: "chem", tab: "quiz", module: null }));
       return;
     }
     const mods = MODULES[state.subject];
     const groups = [...new Set(mods.map(m => m.group))];
     /* «новое» — только у самого свежего готового модуля (поле rel — дата выхода). Вышел новый — пометка переезжает сама */
-    const newest = [...MODULES.chem, ...MODULES.bio].filter(m => m.ready && m.rel).sort((a, b) => b.rel.localeCompare(a.rel))[0];
+    const newestRel = ([...MODULES.chem, ...MODULES.bio].filter(m => m.ready && m.rel).sort((a, b) => b.rel.localeCompare(a.rel))[0] || {}).rel;
+    const isNew = (m) => !!(m.ready && m.rel && m.rel === newestRel);   /* в один день вышло несколько — «новое» у всех */
     const intro = state.subject === "chem"
       ? "Выбери модуль. Готовые открываются сразу, остальные в работе."
       : "Модули по биологии в работе. Первым выйдет тот, который выберут подписчики.";
@@ -1340,8 +1523,8 @@ body:not(.locked) .gate { display: none; }
       <div class="group">
         <h2>${g}</h2>
         <div class="mods">${mods.filter(m => m.group === g).map(m => `
-          <button type="button" class="mod${m.ready ? "" : " soon"}${m === newest ? " hot" : ""}" data-mod="${m.id}">
-            <b>${m.title}</b><p>${m.desc}</p><span class="st">${m === newest ? "новое · " : ""}${m.st}</span>
+          <button type="button" class="mod${m.ready ? "" : " soon"}${isNew(m) ? " hot" : ""}" data-mod="${m.id}">
+            <b>${m.title}</b><p>${m.desc}</p><span class="st">${isNew(m) ? "новое · " : ""}${m.st}</span>
           </button>`).join("")}</div>
       </div>`).join("") +
       `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
@@ -1359,7 +1542,9 @@ body:not(.locked) .gate { display: none; }
       return;
     }
     const items = RX.filter(r => r.trap);
-    vTraps.innerHTML = `<p class="intro">Все ловушки ЕГЭ из готовых модулей в одном месте. Сейчас их ${items.length}, с каждым новым модулем станет больше.</p>
+    vTraps.innerHTML = `<p class="intro">Все ловушки ЕГЭ из готовых разделов в одном месте — ${items.length + Object.values(TRAPS).reduce((n, l) => n + l.length, 0)} штук. Здесь теряют баллы чаще всего.</p>
+      ${trapsNew()}
+      <h3 class="cd-h k-th">Карта органики</h3>
       <div class="traps">${items.map(r => `
         <article class="trap-card">
           <div class="top"><span class="rx-n">${r.id}</span><b>${N[r.from].name} → ${N[r.to].name}</b></div>
@@ -1367,6 +1552,7 @@ body:not(.locked) .gate { display: none; }
           <p>${chem(r.trap)}</p>
           <button type="button" class="linkbtn" data-open="${r.id}">Открыть реакцию на карте</button>
         </article>`).join("")}</div>`;
+    vTraps.querySelectorAll("[data-tmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.tmod })));
     vTraps.querySelectorAll("[data-open]").forEach(b => b.addEventListener("click", () => {
       go({ tab: "learn", module: "organika" }, { keepSelection: true });
       selectEdge(+b.dataset.open);
@@ -1913,7 +2099,812 @@ body:not(.locked) .gate { display: none; }
     if (m) m.addEventListener("click", () => cStart(shuffle(d.cards.filter(c => (!C.grp || c.g === C.grp) && !cs.k[c.id])).slice(0, CSESSION)));
   }
 
-  /* старт: #organika, #quiz, #lovushki, #bio, #r8, #z32, #cards */
+  /* ════════ v3.0: ЗАДАНИЕ 22 — ХИМИЧЕСКОЕ РАВНОВЕСИЕ (принцип Ле Шателье) ════════
+     Реакция + фактор → ползунок «обратная · не смещается · прямая». Задания собираются из реакций и правил. */
+  const vL = document.getElementById("v-lechat");
+  const LK = "hb.lch.v1";
+  let ls = {};
+  try { ls = JSON.parse(localStorage.getItem(LK) || "{}") || {}; } catch (e) { ls = {}; }
+  function lsave() { try { localStorage.setItem(LK, JSON.stringify(ls)); } catch (e) {} }
+  /* q: +1 — выделяется теплота (+Q, экзо), −1 — поглощается (−Q, эндо). ph: г, ж, тв */
+  const S = (k, f, ph) => ({ k, f, ph });
+  const LR = [
+    { l: [S(1, "N2", "г"), S(3, "H2", "г")], r: [S(2, "NH3", "г")], q: 1 },
+    { l: [S(2, "SO2", "г"), S(1, "O2", "г")], r: [S(2, "SO3", "г")], q: 1 },
+    { l: [S(1, "N2", "г"), S(1, "O2", "г")], r: [S(2, "NO", "г")], q: -1 },
+    { l: [S(1, "H2", "г"), S(1, "Cl2", "г")], r: [S(2, "HCl", "г")], q: 1 },
+    { l: [S(1, "CaCO3", "тв")], r: [S(1, "CaO", "тв"), S(1, "CO2", "г")], q: -1 },
+    { l: [S(1, "C", "тв"), S(1, "CO2", "г")], r: [S(2, "CO", "г")], q: -1 },
+    { l: [S(2, "NO", "г"), S(1, "O2", "г")], r: [S(2, "NO2", "г")], q: 1 },
+    { l: [S(2, "NO2", "г")], r: [S(1, "N2O4", "г")], q: 1 },
+    { l: [S(1, "CO", "г"), S(1, "H2O", "г")], r: [S(1, "CO2", "г"), S(1, "H2", "г")], q: 1 },
+    { l: [S(4, "HCl", "г"), S(1, "O2", "г")], r: [S(2, "H2O", "г"), S(2, "Cl2", "г")], q: 1 },
+    { l: [S(1, "CO", "г"), S(2, "H2", "г")], r: [S(1, "CH3OH", "г")], q: 1 },
+    { l: [S(1, "C2H4", "г"), S(1, "H2", "г")], r: [S(1, "C2H6", "г")], q: 1 },
+    { l: [S(1, "C2H4", "г"), S(1, "H2O", "г")], r: [S(1, "C2H5OH", "г")], q: 1 },
+    { l: [S(1, "CH4", "г"), S(1, "H2O", "г")], r: [S(1, "CO", "г"), S(3, "H2", "г")], q: -1 },
+    { l: [S(1, "FeO", "тв"), S(1, "CO", "г")], r: [S(1, "Fe", "тв"), S(1, "CO2", "г")], q: 1 },
+    { l: [S(1, "PCl5", "г")], r: [S(1, "PCl3", "г"), S(1, "Cl2", "г")], q: -1 },
+    { l: [S(2, "CO", "г"), S(1, "O2", "г")], r: [S(2, "CO2", "г")], q: 1 },
+    { l: [S(3, "Fe", "тв"), S(4, "H2O", "г")], r: [S(1, "Fe3O4", "тв"), S(4, "H2", "г")], q: 1 },
+    { l: [S(1, "C", "тв"), S(1, "H2O", "г")], r: [S(1, "CO", "г"), S(1, "H2", "г")], q: -1 },
+  ];
+  const lSp = (s) => `${s.k > 1 ? s.k : ""}${chem(s.f)}<small class="ph">(${s.ph})</small>`;
+  const lSide = (a) => a.map(lSp).join(" + ");
+  const lGas = (a) => a.filter(s => s.ph === "г").reduce((n, s) => n + s.k, 0);
+  const DIR = { "-1": "обратной реакции (влево)", "0": "не смещается", "1": "прямой реакции (вправо)" };
+
+  /* все факторы для реакции: [текст, ответ −1/0/1, объяснение] */
+  function lFactors(R) {
+    const out = [], exo = R.q > 0, gl = lGas(R.l), gr = lGas(R.r);
+    const heat = exo ? "Прямая реакция экзотермическая (+Q): теплота выделяется." : "Прямая реакция эндотермическая (−Q): теплота поглощается.";
+    out.push(["🔥 Повысили температуру", exo ? -1 : 1, `${heat} При нагревании равновесие смещается в сторону реакции, которая поглощает теплоту, — ${exo ? "обратной" : "прямой"}.`]);
+    out.push(["❄️ Понизили температуру", exo ? 1 : -1, `${heat} При охлаждении равновесие смещается в сторону реакции, которая выделяет теплоту, — ${exo ? "прямой" : "обратной"}.`]);
+    const gasTxt = `Газов слева ${gl} моль, справа ${gr} моль.`;
+    const pUp = gl === gr ? 0 : gl > gr ? 1 : -1;
+    out.push(["⬇️ Повысили давление", pUp, gl === gr ? `${gasTxt} Число молей газов одинаковое — давление не смещает равновесие.` : `${gasTxt} При повышении давления равновесие смещается туда, где газов меньше, — ${pUp > 0 ? "вправо" : "влево"}.`]);
+    out.push(["⬆️ Понизили давление", -pUp || 0, gl === gr ? `${gasTxt} Число молей газов одинаковое — давление не смещает равновесие.` : `${gasTxt} При понижении давления равновесие смещается туда, где газов больше, — ${pUp > 0 ? "влево" : "вправо"}.`]);
+    for (const [side, arr] of [[1, R.l], [-1, R.r]]) for (const s of arr) {
+      const who = side > 0 ? "исходное вещество" : "продукт";
+      if (s.ph === "тв") {
+        out.push([`➕ Добавили ${chem(s.f)}(тв)`, 0, `${chem(s.f)} — твёрдое вещество. Его количество не входит в выражение равновесия, поэтому добавление твёрдого вещества равновесие не смещает.`]);
+        continue;
+      }
+      out.push([`➕ Увеличили концентрацию ${chem(s.f)}`, side, `${chem(s.f)} — ${who}. Равновесие смещается в сторону, где это вещество расходуется, — ${side > 0 ? "вправо" : "влево"}.`]);
+      out.push([`➖ Уменьшили концентрацию ${chem(s.f)}`, -side, `${chem(s.f)} — ${who}. Равновесие смещается в сторону, где это вещество образуется, — ${side > 0 ? "влево" : "вправо"}.`]);
+    }
+    out.push(["⚗️ Добавили катализатор", 0, "Катализатор одинаково ускоряет прямую и обратную реакции. Равновесие не смещается — оно просто наступает быстрее."]);
+    return out;
+  }
+  const L = { run: null };
+  function lNew(n) {
+    /* 10 заданий: факторы разных типов, ответы «не смещается» тоже встречаются */
+    const qs = [];
+    for (let i = 0; i < n; i++) {
+      const R = LR[Math.floor(Math.random() * LR.length)], fs = lFactors(R);
+      const pool = Math.random() < 0.25 ? fs.filter(f => f[1] === 0) : fs;
+      const F = (pool.length ? pool : fs)[Math.floor(Math.random() * (pool.length || fs.length))];
+      qs.push({ R, F });
+    }
+    return qs;
+  }
+  function lRender() {
+    if (L.run) return lRenderRun();
+    vL.innerHTML = `
+      <div class="z-head">
+        <button type="button" class="back" data-l="back">← к модулям</button>
+        <h2 class="mod-title">Задание 22: химическое равновесие</h2>
+      </div>
+      <p class="intro">Дана обратимая реакция, на неё действует фактор. Сдвинь ползунок: куда сместится равновесие — в сторону прямой реакции, обратной или никуда. Принцип Ле Шателье: система ослабляет воздействие.</p>
+      <div class="l-start">
+        ${ls.best != null ? `<p class="cd-total">Лучший результат: <b>${ls.best}</b> из 10</p>` : ""}
+        <button type="button" class="btn primary" data-l="go">Начать: 10 заданий</button>
+      </div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">
+        <div><b>🔥 Температура</b><span>Нагрев → в сторону реакции с −Q (поглощение теплоты). Охлаждение → в сторону +Q.</span></div>
+        <div><b>⬇️ Давление</b><span>Повышение → туда, где меньше молей <u>газов</u>. Понижение → где больше. Поровну или газов нет — не смещается.</span></div>
+        <div><b>➕ Концентрация</b><span>Добавили вещество → в сторону, где оно расходуется. Убрали → где образуется. Твёрдые вещества не влияют.</span></div>
+        <div><b>⚗️ Катализатор</b><span>Не смещает никогда — только ускоряет наступление равновесия.</span></div>
+      </div>
+      <p class="cd-credit">Идея раздела — репетитор по химии Ася Подгорнова · <a href="https://www.instagram.com/bloyyan/" target="_blank" rel="noopener" data-lig>@bloyyan</a> в нельзяграме</p>`;
+    vL.querySelector('[data-l="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vL.querySelector('[data-l="go"]').addEventListener("click", () => { L.run = { qs: lNew(10), k: 0, ok: 0, pick: null, done: false }; lRender(); zScroll(vL); });
+    vL.querySelector("[data-lig]").addEventListener("click", (e) => {
+      const w = window.Telegram && window.Telegram.WebApp;
+      if (w && w.openLink) { e.preventDefault(); try { w.openLink(e.currentTarget.href); } catch (er) { location.href = e.currentTarget.href; } }
+    });
+  }
+  function lRenderRun() {
+    const r = L.run;
+    if (r.k >= r.qs.length) return lRenderEnd();
+    const { R, F } = r.qs[r.k], checked = r.done;
+    const tilt = checked ? F[1] : 0;
+    vL.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-l="list">← Равновесие</button></div>
+      <div class="cd-top"><span class="num">Задание ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card">
+        <div class="l-eq"><span class="l-side${checked && F[1] < 0 ? " grow" : ""}">${lSide(R.l)}</span><span class="l-arr${checked ? " d" + F[1] : ""}"><i>→</i><i>←</i></span><span class="l-side${checked && F[1] > 0 ? " grow" : ""}">${lSide(R.r)}</span><span class="l-q">${R.q > 0 ? "+ Q" : "− Q"}</span></div>
+        <div class="l-factor">${F[0]}</div>
+        <svg class="l-beam" viewBox="0 0 220 70" aria-hidden="true">
+          <polygon points="110,62 100,70 120,70" class="fulcrum"/>
+          <g style="transform: rotate(${tilt * 9}deg); transform-origin: 110px 60px" class="beam">
+            <line x1="20" y1="60" x2="200" y2="60"/><rect x="8" y="40" width="44" height="18" rx="4"/><rect x="168" y="40" width="44" height="18" rx="4"/>
+            <text x="30" y="53">исх.</text><text x="190" y="53">прод.</text>
+          </g>
+        </svg>
+      </div>
+      <p class="l-ask">Куда сместится равновесие?</p>
+      <div class="l-slider${checked ? " locked" : ""}" data-pick="${r.pick == null ? "" : r.pick}">
+        <div class="l-track"><span class="l-thumb"></span></div>
+        <div class="l-stops">
+          <button type="button" data-lp="-1">← в сторону<br>обратной</button>
+          <button type="button" data-lp="0">не<br>смещается</button>
+          <button type="button" data-lp="1">в сторону<br>прямой →</button>
+        </div>
+      </div>
+      ${checked
+        ? `<div class="z-ex"><p class="fb ${r.pick === F[1] ? "good" : "wrong"}">${r.pick === F[1] ? "Верно!" : `Неверно. Правильно: ${DIR[F[1]]}.`} ${F[2]}</p><div class="actions"><button type="button" class="btn primary" data-l="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
+        : `<div class="actions l-act"><button type="button" class="btn primary" data-l="check"${r.pick == null ? " disabled" : ""}>Проверить</button></div>`}`;
+    vL.querySelector('[data-l="list"]').addEventListener("click", () => { L.run = null; lRender(); zScroll(vL); });
+    const sl = vL.querySelector(".l-slider"), track = sl.querySelector(".l-track");
+    const setPick = (v) => { if (r.done) return; r.pick = v; sl.dataset.pick = v; const b = vL.querySelector('[data-l="check"]'); if (b) b.disabled = false; };
+    sl.querySelectorAll("[data-lp]").forEach(b => b.addEventListener("click", () => setPick(+b.dataset.lp)));
+    const fromX = (x) => { const rc = track.getBoundingClientRect(); const p = (x - rc.left) / rc.width; return p < 1 / 3 ? -1 : p > 2 / 3 ? 1 : 0; };
+    let drag = false;
+    track.addEventListener("pointerdown", (e) => { if (r.done) return; drag = true; try { track.setPointerCapture(e.pointerId); } catch (er) {} setPick(fromX(e.clientX)); });
+    track.addEventListener("pointermove", (e) => { if (drag) setPick(fromX(e.clientX)); });
+    track.addEventListener("pointerup", () => { drag = false; });
+    const ch = vL.querySelector('[data-l="check"]');
+    if (ch) ch.addEventListener("click", () => {
+      r.done = true; if (r.pick === F[1]) r.ok++;
+      haptic(r.pick === F[1] ? "success" : "error"); lRenderRun();
+    });
+    const nx = vL.querySelector('[data-l="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; r.pick = null; r.done = false; lRenderRun(); zScroll(vL); });
+  }
+  function lRenderEnd() {
+    const r = L.run;
+    if (ls.best == null || r.ok > ls.best) { ls.best = r.ok; lsave(); }
+    vL.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-l="list">← Равновесие</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все верно — равновесие тебя слушается 🔥" : r.ok >= 7 ? "Хорошо! Загляни в шпаргалку и добей до 10." : "Повтори шпаргалку: температура, давление, концентрация, катализатор — и ещё раз."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-l="again">Ещё 10 заданий</button><button type="button" class="btn" data-l="list2">Шпаргалка</button></div></div>`;
+    const back = () => { L.run = null; lRender(); zScroll(vL); };
+    vL.querySelector('[data-l="list"]').addEventListener("click", back);
+    vL.querySelector('[data-l="list2"]').addEventListener("click", back);
+    vL.querySelector('[data-l="again"]').addEventListener("click", () => { L.run = { qs: lNew(10), k: 0, ok: 0, pick: null, done: false }; lRender(); zScroll(vL); });
+  }
+
+  /* ════════ v3.0: ГИДРОЛИЗ СОЛЕЙ и ЭЛЕКТРОЛИЗ РАСТВОРОВ ════════
+     Общая база ионов → ответы считаются по правилам ЕГЭ, а не вбиты руками. */
+  const vG = document.getElementById("v-gidroliz"), vE = document.getElementById("v-elektroliz");
+  const SK = "hb.salt.v1";
+  let ss = {};
+  try { ss = JSON.parse(localStorage.getItem(SK) || "{}") || {}; } catch (e) { ss = {}; }
+  function ssave() { try { localStorage.setItem(SK, JSON.stringify(ss)); } catch (e) {} }
+  const sPick = (a) => a[Math.floor(Math.random() * a.length)];
+  const sShuf = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  /* катионы: i — ион, n — заряд, b — основание, s — сильное (1) / слабое (0),
+     el — катод: a — только H₂ (Li…Al), m — металл и H₂ (Mn…Pb), n — только металл (после H), H — кислота */
+  const SC = {
+    Na: { i: "Na^{+}", m: "Na", n: 1, b: "NaOH", s: 1, el: "a" },
+    K: { i: "K^{+}", m: "K", n: 1, b: "KOH", s: 1, el: "a" },
+    Li: { i: "Li^{+}", m: "Li", n: 1, b: "LiOH", s: 1, el: "a" },
+    Ba: { i: "Ba^{2+}", m: "Ba", n: 2, b: "Ba(OH)2", s: 1, el: "a" },
+    Ca: { i: "Ca^{2+}", m: "Ca", n: 2, b: "Ca(OH)2", s: 1, el: "a" },
+    Mg: { i: "Mg^{2+}", m: "Mg", n: 2, b: "Mg(OH)2", s: 0, el: "a" },
+    Al: { i: "Al^{3+}", m: "Al", n: 3, b: "Al(OH)3", s: 0, el: "a" },
+    NH4: { i: "NH4^{+}", n: 1, b: "NH3·H2O", s: 0 },
+    Zn: { i: "Zn^{2+}", m: "Zn", n: 2, b: "Zn(OH)2", s: 0, el: "m" },
+    Fe2: { i: "Fe^{2+}", m: "Fe", n: 2, b: "Fe(OH)2", s: 0, el: "m", tint: "#9fd3a8" },
+    Fe3: { i: "Fe^{3+}", m: "Fe", n: 3, b: "Fe(OH)3", s: 0 },
+    Ni: { i: "Ni^{2+}", m: "Ni", n: 2, b: "Ni(OH)2", s: 0, el: "m", tint: "#7fcf9a" },
+    Mn: { i: "Mn^{2+}", m: "Mn", n: 2, b: "Mn(OH)2", s: 0, el: "m" },
+    Cr: { i: "Cr^{3+}", m: "Cr", n: 3, b: "Cr(OH)3", s: 0 },
+    Sn: { i: "Sn^{2+}", m: "Sn", n: 2, b: "Sn(OH)2", s: 0, el: "m" },
+    Pb: { i: "Pb^{2+}", m: "Pb", n: 2, b: "Pb(OH)2", s: 0, el: "m" },
+    Cu: { i: "Cu^{2+}", m: "Cu", n: 2, b: "Cu(OH)2", s: 0, el: "n", tint: "#5aa9e6", dep: "#c8743a" },
+    Ag: { i: "Ag^{+}", m: "Ag", n: 1, b: "AgOH", s: 0, el: "n", dep: "#cfd6de" },
+    Hg: { i: "Hg^{2+}", m: "Hg", n: 2, el: "n", dep: "#b9c2cc" },
+    H: { i: "H^{+}", n: 1, el: "H" },
+  };
+  /* анионы: a — кислота, s — сильная/слабая, h — что получается при гидролизе (1-я ступень),
+     an — продукт на аноде (если анион окисляется сам), foil — частая ошибка */
+  const SA = {
+    Cl: { i: "Cl^{−}", n: 1, a: "HCl", s: 1, an: "Cl2", hr: "2Cl^{−} − 2e^{−} → Cl2↑" },
+    Br: { i: "Br^{−}", n: 1, a: "HBr", s: 1, an: "Br2", hr: "2Br^{−} − 2e^{−} → Br2" },
+    I: { i: "I^{−}", n: 1, a: "HI", s: 1, an: "I2", hr: "2I^{−} − 2e^{−} → I2" },
+    S: { i: "S^{2−}", n: 2, a: "H2S", s: 0, h: "HS^{−}", an: "S", hr: "S^{2−} − 2e^{−} → S↓" },
+    NO3: { i: "NO3^{−}", n: 1, a: "HNO3", s: 1, foil: "NO2" },
+    SO4: { i: "SO4^{2−}", n: 2, a: "H2SO4", s: 1, foil: "SO2" },
+    F: { i: "F^{−}", n: 1, a: "HF", s: 0, h: "HF", foil: "F2" },
+    CO3: { i: "CO3^{2−}", n: 2, a: "H2CO3", s: 0, h: "HCO3^{−}", foil: "CO2" },
+    SO3: { i: "SO3^{2−}", n: 2, a: "H2SO3", s: 0, h: "HSO3^{−}" },
+    PO4: { i: "PO4^{3−}", n: 3, a: "H3PO4", s: 0, h: "HPO4^{2−}" },
+    SiO3: { i: "SiO3^{2−}", n: 2, a: "H2SiO3", s: 0, h: "HSiO3^{−}" },
+    NO2: { i: "NO2^{−}", n: 1, a: "HNO2", s: 0, h: "HNO2" },
+    Ac: { i: "CH3COO^{−}", n: 1, a: "CH3COOH", s: 0, h: "CH3COOH", an: "C2H6 и CO2", hr: "2CH3COO^{−} − 2e^{−} → C2H6↑ + 2CO2↑" },
+    HCOO: { i: "HCOO^{−}", n: 1, a: "HCOOH", s: 0, h: "HCOOH" },
+    OH: { i: "OH^{−}", n: 1, foil: "H2O" },
+  };
+  /* ── ГИДРОЛИЗ: [формула, название, катион, анион, особенность] ── */
+  const GS = [
+    ["NaCl", "хлорид натрия", "Na", "Cl"], ["KNO3", "нитрат калия", "K", "NO3"], ["K2SO4", "сульфат калия", "K", "SO4"],
+    ["Na2SO4", "сульфат натрия", "Na", "SO4"], ["BaCl2", "хлорид бария", "Ba", "Cl"], ["Ba(NO3)2", "нитрат бария", "Ba", "NO3"],
+    ["CaCl2", "хлорид кальция", "Ca", "Cl"], ["Ca(NO3)2", "нитрат кальция", "Ca", "NO3"], ["NaI", "иодид натрия", "Na", "I"],
+    ["KBr", "бромид калия", "K", "Br"], ["LiNO3", "нитрат лития", "Li", "NO3"],
+    ["NH4Cl", "хлорид аммония", "NH4", "Cl"], ["NH4NO3", "нитрат аммония", "NH4", "NO3"], ["(NH4)2SO4", "сульфат аммония", "NH4", "SO4"],
+    ["AlCl3", "хлорид алюминия", "Al", "Cl"], ["Al2(SO4)3", "сульфат алюминия", "Al", "SO4"], ["Al(NO3)3", "нитрат алюминия", "Al", "NO3"],
+    ["ZnCl2", "хлорид цинка", "Zn", "Cl"], ["ZnSO4", "сульфат цинка", "Zn", "SO4"], ["FeCl3", "хлорид железа(III)", "Fe3", "Cl"],
+    ["Fe2(SO4)3", "сульфат железа(III)", "Fe3", "SO4"], ["Fe(NO3)3", "нитрат железа(III)", "Fe3", "NO3"], ["FeSO4", "сульфат железа(II)", "Fe2", "SO4"],
+    ["CuSO4", "сульфат меди(II)", "Cu", "SO4"], ["CuCl2", "хлорид меди(II)", "Cu", "Cl"], ["Cu(NO3)2", "нитрат меди(II)", "Cu", "NO3"],
+    ["MgCl2", "хлорид магния", "Mg", "Cl"], ["MgSO4", "сульфат магния", "Mg", "SO4"], ["MnSO4", "сульфат марганца(II)", "Mn", "SO4"],
+    ["NiSO4", "сульфат никеля(II)", "Ni", "SO4"], ["Pb(NO3)2", "нитрат свинца(II)", "Pb", "NO3"], ["AgNO3", "нитрат серебра", "Ag", "NO3"],
+    ["CrCl3", "хлорид хрома(III)", "Cr", "Cl"], ["Cr2(SO4)3", "сульфат хрома(III)", "Cr", "SO4"],
+    ["Na2CO3", "карбонат натрия", "Na", "CO3"], ["K2CO3", "карбонат калия", "K", "CO3"], ["Na2SO3", "сульфит натрия", "Na", "SO3"],
+    ["K2SO3", "сульфит калия", "K", "SO3"], ["Na2S", "сульфид натрия", "Na", "S"], ["K2S", "сульфид калия", "K", "S"],
+    ["Na3PO4", "фосфат натрия", "Na", "PO4"], ["K3PO4", "фосфат калия", "K", "PO4"], ["Na2SiO3", "силикат натрия", "Na", "SiO3"],
+    ["K2SiO3", "силикат калия", "K", "SiO3"], ["CH3COONa", "ацетат натрия", "Na", "Ac"], ["CH3COOK", "ацетат калия", "K", "Ac"],
+    ["(CH3COO)2Ba", "ацетат бария", "Ba", "Ac"], ["(CH3COO)2Ca", "ацетат кальция", "Ca", "Ac"], ["NaF", "фторид натрия", "Na", "F"],
+    ["KF", "фторид калия", "K", "F"], ["NaNO2", "нитрит натрия", "Na", "NO2"], ["KNO2", "нитрит калия", "K", "NO2"],
+    ["HCOONa", "формиат натрия", "Na", "HCOO"], ["HCOOK", "формиат калия", "K", "HCOO"],
+    ["CH3COONH4", "ацетат аммония", "NH4", "Ac", { med: 0 }], ["(NH4)2CO3", "карбонат аммония", "NH4", "CO3"],
+    ["(NH4)2S", "сульфид аммония", "NH4", "S"], ["NH4F", "фторид аммония", "NH4", "F"], ["(CH3COO)2Pb", "ацетат свинца(II)", "Pb", "Ac"],
+    ["(CH3COO)2Zn", "ацетат цинка", "Zn", "Ac"],
+    ["Al2S3", "сульфид алюминия", "Al", "S", { irr: "Al2S3 + 6H2O → 2Al(OH)3↓ + 3H2S↑" }],
+    ["Cr2S3", "сульфид хрома(III)", "Cr", "S", { irr: "Cr2S3 + 6H2O → 2Cr(OH)3↓ + 3H2S↑" }],
+  ];
+  const MED = { "-1": "кислая", "0": "нейтральная", "1": "щелочная" };
+  const PH = { "-1": "pH < 7", "0": "pH ≈ 7", "1": "pH > 7" };
+  const IND = {
+    "лакмус": { "-1": ["красный", "#e5484d"], "0": ["фиолетовый", "#8e5bd0"], "1": ["синий", "#3e7bfa"] },
+    "метилоранж": { "-1": ["красный", "#e5484d"], "0": ["оранжевый", "#f08c2e"], "1": ["жёлтый", "#f2c94c"] },
+    "фенолфталеин": { "-1": ["бесцветный", ""], "0": ["бесцветный", ""], "1": ["малиновый", "#d6246e"] },
+  };
+  const TYPES = ["по катиону", "по аниону", "по катиону и аниону", "не подвергается"];
+  function gInfo(row) {
+    const [f, name, ck, ak, x] = row, C = SC[ck], A = SA[ak], o = x || {};
+    const type = C.s && A.s ? 3 : !C.s && A.s ? 0 : C.s ? 1 : 2;
+    const med = type === 3 ? 0 : type === 0 ? -1 : type === 1 ? 1 : o.med;
+    const cpart = `${chem(C.i)} — от ${C.s ? "сильного" : "слабого"} основания ${chem(C.b)}`;
+    const apart = `${chem(A.i)} — от ${A.s ? "сильной" : "слабой"} кислоты ${chem(A.a)}`;
+    const cEq = ck === "NH4" ? "NH4^{+} + H2O ⇄ NH3·H2O + H^{+}" : `${C.i} + H2O ⇄ ${C.m}OH${C.n > 1 ? `^{${C.n - 1 > 1 ? C.n - 1 : ""}+}` : ""} + H^{+}`;
+    const aEq = `${A.i} + H2O ⇄ ${A.h} + OH^{−}`;
+    let why;
+    if (o.irr) why = `Оба иона слабые, и гидролиз идёт до конца — в растворе эта соль не существует: ${chem(o.irr)}`;
+    else if (type === 3) why = "Сильное основание + сильная кислота — гидролиза нет, ионов H⁺ и OH⁻ поровну.";
+    else if (type === 0) why = `Гидролиз по слабому — по катиону: ${chem(cEq)}. Накапливаются H⁺.`;
+    else if (type === 1) why = `Гидролиз по слабому — по аниону: ${chem(aEq)}. Накапливаются OH⁻.`;
+    else why = `Слабые оба иона — гидролиз и по катиону, и по аниону.${o.med === 0 ? " Сила NH₃·H₂O и CH₃COOH почти одинаковая, поэтому среда близка к нейтральной." : ""}`;
+    return { f, name, type, med, why, ions: `${cpart}<br>${apart}`, irr: !!o.irr };
+  }
+  function gTube(med, ind, done) {
+    const c = done && med != null ? IND[ind][med][1] : "";
+    const fill = c || "var(--surface-2)";
+    const mk = done && med != null ? (med < 0 ? 22 : med > 0 ? 78 : 50) : null;
+    return `<div class="g-vis">
+      <svg class="g-tube" viewBox="0 0 60 120" aria-hidden="true">
+        <path class="g-liq${done ? " on" : ""}" d="M14 52 H46 V96 a16 16 0 0 1 -32 0 Z" style="fill:${fill}"/>
+        <path class="g-glass" d="M12 6 V96 a18 18 0 0 0 36 0 V6"/>
+        ${done ? "" : `<circle class="g-drop" cx="30" cy="18" r="4"/>`}
+      </svg>
+      <div class="g-ph"><div class="g-scale"><span>0</span><span>7</span><span>14</span></div>${mk != null ? `<i class="g-mk" style="left:${mk}%"></i>` : ""}<small>${ind}${done && med != null ? ` · ${IND[ind][med][0]} · ${PH[med]}` : ""}</small></div>
+    </div>`;
+  }
+  function gNew(n) {
+    const qs = [], rows = sShuf(GS);
+    for (let i = 0; i < n; i++) {
+      const g = gInfo(rows[i % rows.length]);
+      const kinds = g.med == null ? ["type"] : ["med", "med", "ind", "type"];
+      const kind = sPick(kinds), ind = sPick(Object.keys(IND));
+      let ask, opts;
+      if (kind === "med") { ask = "Какая среда у раствора?"; opts = [-1, 0, 1].map(v => ({ h: `${MED[v]} <small>${PH[v]}</small>`, ok: v === g.med })); }
+      else if (kind === "ind") {
+        ask = `Какого цвета станет ${ind} в растворе?`;
+        const cols = [...new Set([-1, 0, 1].map(v => IND[ind][v][0]))];
+        opts = cols.map(t => ({ h: t, ok: t === IND[ind][g.med][0] }));
+      } else { ask = "Как гидролизуется соль?"; opts = TYPES.map((t, j) => ({ h: t, ok: j === g.type })); }
+      qs.push({ g, kind, ind: kind === "ind" ? ind : "лакмус", ask, opts });
+    }
+    return qs;
+  }
+
+  /* ── ЭЛЕКТРОЛИЗ водных растворов: [формула, название, катион, анион] ── */
+  const ES = [
+    ["NaCl", "хлорид натрия", "Na", "Cl"], ["KCl", "хлорид калия", "K", "Cl"], ["KBr", "бромид калия", "K", "Br"], ["NaI", "иодид натрия", "Na", "I"],
+    ["CaCl2", "хлорид кальция", "Ca", "Cl"], ["BaCl2", "хлорид бария", "Ba", "Cl"], ["MgCl2", "хлорид магния", "Mg", "Cl"],
+    ["Na2SO4", "сульфат натрия", "Na", "SO4"], ["K2SO4", "сульфат калия", "K", "SO4"], ["KNO3", "нитрат калия", "K", "NO3"], ["NaNO3", "нитрат натрия", "Na", "NO3"],
+    ["Na2CO3", "карбонат натрия", "Na", "CO3"], ["K2CO3", "карбонат калия", "K", "CO3"], ["Na2S", "сульфид натрия", "Na", "S"], ["K2S", "сульфид калия", "K", "S"],
+    ["NaF", "фторид натрия", "Na", "F"], ["KF", "фторид калия", "K", "F"],
+    ["CuSO4", "сульфат меди(II)", "Cu", "SO4"], ["CuCl2", "хлорид меди(II)", "Cu", "Cl"], ["Cu(NO3)2", "нитрат меди(II)", "Cu", "NO3"], ["CuBr2", "бромид меди(II)", "Cu", "Br"],
+    ["AgNO3", "нитрат серебра", "Ag", "NO3"], ["Hg(NO3)2", "нитрат ртути(II)", "Hg", "NO3"],
+    ["ZnSO4", "сульфат цинка", "Zn", "SO4"], ["ZnCl2", "хлорид цинка", "Zn", "Cl"], ["ZnBr2", "бромид цинка", "Zn", "Br"],
+    ["FeSO4", "сульфат железа(II)", "Fe2", "SO4"], ["FeCl2", "хлорид железа(II)", "Fe2", "Cl"], ["NiSO4", "сульфат никеля(II)", "Ni", "SO4"], ["NiCl2", "хлорид никеля(II)", "Ni", "Cl"],
+    ["Pb(NO3)2", "нитрат свинца(II)", "Pb", "NO3"], ["SnCl2", "хлорид олова(II)", "Sn", "Cl"], ["MnSO4", "сульфат марганца(II)", "Mn", "SO4"],
+    ["CH3COONa", "ацетат натрия", "Na", "Ac"], ["CH3COOK", "ацетат калия", "K", "Ac"],
+    ["HCl", "соляная кислота", "H", "Cl"], ["H2SO4", "серная кислота", "H", "SO4"], ["HNO3", "азотная кислота", "H", "NO3"],
+    ["NaOH", "гидроксид натрия", "Na", "OH"], ["KOH", "гидроксид калия", "K", "OH"],
+  ];
+  const H2W = "2H2O + 2e^{−} → H2↑ + 2OH^{−}";
+  function eInfo(row) {
+    const [f, name, ck, ak] = row, C = SC[ck], A = SA[ak];
+    let cat, catEx, catOpts;
+    const mRed = C.m ? `${C.i} + ${C.n > 1 ? C.n : ""}e^{−} → ${C.m}` : "";
+    if (C.el === "H") { cat = "H2"; catEx = `Раствор кислоты — восстанавливаются ионы водорода: ${chem("2H^{+} + 2e^{−} → H2↑")}`; catOpts = ["H2", "O2", A.an || A.foil]; }
+    else if (C.el === "a") { cat = "H2"; catEx = `${chem(C.m)} стоит в ряду активности до алюминия включительно — сам не восстанавливается, восстанавливается вода: ${chem(H2W)}`; catOpts = [C.m, `${C.m} и H2`, "H2"]; }
+    else if (C.el === "m") { cat = `${C.m} и H2`; catEx = `${chem(C.m)} — между Al и H в ряду активности: восстанавливаются и металл, и вода. ${chem(mRed)} · ${chem(H2W)}`; catOpts = [C.m, `${C.m} и H2`, "H2"]; }
+    else { cat = C.m; catEx = `${chem(C.m)} стоит после водорода — восстанавливается только металл: ${chem(mRed)}`; catOpts = [C.m, `${C.m} и H2`, "H2"]; }
+    let an, anEx, anOpts;
+    if (A.an) {
+      an = A.an;
+      anEx = ak === "Ac" ? `Ацетат-ион окисляется сам (реакция Кольбе): ${chem(A.hr)}` : `Бескислородный анион (кроме F⁻) окисляется сам: ${chem(A.hr)}`;
+      anOpts = ak === "Ac" ? [an, "O2", "CH4 и CO2"] : [an, "O2", "H2"];
+    } else {
+      an = "O2";
+      anEx = ak === "OH" ? `В растворе щёлочи окисляются гидроксид-ионы: ${chem("4OH^{−} − 4e^{−} → O2↑ + 2H2O")}`
+        : `${chem(A.i)} ${ak === "F" ? "— фторид-ион не окисляется в водном растворе" : "— кислородсодержащий анион, сам не окисляется"}. Окисляется вода: ${chem("2H2O − 4e^{−} → O2↑ + 4H^{+}")}`;
+      anOpts = ["O2", A.foil || "SO2", "H2"];
+    }
+    return { f, name, ck, ak, cat, catEx, catOpts, an, anEx, anOpts };
+  }
+  function eNew(nSalts) {
+    const qs = [];
+    for (const row of sShuf(ES).slice(0, nSalts)) {
+      const e = eInfo(row);
+      qs.push({ e, step: 0, ask: "Что выделится на катоде (−)?", opts: sShuf(e.catOpts).map(t => ({ h: chem(t), ok: t === e.cat })) });
+      qs.push({ e, step: 1, ask: "Что выделится на аноде (+)?", opts: sShuf(e.anOpts).map(t => ({ h: chem(t), ok: t === e.an })) });
+    }
+    return qs;
+  }
+  const GASC = { Cl2: "#c9e36b", Br2: "#b8642c", I2: "#7a4a2a", O2: "", H2: "", "C2H6 и CO2": "" };
+  function eCell(q, done) {
+    const e = q.e, C = SC[e.ck];
+    const showC = q.step > 0 || done, showA = q.step > 0 && done;
+    const metal = showC && e.cat !== "H2" && C.m;
+    const gasC = showC && /H2/.test(e.cat);
+    const anG = showA && e.an !== "S", anS = showA && e.an === "S";
+    const halo = showA ? GASC[e.an] : "";
+    const bub = (x, n) => Array.from({ length: n }, (_, j) => `<circle class="e-b" cx="${x + (j % 2 ? 7 : -7)}" cy="0" r="${2 + (j % 3)}" style="animation-delay:${(j * 0.35).toFixed(2)}s"/>`).join("");
+    return `<svg class="e-cell" viewBox="0 0 240 150" aria-hidden="true">
+      <path class="e-glass" d="M30 30 V128 a10 10 0 0 0 10 10 H200 a10 10 0 0 0 10 -10 V30"/>
+      <rect class="e-sol" x="32" y="56" width="176" height="80" rx="8" style="fill:${C.tint || "var(--accent-soft)"}"/>
+      ${halo && e.an !== "S" ? `<rect class="e-halo" x="138" y="56" width="70" height="80" rx="8" style="fill:${halo}"/>` : ""}
+      <line class="e-wire" x1="80" y1="8" x2="160" y2="8"/><line class="e-wire" x1="80" y1="8" x2="80" y2="22"/><line class="e-wire" x1="160" y1="8" x2="160" y2="22"/>
+      <rect class="e-el" x="72" y="22" width="16" height="96" rx="3"/>${metal ? `<rect class="e-dep" x="70" y="70" width="20" height="50" rx="4" style="fill:${C.dep || "#8a96a3"}"/>` : ""}
+      <rect class="e-el" x="152" y="22" width="16" height="96" rx="3"/>${anS ? `<rect class="e-dep" x="150" y="76" width="20" height="44" rx="4" style="fill:#f2d14c"/>` : ""}
+      ${gasC ? `<g class="e-bub" transform="translate(80 118)">${bub(0, 6)}</g>` : ""}${anG ? `<g class="e-bub" transform="translate(160 118)">${bub(0, 6)}</g>` : ""}
+      <text x="80" y="146" class="e-lbl">катод −</text><text x="160" y="146" class="e-lbl">анод +</text>
+    </svg>`;
+  }
+
+  /* ── общий движок: 10 вопросов с вариантами ── */
+  const SR = { g: null, e: null };
+  function sQuiz(key) {
+    const V = key === "g" ? vG : vE, r = SR[key];
+    if (r.k >= r.qs.length) return sEnd(key);
+    const q = r.qs[r.k], done = r.pick != null, okPick = done && q.opts[r.pick].ok;
+    let card, ex;
+    if (key === "g") {
+      const g = q.g;
+      card = `<div class="l-card s-card"><p class="s-f">${chem(g.f)}</p><p class="s-name">${g.name}</p>${done ? `<p class="s-ions">${g.ions}</p>` : ""}${(q.kind === "type" && !done) || g.med == null ? "" : gTube(g.med, q.ind, done)}</div>`;
+      const right = q.opts.find(o => o.ok).h.replace(/<small>.*<\/small>/, "").trim();
+      ex = `${okPick ? "Верно!" : `Неверно. Правильно: ${right}.`} ${g.why}${g.med != null && !g.irr && q.kind !== "type" ? ` Среда ${MED[g.med]}.` : ""}`;
+    } else {
+      const e = q.e;
+      card = `<div class="l-card s-card"><p class="s-f">${chem(e.f)}</p><p class="s-name">${e.name} · водный раствор</p>${eCell(q, done)}
+        ${q.step > 0 ? `<p class="s-ions">катод: <b>${chem(e.cat)}</b>${done ? ` · анод: <b>${chem(e.an)}</b>` : ""}</p>` : ""}</div>`;
+      const right = chem(q.step ? e.an : e.cat);
+      ex = `${okPick ? "Верно!" : `Неверно. Правильно: ${right}.`} ${q.step ? e.anEx : e.catEx}`;
+    }
+    V.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-s="list">← ${key === "g" ? "Гидролиз" : "Электролиз"}</button></div>
+      <div class="cd-top"><span class="num">${key === "g" ? "Задание" : "Ответ"} ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      ${card}
+      <p class="l-ask">${q.ask}</p>
+      <div class="z-opts s-opts">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o.ok ? " good" : j === r.pick ? " bad" : " fade") : ""}" data-so="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o.h}</b></span></button>`).join("")}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${okPick ? "good" : "wrong"}">${ex}</p><div class="actions"><button type="button" class="btn primary" data-s="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    V.querySelector('[data-s="list"]').addEventListener("click", () => { SR[key] = null; sStart(key); zScroll(V); });
+    V.querySelectorAll("[data-so]").forEach(b => b.addEventListener("click", () => {
+      if (r.pick != null) return;
+      r.pick = +b.dataset.so; const ok = q.opts[r.pick].ok; if (ok) r.ok++;
+      haptic(ok ? "success" : "error"); sQuiz(key); zScroll(V.querySelector(".z-ex"), 160);
+    }));
+    const nx = V.querySelector('[data-s="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; r.pick = null; sQuiz(key); zScroll(V); });
+  }
+  function sEnd(key) {
+    const V = key === "g" ? vG : vE, r = SR[key], bk = key + "best";
+    if (ss[bk] == null || r.ok > ss[bk]) { ss[bk] = r.ok; ssave(); }
+    V.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-s="list">← ${key === "g" ? "Гидролиз" : "Электролиз"}</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все верно 🔥" : r.ok >= 7 ? "Хорошо! Загляни в шпаргалку и добей до 10." : "Повтори шпаргалку — и ещё раз."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-s="again">Ещё раз</button><button type="button" class="btn" data-s="list2">Шпаргалка</button></div></div>`;
+    const back = () => { SR[key] = null; sStart(key); zScroll(V); };
+    V.querySelector('[data-s="list"]').addEventListener("click", back);
+    V.querySelector('[data-s="list2"]').addEventListener("click", back);
+    V.querySelector('[data-s="again"]').addEventListener("click", () => { sGo(key); });
+  }
+  function sGo(key) { SR[key] = { qs: key === "g" ? gNew(10) : eNew(5), k: 0, ok: 0, pick: null }; sQuiz(key); zScroll(key === "g" ? vG : vE); }
+  function sStart(key) {
+    if (SR[key]) return sQuiz(key);
+    const V = key === "g" ? vG : vE, best = ss[key + "best"];
+    const G = key === "g";
+    V.innerHTML = `
+      <div class="z-head">
+        <button type="button" class="back" data-s="back">← к модулям</button>
+        <h2 class="mod-title">${G ? "Гидролиз солей" : "Электролиз растворов"}</h2>
+      </div>
+      <p class="intro">${G ? `Дана соль — определи среду раствора, цвет индикатора или тип гидролиза. ${GS.length} солей, вопросы каждый раз новые.` : `Дан водный раствор — что выделится на катоде и что на аноде. ${ES.length} растворов: соли, кислоты, щёлочи. 5 растворов = 10 ответов.`}</p>
+      <div class="l-start">
+        ${best != null ? `<p class="cd-total">Лучший результат: <b>${best}</b> из 10</p>` : ""}
+        <button type="button" class="btn primary" data-s="go">Начать: 10 заданий</button>
+      </div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">${G ? `
+        <div><b>Кто сильнее — та и среда</b><span>Сильное основание + слабая кислота → щелочная (pH &gt; 7). Слабое основание + сильная кислота → кислая (pH &lt; 7). Оба сильные → нейтральная, гидролиза нет.</span></div>
+        <div><b>Гидролиз идёт по слабому</b><span>Слабый катион (NH₄⁺, Al³⁺, Zn²⁺, Fe³⁺, Cu²⁺…) → по катиону. Слабый анион (CO₃²⁻, S²⁻, SO₃²⁻, PO₄³⁻, SiO₃²⁻, F⁻, NO₂⁻, CH₃COO⁻) → по аниону. Оба слабые → по катиону и аниону.</span></div>
+        <div><b>Сильные</b><span>Основания: LiOH, NaOH, KOH, Ca(OH)₂, Ba(OH)₂. Кислоты: HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄.</span></div>
+        <div><b>Индикаторы</b><span>Лакмус: кислая — красный, нейтральная — фиолетовый, щелочная — синий. Метилоранж: красный · оранжевый · жёлтый. Фенолфталеин: бесцветный · бесцветный · малиновый.</span></div>
+        <div><b>Необратимый гидролиз</b><span>Al₂S₃, Cr₂S₃ в воде не существуют: сразу дают гидроксид и H₂S.</span></div>`
+      : `
+        <div><b>Катод (−): катионы</b><span>Li … Al — сам металл не выделяется, только H₂ из воды. Mn … Pb — металл и H₂. После H (Cu, Ag, Hg) — только металл. Кислота — H₂.</span></div>
+        <div><b>Анод (+): анионы</b><span>S²⁻, I⁻, Br⁻, Cl⁻ → S, I₂, Br₂, Cl₂. Кислородсодержащие (SO₄²⁻, NO₃⁻, CO₃²⁻), F⁻ и OH⁻ → O₂.</span></div>
+        <div><b>Ацетаты</b><span>На аноде — этан и углекислый газ: 2CH₃COO⁻ − 2e⁻ → C₂H₆ + 2CO₂.</span></div>
+        <div><b>Электроды инертные</b><span>Во всех заданиях раздела — уголь или платина, сам анод не растворяется.</span></div>`}
+      </div>`;
+    V.querySelector('[data-s="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    V.querySelector('[data-s="go"]').addEventListener("click", () => sGo(key));
+  }
+  const gRender = () => sStart("g"), eRender = () => sStart("e");
+
+  const HC = {"cls": {"alk": "Алканы", "ene": "Алкены", "yne": "Алкины", "die": "Диены", "are": "Арены"}, "items": [{"c": "alk", "a": {"t": "CH4"}, "r": "Cl2 (1 моль), hν", "o": [{"t": "CH3⟦Cl⟧"}, {"t": "CH2Cl2"}, {"t": "C2H6"}], "y": "замещение", "x": "Алканы на свету вступают в радикальное замещение: атом H меняется на Cl. При 1 моль Cl₂ — монохлорметан. Второй продукт — HCl."}, {"c": "alk", "a": {"t": "CH3–CH2–CH3"}, "r": "Br2, hν", "o": [{"t": "CH3–CH⟦Br⟧–CH3"}, {"t": "CH3–CH2–CH2Br"}, {"t": "CH2=CH–CH3"}], "y": "замещение", "x": "Бромирование избирательно: бром замещает H у самого замещённого атома углерода. У пропана это вторичный атом — получается 2-бромпропан."}, {"c": "alk", "a": {"t": "CH3–CH(CH3)–CH3"}, "r": "Br2, hν", "o": [{"t": "CH3–C⟦Br⟧(CH3)–CH3"}, {"t": "CH2Br–CH(CH3)–CH3"}, {"t": "CH2=C(CH3)–CH3"}], "y": "замещение", "x": "Бром замещает H у третичного атома углерода — так образуется самый устойчивый радикал. Продукт — 2-бром-2-метилпропан."}, {"c": "alk", "a": {"t": "2CH3Cl"}, "r": "2Na (реакция Вюрца)", "o": [{"t": "CH3⟦–⟧CH3"}, {"t": "CH4"}, {"t": "CH2=CH2"}], "y": "Вюрц", "x": "Натрий отрывает галоген, и два углеводородных остатка соединяются: углеродная цепь удваивается. Из хлорметана — этан."}, {"c": "alk", "a": {"t": "CH3–CH2–CH2–CH3"}, "r": "AlCl3, t", "o": [{"t": "CH3–CH⟦(CH3)⟧–CH3"}, {"t": "CH3–CH=CH–CH3"}, {"m": "m0"}], "y": "изомеризация", "x": "Изомеризация: неразветвлённая цепь перестраивается в разветвлённую. Из бутана — изобутан (2-метилпропан), формула та же — C₄H₁₀."}, {"c": "alk", "a": {"t": "CH3COONa"}, "r": "NaOH (сплавление)", "o": [{"t": "⟦CH4⟧"}, {"t": "C2H6"}, {"t": "CH3OH"}], "y": "декарбоксилирование", "x": "Сплавление соли карбоновой кислоты со щёлочью отщепляет карбоксильную группу: CH₃COONa + NaOH → CH₄ + Na₂CO₃. Цепь становится на один атом C короче."}, {"c": "alk", "a": {"t": "Al4C3"}, "r": "H2O", "o": [{"t": "⟦CH4⟧"}, {"t": "C2H2"}, {"t": "C2H6"}], "y": "гидролиз", "x": "Карбид алюминия гидролизуется с образованием метана: Al₄C₃ + 12H₂O → 4Al(OH)₃ + 3CH₄."}, {"c": "alk", "a": {"t": "2CH4"}, "r": "1500 °C", "o": [{"t": "⟦CH≡CH⟧"}, {"t": "CH2=CH2"}, {"t": "CH3–CH3"}], "y": "пиролиз", "x": "При 1500 °C и быстром охлаждении метан превращается в ацетилен: 2CH₄ → C₂H₂ + 3H₂ — промышленный способ."}, {"c": "alk", "a": {"t": "CH3–CH2–CH3"}, "r": "Ni, t (дегидрирование)", "o": [{"t": "CH2⟦=⟧CH–CH3"}, {"t": "CH≡C–CH3"}, {"t": "CH3–CH=CH–CH3"}], "y": "отщепление", "x": "Дегидрирование отщепляет молекулу H₂ от соседних атомов углерода — появляется двойная связь. Пропан → пропен."}, {"c": "alk", "a": {"t": "CH3–(CH2)4–CH3"}, "r": "Pt, t (ароматизация)", "o": [{"m": "m1"}, {"m": "m2"}, {"t": "CH2=CH–(CH2)3–CH3"}], "y": "дегидроциклизация", "x": "Гексан на платине замыкается в цикл и теряет 4 молекулы H₂ — получается бензол."}, {"c": "alk", "a": {"t": "CH3–(CH2)5–CH3"}, "r": "Pt, t (ароматизация)", "o": [{"m": "m3"}, {"m": "m1"}, {"m": "m4"}], "y": "дегидроциклизация", "x": "Гептан: шесть атомов C замыкаются в бензольное кольцо, седьмой остаётся метильной группой. Получается толуол."}, {"c": "ene", "a": {"t": "CH2=CH–CH3"}, "r": "HBr", "o": [{"t": "CH3–CH⟦Br⟧–CH3"}, {"t": "CH2Br–CH2–CH3"}, {"t": "CH2Br–CHBr–CH3"}], "y": "присоединение", "x": "Правило Марковникова: водород идёт к более гидрированному атому C (к CH₂), бром — к менее гидрированному. Продукт — 2-бромпропан."}, {"c": "ene", "a": {"t": "CH2=CH–CH3"}, "r": "H2O, H⁺", "o": [{"t": "CH3–CH⟦(OH)⟧–CH3"}, {"t": "CH2OH–CH2–CH3"}, {"t": "CH3–CO–CH3"}], "y": "гидратация", "x": "Гидратация по правилу Марковникова: OH присоединяется к среднему атому C. Получается пропанол-2."}, {"c": "ene", "a": {"t": "CH2=CH–CH3"}, "r": "Br2 (бромная вода)", "o": [{"t": "CH2⟦Br⟧–CH⟦Br⟧–CH3"}, {"t": "CH3–CBr2–CH3"}, {"t": "CH3–CHBr–CH3"}], "y": "присоединение", "x": "Бром присоединяется по месту разрыва двойной связи — по одному атому к каждому углероду. Бромная вода обесцвечивается: это качественная реакция."}, {"c": "ene", "a": {"t": "CH2=CH2"}, "r": "H2, Ni", "o": [{"t": "CH3–CH3"}, {"t": "CH≡CH"}, {"t": "CH4"}], "y": "гидрирование", "x": "Водород присоединяется по двойной связи: этен → этан."}, {"c": "ene", "a": {"t": "CH2=CH2"}, "r": "KMnO4, H2O, 0 °C", "o": [{"t": "CH2⟦OH⟧–CH2⟦OH⟧"}, {"t": "CH3COOH"}, {"t": "CO2"}], "y": "мягкое окисление", "x": "Реакция Вагнера: на холоде в нейтральной среде двойная связь не рвётся, к каждому атому C присоединяется OH. Получается этиленгликоль. Раствор KMnO₄ обесцвечивается."}, {"c": "ene", "a": {"t": "CH3–CH=CH–CH3"}, "r": "KMnO4, H2SO4, t", "o": [{"t": "2CH3–CO⟦OH⟧"}, {"t": "CH3–CH(OH)–CH(OH)–CH3"}, {"t": "CH3–CHO"}], "y": "жёсткое окисление", "x": "В кислой среде при нагревании двойная связь рвётся полностью, каждый осколок окисляется до кислоты. Бутен-2 → 2 молекулы уксусной кислоты."}, {"c": "ene", "a": {"t": "CH2=CH–CH3"}, "r": "KMnO4, H2SO4, t", "o": [{"t": "CH3–CO⟦OH⟧ + ⟦CO2⟧"}, {"t": "2CH3COOH"}, {"t": "CH3–CH2–COOH"}], "y": "жёсткое окисление", "x": "Двойная связь рвётся. Концевая группа =CH₂ окисляется до CO₂, остаток CH₃–CH= — до уксусной кислоты."}, {"c": "ene", "a": {"t": "CH2=CH–CH3"}, "r": "Cl2, 500 °C", "o": [{"t": "CH2=CH–CH2⟦Cl⟧"}, {"t": "CH2Cl–CHCl–CH3"}, {"t": "CH3–CHCl–CH3"}], "y": "замещение", "x": "При 500 °C идёт не присоединение, а радикальное замещение у атома C рядом с двойной связью (аллильное). Получается 3-хлорпропен."}, {"c": "ene", "a": {"t": "nCH2=CH2"}, "r": "t, p, kat (полимеризация)", "o": [{"t": "(–CH2–CH2–)n"}, {"t": "(–CH=CH–)n"}, {"t": "CH≡CH"}], "y": "полимеризация", "x": "Двойные связи раскрываются, молекулы этена соединяются в длинную цепь — полиэтилен."}, {"c": "ene", "a": {"t": "CH3–CH2–CH2Br"}, "r": "KOH (спирт), t", "o": [{"t": "CH2⟦=⟧CH–CH3"}, {"t": "CH3–CH2–CH2OH"}, {"t": "CH≡C–CH3"}], "y": "отщепление", "x": "Спиртовой раствор щёлочи отщепляет HBr — получается алкен. (Водный раствор KOH дал бы спирт.)"}, {"c": "ene", "a": {"t": "CH3–CHBr–CH2–CH3"}, "r": "KOH (спирт), t", "o": [{"t": "CH3–CH⟦=⟧CH–CH3"}, {"t": "CH2=CH–CH2–CH3"}, {"t": "CH3–CH(OH)–CH2–CH3"}], "y": "отщепление", "x": "Правило Зайцева: водород уходит от соседнего, менее гидрированного атома C. Двойная связь встаёт в середину цепи — бутен-2."}, {"c": "ene", "a": {"t": "CH3–CH2OH"}, "r": "H2SO4 (конц.), t > 140 °C", "o": [{"t": "CH2⟦=⟧CH2"}, {"t": "C2H5–O–C2H5"}, {"t": "CH3–CHO"}], "y": "дегидратация", "x": "Внутримолекулярная дегидратация: при t > 140 °C от спирта отщепляется вода — получается этилен. При t < 140 °C получился бы диэтиловый эфир."}, {"c": "ene", "a": {"t": "CH2Br–CH2Br"}, "r": "Zn, t", "o": [{"t": "CH2⟦=⟧CH2"}, {"t": "CH≡CH"}, {"t": "CH3–CH3"}], "y": "отщепление", "x": "Цинк отрывает два атома брома от соседних атомов C — возвращается двойная связь."}, {"c": "yne", "a": {"t": "CH2Br–CH2Br"}, "r": "KOH (спирт, изб.), t", "o": [{"t": "CH⟦≡⟧CH"}, {"t": "CH2=CH2"}, {"t": "CH2OH–CH2OH"}], "y": "отщепление", "x": "Избыток спиртовой щёлочи отщепляет две молекулы HBr — образуется тройная связь."}, {"c": "yne", "a": {"t": "CaC2"}, "r": "H2O", "o": [{"t": "⟦CH≡CH⟧"}, {"t": "CH4"}, {"t": "CH2=CH2"}], "y": "гидролиз", "x": "Карбид кальция с водой даёт ацетилен: CaC₂ + 2H₂O → C₂H₂ + Ca(OH)₂."}, {"c": "yne", "a": {"t": "CH≡CH"}, "r": "H2O, Hg²⁺, H⁺ (Кучеров)", "o": [{"t": "CH3–C⟦HO⟧"}, {"t": "CH2=CH–OH"}, {"t": "CH3COOH"}], "y": "гидратация", "x": "Реакция Кучерова: сначала образуется неустойчивый виниловый спирт, он сразу перестраивается в уксусный альдегид. Из ацетилена — единственный случай, когда получается альдегид."}, {"c": "yne", "a": {"t": "CH≡C–CH3"}, "r": "H2O, Hg²⁺, H⁺ (Кучеров)", "o": [{"t": "CH3–C⟦O⟧–CH3"}, {"t": "CH3–CH2–CHO"}, {"t": "CH3–CH(OH)–CH3"}], "y": "гидратация", "x": "Гомологи ацетилена по Кучерову дают кетоны: по правилу Марковникова O встаёт к среднему атому C. Пропин → ацетон."}, {"c": "yne", "a": {"t": "3CH≡CH"}, "r": "C (акт.), 600 °C", "o": [{"m": "m1"}, {"m": "m2"}, {"t": "CH2=CH–C≡CH"}], "y": "тримеризация", "x": "Реакция Зелинского: три молекулы ацетилена замыкаются в бензольное кольцо."}, {"c": "yne", "a": {"t": "CH≡CH"}, "r": "2HBr", "o": [{"t": "CH3–CH⟦Br2⟧"}, {"t": "CH2Br–CH2Br"}, {"t": "CH2=CHBr"}], "y": "присоединение", "x": "Две молекулы HBr, обе по Марковникову: второй бром идёт к тому же атому C, где уже стоит первый. Получается 1,1-дибромэтан."}, {"c": "yne", "a": {"t": "CH≡CH"}, "r": "HCl (1 моль), HgCl2", "o": [{"t": "CH2=CH⟦Cl⟧"}, {"t": "CH3–CH2Cl"}, {"t": "CH3–CHCl2"}], "y": "присоединение", "x": "Одна молекула HCl — раскрывается одна из двух π-связей. Получается винилхлорид, мономер ПВХ."}, {"c": "yne", "a": {"t": "CH≡C–CH3"}, "r": "[Ag(NH3)2]OH", "o": [{"t": "⟦Ag⟧C≡C–CH3"}, {"t": "CH2=CH–CH3"}, {"t": "AgC≡CAg"}], "y": "замещение", "x": "Водород у тройной связи на конце цепи подвижный: аммиачный раствор оксида серебра замещает его на Ag — выпадает осадок. Так отличают алкины-1 от алкинов с тройной связью внутри цепи."}, {"c": "yne", "a": {"t": "CH≡CH"}, "r": "2[Ag(NH3)2]OH", "o": [{"t": "⟦Ag⟧C≡C⟦Ag⟧"}, {"t": "AgCH=CHAg"}, {"t": "CH3–CHO"}], "y": "замещение", "x": "У ацетилена два подвижных атома H — оба замещаются на серебро. Ацетиленид серебра — осадок."}, {"c": "yne", "a": {"t": "CH≡CH"}, "r": "H2 (1 моль), Pd/Pb²⁺", "o": [{"t": "CH2⟦=⟧CH2"}, {"t": "CH3–CH3"}, {"t": "CH4"}], "y": "гидрирование", "x": "На «отравленном» катализаторе гидрирование останавливается на алкене."}, {"c": "yne", "a": {"t": "CH3–C≡C–CH3"}, "r": "KMnO4, H2SO4, t", "o": [{"t": "2CH3–CO⟦OH⟧"}, {"t": "CH3–CH=CH–CH3"}, {"t": "CH3–CHO"}], "y": "жёсткое окисление", "x": "Тройная связь рвётся полностью, оба осколка окисляются до уксусной кислоты."}, {"c": "die", "a": {"t": "CH2=CH–CH=CH2"}, "r": "Br2 (1 моль)", "o": [{"t": "CH2⟦Br⟧–CH⟦=⟧CH–CH2⟦Br⟧"}, {"t": "CH2Br–CHBr–CHBr–CH2Br"}, {"t": "CH3–CBr2–CH=CH2"}], "y": "1,4-присоединение", "x": "У сопряжённых диенов основной продукт — 1,4-присоединение: бром встаёт на концы, а двойная связь переходит в середину."}, {"c": "die", "a": {"t": "CH2=CH–CH=CH2"}, "r": "2H2, Ni", "o": [{"t": "CH3–CH2–CH2–CH3"}, {"t": "CH2=CH–CH2–CH3"}, {"t": "CH≡C–CH2–CH3"}], "y": "гидрирование", "x": "Две молекулы H₂ насыщают обе двойные связи — бутадиен превращается в бутан."}, {"c": "die", "a": {"t": "nCH2=CH–CH=CH2"}, "r": "kat (полимеризация)", "o": [{"t": "(–CH2–CH⟦=⟧CH–CH2–)n"}, {"t": "(–CH2–CH2–)n"}, {"t": "(–CH=CH–CH=CH–)n"}], "y": "полимеризация", "x": "Полимеризация идёт по 1,4: в каждом звене остаётся одна двойная связь в середине. Это бутадиеновый каучук."}, {"c": "die", "a": {"t": "2CH3–CH2OH"}, "r": "Al2O3, ZnO, 425 °C (Лебедев)", "o": [{"t": "CH2=CH–CH=CH2"}, {"t": "CH2=CH2"}, {"t": "C2H5–O–C2H5"}], "y": "Лебедев", "x": "Способ Лебедева: из двух молекул этанола — бутадиен-1,3, вода и водород."}, {"c": "are", "a": {"m": "m1"}, "r": "Br2, FeBr3", "o": [{"m": "m5"}, {"m": "m6"}, {"m": "m7"}], "y": "замещение", "x": "С катализатором FeBr₃ бензол вступает в замещение: H → Br. Кольцо сохраняется. Получается бромбензол."}, {"c": "are", "a": {"m": "m1"}, "r": "3Cl2, hν", "o": [{"m": "m8"}, {"m": "m9"}, {"m": "m10"}], "y": "присоединение", "x": "На свету без катализатора хлор присоединяется ко всему кольцу — получается гексахлорциклогексан C₆H₆Cl₆ (гексахлоран)."}, {"c": "are", "a": {"m": "m1"}, "r": "HNO3, H2SO4 (конц.)", "o": [{"m": "m11"}, {"m": "m12"}, {"m": "m13"}], "y": "нитрование", "x": "Нитрующая смесь замещает H на NO₂ — получается нитробензол. Анилин из него получают уже восстановлением."}, {"c": "are", "a": {"m": "m1"}, "r": "CH3Cl, AlCl3", "o": [{"m": "m3"}, {"m": "m9"}, {"m": "m14"}], "y": "алкилирование", "x": "Алкилирование по Фриделю — Крафтсу: CH₃ замещает H в кольце. Получается толуол и HCl."}, {"c": "are", "a": {"m": "m1"}, "r": "CH2=CH–CH3, H⁺", "o": [{"m": "m15"}, {"m": "m16"}, {"m": "m3"}], "y": "алкилирование", "x": "Пропен присоединяется к кольцу по Марковникову — средним атомом C. Получается изопропилбензол (кумол)."}, {"c": "are", "a": {"m": "m1"}, "r": "3H2, Ni, t", "o": [{"m": "m2"}, {"m": "m17"}, {"t": "CH3–(CH2)4–CH3"}], "y": "гидрирование", "x": "Три молекулы H₂ насыщают кольцо — получается циклогексан. Кольцо не разрывается."}, {"c": "are", "a": {"m": "m3"}, "r": "Cl2, hν", "o": [{"m": "m18"}, {"m": "m19"}, {"m": "m20"}], "y": "замещение", "x": "На свету хлор замещает H в боковой цепи (CH₃), а не в кольце. Получается бензилхлорид."}, {"c": "are", "a": {"m": "m3"}, "r": "Cl2, FeCl3", "o": [{"m": "m20"}, {"m": "m18"}, {"m": "m21"}], "y": "замещение", "x": "С катализатором замещается H в кольце. CH₃ — ориентант I рода: направляет в орто- и пара-положения. Мета-изомер не образуется."}, {"c": "are", "a": {"m": "m3"}, "r": "KMnO4, H2SO4, t", "o": [{"m": "m22"}, {"m": "m23"}, {"m": "m13"}], "y": "окисление", "x": "Боковая цепь окисляется до COOH, кольцо не трогается. Толуол → бензойная кислота."}, {"c": "are", "a": {"m": "m24"}, "r": "KMnO4, H2SO4, t", "o": [{"m": "m22"}, {"m": "m25"}, {"m": "m26"}], "y": "окисление", "x": "Любая боковая цепь окисляется до одной COOH у кольца. Лишний атом C уходит в CO₂. Этилбензол → бензойная кислота + CO₂."}, {"c": "are", "a": {"m": "m27"}, "r": "Br2 (бромная вода)", "o": [{"m": "m28"}, {"m": "m29"}, {"m": "m5"}], "y": "присоединение", "x": "У стирола двойная связь в боковой цепи — бром присоединяется к ней, как у алкенов. Бромная вода обесцвечивается, кольцо не затрагивается."}], "svg": {"m0": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='83' height='80' viewBox='0 0 112 108'><path d='M 110.0,54.0 L 56.0,0.0'/><path d='M 56.0,0.0 L 2.0,54.0'/><path d='M 2.0,54.0 L 56.0,108.0'/><path d='M 56.0,108.0 L 110.0,54.0'/><path d='M 107.3,51.3 L 110.0,54.0 L 107.3,56.7'/><path d='M 58.7,2.7 L 56.0,0.0 L 53.3,2.7'/><path d='M 4.7,51.3 L 2.0,54.0 L 4.7,56.7'/><path d='M 53.3,105.3 L 56.0,108.0 L 58.7,105.3'/></svg> ", "m1": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='90' viewBox='0 0 136 121'><path d='M 136.0,60.5 L 102.0,1.6'/><path d='M 102.0,1.6 L 34.0,1.6'/><path d='M 96.1,11.8 L 39.9,11.8'/><path d='M 34.0,1.6 L 0.0,60.5'/><path d='M 0.0,60.5 L 34.0,119.4'/><path d='M 11.8,60.5 L 39.9,109.2'/><path d='M 34.0,119.4 L 102.0,119.4'/><path d='M 102.0,119.4 L 136.0,60.5'/><path d='M 96.1,109.2 L 124.2,60.5'/><path d='M 134.3,57.6 L 136.0,60.5 L 134.3,63.4'/><path d='M 103.7,4.6 L 102.0,1.6 L 98.6,1.6'/><path d='M 37.4,1.6 L 34.0,1.6 L 32.3,4.6'/><path d='M 1.7,57.6 L 0.0,60.5 L 1.7,63.4'/><path d='M 32.3,116.4 L 34.0,119.4 L 37.4,119.4'/><path d='M 98.6,119.4 L 102.0,119.4 L 103.7,116.4'/></svg> ", "m2": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='90' viewBox='0 0 136 121'><path d='M 136.0,60.5 L 102.0,1.6'/><path d='M 102.0,1.6 L 34.0,1.6'/><path d='M 34.0,1.6 L 0.0,60.5'/><path d='M 0.0,60.5 L 34.0,119.4'/><path d='M 34.0,119.4 L 102.0,119.4'/><path d='M 102.0,119.4 L 136.0,60.5'/><path d='M 134.3,57.6 L 136.0,60.5 L 134.3,63.4'/><path d='M 103.7,4.6 L 102.0,1.6 L 98.6,1.6'/><path d='M 37.4,1.6 L 34.0,1.6 L 32.3,4.6'/><path d='M 1.7,57.6 L 0.0,60.5 L 1.7,63.4'/><path d='M 32.3,116.4 L 34.0,119.4 L 37.4,119.4'/><path d='M 98.6,119.4 L 102.0,119.4 L 103.7,116.4'/></svg> ", "m3": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 144.1,60.5 L 102.4,60.5'/><path d='M 102.4,60.5 L 77.6,17.6'/><path d='M 93.8,60.5 L 73.3,25.0'/><path d='M 77.6,17.6 L 28.1,17.6'/><path d='M 28.1,17.6 L 3.3,60.5'/><path d='M 32.4,25.0 L 11.9,60.5'/><path d='M 3.3,60.5 L 28.1,103.4'/><path d='M 28.1,103.4 L 77.6,103.4'/><path d='M 32.4,96.0 L 73.3,96.0'/><path d='M 77.6,103.4 L 102.4,60.5'/><path d='M 78.9,19.8 L 77.6,17.6 L 75.1,17.6'/><path d='M 30.6,17.6 L 28.1,17.6 L 26.9,19.8'/><path d='M 4.6,58.4 L 3.3,60.5 L 4.6,62.6'/><path d='M 26.9,101.2 L 28.1,103.4 L 30.6,103.4'/><path d='M 75.1,103.4 L 77.6,103.4 L 78.9,101.2'/><text x='147.4' y='68.0' font-size='15'>C</text><text x='157.7' y='68.0' font-size='15'>H</text><text x='168.1' y='74.0' font-size='9'>3</text></svg> ", "m4": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 144.1,60.5 L 102.4,60.5'/><path d='M 102.4,60.5 L 77.6,17.6'/><path d='M 77.6,17.6 L 28.1,17.6'/><path d='M 28.1,17.6 L 3.3,60.5'/><path d='M 3.3,60.5 L 28.1,103.4'/><path d='M 28.1,103.4 L 77.6,103.4'/><path d='M 77.6,103.4 L 102.4,60.5'/><path d='M 78.9,19.8 L 77.6,17.6 L 75.1,17.6'/><path d='M 30.6,17.6 L 28.1,17.6 L 26.9,19.8'/><path d='M 4.6,58.4 L 3.3,60.5 L 4.6,62.6'/><path d='M 26.9,101.2 L 28.1,103.4 L 30.6,103.4'/><path d='M 75.1,103.4 L 77.6,103.4 L 78.9,101.2'/><text x='147.4' y='68.0' font-size='15'>C</text><text x='157.7' y='68.0' font-size='15'>H</text><text x='168.1' y='74.0' font-size='9'>3</text></svg> ", "m5": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 155.4,60.5 L 109.7,60.5'/><path d='M 109.7,60.5 L 82.8,14.0'/><path d='M 100.4,60.5 L 78.2,22.0'/><path d='M 82.8,14.0 L 29.1,14.0'/><path d='M 29.1,14.0 L 2.2,60.5'/><path d='M 33.8,22.0 L 11.5,60.5'/><path d='M 2.2,60.5 L 29.1,107.0'/><path d='M 29.1,107.0 L 82.8,107.0'/><path d='M 33.8,99.0 L 78.2,99.0'/><path d='M 82.8,107.0 L 109.7,60.5'/><path d='M 84.2,16.3 L 82.8,14.0 L 80.1,14.0'/><path d='M 31.8,14.0 L 29.1,14.0 L 27.8,16.3'/><path d='M 3.6,58.2 L 2.2,60.5 L 3.6,62.8'/><path d='M 27.8,104.7 L 29.1,107.0 L 31.8,107.0'/><path d='M 80.1,107.0 L 82.8,107.0 L 84.2,104.7'/><text x='158.9' y='68.0' font-size='15'>B</text><text x='169.3' y='68.0' font-size='15'>r</text></svg> ", "m6": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='160' height='141' viewBox='0 0 216 190'><path d='M 195.2,93.5 L 156.0,93.5'/><path d='M 156.0,93.5 L 132.5,52.9'/><path d='M 132.5,52.9 L 149.8,23.0'/><path d='M 132.5,52.9 L 85.7,52.9'/><path d='M 85.7,52.9 L 67.6,21.6'/><path d='M 85.7,52.9 L 62.3,93.5'/><path d='M 62.3,93.5 L 20.8,93.5'/><path d='M 62.3,93.5 L 85.7,134.1'/><path d='M 85.7,134.1 L 66.7,167.0'/><path d='M 85.7,134.1 L 132.5,134.1'/><path d='M 132.5,134.1 L 151.6,167.0'/><path d='M 132.5,134.1 L 156.0,93.5'/><text x='198.3' y='101.0' font-size='15'>B</text><text x='208.7' y='101.0' font-size='15'>r</text><text x='151.5' y='19.9' font-size='15'>B</text><text x='161.8' y='19.9' font-size='15'>r</text><text x='49.7' y='19.9' font-size='15'>B</text><text x='60.0' y='19.9' font-size='15'>r</text><text x='2.9' y='101.0' font-size='15'>B</text><text x='13.2' y='101.0' font-size='15'>r</text><text x='49.7' y='182.1' font-size='15'>B</text><text x='60.0' y='182.1' font-size='15'>r</text><text x='151.5' y='182.1' font-size='15'>B</text><text x='161.8' y='182.1' font-size='15'>r</text></svg> ", "m7": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 155.4,60.5 L 109.7,60.5'/><path d='M 109.7,60.5 L 82.8,14.0'/><path d='M 82.8,14.0 L 29.1,14.0'/><path d='M 29.1,14.0 L 2.2,60.5'/><path d='M 2.2,60.5 L 29.1,107.0'/><path d='M 29.1,107.0 L 82.8,107.0'/><path d='M 82.8,107.0 L 109.7,60.5'/><path d='M 84.2,16.3 L 82.8,14.0 L 80.1,14.0'/><path d='M 31.8,14.0 L 29.1,14.0 L 27.8,16.3'/><path d='M 3.6,58.2 L 2.2,60.5 L 3.6,62.8'/><path d='M 27.8,104.7 L 29.1,107.0 L 31.8,107.0'/><path d='M 80.1,107.0 L 82.8,107.0 L 84.2,104.7'/><text x='158.9' y='68.0' font-size='15'>B</text><text x='169.3' y='68.0' font-size='15'>r</text></svg> ", "m8": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='160' height='141' viewBox='0 0 216 190'><path d='M 197.0,93.5 L 157.1,93.5'/><path d='M 157.1,93.5 L 133.3,52.3'/><path d='M 133.3,52.3 L 151.0,21.8'/><path d='M 133.3,52.3 L 85.8,52.3'/><path d='M 85.8,52.3 L 66.5,19.0'/><path d='M 85.8,52.3 L 62.0,93.5'/><path d='M 62.0,93.5 L 19.0,93.5'/><path d='M 62.0,93.5 L 85.8,134.7'/><path d='M 85.8,134.7 L 66.4,168.2'/><path d='M 85.8,134.7 L 133.3,134.7'/><path d='M 133.3,134.7 L 152.7,168.2'/><path d='M 133.3,134.7 L 157.1,93.5'/><text x='200.2' y='101.0' font-size='15'>C</text><text x='210.5' y='101.0' font-size='15'>l</text><text x='152.6' y='18.6' font-size='15'>C</text><text x='163.0' y='18.6' font-size='15'>l</text><text x='50.3' y='18.6' font-size='15'>C</text><text x='60.6' y='18.6' font-size='15'>l</text><text x='2.7' y='101.0' font-size='15'>C</text><text x='13.1' y='101.0' font-size='15'>l</text><text x='50.3' y='183.4' font-size='15'>C</text><text x='60.6' y='183.4' font-size='15'>l</text><text x='152.6' y='183.4' font-size='15'>C</text><text x='163.0' y='183.4' font-size='15'>l</text></svg> ", "m9": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 157.3,60.5 L 110.9,60.5'/><path d='M 110.9,60.5 L 83.7,13.3'/><path d='M 101.5,60.5 L 79.0,21.5'/><path d='M 83.7,13.3 L 29.2,13.3'/><path d='M 29.2,13.3 L 2.0,60.5'/><path d='M 33.9,21.5 L 11.4,60.5'/><path d='M 2.0,60.5 L 29.2,107.7'/><path d='M 29.2,107.7 L 83.7,107.7'/><path d='M 33.9,99.5 L 79.0,99.5'/><path d='M 83.7,107.7 L 110.9,60.5'/><path d='M 85.1,15.7 L 83.7,13.3 L 81.0,13.3'/><path d='M 31.9,13.3 L 29.2,13.3 L 27.8,15.7'/><path d='M 3.3,58.1 L 2.0,60.5 L 3.3,62.9'/><path d='M 27.8,105.3 L 29.2,107.7 L 31.9,107.7'/><path d='M 81.0,107.7 L 83.7,107.7 L 85.1,105.3'/><text x='160.9' y='68.0' font-size='15'>C</text><text x='171.3' y='68.0' font-size='15'>l</text></svg> ", "m10": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 157.3,60.5 L 110.9,60.5'/><path d='M 110.9,60.5 L 83.7,13.3'/><path d='M 83.7,13.3 L 29.2,13.3'/><path d='M 29.2,13.3 L 2.0,60.5'/><path d='M 2.0,60.5 L 29.2,107.7'/><path d='M 29.2,107.7 L 83.7,107.7'/><path d='M 83.7,107.7 L 110.9,60.5'/><path d='M 85.1,15.7 L 83.7,13.3 L 81.0,13.3'/><path d='M 31.9,13.3 L 29.2,13.3 L 27.8,15.7'/><path d='M 3.3,58.1 L 2.0,60.5 L 3.3,62.9'/><path d='M 27.8,105.3 L 29.2,107.7 L 31.9,107.7'/><path d='M 81.0,107.7 L 83.7,107.7 L 85.1,105.3'/><text x='160.9' y='68.0' font-size='15'>C</text><text x='171.3' y='68.0' font-size='15'>l</text></svg> ", "m11": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 145.2,60.5 L 102.9,60.5'/><path d='M 102.9,60.5 L 78.0,17.4'/><path d='M 94.3,60.5 L 73.7,24.8'/><path d='M 78.0,17.4 L 28.2,17.4'/><path d='M 28.2,17.4 L 3.3,60.5'/><path d='M 32.5,24.8 L 11.9,60.5'/><path d='M 3.3,60.5 L 28.2,103.6'/><path d='M 28.2,103.6 L 78.0,103.6'/><path d='M 32.5,96.2 L 73.7,96.2'/><path d='M 78.0,103.6 L 102.9,60.5'/><path d='M 79.2,19.5 L 78.0,17.4 L 75.5,17.4'/><path d='M 30.7,17.4 L 28.2,17.4 L 26.9,19.5'/><path d='M 4.5,58.3 L 3.3,60.5 L 4.5,62.7'/><path d='M 26.9,101.5 L 28.2,103.6 L 30.7,103.6'/><path d='M 75.5,103.6 L 78.0,103.6 L 79.2,101.5'/><text x='148.5' y='68.0' font-size='15'>N</text><text x='158.1' y='68.0' font-size='15'>O</text><text x='168.5' y='74.0' font-size='9'>2</text></svg> ", "m12": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 144.1,60.5 L 102.4,60.5'/><path d='M 102.4,60.5 L 77.6,17.6'/><path d='M 93.8,60.5 L 73.3,25.0'/><path d='M 77.6,17.6 L 28.1,17.6'/><path d='M 28.1,17.6 L 3.3,60.5'/><path d='M 32.4,25.0 L 11.9,60.5'/><path d='M 3.3,60.5 L 28.1,103.4'/><path d='M 28.1,103.4 L 77.6,103.4'/><path d='M 32.4,96.0 L 73.3,96.0'/><path d='M 77.6,103.4 L 102.4,60.5'/><path d='M 78.9,19.8 L 77.6,17.6 L 75.1,17.6'/><path d='M 30.6,17.6 L 28.1,17.6 L 26.9,19.8'/><path d='M 4.6,58.4 L 3.3,60.5 L 4.6,62.6'/><path d='M 26.9,101.2 L 28.1,103.4 L 30.6,103.4'/><path d='M 75.1,103.4 L 77.6,103.4 L 78.9,101.2'/><text x='147.4' y='68.0' font-size='15'>N</text><text x='157.7' y='68.0' font-size='15'>H</text><text x='168.1' y='74.0' font-size='9'>2</text></svg> ", "m13": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 151.1,60.5 L 106.9,60.5'/><path d='M 106.9,60.5 L 80.9,15.4'/><path d='M 97.9,60.5 L 76.4,23.2'/><path d='M 80.9,15.4 L 28.8,15.4'/><path d='M 28.8,15.4 L 2.8,60.5'/><path d='M 33.3,23.2 L 11.8,60.5'/><path d='M 2.8,60.5 L 28.8,105.6'/><path d='M 28.8,105.6 L 80.9,105.6'/><path d='M 33.3,97.8 L 76.4,97.8'/><path d='M 80.9,105.6 L 106.9,60.5'/><path d='M 82.2,17.6 L 80.9,15.4 L 78.3,15.4'/><path d='M 31.4,15.4 L 28.8,15.4 L 27.5,17.6'/><path d='M 4.1,58.2 L 2.8,60.5 L 4.1,62.8'/><path d='M 27.5,103.4 L 28.8,105.6 L 31.4,105.6'/><path d='M 78.3,105.6 L 80.9,105.6 L 82.2,103.4'/><text x='154.5' y='68.0' font-size='15'>O</text><text x='164.9' y='68.0' font-size='15'>H</text></svg> ", "m14": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='118' height='98' viewBox='0 0 159 132'><path d='M 26.0,110.0 L 63.9,88.1'/><path d='M 63.9,88.1 L 109.9,114.6'/><path d='M 71.9,83.5 L 109.9,105.4'/><path d='M 109.9,114.6 L 155.9,88.1'/><path d='M 155.9,88.1 L 155.9,34.9'/><path d='M 147.9,83.5 L 147.9,39.5'/><path d='M 155.9,34.9 L 109.9,8.4'/><path d='M 109.9,8.4 L 63.9,34.9'/><path d='M 109.9,17.6 L 71.9,39.5'/><path d='M 63.9,34.9 L 31.9,16.4'/><path d='M 63.9,34.9 L 63.9,88.1'/><path d='M 107.6,113.3 L 109.9,114.6 L 112.2,113.3'/><path d='M 153.6,89.4 L 155.9,88.1 L 155.9,85.4'/><path d='M 155.9,37.6 L 155.9,34.9 L 153.6,33.6'/><path d='M 112.2,9.7 L 109.9,8.4 L 107.6,9.7'/><text x='3.1' y='122.1' font-size='15'>C</text><text x='13.4' y='122.1' font-size='15'>H</text><text x='23.8' y='128.1' font-size='9'>3</text><text x='3.1' y='15.9' font-size='15'>C</text><text x='13.4' y='15.9' font-size='15'>H</text><text x='23.8' y='21.9' font-size='9'>3</text></svg> ", "m15": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='145' height='90' viewBox='0 0 196 121'><path d='M 167.8,90.2 L 154.2,66.7'/><path d='M 152.5,48.3 L 166.0,24.8'/><path d='M 130.7,56.0 L 99.7,56.0'/><path d='M 99.7,56.0 L 75.5,14.1'/><path d='M 91.3,56.0 L 71.3,21.4'/><path d='M 75.5,14.1 L 27.2,14.1'/><path d='M 27.2,14.1 L 3.0,56.0'/><path d='M 31.4,21.4 L 11.4,56.0'/><path d='M 3.0,56.0 L 27.2,97.9'/><path d='M 27.2,97.9 L 75.5,97.9'/><path d='M 31.4,90.6 L 71.3,90.6'/><path d='M 75.5,97.9 L 99.7,56.0'/><path d='M 76.7,16.2 L 75.5,14.1 L 73.1,14.1'/><path d='M 29.6,14.1 L 27.2,14.1 L 26.0,16.2'/><path d='M 4.2,53.9 L 3.0,56.0 L 4.2,58.1'/><path d='M 26.0,95.8 L 27.2,97.9 L 29.6,97.9'/><path d='M 73.1,97.9 L 75.5,97.9 L 76.7,95.8'/><text x='167.7' y='105.4' font-size='15'>C</text><text x='178.1' y='105.4' font-size='15'>H</text><text x='188.4' y='111.4' font-size='9'>3</text><text x='133.9' y='63.5' font-size='15'>C</text><text x='144.2' y='63.5' font-size='15'>H</text><text x='167.7' y='21.6' font-size='15'>C</text><text x='178.1' y='21.6' font-size='15'>H</text><text x='188.4' y='27.6' font-size='9'>3</text></svg> ", "m16": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='237' height='90' viewBox='0 0 320 121'><path d='M 196.8,60.5 L 145.6,60.5'/><path d='M 145.6,60.5 L 115.7,8.8'/><path d='M 135.2,60.5 L 110.6,17.8'/><path d='M 115.7,8.8 L 56.0,8.8'/><path d='M 56.0,8.8 L 26.2,60.5'/><path d='M 61.2,17.8 L 36.5,60.5'/><path d='M 26.2,60.5 L 56.0,112.2'/><path d='M 56.0,112.2 L 115.7,112.2'/><path d='M 61.2,103.2 L 110.6,103.2'/><path d='M 115.7,112.2 L 145.6,60.5'/><path d='M 117.2,11.4 L 115.7,8.8 L 112.8,8.8'/><path d='M 59.0,8.8 L 56.0,8.8 L 54.6,11.4'/><path d='M 27.7,57.9 L 26.2,60.5 L 27.7,63.1'/><path d='M 54.6,109.6 L 56.0,112.2 L 59.0,112.2'/><path d='M 112.8,112.2 L 115.7,112.2 L 117.2,109.6'/><text x='200.8' y='68.0' font-size='15'>C</text><text x='211.1' y='68.0' font-size='15'>H</text><text x='221.5' y='74.0' font-size='9'>2</text><text x='226.3' y='68.0' font-size='15'>–</text><text x='234.7' y='68.0' font-size='15'>C</text><text x='245.0' y='68.0' font-size='15'>H</text><text x='255.4' y='74.0' font-size='9'>2</text><text x='260.2' y='68.0' font-size='15'>–</text><text x='268.5' y='68.0' font-size='15'>C</text><text x='278.9' y='68.0' font-size='15'>H</text><text x='289.2' y='74.0' font-size='9'>3</text></svg> ", "m17": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='90' viewBox='0 0 136 121'><path d='M 136.0,60.5 L 102.0,1.6'/><path d='M 124.2,60.5 L 96.1,11.8'/><path d='M 102.0,1.6 L 34.0,1.6'/><path d='M 34.0,1.6 L 0.0,60.5'/><path d='M 0.0,60.5 L 34.0,119.4'/><path d='M 34.0,119.4 L 102.0,119.4'/><path d='M 102.0,119.4 L 136.0,60.5'/><path d='M 134.3,57.6 L 136.0,60.5 L 134.3,63.4'/><path d='M 103.7,4.6 L 102.0,1.6 L 98.6,1.6'/><path d='M 37.4,1.6 L 34.0,1.6 L 32.3,4.6'/><path d='M 1.7,57.6 L 0.0,60.5 L 1.7,63.4'/><path d='M 32.3,116.4 L 34.0,119.4 L 37.4,119.4'/><path d='M 98.6,119.4 L 102.0,119.4 L 103.7,116.4'/></svg> ", "m18": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='148' height='95' viewBox='0 0 200 128'><path d='M 18.6,54.1 L 41.2,78.6'/><path d='M 57.0,84.5 L 98.3,75.2'/><path d='M 98.3,75.2 L 132.9,112.7'/><path d='M 106.9,73.3 L 135.5,104.3'/><path d='M 132.9,112.7 L 182.7,101.5'/><path d='M 182.7,101.5 L 197.9,52.8'/><path d='M 176.7,95.0 L 189.3,54.7'/><path d='M 197.9,52.8 L 163.3,15.3'/><path d='M 163.3,15.3 L 113.5,26.5'/><path d='M 160.6,23.7 L 119.5,33.0'/><path d='M 113.5,26.5 L 98.3,75.2'/><path d='M 131.2,110.9 L 132.9,112.7 L 135.4,112.2'/><path d='M 180.2,102.1 L 182.7,101.5 L 183.5,99.1'/><path d='M 197.1,55.2 L 197.9,52.8 L 196.1,50.9'/><path d='M 165.0,17.1 L 163.3,15.3 L 160.8,15.8'/><path d='M 115.9,25.9 L 113.5,26.5 L 112.7,28.9'/><text x='2.1' y='56.4' font-size='15'>C</text><text x='12.5' y='56.4' font-size='15'>l</text><text x='34.3' y='94.0' font-size='15'>C</text><text x='44.7' y='94.0' font-size='15'>H</text><text x='55.0' y='100.0' font-size='9'>2</text></svg> ", "m19": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='118' height='98' viewBox='0 0 159 132'><path d='M 26.0,110.0 L 63.9,88.1'/><path d='M 63.9,88.1 L 109.9,114.6'/><path d='M 71.9,83.5 L 109.9,105.4'/><path d='M 109.9,114.6 L 155.9,88.1'/><path d='M 155.9,88.1 L 155.9,34.9'/><path d='M 147.9,83.5 L 147.9,39.5'/><path d='M 155.9,34.9 L 109.9,8.4'/><path d='M 109.9,8.4 L 63.9,34.9'/><path d='M 109.9,17.6 L 71.9,39.5'/><path d='M 63.9,34.9 L 22.8,11.2'/><path d='M 63.9,34.9 L 63.9,88.1'/><path d='M 107.6,113.3 L 109.9,114.6 L 112.2,113.3'/><path d='M 153.6,89.4 L 155.9,88.1 L 155.9,85.4'/><path d='M 155.9,37.6 L 155.9,34.9 L 153.6,33.6'/><path d='M 112.2,9.7 L 109.9,8.4 L 107.6,9.7'/><text x='3.1' y='122.1' font-size='15'>C</text><text x='13.4' y='122.1' font-size='15'>H</text><text x='23.8' y='128.1' font-size='9'>3</text><text x='6.2' y='15.9' font-size='15'>C</text><text x='16.6' y='15.9' font-size='15'>l</text></svg> ", "m20": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='160' height='90' viewBox='0 0 216 121'><path d='M 184.8,60.5 L 147.9,60.5'/><path d='M 147.9,60.5 L 125.7,22.1'/><path d='M 125.7,22.1 L 81.3,22.1'/><path d='M 121.8,28.7 L 85.1,28.7'/><path d='M 81.3,22.1 L 59.1,60.5'/><path d='M 59.1,60.5 L 19.0,60.5'/><path d='M 59.1,60.5 L 81.3,98.9'/><path d='M 66.8,60.5 L 85.1,92.3'/><path d='M 81.3,98.9 L 125.7,98.9'/><path d='M 125.7,98.9 L 147.9,60.5'/><path d='M 121.8,92.3 L 140.2,60.5'/><path d='M 126.8,24.0 L 125.7,22.1 L 123.5,22.1'/><path d='M 83.5,22.1 L 81.3,22.1 L 80.2,24.0'/><path d='M 80.2,97.0 L 81.3,98.9 L 83.5,98.9'/><path d='M 123.5,98.9 L 125.7,98.9 L 126.8,97.0'/><text x='187.7' y='68.0' font-size='15'>C</text><text x='198.1' y='68.0' font-size='15'>H</text><text x='208.4' y='74.0' font-size='9'>3</text><text x='3.0' y='68.0' font-size='15'>C</text><text x='13.3' y='68.0' font-size='15'>l</text></svg> ", "m21": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='144' height='98' viewBox='0 0 194 132'><path d='M 162.6,99.7 L 131.3,81.6'/><path d='M 131.3,81.6 L 131.3,36.9'/><path d='M 131.3,36.9 L 92.5,14.5'/><path d='M 124.6,40.7 L 92.5,22.2'/><path d='M 92.5,14.5 L 53.7,36.9'/><path d='M 53.7,36.9 L 53.7,81.6'/><path d='M 60.4,40.7 L 60.4,77.8'/><path d='M 53.7,81.6 L 19.2,101.5'/><path d='M 53.7,81.6 L 92.5,104.0'/><path d='M 92.5,104.0 L 131.3,81.6'/><path d='M 92.5,96.3 L 124.6,77.8'/><path d='M 131.3,39.1 L 131.3,36.9 L 129.3,35.7'/><path d='M 94.4,15.6 L 92.5,14.5 L 90.5,15.6'/><path d='M 55.6,35.7 L 53.7,36.9 L 53.7,39.1'/><path d='M 90.5,102.9 L 92.5,104.0 L 94.4,102.9'/><text x='165.6' y='111.5' font-size='15'>C</text><text x='175.9' y='111.5' font-size='15'>H</text><text x='186.3' y='117.5' font-size='9'>3</text><text x='3.2' y='111.5' font-size='15'>C</text><text x='13.5' y='111.5' font-size='15'>l</text></svg> ", "m22": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='145' height='90' viewBox='0 0 196 121'><path d='M 174.8,94.9 L 160.3,69.9'/><path d='M 161.9,53.0 L 176.3,28.0'/><path d='M 155.3,49.3 L 169.8,24.2'/><path d='M 146.2,59.0 L 103.5,59.0'/><path d='M 103.5,59.0 L 78.3,15.2'/><path d='M 94.8,59.0 L 73.9,22.8'/><path d='M 78.3,15.2 L 27.7,15.2'/><path d='M 27.7,15.2 L 2.5,59.0'/><path d='M 32.1,22.8 L 11.2,59.0'/><path d='M 2.5,59.0 L 27.7,102.8'/><path d='M 27.7,102.8 L 78.3,102.8'/><path d='M 32.1,95.2 L 73.9,95.2'/><path d='M 78.3,102.8 L 103.5,59.0'/><path d='M 79.5,17.4 L 78.3,15.2 L 75.7,15.2'/><path d='M 30.3,15.2 L 27.7,15.2 L 26.5,17.4'/><path d='M 3.7,56.8 L 2.5,59.0 L 3.7,61.2'/><path d='M 26.5,100.6 L 27.7,102.8 L 30.3,102.8'/><path d='M 75.7,102.8 L 78.3,102.8 L 79.5,100.6'/><text x='174.8' y='110.3' font-size='15'>O</text><text x='185.2' y='110.3' font-size='15'>H</text><text x='149.6' y='66.5' font-size='15'>C</text><text x='174.8' y='22.7' font-size='15'>O</text></svg> ", "m23": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='148' height='95' viewBox='0 0 200 128'><path d='M 16.5,54.2 L 37.4,76.8'/><path d='M 10.6,59.6 L 31.5,82.3'/><path d='M 50.6,85.7 L 94.3,75.8'/><path d='M 94.3,75.8 L 130.7,115.3'/><path d='M 103.3,73.8 L 133.5,106.4'/><path d='M 130.7,115.3 L 183.1,103.5'/><path d='M 183.1,103.5 L 199.0,52.2'/><path d='M 176.8,96.6 L 190.0,54.2'/><path d='M 199.0,52.2 L 162.6,12.7'/><path d='M 162.6,12.7 L 110.2,24.5'/><path d='M 159.8,21.6 L 116.5,31.4'/><path d='M 110.2,24.5 L 94.3,75.8'/><path d='M 128.9,113.3 L 130.7,115.3 L 133.3,114.7'/><path d='M 180.4,104.0 L 183.1,103.5 L 183.9,100.9'/><path d='M 198.2,54.8 L 199.0,52.2 L 197.2,50.2'/><path d='M 164.4,14.7 L 162.6,12.7 L 160.0,13.3'/><path d='M 112.8,24.0 L 110.2,24.5 L 109.4,27.1'/><text x='1.0' y='55.7' font-size='15'>O</text><text x='27.7' y='95.1' font-size='15'>C</text><text x='38.1' y='95.1' font-size='15'>H</text></svg> ", "m24": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='184' height='90' viewBox='0 0 248 121'><path d='M 171.9,60.5 L 124.5,60.5'/><path d='M 124.5,60.5 L 96.7,12.3'/><path d='M 114.9,60.5 L 91.9,20.7'/><path d='M 96.7,12.3 L 41.0,12.3'/><path d='M 41.0,12.3 L 13.2,60.5'/><path d='M 45.9,20.7 L 22.9,60.5'/><path d='M 13.2,60.5 L 41.0,108.7'/><path d='M 41.0,108.7 L 96.7,108.7'/><path d='M 45.9,100.3 L 91.9,100.3'/><path d='M 96.7,108.7 L 124.5,60.5'/><path d='M 98.1,14.7 L 96.7,12.3 L 93.9,12.3'/><path d='M 43.8,12.3 L 41.0,12.3 L 39.6,14.7'/><path d='M 14.6,58.1 L 13.2,60.5 L 14.6,62.9'/><path d='M 39.6,106.3 L 41.0,108.7 L 43.8,108.7'/><path d='M 93.9,108.7 L 96.7,108.7 L 98.1,106.3'/><text x='175.6' y='68.0' font-size='15'>C</text><text x='186.0' y='68.0' font-size='15'>H</text><text x='196.3' y='74.0' font-size='9'>2</text><text x='201.1' y='68.0' font-size='15'>–</text><text x='209.5' y='68.0' font-size='15'>C</text><text x='219.9' y='68.0' font-size='15'>H</text><text x='230.2' y='74.0' font-size='9'>3</text></svg> ", "m25": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='175' height='96' viewBox='0 0 237 130'><path d='M 23.8,80.4 L 54.0,69.9'/><path d='M 66.8,60.2 L 72.3,31.3'/><path d='M 59.6,58.9 L 65.2,29.9'/><path d='M 69.4,73.9 L 89.3,91.1'/><path d='M 106.6,95.9 L 143.8,83.0'/><path d='M 143.8,83.0 L 180.3,114.6'/><path d='M 151.7,80.3 L 181.8,106.4'/><path d='M 180.3,114.6 L 225.9,98.8'/><path d='M 225.9,98.8 L 235.0,51.5'/><path d='M 219.5,93.4 L 227.1,54.2'/><path d='M 235.0,51.5 L 198.5,19.9'/><path d='M 198.5,19.9 L 152.9,35.7'/><path d='M 196.9,28.1 L 159.2,41.1'/><path d='M 152.9,35.7 L 143.8,83.0'/><path d='M 178.4,113.1 L 180.3,114.6 L 182.5,113.8'/><path d='M 223.6,99.6 L 225.9,98.8 L 226.3,96.5'/><path d='M 234.5,53.8 L 235.0,51.5 L 233.2,49.9'/><path d='M 200.3,21.4 L 198.5,19.9 L 196.2,20.7'/><path d='M 155.2,34.9 L 152.9,35.7 L 152.5,38.0'/><text x='2.0' y='90.5' font-size='15'>H</text><text x='11.6' y='90.5' font-size='15'>O</text><text x='57.2' y='74.8' font-size='15'>C</text><text x='66.3' y='27.4' font-size='15'>O</text><text x='84.0' y='106.3' font-size='15'>C</text><text x='94.4' y='106.3' font-size='15'>H</text><text x='104.7' y='112.3' font-size='9'>2</text></svg> ", "m26": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='145' height='90' viewBox='0 0 196 121'><path d='M 167.8,90.2 L 154.2,66.7'/><path d='M 155.6,50.1 L 169.2,26.6'/><path d='M 149.4,46.5 L 162.9,23.0'/><path d='M 140.3,56.0 L 99.7,56.0'/><path d='M 99.7,56.0 L 75.5,14.1'/><path d='M 91.3,56.0 L 71.3,21.4'/><path d='M 75.5,14.1 L 27.2,14.1'/><path d='M 27.2,14.1 L 3.0,56.0'/><path d='M 31.4,21.4 L 11.4,56.0'/><path d='M 3.0,56.0 L 27.2,97.9'/><path d='M 27.2,97.9 L 75.5,97.9'/><path d='M 31.4,90.6 L 71.3,90.6'/><path d='M 75.5,97.9 L 99.7,56.0'/><path d='M 76.7,16.2 L 75.5,14.1 L 73.1,14.1'/><path d='M 29.6,14.1 L 27.2,14.1 L 26.0,16.2'/><path d='M 4.2,53.9 L 3.0,56.0 L 4.2,58.1'/><path d='M 26.0,95.8 L 27.2,97.9 L 29.6,97.9'/><path d='M 73.1,97.9 L 75.5,97.9 L 76.7,95.8'/><text x='167.7' y='105.4' font-size='15'>C</text><text x='178.1' y='105.4' font-size='15'>H</text><text x='188.4' y='111.4' font-size='9'>3</text><text x='143.5' y='63.5' font-size='15'>C</text><text x='167.7' y='21.6' font-size='15'>O</text></svg> ", "m27": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='170' height='90' viewBox='0 0 230 121'><path d='M 161.7,60.5 L 116.6,60.5'/><path d='M 116.6,60.5 L 90.1,14.5'/><path d='M 107.4,60.5 L 85.5,22.5'/><path d='M 90.1,14.5 L 36.9,14.5'/><path d='M 36.9,14.5 L 10.4,60.5'/><path d='M 41.6,22.5 L 19.6,60.5'/><path d='M 10.4,60.5 L 36.9,106.5'/><path d='M 36.9,106.5 L 90.1,106.5'/><path d='M 41.6,98.5 L 85.5,98.5'/><path d='M 90.1,106.5 L 116.6,60.5'/><path d='M 91.4,16.8 L 90.1,14.5 L 87.4,14.5'/><path d='M 39.6,14.5 L 36.9,14.5 L 35.6,16.8'/><path d='M 11.7,58.2 L 10.4,60.5 L 11.7,62.8'/><path d='M 35.6,104.2 L 36.9,106.5 L 39.6,106.5'/><path d='M 87.4,106.5 L 90.1,106.5 L 91.4,104.2'/><text x='165.3' y='68.0' font-size='15'>C</text><text x='175.6' y='68.0' font-size='15'>H</text><text x='186.0' y='68.0' font-size='15'>=</text><text x='194.3' y='68.0' font-size='15'>C</text><text x='204.7' y='68.0' font-size='15'>H</text><text x='215.0' y='74.0' font-size='9'>2</text></svg> ", "m28": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='177' height='101' viewBox='0 0 239 136'><path d='M 19.9,37.9 L 55.0,33.2'/><path d='M 71.0,42.9 L 86.5,63.0'/><path d='M 88.0,81.4 L 77.1,108.0'/><path d='M 100.8,69.6 L 140.7,64.2'/><path d='M 140.7,64.2 L 170.4,102.8'/><path d='M 149.0,63.1 L 173.6,95.0'/><path d='M 170.4,102.8 L 218.6,96.3'/><path d='M 218.6,96.3 L 237.1,51.3'/><path d='M 213.5,89.7 L 228.8,52.4'/><path d='M 237.1,51.3 L 207.4,12.8'/><path d='M 207.4,12.8 L 159.2,19.2'/><path d='M 204.2,20.6 L 164.3,25.9'/><path d='M 159.2,19.2 L 140.7,64.2'/><path d='M 168.9,100.9 L 170.4,102.8 L 172.8,102.5'/><path d='M 216.2,96.7 L 218.6,96.3 L 219.5,94.1'/><path d='M 236.2,53.6 L 237.1,51.3 L 235.6,49.4'/><path d='M 208.9,14.7 L 207.4,12.8 L 205.0,13.1'/><path d='M 161.6,18.9 L 159.2,19.2 L 158.2,21.5'/><text x='1.9' y='46.1' font-size='15'>B</text><text x='12.2' y='46.1' font-size='15'>r</text><text x='58.2' y='39.7' font-size='15'>C</text><text x='68.6' y='39.7' font-size='15'>H</text><text x='78.9' y='45.7' font-size='9'>2</text><text x='78.2' y='78.2' font-size='15'>C</text><text x='88.6' y='78.2' font-size='15'>H</text><text x='61.3' y='123.2' font-size='15'>B</text><text x='71.7' y='123.2' font-size='15'>r</text></svg> ", "m29": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='200' height='90' viewBox='0 0 270 121'><path d='M 204.0,60.5 L 164.0,60.5'/><path d='M 164.0,60.5 L 140.2,19.2'/><path d='M 140.2,19.2 L 92.5,19.2'/><path d='M 136.1,26.4 L 96.7,26.4'/><path d='M 92.5,19.2 L 68.7,60.5'/><path d='M 68.7,60.5 L 26.5,60.5'/><path d='M 68.7,60.5 L 92.5,101.8'/><path d='M 77.0,60.5 L 96.7,94.6'/><path d='M 92.5,101.8 L 140.2,101.8'/><path d='M 140.2,101.8 L 164.0,60.5'/><path d='M 136.1,94.6 L 155.8,60.5'/><path d='M 141.4,21.3 L 140.2,19.2 L 137.8,19.2'/><path d='M 94.9,19.2 L 92.5,19.2 L 91.4,21.3'/><path d='M 91.4,99.7 L 92.5,101.8 L 94.9,101.8'/><path d='M 137.8,101.8 L 140.2,101.8 L 141.4,99.7'/><text x='207.2' y='68.0' font-size='15'>C</text><text x='217.5' y='68.0' font-size='15'>H</text><text x='227.9' y='68.0' font-size='15'>=</text><text x='236.3' y='68.0' font-size='15'>C</text><text x='246.6' y='68.0' font-size='15'>H</text><text x='257.0' y='74.0' font-size='9'>2</text><text x='8.5' y='68.0' font-size='15'>B</text><text x='18.8' y='68.0' font-size='15'>r</text></svg> "}};
+  /* ════════ v3.0: УГЛЕВОДОРОДЫ — вещество + реагент → продукт ════════ */
+  const vH = document.getElementById("v-uglevodorody");
+  const HK = "hb.hc.v1";
+  let hs = {};
+  try { hs = JSON.parse(localStorage.getItem(HK) || "{}") || {}; } catch (e) { hs = {}; }
+  function hsave() { try { localStorage.setItem(HK, JSON.stringify(hs)); } catch (e) {} }
+  const HR = { run: null, cls: hs.cls || "all" };
+  const hTxt = (t, mark) => t.split(/(⟦[^⟧]*⟧)/).map(p => p.startsWith("⟦") ? (mark ? `<mark class="h-new">${chem(p.slice(1, -1))}</mark>` : chem(p.slice(1, -1))) : chem(p)).join("");
+  const hMol = (x, mark) => x.m ? `<span class="h-mol">${HC.svg[x.m]}</span>` : `<span class="h-f">${hTxt(x.t, mark)}</span>`;
+  function hNew(n) {
+    const pool = HC.items.filter(it => HR.cls === "all" || it.c === HR.cls);
+    return sShuf(pool).slice(0, Math.min(n, pool.length)).map(it => ({ it, order: sShuf([0, 1, 2]) }));
+  }
+  function hRender() {
+    if (HR.run) return hRun();
+    const n = (c) => HC.items.filter(it => c === "all" || it.c === c).length;
+    vH.innerHTML = `
+      <div class="z-head">
+        <button type="button" class="back" data-h="back">← к модулям</button>
+        <h2 class="mod-title">Углеводороды</h2>
+      </div>
+      <p class="intro">Дано вещество и реагент — выбери продукт. После ответа подсвечивается, что изменилось в молекуле. ${HC.items.length} реакций из ЕГЭ: замещение, присоединение, Марковников, Зайцев, Кучеров, окисление KMnO₄.</p>
+      <div class="h-chips">${[["all", "Все"], ...Object.entries(HC.cls)].map(([k, t]) => `<button type="button" class="h-chip${HR.cls === k ? " on" : ""}" data-hc="${k}">${t} <small>${n(k)}</small></button>`).join("")}</div>
+      <div class="l-start">
+        ${hs.best != null ? `<p class="cd-total">Лучший результат: <b>${hs.best}</b> из 10</p>` : ""}
+        <button type="button" class="btn primary" data-h="go">Начать: ${Math.min(10, n(HR.cls))} заданий</button>
+      </div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">
+        <div><b>Алканы</b><span>Только замещение (на свету) — бром идёт к третичному, потом вторичному атому C. Вюрц удваивает цепь. Дегидрирование → алкен.</span></div>
+        <div><b>Марковников</b><span>H присоединяется к более гидрированному атому C (где больше H), а Br, Cl, OH — к соседнему.</span></div>
+        <div><b>Зайцев</b><span>При отщеплении H уходит от менее гидрированного соседа — двойная связь встаёт внутрь цепи.</span></div>
+        <div><b>KOH: вода или спирт</b><span>Водный раствор — замещение, получается спирт. Спиртовой — отщепление HX, получается алкен.</span></div>
+        <div><b>KMnO₄</b><span>На холоде в нейтральной среде — диол (обесцвечивание). В кислой при t — связь рвётся: =CH₂ → CO₂, =CH–R → R–COOH. Боковая цепь арена → одна COOH у кольца.</span></div>
+        <div><b>Кучеров</b><span>Ацетилен + H₂O (Hg²⁺) → уксусный альдегид. Остальные алкины → кетоны.</span></div>
+        <div><b>Арены</b><span>С катализатором (FeBr₃, AlCl₃, H₂SO₄) — замещение в кольце. На свету без катализатора: у бензола — присоединение, у толуола — замещение в CH₃.</span></div>
+      </div>`;
+    vH.querySelector('[data-h="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vH.querySelectorAll("[data-hc]").forEach(b => b.addEventListener("click", () => { HR.cls = b.dataset.hc; hs.cls = HR.cls; hsave(); hRender(); }));
+    vH.querySelector('[data-h="go"]').addEventListener("click", () => { HR.run = { qs: hNew(10), k: 0, ok: 0, pick: null }; hRun(); zScroll(vH); });
+  }
+  function hRun() {
+    const r = HR.run;
+    if (r.k >= r.qs.length) return hEnd();
+    const { it, order } = r.qs[r.k], done = r.pick != null, good = done && r.pick === 0;
+    vH.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-h="list">← Углеводороды</button></div>
+      <div class="cd-top"><span class="num">Задание ${r.k + 1} из ${r.qs.length} · ${HC.cls[it.c]}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card h-card">
+        <div class="h-rx">
+          ${hMol(it.a)}
+          <span class="h-arr"><small>${chem(it.r)}</small><i></i></span>
+          ${done ? `<span class="h-prod">${hMol(it.o[0], true)}</span>` : `<span class="h-slot">?</span>`}
+        </div>
+        ${done ? `<span class="h-type">${it.y}</span>` : ""}
+      </div>
+      <p class="l-ask">Что получится?</p>
+      <div class="z-opts s-opts h-opts">${order.map(j => `<button type="button" class="z-opt${done ? (j === 0 ? " good" : j === r.pick ? " bad" : " fade") : ""}" data-ho="${j}"${done ? " disabled" : ""}><span class="ft"><b>${hMol(it.o[j], false)}</b></span></button>`).join("")}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : "Неверно."} ${it.x}</p><div class="actions"><button type="button" class="btn primary" data-h="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    vH.querySelector('[data-h="list"]').addEventListener("click", () => { HR.run = null; hRender(); zScroll(vH); });
+    vH.querySelectorAll("[data-ho]").forEach(b => b.addEventListener("click", () => {
+      if (r.pick != null) return;
+      r.pick = +b.dataset.ho; if (r.pick === 0) r.ok++;
+      haptic(r.pick === 0 ? "success" : "error"); hRun(); zScroll(vH.querySelector(".h-card"), 90);
+    }));
+    const nx = vH.querySelector('[data-h="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; r.pick = null; hRun(); zScroll(vH); });
+  }
+  function hEnd() {
+    const r = HR.run;
+    if (r.qs.length === 10 && (hs.best == null || r.ok > hs.best)) { hs.best = r.ok; hsave(); }
+    vH.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-h="list">← Углеводороды</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все верно 🔥" : r.ok >= r.qs.length * 0.7 ? "Хорошо! Загляни в шпаргалку и добей до конца." : "Повтори шпаргалку — и ещё раз."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-h="again">Ещё раз</button><button type="button" class="btn" data-h="list2">Шпаргалка</button></div></div>`;
+    const back = () => { HR.run = null; hRender(); zScroll(vH); };
+    vH.querySelector('[data-h="list"]').addEventListener("click", back);
+    vH.querySelector('[data-h="list2"]').addEventListener("click", back);
+    vH.querySelector('[data-h="again"]').addEventListener("click", () => { HR.run = { qs: hNew(10), k: 0, ok: 0, pick: null }; hRun(); zScroll(vH); });
+  }
+
+  const ISO = {"pairs": [{"a": {"t": "CH3–CH(CH3)–CH2–CH3"}, "na": "2-метилбутан", "b": {"t": "CH3–CH2–CH(CH3)–CH3"}, "nb": "2-метилбутан", "k": 0, "x": "Цепь просто записана с другого конца. Самая длинная цепь — 4 атома C, метил у второго."}, {"a": {"t": "CH2=CH–CH2–CH3"}, "na": "бутен-1", "b": {"t": "CH3–CH2–CH=CH2"}, "nb": "бутен-1", "k": 0, "x": "Двойная связь у крайнего атома C — нумеруем с того конца, где она ближе. Это одно вещество."}, {"a": {"t": "CH3–C(CH3)2–CH3"}, "na": "2,2-диметилпропан", "b": {"t": "C(CH3)4"}, "nb": "2,2-диметилпропан", "k": 0, "x": "Центральный атом C и четыре метила — это одно и то же, просто иначе записано."}, {"a": {"t": "CH3–CH(CH3)–CH(CH3)–CH3"}, "na": "2,3-диметилбутан", "b": {"t": "(CH3)2CH–CH(CH3)2"}, "nb": "2,3-диметилбутан", "k": 0, "x": "Две группы CH(CH₃)₂ соединены между собой — это 2,3-диметилбутан, в любой записи."}, {"a": {"t": "CH3–CH2–CH(CH3)–CH2–CH3"}, "na": "3-метилпентан", "b": {"t": "CH3–CH(C2H5)–CH2–CH3"}, "nb": "3-метилпентан", "k": 0, "x": "Ловушка: «боковой» этил на самом деле продолжает главную цепь. Самая длинная цепь — 5 атомов C, метил у третьего."}, {"a": {"t": "CH3–CH(CH3)–CH2–CH2–CH3"}, "na": "2-метилпентан", "b": {"t": "CH3–CH2–CH2–CH(CH3)–CH3"}, "nb": "2-метилпентан", "k": 0, "x": "Та же молекула, записанная справа налево. Нумеруем с того конца, где ближе заместитель."}, {"a": {"t": "CH3–CH(OH)–CH3"}, "na": "пропанол-2", "b": {"t": "(CH3)2CH–OH"}, "nb": "пропанол-2", "k": 0, "x": "OH у среднего атома C в обеих записях."}, {"a": {"m": "m0"}, "na": "цис-бутен-2", "b": {"m": "m1"}, "nb": "цис-бутен-2", "k": 0, "x": "Обе метильные группы по одну сторону двойной связи — это один и тот же цис-изомер, просто перевёрнутый."}, {"a": {"t": "CH3–CH2–CH2–CH3"}, "na": "бутан", "b": {"t": "CH3–CH(CH3)–CH3"}, "nb": "2-метилпропан", "k": 1, "x": "Формула одна — C₄H₁₀, а углеродный скелет разный: прямая цепь и разветвлённая. Изомерия углеродного скелета."}, {"a": {"t": "CH2=CH–CH2–CH3"}, "na": "бутен-1", "b": {"t": "CH3–CH=CH–CH3"}, "nb": "бутен-2", "k": 1, "x": "Оба C₄H₈, отличается место двойной связи — изомерия положения кратной связи."}, {"a": {"t": "CH2=CH–CH2–CH3"}, "na": "бутен-1", "b": {"m": "m2"}, "nb": "циклобутан", "k": 1, "x": "Оба C₄H₈: алкены и циклоалканы — межклассовые изомеры (общая формула CₙH₂ₙ)."}, {"a": {"t": "CH3–CH2–CH2–OH"}, "na": "пропанол-1", "b": {"t": "CH3–CH(OH)–CH3"}, "nb": "пропанол-2", "k": 1, "x": "Оба C₃H₈O, OH стоит у разных атомов C — изомерия положения функциональной группы."}, {"a": {"t": "CH3–CH2–OH"}, "na": "этанол", "b": {"t": "CH3–O–CH3"}, "nb": "диметиловый эфир", "k": 1, "x": "Оба C₂H₆O: спирты и простые эфиры — межклассовые изомеры."}, {"a": {"t": "CH3–CH2–CHO"}, "na": "пропаналь", "b": {"t": "CH3–CO–CH3"}, "nb": "ацетон (пропанон)", "k": 1, "x": "Оба C₃H₆O: альдегиды и кетоны — межклассовые изомеры."}, {"a": {"t": "CH≡C–CH2–CH3"}, "na": "бутин-1", "b": {"t": "CH2=CH–CH=CH2"}, "nb": "бутадиен-1,3", "k": 1, "x": "Оба C₄H₆: алкины и алкадиены — межклассовые изомеры (CₙH₂ₙ₋₂)."}, {"a": {"t": "CH3–COOH"}, "na": "уксусная кислота", "b": {"t": "H–COO–CH3"}, "nb": "метилформиат", "k": 1, "x": "Оба C₂H₄O₂: карбоновые кислоты и сложные эфиры — межклассовые изомеры."}, {"a": {"t": "CH3–CH2–CH2–CH2–CH3"}, "na": "пентан", "b": {"t": "CH3–C(CH3)2–CH3"}, "nb": "2,2-диметилпропан", "k": 1, "x": "Оба C₅H₁₂, скелет разный — изомерия углеродного скелета."}, {"a": {"t": "CH3–CH2–CH2–Cl"}, "na": "1-хлорпропан", "b": {"t": "CH3–CHCl–CH3"}, "nb": "2-хлорпропан", "k": 1, "x": "Оба C₃H₇Cl, хлор у разных атомов C — изомерия положения."}, {"a": {"m": "m3"}, "na": "1,2-диметилбензол (о-ксилол)", "b": {"m": "m4"}, "nb": "этилбензол", "k": 1, "x": "Оба C₈H₁₀: два метила или один этил — изомерия боковых цепей."}, {"a": {"m": "m3"}, "na": "1,2-диметилбензол (о-ксилол)", "b": {"m": "m5"}, "nb": "1,4-диметилбензол (п-ксилол)", "k": 1, "x": "Оба C₈H₁₀, метилы в разных положениях кольца — изомерия положения."}, {"a": {"m": "m0"}, "na": "цис-бутен-2", "b": {"m": "m6"}, "nb": "транс-бутен-2", "k": 2, "x": "Строение одинаковое, но метилы по одну сторону двойной связи (цис) или по разные (транс). Это пространственная изомерия."}, {"a": {"m": "m7"}, "na": "цис-1,2-дихлорэтен", "b": {"m": "m8"}, "nb": "транс-1,2-дихлорэтен", "k": 2, "x": "Атомы Cl по одну сторону (цис) и по разные стороны (транс) от двойной связи."}, {"a": {"m": "m9"}, "na": "цис-пентен-2", "b": {"m": "m10"}, "nb": "транс-пентен-2", "k": 2, "x": "У каждого атома C при двойной связи разные заместители — значит, возможна цис-транс-изомерия."}, {"a": {"t": "CH3–CH3"}, "na": "этан", "b": {"t": "CH3–CH2–CH3"}, "nb": "пропан", "k": 3, "x": "Один класс, отличаются на одну группу CH₂ — гомологи."}, {"a": {"t": "CH2=CH2"}, "na": "этен", "b": {"t": "CH2=CH–CH3"}, "nb": "пропен", "k": 3, "x": "Оба алкены, разница — CH₂. Гомологи."}, {"a": {"t": "CH3–OH"}, "na": "метанол", "b": {"t": "CH3–CH2–OH"}, "nb": "этанол", "k": 3, "x": "Оба одноатомные спирты, разница — CH₂. Гомологи."}, {"a": {"m": "m11"}, "na": "бензол", "b": {"m": "m12"}, "nb": "толуол", "k": 3, "x": "Оба арены, толуол больше на CH₂. Гомологи."}, {"a": {"t": "H–COOH"}, "na": "муравьиная кислота", "b": {"t": "CH3–COOH"}, "nb": "уксусная кислота", "k": 3, "x": "Обе предельные одноосновные кислоты, разница — CH₂. Гомологи."}, {"a": {"t": "CH≡CH"}, "na": "этин", "b": {"t": "CH≡C–CH3"}, "nb": "пропин", "k": 3, "x": "Оба алкины, разница — CH₂. Гомологи."}, {"a": {"t": "CH3–CH2–CH2–CH3"}, "na": "бутан", "b": {"t": "CH3–CH(CH3)–CH2–CH3"}, "nb": "2-метилбутан", "k": 3, "x": "Ловушка: строение разное, но формулы C₄H₁₀ и C₅H₁₂ — отличаются на CH₂, класс один. Значит, гомологи, а не изомеры."}], "counts": [{"q": "Сколько структурных изомеров у алкана C₄H₁₀?", "l": [{"t": "CH3–CH2–CH2–CH3", "n": "бутан"}, {"t": "CH3–CH(CH3)–CH3", "n": "2-метилпропан"}]}, {"q": "Сколько структурных изомеров у алкана C₅H₁₂?", "l": [{"t": "CH3–(CH2)3–CH3", "n": "пентан"}, {"t": "CH3–CH(CH3)–CH2–CH3", "n": "2-метилбутан"}, {"t": "CH3–C(CH3)2–CH3", "n": "2,2-диметилпропан"}]}, {"q": "Сколько структурных изомеров у алкана C₆H₁₄?", "l": [{"t": "CH3–(CH2)4–CH3", "n": "гексан"}, {"t": "CH3–CH(CH3)–(CH2)2–CH3", "n": "2-метилпентан"}, {"t": "CH3–CH2–CH(CH3)–CH2–CH3", "n": "3-метилпентан"}, {"t": "CH3–CH(CH3)–CH(CH3)–CH3", "n": "2,3-диметилбутан"}, {"t": "CH3–C(CH3)2–CH2–CH3", "n": "2,2-диметилбутан"}]}, {"q": "Сколько структурных изомеров среди алкенов C₄H₈ (без цис-транс)?", "l": [{"t": "CH2=CH–CH2–CH3", "n": "бутен-1"}, {"t": "CH3–CH=CH–CH3", "n": "бутен-2"}, {"t": "CH2=C(CH3)–CH3", "n": "2-метилпропен"}]}, {"q": "Сколько изомеров среди алкенов C₄H₈ с учётом цис-транс?", "l": [{"t": "CH2=CH–CH2–CH3", "n": "бутен-1"}, {"m": "m0", "n": "цис-бутен-2"}, {"m": "m6", "n": "транс-бутен-2"}, {"t": "CH2=C(CH3)–CH3", "n": "2-метилпропен"}]}, {"q": "Сколько структурных изомеров среди алкенов C₅H₁₀ (без цис-транс)?", "l": [{"t": "CH2=CH–(CH2)2–CH3", "n": "пентен-1"}, {"t": "CH3–CH=CH–CH2–CH3", "n": "пентен-2"}, {"t": "CH2=C(CH3)–CH2–CH3", "n": "2-метилбутен-1"}, {"t": "CH2=CH–CH(CH3)–CH3", "n": "3-метилбутен-1"}, {"t": "CH3–C(CH3)=CH–CH3", "n": "2-метилбутен-2"}]}, {"q": "Сколько изомерных алкинов C₄H₆?", "l": [{"t": "CH≡C–CH2–CH3", "n": "бутин-1"}, {"t": "CH3–C≡C–CH3", "n": "бутин-2"}]}, {"q": "Сколько изомеров у C₃H₇Cl?", "l": [{"t": "CH3–CH2–CH2–Cl", "n": "1-хлорпропан"}, {"t": "CH3–CHCl–CH3", "n": "2-хлорпропан"}]}, {"q": "Сколько изомеров у C₄H₉Cl?", "l": [{"t": "CH3–(CH2)3–Cl", "n": "1-хлорбутан"}, {"t": "CH3–CHCl–CH2–CH3", "n": "2-хлорбутан"}, {"t": "CH3–CH(CH3)–CH2–Cl", "n": "1-хлор-2-метилпропан"}, {"t": "CH3–CCl(CH3)–CH3", "n": "2-хлор-2-метилпропан"}]}, {"q": "Сколько изомеров у C₂H₄Cl₂?", "l": [{"t": "CH2Cl–CH2Cl", "n": "1,2-дихлорэтан"}, {"t": "CH3–CHCl2", "n": "1,1-дихлорэтан"}]}, {"q": "Сколько спиртов состава C₄H₁₀O?", "l": [{"t": "CH3–(CH2)3–OH", "n": "бутанол-1"}, {"t": "CH3–CH(OH)–CH2–CH3", "n": "бутанол-2"}, {"t": "CH3–CH(CH3)–CH2–OH", "n": "2-метилпропанол-1"}, {"t": "CH3–C(OH)(CH3)–CH3", "n": "2-метилпропанол-2"}]}, {"q": "Сколько всего изомеров у C₃H₈O (спирты и эфиры)?", "l": [{"t": "CH3–CH2–CH2–OH", "n": "пропанол-1"}, {"t": "CH3–CH(OH)–CH3", "n": "пропанол-2"}, {"t": "CH3–O–CH2–CH3", "n": "метилэтиловый эфир"}]}, {"q": "Сколько аренов состава C₈H₁₀?", "l": [{"m": "m4", "n": "этилбензол"}, {"m": "m3", "n": "1,2-диметилбензол"}, {"m": "m13", "n": "1,3-диметилбензол"}, {"m": "m5", "n": "1,4-диметилбензол"}]}, {"q": "Сколько карбоновых кислот состава C₄H₈O₂?", "l": [{"t": "CH3–CH2–CH2–COOH", "n": "бутановая кислота"}, {"t": "CH3–CH(CH3)–COOH", "n": "2-метилпропановая кислота"}]}, {"q": "Сколько всего изомеров у C₃H₆?", "l": [{"t": "CH2=CH–CH3", "n": "пропен"}, {"m": "m14", "n": "циклопропан"}]}], "svg": {"m0": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='64' viewBox='0 0 136 86'><path d='M 23.3,50.9 L 35.9,29.1'/><path d='M 49.5,15.1 L 80.5,15.1'/><path d='M 49.5,22.0 L 80.5,22.0'/><path d='M 94.2,29.1 L 106.8,50.9'/><text x='4.1' y='66.0' font-size='15'>C</text><text x='14.4' y='66.0' font-size='15'>H</text><text x='24.8' y='72.0' font-size='9'>3</text><text x='27.1' y='26.0' font-size='15'>C</text><text x='37.5' y='26.0' font-size='15'>H</text><text x='83.6' y='26.0' font-size='15'>C</text><text x='93.9' y='26.0' font-size='15'>H</text><text x='106.6' y='66.0' font-size='15'>C</text><text x='117.0' y='66.0' font-size='15'>H</text><text x='127.3' y='72.0' font-size='9'>3</text></svg> ", "m1": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='64' viewBox='0 0 136 86'><path d='M 23.3,50.9 L 35.9,29.1'/><path d='M 49.5,15.1 L 80.5,15.1'/><path d='M 49.5,22.0 L 80.5,22.0'/><path d='M 94.2,29.1 L 106.8,50.9'/><text x='4.1' y='66.0' font-size='15'>C</text><text x='14.4' y='66.0' font-size='15'>H</text><text x='24.8' y='72.0' font-size='9'>3</text><text x='27.1' y='26.0' font-size='15'>C</text><text x='37.5' y='26.0' font-size='15'>H</text><text x='83.6' y='26.0' font-size='15'>C</text><text x='93.9' y='26.0' font-size='15'>H</text><text x='106.6' y='66.0' font-size='15'>C</text><text x='117.0' y='66.0' font-size='15'>H</text><text x='127.3' y='72.0' font-size='9'>3</text></svg> ", "m2": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='83' height='80' viewBox='0 0 112 108'><path d='M 110.0,54.0 L 56.0,0.0'/><path d='M 56.0,0.0 L 2.0,54.0'/><path d='M 2.0,54.0 L 56.0,108.0'/><path d='M 56.0,108.0 L 110.0,54.0'/><path d='M 107.3,51.3 L 110.0,54.0 L 107.3,56.7'/><path d='M 58.7,2.7 L 56.0,0.0 L 53.3,2.7'/><path d='M 4.7,51.3 L 2.0,54.0 L 4.7,56.7'/><path d='M 53.3,105.3 L 56.0,108.0 L 58.7,105.3'/></svg> ", "m3": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='118' height='98' viewBox='0 0 159 132'><path d='M 26.0,110.0 L 63.9,88.1'/><path d='M 63.9,88.1 L 109.9,114.6'/><path d='M 71.9,83.5 L 109.9,105.4'/><path d='M 109.9,114.6 L 155.9,88.1'/><path d='M 155.9,88.1 L 155.9,34.9'/><path d='M 147.9,83.5 L 147.9,39.5'/><path d='M 155.9,34.9 L 109.9,8.4'/><path d='M 109.9,8.4 L 63.9,34.9'/><path d='M 109.9,17.6 L 71.9,39.5'/><path d='M 63.9,34.9 L 31.9,16.4'/><path d='M 63.9,34.9 L 63.9,88.1'/><path d='M 107.6,113.3 L 109.9,114.6 L 112.2,113.3'/><path d='M 153.6,89.4 L 155.9,88.1 L 155.9,85.4'/><path d='M 155.9,37.6 L 155.9,34.9 L 153.6,33.6'/><path d='M 112.2,9.7 L 109.9,8.4 L 107.6,9.7'/><text x='3.1' y='122.1' font-size='15'>C</text><text x='13.4' y='122.1' font-size='15'>H</text><text x='23.8' y='128.1' font-size='9'>3</text><text x='3.1' y='15.9' font-size='15'>C</text><text x='13.4' y='15.9' font-size='15'>H</text><text x='23.8' y='21.9' font-size='9'>3</text></svg> ", "m4": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='184' height='90' viewBox='0 0 248 121'><path d='M 171.9,60.5 L 124.5,60.5'/><path d='M 124.5,60.5 L 96.7,12.3'/><path d='M 114.9,60.5 L 91.9,20.7'/><path d='M 96.7,12.3 L 41.0,12.3'/><path d='M 41.0,12.3 L 13.2,60.5'/><path d='M 45.9,20.7 L 22.9,60.5'/><path d='M 13.2,60.5 L 41.0,108.7'/><path d='M 41.0,108.7 L 96.7,108.7'/><path d='M 45.9,100.3 L 91.9,100.3'/><path d='M 96.7,108.7 L 124.5,60.5'/><path d='M 98.1,14.7 L 96.7,12.3 L 93.9,12.3'/><path d='M 43.8,12.3 L 41.0,12.3 L 39.6,14.7'/><path d='M 14.6,58.1 L 13.2,60.5 L 14.6,62.9'/><path d='M 39.6,106.3 L 41.0,108.7 L 43.8,108.7'/><path d='M 93.9,108.7 L 96.7,108.7 L 98.1,106.3'/><text x='175.6' y='68.0' font-size='15'>C</text><text x='186.0' y='68.0' font-size='15'>H</text><text x='196.3' y='74.0' font-size='9'>2</text><text x='201.1' y='68.0' font-size='15'>–</text><text x='209.5' y='68.0' font-size='15'>C</text><text x='219.9' y='68.0' font-size='15'>H</text><text x='230.2' y='74.0' font-size='9'>3</text></svg> ", "m5": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='160' height='90' viewBox='0 0 216 121'><path d='M 184.9,60.5 L 148.7,60.5'/><path d='M 148.7,60.5 L 126.9,22.7'/><path d='M 126.9,22.7 L 83.2,22.7'/><path d='M 123.1,29.3 L 87.0,29.3'/><path d='M 83.2,22.7 L 61.4,60.5'/><path d='M 61.4,60.5 L 25.2,60.5'/><path d='M 61.4,60.5 L 83.2,98.3'/><path d='M 69.0,60.5 L 87.0,91.7'/><path d='M 83.2,98.3 L 126.9,98.3'/><path d='M 126.9,98.3 L 148.7,60.5'/><path d='M 123.1,91.7 L 141.1,60.5'/><path d='M 127.9,24.6 L 126.9,22.7 L 124.7,22.7'/><path d='M 85.4,22.7 L 83.2,22.7 L 82.1,24.6'/><path d='M 82.1,96.4 L 83.2,98.3 L 85.4,98.3'/><path d='M 124.7,98.3 L 126.9,98.3 L 127.9,96.4'/><text x='187.8' y='68.0' font-size='15'>C</text><text x='198.2' y='68.0' font-size='15'>H</text><text x='208.5' y='74.0' font-size='9'>3</text><text x='2.9' y='68.0' font-size='15'>C</text><text x='13.3' y='68.0' font-size='15'>H</text><text x='23.6' y='74.0' font-size='9'>3</text></svg> ", "m6": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='119' height='56' viewBox='0 0 161 76'><path d='M 25.8,37.4 L 42.5,30.3'/><path d='M 69.8,26.5 L 87.5,39.8'/><path d='M 65.7,31.8 L 83.5,45.2'/><path d='M 103.6,46.5 L 129.3,35.6'/><text x='3.5' y='48.1' font-size='15'>C</text><text x='13.8' y='48.1' font-size='15'>H</text><text x='24.2' y='54.1' font-size='9'>3</text><text x='45.4' y='30.5' font-size='15'>C</text><text x='55.8' y='30.5' font-size='15'>H</text><text x='81.3' y='57.5' font-size='15'>C</text><text x='91.6' y='57.5' font-size='15'>H</text><text x='132.2' y='39.9' font-size='15'>C</text><text x='142.6' y='39.9' font-size='15'>H</text><text x='152.9' y='45.9' font-size='9'>3</text></svg> ", "m7": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='64' viewBox='0 0 136 86'><path d='M 20.7,56.6 L 36.4,29.4'/><path d='M 50.9,14.3 L 88.3,14.3'/><path d='M 50.9,22.4 L 88.3,22.4'/><path d='M 102.7,29.4 L 118.4,56.6'/><text x='4.3' y='72.2' font-size='15'>C</text><text x='14.7' y='72.2' font-size='15'>l</text><text x='28.0' y='25.8' font-size='15'>C</text><text x='38.3' y='25.8' font-size='15'>H</text><text x='91.8' y='25.8' font-size='15'>C</text><text x='102.2' y='25.8' font-size='15'>H</text><text x='118.5' y='72.2' font-size='15'>C</text><text x='128.9' y='72.2' font-size='15'>l</text></svg> ", "m8": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='119' height='56' viewBox='0 0 161 76'><path d='M 20.0,39.1 L 44.3,28.8'/><path d='M 72.7,24.7 L 94.1,40.8'/><path d='M 68.1,30.7 L 89.5,46.9'/><path d='M 110.8,48.1 L 141.0,35.2'/><text x='3.6' y='48.6' font-size='15'>C</text><text x='13.9' y='48.6' font-size='15'>l</text><text x='47.7' y='28.8' font-size='15'>C</text><text x='58.0' y='28.8' font-size='15'>H</text><text x='88.1' y='59.2' font-size='15'>C</text><text x='98.4' y='59.2' font-size='15'>H</text><text x='144.3' y='39.4' font-size='15'>C</text><text x='154.7' y='39.4' font-size='15'>l</text></svg> ", "m9": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='154' height='64' viewBox='0 0 208 86'><path d='M 72.7,53.2 L 87.9,26.8'/><path d='M 102.2,12.0 L 138.5,12.0'/><path d='M 102.2,19.8 L 138.5,19.8'/><path d='M 152.8,26.8 L 168.0,53.2'/><text x='14.6' y='68.6' font-size='15'>H</text><text x='25.0' y='74.6' font-size='9'>3</text><text x='29.8' y='68.6' font-size='15'>C</text><text x='40.1' y='68.6' font-size='15'>–</text><text x='48.5' y='68.6' font-size='15'>H</text><text x='58.8' y='74.6' font-size='9'>2</text><text x='63.6' y='68.6' font-size='15'>C</text><text x='79.4' y='23.4' font-size='15'>C</text><text x='89.8' y='23.4' font-size='15'>H</text><text x='142.0' y='23.4' font-size='15'>C</text><text x='152.3' y='23.4' font-size='15'>H</text><text x='168.1' y='68.6' font-size='15'>C</text><text x='178.5' y='68.6' font-size='15'>H</text><text x='188.8' y='74.6' font-size='9'>3</text></svg> ", "m10": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='172' height='56' viewBox='0 0 233 76'><path d='M 74.2,37.8 L 95.2,28.8'/><path d='M 123.5,24.7 L 144.9,40.8'/><path d='M 119.0,30.8 L 140.3,46.8'/><path d='M 161.5,48.0 L 191.6,35.2'/><text x='12.8' y='48.6' font-size='15'>H</text><text x='23.2' y='54.6' font-size='9'>3</text><text x='28.0' y='48.6' font-size='15'>C</text><text x='38.3' y='48.6' font-size='15'>–</text><text x='46.7' y='48.6' font-size='15'>H</text><text x='57.0' y='54.6' font-size='9'>2</text><text x='61.8' y='48.6' font-size='15'>C</text><text x='98.6' y='28.8' font-size='15'>C</text><text x='108.9' y='28.8' font-size='15'>H</text><text x='138.9' y='59.2' font-size='15'>C</text><text x='149.2' y='59.2' font-size='15'>H</text><text x='194.9' y='39.4' font-size='15'>C</text><text x='205.3' y='39.4' font-size='15'>H</text><text x='215.6' y='45.4' font-size='9'>3</text></svg> ", "m11": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='101' height='90' viewBox='0 0 136 121'><path d='M 136.0,60.5 L 102.0,1.6'/><path d='M 102.0,1.6 L 34.0,1.6'/><path d='M 96.1,11.8 L 39.9,11.8'/><path d='M 34.0,1.6 L 0.0,60.5'/><path d='M 0.0,60.5 L 34.0,119.4'/><path d='M 11.8,60.5 L 39.9,109.2'/><path d='M 34.0,119.4 L 102.0,119.4'/><path d='M 102.0,119.4 L 136.0,60.5'/><path d='M 96.1,109.2 L 124.2,60.5'/><path d='M 134.3,57.6 L 136.0,60.5 L 134.3,63.4'/><path d='M 103.7,4.6 L 102.0,1.6 L 98.6,1.6'/><path d='M 37.4,1.6 L 34.0,1.6 L 32.3,4.6'/><path d='M 1.7,57.6 L 0.0,60.5 L 1.7,63.4'/><path d='M 32.3,116.4 L 34.0,119.4 L 37.4,119.4'/><path d='M 98.6,119.4 L 102.0,119.4 L 103.7,116.4'/></svg> ", "m12": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='130' height='90' viewBox='0 0 176 121'><path d='M 144.1,60.5 L 102.4,60.5'/><path d='M 102.4,60.5 L 77.6,17.6'/><path d='M 93.8,60.5 L 73.3,25.0'/><path d='M 77.6,17.6 L 28.1,17.6'/><path d='M 28.1,17.6 L 3.3,60.5'/><path d='M 32.4,25.0 L 11.9,60.5'/><path d='M 3.3,60.5 L 28.1,103.4'/><path d='M 28.1,103.4 L 77.6,103.4'/><path d='M 32.4,96.0 L 73.3,96.0'/><path d='M 77.6,103.4 L 102.4,60.5'/><path d='M 78.9,19.8 L 77.6,17.6 L 75.1,17.6'/><path d='M 30.6,17.6 L 28.1,17.6 L 26.9,19.8'/><path d='M 4.6,58.4 L 3.3,60.5 L 4.6,62.6'/><path d='M 26.9,101.2 L 28.1,103.4 L 30.6,103.4'/><path d='M 75.1,103.4 L 77.6,103.4 L 78.9,101.2'/><text x='147.4' y='68.0' font-size='15'>C</text><text x='157.7' y='68.0' font-size='15'>H</text><text x='168.1' y='74.0' font-size='9'>3</text></svg> ", "m13": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='144' height='98' viewBox='0 0 194 132'><path d='M 162.7,98.9 L 132.1,81.2'/><path d='M 132.1,81.2 L 132.1,37.3'/><path d='M 132.1,37.3 L 94.0,15.3'/><path d='M 125.5,41.1 L 94.0,22.9'/><path d='M 94.0,15.3 L 56.0,37.3'/><path d='M 56.0,37.3 L 56.0,81.2'/><path d='M 62.6,41.1 L 62.6,77.4'/><path d='M 56.0,81.2 L 25.3,98.9'/><path d='M 56.0,81.2 L 94.0,103.2'/><path d='M 94.0,103.2 L 132.1,81.2'/><path d='M 94.0,95.6 L 125.5,77.4'/><path d='M 132.1,39.5 L 132.1,37.3 L 130.2,36.2'/><path d='M 95.9,16.4 L 94.0,15.3 L 92.1,16.4'/><path d='M 57.9,36.2 L 56.0,37.3 L 56.0,39.5'/><path d='M 92.1,102.1 L 94.0,103.2 L 95.9,102.1'/><text x='165.7' y='110.7' font-size='15'>C</text><text x='176.0' y='110.7' font-size='15'>H</text><text x='186.4' y='116.7' font-size='9'>3</text><text x='3.1' y='110.7' font-size='15'>C</text><text x='13.4' y='110.7' font-size='15'>H</text><text x='23.8' y='116.7' font-size='9'>3</text></svg> ", "m14": "<svg class='mol' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='67' height='68' viewBox='0 0 90 92'><path d='M 84.8,46.0 L 5.2,0.0'/><path d='M 5.2,0.0 L 5.2,92.0'/><path d='M 5.2,92.0 L 84.8,46.0'/><path d='M 80.9,43.7 L 84.8,46.0 L 80.9,48.3'/><path d='M 9.1,2.3 L 5.2,0.0 L 5.2,4.6'/><path d='M 5.2,87.4 L 5.2,92.0 L 9.1,89.7'/></svg> "}};
+  /* ════════ v3.0: ИЗОМЕРИЯ — «кто они друг другу» и «сколько изомеров» ════════ */
+  const vI = document.getElementById("v-izomeriya");
+  const IK = "hb.iso.v1";
+  let is_ = {};
+  try { is_ = JSON.parse(localStorage.getItem(IK) || "{}") || {}; } catch (e) { is_ = {}; }
+  function isave() { try { localStorage.setItem(IK, JSON.stringify(is_)); } catch (e) {} }
+  const IR = { run: null };
+  const KIND = ["одно и то же вещество", "структурные изомеры", "цис-транс-изомеры", "гомологи"];
+  const KSIGN = ["=", "≠ строение, = формула", "↕ цис / транс", "+ CH₂"];
+  const iMol = (x) => x.m ? `<span class="h-mol">${ISO.svg[x.m]}</span>` : `<span class="h-f">${chem(x.t)}</span>`;
+  function iNew() {
+    /* 7 пар + 3 вопроса «сколько», вперемешку */
+    const ps = sShuf(ISO.pairs).slice(0, 7).map(p => ({ t: "p", p }));
+    const cs = sShuf(ISO.counts).slice(0, 3).map(c => {
+      const n = c.l.length, nums = new Set([n]);
+      for (const d of sShuf([-1, 1, 2, -2, 3])) { if (nums.size >= 4) break; if (n + d >= 1) nums.add(n + d); }
+      return { t: "c", c, n, opts: [...nums].sort((a, b) => a - b) };
+    });
+    return sShuf([...ps, ...cs]);
+  }
+  function iRender() {
+    if (IR.run) return iRun();
+    vI.innerHTML = `
+      <div class="z-head">
+        <button type="button" class="back" data-i="back">← к модулям</button>
+        <h2 class="mod-title">Изомерия</h2>
+      </div>
+      <p class="intro">Два вида заданий: кто эти два вещества друг другу — одно вещество, изомеры, цис-транс-изомеры или гомологи; и сколько изомеров у формулы — после ответа они появятся по одному. ${ISO.pairs.length} пар и ${ISO.counts.length} формул.</p>
+      <div class="l-start">
+        ${is_.best != null ? `<p class="cd-total">Лучший результат: <b>${is_.best}</b> из 10</p>` : ""}
+        <button type="button" class="btn primary" data-i="go">Начать: 10 заданий</button>
+      </div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">
+        <div><b>Одно вещество</b><span>Назови оба по правилам: выбери самую длинную цепь, пронумеруй с того конца, где ближе заместитель или кратная связь. Названия совпали — вещество одно.</span></div>
+        <div><b>Структурные изомеры</b><span>Молекулярная формула одна, строение разное: скелет (прямая или разветвлённая цепь), положение кратной связи или группы, межклассовые (алкены ↔ циклоалканы, алкины ↔ диены, спирты ↔ эфиры, альдегиды ↔ кетоны, кислоты ↔ сложные эфиры).</span></div>
+        <div><b>Цис-транс</b><span>Только у двойной связи (или цикла), и только если у каждого атома C при ней два <u>разных</u> заместителя. Бутен-1 и 2-метилпропен — цис-транс нет.</span></div>
+        <div><b>Гомологи</b><span>Один класс, формулы отличаются на CH₂ (или несколько CH₂). Изомеры — формула одинаковая, гомологи — разная.</span></div>
+      </div>`;
+    vI.querySelector('[data-i="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vI.querySelector('[data-i="go"]').addEventListener("click", () => { IR.run = { qs: iNew(), k: 0, ok: 0, pick: null }; iRun(); zScroll(vI); });
+  }
+  function iRun() {
+    const r = IR.run;
+    if (r.k >= r.qs.length) return iEnd();
+    const q = r.qs[r.k], done = r.pick != null;
+    let card, ask, opts, right, ex;
+    if (q.t === "p") {
+      const p = q.p, good = done && r.pick === p.k;
+      card = `<div class="l-card i-card">
+        <div class="i-pair${done ? " k" + p.k : ""}">
+          <div class="i-m">${iMol(p.a)}${done ? `<small class="i-n">${p.na}</small>` : ""}</div>
+          <span class="i-sign">${done ? KSIGN[p.k] : "?"}</span>
+          <div class="i-m i-b">${iMol(p.b)}${done ? `<small class="i-n">${p.nb}</small>` : ""}</div>
+        </div></div>`;
+      ask = "Кто эти вещества друг другу?";
+      opts = KIND.map((t, j) => ({ h: t, ok: j === p.k }));
+      ex = `${good ? "Верно!" : `Неверно. Правильно: ${KIND[p.k]}.`} ${p.x}`;
+    } else {
+      const c = q.c, good = done && q.opts[r.pick] === q.n;
+      card = `<div class="l-card i-card"><p class="i-q">${c.q}</p>
+        ${done ? `<div class="i-list">${c.l.map((m, j) => `<div class="i-it" style="animation-delay:${(j * 0.35).toFixed(2)}s"><b>${j + 1}</b>${iMol(m)}<small>${m.n}</small></div>`).join("")}</div>` : ""}</div>`;
+      ask = "Сколько?";
+      opts = q.opts.map(n => ({ h: String(n), ok: n === q.n }));
+      ex = `${good ? "Верно!" : `Неверно. Правильно: ${q.n}.`} Все изомеры — на карточке выше.`;
+    }
+    vI.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-i="list">← Изомерия</button></div>
+      <div class="cd-top"><span class="num">Задание ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      ${card}
+      <p class="l-ask">${ask}</p>
+      <div class="z-opts s-opts${q.t === "c" ? " i-nums" : ""}">${opts.map((o, j) => `<button type="button" class="z-opt${done ? (o.ok ? " good" : j === r.pick ? " bad" : " fade") : ""}" data-io="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o.h}</b></span></button>`).join("")}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${opts[r.pick].ok ? "good" : "wrong"}">${ex}</p><div class="actions"><button type="button" class="btn primary" data-i="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    vI.querySelector('[data-i="list"]').addEventListener("click", () => { IR.run = null; iRender(); zScroll(vI); });
+    vI.querySelectorAll("[data-io]").forEach(b => b.addEventListener("click", () => {
+      if (r.pick != null) return;
+      r.pick = +b.dataset.io; const ok = opts[r.pick].ok; if (ok) r.ok++;
+      haptic(ok ? "success" : "error"); iRun(); zScroll(vI.querySelector(".i-card"), 90);
+    }));
+    const nx = vI.querySelector('[data-i="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; r.pick = null; iRun(); zScroll(vI); });
+  }
+  function iEnd() {
+    const r = IR.run;
+    if (is_.best == null || r.ok > is_.best) { is_.best = r.ok; isave(); }
+    vI.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-i="list">← Изомерия</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все верно 🔥" : r.ok >= 7 ? "Хорошо! Загляни в шпаргалку и добей до 10." : "Повтори шпаргалку — и ещё раз."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-i="again">Ещё 10 заданий</button><button type="button" class="btn" data-i="list2">Шпаргалка</button></div></div>`;
+    const back = () => { IR.run = null; iRender(); zScroll(vI); };
+    vI.querySelector('[data-i="list"]').addEventListener("click", back);
+    vI.querySelector('[data-i="list2"]').addEventListener("click", back);
+    vI.querySelector('[data-i="again"]').addEventListener("click", () => { IR.run = { qs: iNew(), k: 0, ok: 0, pick: null }; iRun(); zScroll(vI); });
+  }
+
+  /* ════════ v3.0: «ПРОВЕРЬ СЕБЯ» — хаб + микс по всем темам; «ЛОВУШКИ ЕГЭ» по всем темам ════════ */
+  const vK = document.getElementById("v-check");
+  const KK = "hb.mix.v1";
+  let ks = {};
+  try { ks = JSON.parse(localStorage.getItem(KK) || "{}") || {}; } catch (e) { ks = {}; }
+  if (!ks.t || typeof ks.t !== "object") ks.t = {};
+  function ksave() { try { localStorage.setItem(KK, JSON.stringify(ks)); } catch (e) {} }
+  const KT = {
+    lechat: { n: "Равновесие · №22", best: () => ls.best },
+    gidroliz: { n: "Гидролиз солей", best: () => ss.gbest },
+    elektroliz: { n: "Электролиз", best: () => ss.ebest },
+    uglevodorody: { n: "Углеводороды", best: () => hs.best },
+    izomeriya: { n: "Изомерия", best: () => is_.best },
+  };
+  const KR = { run: null };
+  /* адаптеры: каждая тема отдаёт задание в общем виде { t, card(done), ask, opts:[{h, ok}], ex } */
+  function kLechat() {
+    const { R, F } = lNew(1)[0];
+    return { t: "lechat", ask: "Куда сместится равновесие?",
+      card: (done) => `<div class="l-card"><div class="l-eq"><span class="l-side${done && F[1] < 0 ? " grow" : ""}">${lSide(R.l)}</span><span class="l-arr${done ? " d" + F[1] : ""}"><i>→</i><i>←</i></span><span class="l-side${done && F[1] > 0 ? " grow" : ""}">${lSide(R.r)}</span><span class="l-q">${R.q > 0 ? "+ Q" : "− Q"}</span></div><div class="l-factor">${F[0]}</div></div>`,
+      opts: [-1, 0, 1].map(v => ({ h: v < 0 ? "← в сторону обратной" : v > 0 ? "в сторону прямой →" : "не смещается", ok: v === F[1] })), ex: F[2] };
+  }
+  function kGidroliz() {
+    const q = gNew(1)[0], g = q.g;
+    return { t: "gidroliz", ask: q.ask, opts: q.opts,
+      card: (done) => `<div class="l-card s-card"><p class="s-f">${chem(g.f)}</p><p class="s-name">${g.name}</p>${done ? `<p class="s-ions">${g.ions}</p>` : ""}${(q.kind === "type" && !done) || g.med == null ? "" : gTube(g.med, q.ind, done)}</div>`,
+      ex: g.why };
+  }
+  function kElektroliz() {
+    const q = sPick(eNew(1)), e = q.e;
+    return { t: "elektroliz", ask: q.ask, opts: q.opts,
+      card: (done) => `<div class="l-card s-card"><p class="s-f">${chem(e.f)}</p><p class="s-name">${e.name} · водный раствор</p>${eCell(q, done)}${q.step > 0 ? `<p class="s-ions">катод: <b>${chem(e.cat)}</b>${done ? ` · анод: <b>${chem(e.an)}</b>` : ""}</p>` : ""}</div>`,
+      ex: q.step ? e.anEx : e.catEx };
+  }
+  function kHc() {
+    const it = sPick(HC.items), order = sShuf([0, 1, 2]);
+    return { t: "uglevodorody", ask: "Что получится?", wide: true,
+      card: (done) => `<div class="l-card h-card"><div class="h-rx">${hMol(it.a)}<span class="h-arr"><small>${chem(it.r)}</small><i></i></span>${done ? `<span class="h-prod">${hMol(it.o[0], true)}</span>` : `<span class="h-slot">?</span>`}</div>${done ? `<span class="h-type">${it.y}</span>` : ""}</div>`,
+      opts: order.map(j => ({ h: hMol(it.o[j], false), ok: j === 0 })), ex: it.x };
+  }
+  function kIso() {
+    if (Math.random() < 0.7) {
+      const p = sPick(ISO.pairs);
+      return { t: "izomeriya", ask: "Кто эти вещества друг другу?",
+        card: (done) => `<div class="l-card i-card"><div class="i-pair${done ? " k" + p.k : ""}"><div class="i-m">${iMol(p.a)}${done ? `<small class="i-n">${p.na}</small>` : ""}</div><span class="i-sign">${done ? KSIGN[p.k] : "?"}</span><div class="i-m i-b">${iMol(p.b)}${done ? `<small class="i-n">${p.nb}</small>` : ""}</div></div></div>`,
+        opts: KIND.map((t, j) => ({ h: t, ok: j === p.k })), ex: p.x };
+    }
+    const c = sPick(ISO.counts), n = c.l.length, nums = new Set([n]);
+    for (const d of sShuf([-1, 1, 2, -2, 3])) { if (nums.size >= 4) break; if (n + d >= 1) nums.add(n + d); }
+    return { t: "izomeriya", ask: "Сколько?", nums: true,
+      card: (done) => `<div class="l-card i-card"><p class="i-q">${c.q}</p>${done ? `<div class="i-list">${c.l.map((m, j) => `<div class="i-it" style="animation-delay:${(j * 0.35).toFixed(2)}s"><b>${j + 1}</b>${iMol(m)}<small>${m.n}</small></div>`).join("")}</div>` : ""}</div>`,
+      opts: [...nums].sort((a, b) => a - b).map(v => ({ h: String(v), ok: v === n })), ex: "Все изомеры — на карточке выше." };
+  }
+  function kNew() {
+    const qs = [];
+    for (const f of [kLechat, kGidroliz, kElektroliz, kHc, kIso]) for (let i = 0; i < 4; i++) qs.push(f());
+    return sShuf(qs);
+  }
+  const kStart = () => { KR.run = { qs: kNew(), k: 0, ok: 0, pick: null, per: {} }; kRun(); zScroll(vK); };
+  const kAcc = (t) => { const x = ks.t[t]; return x && x.n ? Math.round(100 * x.ok / x.n) : null; };
+  function kRender() {
+    if (KR.run) return kRun();
+    const rows = Object.entries(KT).map(([id, m]) => {
+      const a = kAcc(id), b = m.best();
+      return `<button type="button" class="k-row" data-kmod="${id}"><span class="k-name"><b>${m.n}</b><small>${a != null ? `в миксе: ${a}% верно` : "в миксе ещё не было"}${b != null ? ` · рекорд в разделе ${b}/10` : ""}</small></span>${cBar(a || 0, 100)}<span class="k-go">→</span></button>`;
+    }).join("");
+    vK.innerHTML = `
+      <h2 class="mod-title k-h">Проверь себя</h2>
+      <p class="intro">Задания из всех разделов вперемешку — как на ЕГЭ, где темы не идут по порядку. В конце увидишь свою слабую тему.</p>
+      <div class="k-hero">
+        <b>Микс по всем темам</b>
+        <span>20 заданий: равновесие, гидролиз, электролиз, углеводороды, изомерия</span>
+        ${ks.best != null ? `<span class="k-best">Рекорд: <b>${ks.best}</b> из 20 · миксов пройдено: ${ks.runs || 0}</span>` : ""}
+        <button type="button" class="btn primary" data-k="go">Начать микс</button>
+      </div>
+      <h3 class="cd-h">Темы</h3>
+      <div class="k-rows">${rows}
+        <button type="button" class="k-row" data-kmap><span class="k-name"><b>Карта органики</b><small>викторина: ${RX.length} реакций вперемешку</small></span><span class="k-go">→</span></button>
+        <button type="button" class="k-row" data-kmod="z32"><span class="k-name"><b>Задание 32: цепочки</b><small>все цепочки ЕГЭ 2023–2026</small></span><span class="k-go">→</span></button>
+        <button type="button" class="k-row" data-kmod="cards"><span class="k-name"><b>Карточки</b><small>названия веществ и минералов</small></span><span class="k-go">→</span></button>
+      </div>`;
+    vK.querySelector('[data-k="go"]').addEventListener("click", kStart);
+    vK.querySelectorAll("[data-kmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.kmod })));
+    vK.querySelector("[data-kmap]").addEventListener("click", () => go({ tab: "quiz", module: "mapquiz" }));
+  }
+  function kRun() {
+    const r = KR.run;
+    if (r.k >= r.qs.length) return kEnd();
+    const q = r.qs[r.k], done = r.pick != null, good = done && q.opts[r.pick].ok;
+    const right = done ? q.opts.find(o => o.ok).h : "";
+    vK.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-k="list">← Проверь себя</button></div>
+      <div class="cd-top"><span class="num">Микс · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <span class="k-topic">${KT[q.t].n}</span>
+      ${q.card(done)}
+      <p class="l-ask">${q.ask}</p>
+      <div class="z-opts s-opts${q.nums ? " i-nums" : ""}${q.wide ? " h-opts" : ""}">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o.ok ? " good" : j === r.pick ? " bad" : " fade") : ""}" data-ko="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o.h}</b></span></button>`).join("")}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : q.wide ? "Неверно." : `Неверно. Правильно: ${right.replace(/<small>.*<\/small>/, "").trim()}.`} ${q.ex}</p><div class="actions"><button type="button" class="btn primary" data-k="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    vK.querySelector('[data-k="list"]').addEventListener("click", () => { KR.run = null; kRender(); zScroll(vK); });
+    vK.querySelectorAll("[data-ko]").forEach(b => b.addEventListener("click", () => {
+      if (r.pick != null) return;
+      r.pick = +b.dataset.ko; const ok = q.opts[r.pick].ok;
+      if (ok) r.ok++;
+      const p = r.per[q.t] || (r.per[q.t] = { ok: 0, n: 0 }); p.n++; if (ok) p.ok++;
+      haptic(ok ? "success" : "error"); kRun(); zScroll(vK.querySelector(".z-ex"), 160);
+    }));
+    const nx = vK.querySelector('[data-k="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; r.pick = null; kRun(); zScroll(vK); });
+  }
+  function kEnd() {
+    const r = KR.run;
+    if (!r.saved) {
+      r.saved = true;
+      for (const [t, p] of Object.entries(r.per)) { const x = ks.t[t] || (ks.t[t] = { ok: 0, n: 0 }); x.ok += p.ok; x.n += p.n; }
+      ks.runs = (ks.runs || 0) + 1;
+      if (ks.best == null || r.ok > ks.best) ks.best = r.ok;
+      ksave();
+    }
+    const per = Object.entries(r.per).map(([t, p]) => ({ t, ...p, a: p.ok / p.n })).sort((a, b) => a.a - b.a);
+    const weak = per[0] && per[0].a < 1 ? per[0] : null;
+    vK.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-k="list">← Проверь себя</button></div>
+      <div class="z-res"><span class="num">Итог микса</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Идеально — все темы под контролем 🔥" : r.ok >= 16 ? "Сильно! Осталось подтянуть одну тему." : "Есть над чем поработать — начни со слабой темы."}</p>
+        <div class="k-per">${per.slice().sort((a, b) => b.a - a.a).map(p => `<div class="k-pr${weak && p.t === weak.t ? " weak" : ""}"><span>${KT[p.t].n}</span><b>${p.ok}/${p.n}</b>${cBar(p.ok, p.n)}</div>`).join("")}</div>
+        ${weak ? `<p class="k-weak">Слабая тема — <b>${KT[weak.t].n}</b>. Открой раздел: там шпаргалка и 10 заданий только по ней.</p>` : ""}
+        <div class="actions">${weak ? `<button type="button" class="btn primary" data-k="weak">Потренировать: ${KT[weak.t].n}</button>` : ""}<button type="button" class="btn${weak ? "" : " primary"}" data-k="again">Ещё микс</button></div></div>`;
+    vK.querySelector('[data-k="list"]').addEventListener("click", () => { KR.run = null; kRender(); zScroll(vK); });
+    vK.querySelector('[data-k="again"]').addEventListener("click", kStart);
+    const w = vK.querySelector('[data-k="weak"]');
+    if (w) w.addEventListener("click", () => { KR.run = null; go({ tab: "learn", module: weak.t }); });
+  }
+
+  /* ── Ловушки ЕГЭ из новых разделов ── */
+  const TRAPS = {
+    lechat: [
+      ["Катализатор ничего не смещает", "Он одинаково ускоряет прямую и обратную реакции. Ответ на «добавили катализатор» — всегда «не смещается»."],
+      ["Твёрдые вещества не в счёт", "Добавили уголь, CaCO₃ или FeO — равновесие на месте. Их концентрация постоянна."],
+      ["Давление считают только по газам", "H₂ + I₂(г) ⇄ 2HI: 2 моль газов слева и 2 справа — давление не смещает. Твёрдые и жидкие вещества не считаем."],
+      ["Нагрев ускоряет обе реакции", "Скорость растёт у обеих, но равновесие уходит в сторону эндотермической (−Q). Не путай «скорость» и «смещение»."],
+    ],
+    gidroliz: [
+      ["Фенолфталеин в кислой — бесцветный", "Малиновым он становится только в щелочной среде. В кислой и нейтральной — бесцветный, а не красный."],
+      ["Метилоранж в щёлочи — жёлтый", "Синий цвет в щёлочи — у лакмуса. Метилоранж: красный · оранжевый · жёлтый."],
+      ["CaCl₂ не гидролизуется, MgCl₂ — да", "Ca(OH)₂ в ЕГЭ — сильное основание, Mg(OH)₂ — слабое. Поэтому у MgCl₂ среда кислая."],
+      ["Гидролиз по слабому, среда — по сильному", "Na₂CO₃ гидролизуется по аниону (слабая H₂CO₃), а среда щелочная — её задаёт сильный NaOH."],
+      ["Al₂S₃ в растворе не существует", "Гидролиз необратимый, сразу до конца: Al(OH)₃↓ и H₂S↑."],
+      ["CH₃COONH₄: гидролиз есть, среда нейтральная", "Гидролизуется и по катиону, и по аниону, но силы NH₃·H₂O и CH₃COOH почти равны — pH ≈ 7."],
+    ],
+    elektroliz: [
+      ["Раствор NaCl не даёт натрий", "Металлы до Al включительно на катоде из раствора не выделяются — идёт H₂. Натрий получают только из расплава."],
+      ["F⁻ не окисляется", "Фторид бескислородный, но на аноде всё равно выделяется O₂ из воды."],
+      ["Zn, Fe, Ni, Pb — и металл, и водород", "Металлы от Mn до Pb: на катоде одновременно металл и H₂."],
+      ["Na₂SO₄, KNO₃ — электролиз воды", "H₂ на катоде, O₂ на аноде, соль не расходуется — растёт только её концентрация."],
+      ["Ацетаты — не кислород", "2CH₃COO⁻ − 2e⁻ → C₂H₆ + 2CO₂ (реакция Кольбе)."],
+      ["Расплав ≠ раствор", "В расплаве NaCl на катоде Na, в растворе — H₂. Внимательно читай условие."],
+    ],
+    uglevodorody: [
+      ["KOH: вода или спирт", "Водный раствор — замещение, получается спирт. Спиртовой — отщепление HX, получается алкен."],
+      ["Бензол и толуол на свету — по-разному", "Бензол + Cl₂ (hν) — присоединение, C₆H₆Cl₆. Толуол + Cl₂ (hν) — замещение в CH₃, бензилхлорид."],
+      ["Бензол не обесцвечивает бромную воду", "А стирол обесцвечивает: у него двойная связь в боковой цепи."],
+      ["Кучеров: альдегид только из ацетилена", "C₂H₂ → уксусный альдегид. Все остальные алкины → кетоны."],
+      ["KMnO₄: холод или нагрев", "На холоде в нейтральной среде — диол. В кислой при нагревании связь рвётся: кислоты и CO₂."],
+      ["Ag₂O (аммиачный) — только для ≡C–H", "Реагируют ацетилен и алкины-1. Бутин-2 — нет: у него нет водорода при тройной связи."],
+    ],
+    izomeriya: [
+      ["Изомеры ≠ гомологи", "Изомеры — формула одинаковая. Гомологи — отличаются на CH₂. Бутан и 2-метилбутан — гомологи."],
+      ["Цис-транс нужны два разных заместителя", "У бутена-1 и 2-метилпропена цис-транс-изомерии нет: у одного атома C при двойной связи два одинаковых заместителя."],
+      ["«Боковой» этил — это цепь", "CH₃–CH(C₂H₅)–CH₂–CH₃ — не 2-этилбутан, а 3-метилпентан: ищи самую длинную цепь."],
+      ["Межклассовые пары", "Алкены ↔ циклоалканы, алкины ↔ диены, спирты ↔ простые эфиры, альдегиды ↔ кетоны, кислоты ↔ сложные эфиры."],
+    ],
+  };
+  function trapsNew() {
+    return Object.entries(TRAPS).map(([t, list]) => `
+      <h3 class="cd-h k-th">${KT[t].n} <button type="button" class="linkbtn" data-tmod="${t}">потренировать →</button></h3>
+      <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("");
+  }
+
+  /* старт: #organika, #quiz, #lovushki, #bio, #r8, #z32, #cards, #lechat, #gidroliz, #elektroliz, #uglevodorody, #izomeriya */
   const h = window.HB_START || location.hash.slice(1);
   const mh = /^r(\d{1,2})$/.exec(h);
   if (h === "quiz") go({ tab: "quiz" }, { noScroll: true });
@@ -1922,6 +2913,11 @@ body:not(.locked) .gate { display: none; }
   else if (h === "organika") go({ module: "organika" }, { noScroll: true });
   else if (h === "z32") go({ module: "z32" }, { noScroll: true });
   else if (h === "cards") go({ module: "cards" }, { noScroll: true });
+  else if (h === "lechat") go({ module: "lechat" }, { noScroll: true });
+  else if (h === "gidroliz") go({ module: "gidroliz" }, { noScroll: true });
+  else if (h === "elektroliz") go({ module: "elektroliz" }, { noScroll: true });
+  else if (h === "uglevodor" || h === "uglevodorody") go({ module: "uglevodorody" }, { noScroll: true });
+  else if (h === "izomeriya") go({ module: "izomeriya" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
