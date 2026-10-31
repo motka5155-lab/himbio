@@ -843,6 +843,14 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .k-weak { font-size: 14.5px; }
 .k-th { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 22px; }
 .k-th .linkbtn { font-size: 13px; }
+.mod.hot { position: relative; }
+.mod.hot::after { content: "НОВОЕ"; position: absolute; top: -9px; right: 12px; padding: 3px 9px; border-radius: 999px; background: var(--accent); color: #fff; font: 800 11px/1.3 var(--font-body); letter-spacing: .06em; box-shadow: 0 3px 10px rgba(194, 24, 91, .35); animation: newPulse 2.4s ease-in-out infinite; }
+@keyframes newPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+.v3-banner { display: grid; gap: 4px; margin: 0 0 16px; padding: 14px 16px; border-radius: 16px; background: var(--accent); color: #fff; }
+.v3-banner b { font: 800 17px/1.25 var(--font-body); }
+.v3-banner span { font-size: 13.5px; opacity: .92; }
+.v3-banner button { justify-self: start; margin-top: 6px; padding: 8px 14px; border-radius: 10px; border: 0; background: #fff; color: var(--accent); font: 700 13.5px var(--font-body); cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .mod.hot::after { animation: none; } }
 </style>
 </head>
 <body class="locked">
@@ -1519,7 +1527,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const intro = state.subject === "chem"
       ? "Выбери модуль. Готовые открываются сразу, остальные в работе."
       : "Модули по биологии в работе. Первым выйдет тот, который выберут подписчики.";
-    vList.innerHTML = `<p class="intro">${intro}</p>` + groups.map(g => `
+    const v3 = state.subject === "chem" && newestRel === "2026-10-31" ? `<div class="v3-banner"><b>🎉 Вышла версия 3.0 — 5 новых разделов</b><span>Равновесие №22 · гидролиз · электролиз · углеводороды · изомерия. Новые разделы отмечены значком «НОВОЕ». А в «Проверь себя» — микс по всем темам.</span><button type="button" id="v3-mix">Пройти микс →</button></div>` : "";
+    vList.innerHTML = v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
       <div class="group">
         <h2>${g}</h2>
         <div class="mods">${mods.filter(m => m.group === g).map(m => `
@@ -1528,6 +1537,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
           </button>`).join("")}</div>
       </div>`).join("") +
       `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
+    const v3b = document.getElementById("v3-mix");
+    if (v3b) v3b.addEventListener("click", () => go({ tab: "quiz", module: null }));
     vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
       const m = mods.find(x => x.id === b.dataset.mod);
       if (m.ready) go({ tab: "learn", module: m.id });
