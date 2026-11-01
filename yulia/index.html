@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Классы веществ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f7f9; --paper: #ffffff; --ink: #14161f; --ink2: #5d6272; --line: #e2e3ea;
+  --lav: #e9e6f7; --sand: #f1e9df; --sage: #e1ebe2;
+  --acc: #1f6f5c; --acc-soft: #dcefe8; --bad: #c2413a; --bad-soft: #fbe6e4; --ok: #1f7a4d; --ok-soft: #e0f3e8;
+  --shadow: 0 1px 2px rgba(20,22,31,.05), 0 8px 24px rgba(20,22,31,.06);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111318; --paper: #1a1d24; --ink: #eef0f5; --ink2: #a3a8b8; --line: #2c303b;
+  --lav: #2a2740; --sand: #352e26; --sage: #23302a; --acc: #5fc4a6; --acc-soft: #1d3a32;
+  --bad: #ff8a80; --bad-soft: #3b2222; --ok: #6fd69f; --ok-soft: #1c3527; --shadow: none; } }
+:root[data-theme="dark"] {
+  --bg: #111318; --paper: #1a1d24; --ink: #eef0f5; --ink2: #a3a8b8; --line: #2c303b;
+  --lav: #2a2740; --sand: #352e26; --sage: #23302a; --acc: #5fc4a6; --acc-soft: #1d3a32;
+  --bad: #ff8a80; --bad-soft: #3b2222; --ok: #6fd69f; --ok-soft: #1c3527; --shadow: none; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.45 Inter, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+.wrap { max-width: 560px; margin: 0 auto; padding: 20px 16px 40px; }
+h1 { margin: 6px 0 4px; font: 700 clamp(26px, 7vw, 32px)/1.12 Raleway, sans-serif; letter-spacing: -.01em; }
+.by { margin: 0 0 18px; color: var(--ink2); font-size: 14px; }
+.by b { color: var(--ink); font-weight: 600; }
+.modes { display: grid; gap: 12px; }
+.mode { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; width: 100%; text-align: left; cursor: pointer; padding: 16px; border-radius: 18px; border: 1.5px solid var(--line); background: var(--paper); box-shadow: var(--shadow); color: inherit; font: inherit; }
+.mode:active { transform: scale(.99); }
+.mode i { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; font-style: normal; font-size: 26px; border: 1.5px solid var(--ink); position: relative; }
+.mode i::after { content: ""; position: absolute; top: 4px; left: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+.mode:nth-child(1) i { background: var(--lav); } .mode:nth-child(2) i { background: var(--sage); }
+.mode b { display: block; font: 700 18px/1.25 Raleway, sans-serif; }
+.mode span { color: var(--ink2); font-size: 14px; }
+.mode small { display: block; margin-top: 4px; color: var(--acc); font-weight: 600; font-size: 13px; }
+.rules { margin-top: 24px; display: grid; gap: 8px; }
+.rules h2 { margin: 0 0 4px; font: 700 15px Raleway, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: var(--ink2); }
+.rule { padding: 12px 14px; border-radius: 14px; background: var(--paper); border: 1px solid var(--line); font-size: 14px; }
+.rule b { display: block; margin-bottom: 2px; font-size: 14.5px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.back { border: 0; background: none; color: var(--ink2); font: 600 14px Inter, sans-serif; cursor: pointer; padding: 6px 0; }
+.score { font: 600 13px Inter, sans-serif; color: var(--ok); }
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin-bottom: 16px; }
+.bar i { display: block; height: 100%; background: var(--acc); border-radius: 3px; transition: width .4s; }
+.card { position: relative; padding: 22px 16px 18px; border-radius: 22px; background: var(--paper); border: 1.5px solid var(--line); box-shadow: var(--shadow); text-align: center; animation: in .35s ease-out; }
+@keyframes in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.tag { display: inline-block; padding: 4px 10px; border-radius: 999px; font: 600 12px Inter, sans-serif; color: var(--ink2); background: var(--bg); border: 1px solid var(--line); }
+.repeat { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
+.pair { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 16px 0 6px; }
+.sub { display: grid; gap: 4px; justify-items: center; }
+.f { font: 700 clamp(26px, 8vw, 34px)/1.1 Inter, sans-serif; }
+.cls { font-size: 12.5px; color: var(--ink2); }
+.plus { font: 600 26px Inter, sans-serif; color: var(--ink2); }
+.q { margin: 12px 0 0; font: 700 17px/1.3 Raleway, sans-serif; }
+.opts { display: grid; gap: 10px; margin-top: 16px; }
+.opts.two { grid-template-columns: 1fr 1fr; }
+.opt { min-height: 54px; padding: 12px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); font: 600 16px Inter, sans-serif; cursor: pointer; }
+.opt:disabled { cursor: default; }
+.opt.good { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.opt.bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); animation: shake .35s; }
+.opt.fade { opacity: .4; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.ex { margin-top: 14px; padding: 14px; border-radius: 16px; font-size: 15px; animation: in .3s ease-out; }
+.ex.good { background: var(--ok-soft); } .ex.bad { background: var(--bad-soft); }
+.ex p { margin: 0; }
+.ex .head { font-weight: 700; margin-bottom: 6px; }
+.ex.good .head { color: var(--ok); } .ex.bad .head { color: var(--bad); }
+.eq { display: block; margin: 10px 0 2px; padding: 10px 12px; border-radius: 12px; background: var(--paper); font: 600 15.5px/1.5 Inter, sans-serif; text-align: center; animation: eq .5s cubic-bezier(.2,.9,.3,1.2); }
+@keyframes eq { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+.ppt { display: inline-block; padding: 0 6px; border-radius: 6px; background: #8fb7e6; color: #0d2a4a; font-weight: 700; animation: drop .9s ease-out; }
+.gas { display: inline-block; padding: 0 6px; border-radius: 6px; background: #f2d27a; color: #4a3500; font-weight: 700; animation: rise .9s ease-out; }
+@keyframes drop { from { transform: translateY(-10px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes rise { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.next { width: 100%; margin-top: 14px; padding: 15px; border: 0; border-radius: 14px; background: var(--ink); color: var(--paper); font: 700 16px Inter, sans-serif; cursor: pointer; }
+.res { text-align: center; padding: 26px 16px; border-radius: 22px; background: var(--paper); border: 1.5px solid var(--line); box-shadow: var(--shadow); }
+.res .big { font: 800 56px/1 Raleway, sans-serif; margin: 6px 0 10px; }
+.res p { color: var(--ink2); margin: 0 0 14px; }
+.foot { margin-top: 28px; text-align: center; font-size: 12.5px; color: var(--ink2); }
+sub, sup { font-size: .68em; line-height: 0; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(() => {
+  /* ── формулы: цифры после букв и скобок → индексы, ^{…} → степень ── */
+  const chem = (s) => s.replace(/\^\{([^}]*)\}/g, "<sup>$1</sup>").replace(/([A-Za-z\)])(\d+)/g, "$1<sub>$2</sub>")
+    .replace(/↓/g, '<span class="ppt">↓</span>').replace(/↑/g, '<span class="gas">↑</span>');
+
+  /* ── «Пойдёт ли реакция?»: [вещество, его класс, реагент, класс реагента, идёт?, уравнение или null, почему] ── */
+  const RX = [
+    ["CaO", "основный оксид", "HCl", "кислота", 1, "CaO + 2HCl → CaCl2 + H2O", "Основные оксиды реагируют с кислотами: получаются соль и вода."],
+    ["CaO", "основный оксид", "CO2", "кислотный оксид", 1, "CaO + CO2 → CaCO3", "Основный оксид + кислотный оксид → соль."],
+    ["Na2O", "основный оксид", "H2O", "вода", 1, "Na2O + H2O → 2NaOH", "Оксиды активных металлов реагируют с водой — получается щёлочь."],
+    ["CaO", "основный оксид", "NaOH", "щёлочь", 0, null, "Основный оксид не реагирует с основаниями: оба «основные», реагировать нечему."],
+    ["CO2", "кислотный оксид", "NaOH", "щёлочь", 1, "CO2 + 2NaOH → Na2CO3 + H2O", "Кислотные оксиды реагируют со щелочами: соль и вода."],
+    ["CO2", "кислотный оксид", "H2O", "вода", 1, "CO2 + H2O ⇄ H2CO3", "Кислотные оксиды реагируют с водой — получается кислота."],
+    ["SiO2", "кислотный оксид", "H2O", "вода", 0, null, "Исключение: SiO₂ с водой не реагирует. Кремниевую кислоту так не получить."],
+    ["CO2", "кислотный оксид", "HCl", "кислота", 0, null, "Кислотный оксид с кислотой не реагирует: оба «кислотные»."],
+    ["SO3", "кислотный оксид", "CaO", "основный оксид", 1, "SO3 + CaO → CaSO4", "Кислотный оксид + основный оксид → соль."],
+    ["Al2O3", "амфотерный оксид", "HCl", "кислота", 1, "Al2O3 + 6HCl → 2AlCl3 + 3H2O", "Амфотерный оксид ведёт себя как основный: реагирует с кислотой."],
+    ["ZnO", "амфотерный оксид", "NaOH", "щёлочь (сплавление)", 1, "ZnO + 2NaOH → Na2ZnO2 + H2O", "Амфотерный оксид реагирует и со щёлочью — здесь он ведёт себя как кислотный."],
+    ["Zn", "металл", "H2SO4 (разб.)", "кислота", 1, "Zn + H2SO4 → ZnSO4 + H2↑", "Цинк стоит в ряду активности до водорода — вытесняет H₂ из кислоты."],
+    ["Cu", "металл", "HCl", "кислота", 0, null, "Медь стоит после водорода — из обычных кислот H₂ не вытесняет."],
+    ["Ag", "металл", "H2SO4 (разб.)", "кислота", 0, null, "Серебро — малоактивный металл, после водорода. Реакции нет."],
+    ["Na", "металл", "H2O", "вода", 1, "2Na + 2H2O → 2NaOH + H2↑", "Очень активные металлы (K, Na, Ca) реагируют с водой: щёлочь и водород."],
+    ["Fe", "металл", "H2O", "вода (без нагрева)", 0, null, "Железо — активный металл, но с холодной водой не реагирует. С кислотами — да."],
+    ["HCl", "кислота", "NaOH", "щёлочь", 1, "HCl + NaOH → NaCl + H2O", "Кислота + основание → соль и вода (нейтрализация)."],
+    ["H2SO4", "кислота", "BaCl2", "соль", 1, "H2SO4 + BaCl2 → BaSO4↓ + 2HCl", "Реакция идёт: выпадает белый осадок BaSO₄."],
+    ["HCl", "кислота", "NaNO3", "соль", 0, null, "Нет ни газа, ни осадка, ни воды — реакция не идёт."],
+    ["NaOH", "щёлочь", "CO2", "кислотный оксид", 1, "2NaOH + CO2 → Na2CO3 + H2O", "Щёлочи реагируют с кислотными оксидами."],
+    ["Na2CO3", "соль", "HCl", "кислота", 1, "Na2CO3 + 2HCl → 2NaCl + H2O + CO2↑", "Соль + кислота: идёт, потому что выделяется газ CO₂."],
+    ["CuSO4", "соль", "NaOH", "щёлочь", 1, "CuSO4 + 2NaOH → Cu(OH)2↓ + Na2SO4", "Соль + щёлочь: выпадает голубой осадок Cu(OH)₂."],
+    ["AgNO3", "соль", "NaCl", "соль", 1, "AgNO3 + NaCl → AgCl↓ + NaNO3", "Соль + соль: идёт, потому что выпадает белый осадок AgCl."],
+    ["NaCl", "соль", "KNO3", "соль", 0, null, "Соль + соль идёт только с осадком. Все продукты растворимы — реакции нет."],
+  ];
+  /* ── «Узнай класс»: [формула, верный ответ, неверные…, пояснение] ── */
+  const CL = [
+    ["CaO", "основный оксид", ["кислотный оксид", "амфотерный оксид", "основание"], "Оксид металла с валентностью I–II (Na₂O, CaO) — основный."],
+    ["SO3", "кислотный оксид", ["основный оксид", "амфотерный оксид", "кислота"], "Оксид неметалла — кислотный. Ему соответствует H₂SO₄."],
+    ["ZnO", "амфотерный оксид", ["основный оксид", "кислотный оксид", "соль"], "ZnO и Al₂O₃ — амфотерные: реагируют и с кислотами, и со щелочами."],
+    ["Al2O3", "амфотерный оксид", ["основный оксид", "кислотный оксид", "основание"], "Амфотерный оксид — вместе с ZnO это главные примеры."],
+    ["H2S", "бескислородная кислота", ["кислородсодержащая кислота", "соль", "кислотный оксид"], "В составе нет кислорода — бескислородная, как HCl."],
+    ["HNO3", "кислородсодержащая кислота", ["бескислородная кислота", "соль", "кислотный оксид"], "Есть кислород — кислородсодержащая, как H₂SO₄."],
+    ["KOH", "щёлочь", ["нерастворимое основание", "соль", "основный оксид"], "Растворимое основание — щёлочь. Лакмус в растворе — синий."],
+    ["Fe(OH)3", "нерастворимое основание", ["щёлочь", "соль", "амфотерный оксид"], "Нерастворимое основание. При нагревании разлагается."],
+    ["NaHCO3", "кислая соль", ["средняя соль", "основная соль", "кислота"], "В соли остался водород кислоты — кислая соль (питьевая сода)."],
+    ["Cu(OH)Cl", "основная соль", ["средняя соль", "кислая соль", "основание"], "В соли осталась группа OH — основная соль."],
+    ["NaCl", "средняя соль", ["кислая соль", "основная соль", "кислота"], "Только металл и кислотный остаток — средняя соль."],
+    ["CuSO4", "синий раствор", ["оранжевый раствор", "зелёный раствор", "бесцветный раствор"], "Растворы солей меди(II) — голубые/синие."],
+    ["K2Cr2O7", "оранжевый раствор", ["синий раствор", "зелёный раствор", "бесцветный раствор"], "Дихромат калия — оранжевый."],
+    ["FeSO4", "зелёный раствор", ["синий раствор", "оранжевый раствор", "бесцветный раствор"], "Соли железа(II) — бледно-зелёные."],
+  ];
+  const shuf = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const app = document.getElementById("app");
+  let S = null;
+  const BY = `<p class="by">Тренажёр по материалам <b>Юлии</b> · @y.yakhimovich</p>`;
+
+  function home() {
+    S = null;
+    app.innerHTML = `
+      <h1>Основные классы веществ</h1>${BY}
+      <div class="modes">
+        <button class="mode" data-m="rx"><i>⚗️</i><span><b>Пойдёт ли реакция?</b><span>Вещество + реагент: реагируют или нет — и почему.</span><small>10 заданий · ${RX.length} реакций</small></span></button>
+        <button class="mode" data-m="cl"><i>🧪</i><span><b>Узнай класс</b><span>Оксид, кислота, основание или соль — и какого цвета раствор.</span><small>10 заданий · ${CL.length} веществ</small></span></button>
+      </div>
+      <div class="rules"><h2>Шпаргалка</h2>
+        <div class="rule"><b>Оксиды</b>Основные — с кислотами, кислотными оксидами, водой (оксиды активных металлов). Кислотные — со щелочами, основными оксидами, водой (кроме SiO₂). Амфотерные — и с кислотами, и со щелочами.</div>
+        <div class="rule"><b>Кислоты</b>С металлами до водорода, с основаниями, с солями — если выпадает осадок или выделяется газ.</div>
+        <div class="rule"><b>Основания</b>С кислотами и кислотными оксидами. Нерастворимые при нагревании разлагаются: Cu(OH)₂ → CuO + H₂O.</div>
+        <div class="rule"><b>Соли</b>Реакция идёт, если образуется осадок, газ или вода (слабый электролит).</div>
+        <div class="rule"><b>Ряд активности</b>K, Na, Ca — реагируют с водой. Металлы до H вытесняют водород из кислот. Cu, Ag, Au — нет.</div>
+      </div>
+      <p class="foot">Ошибся — задание вернётся в конце, пока не ответишь верно.</p>`;
+    app.querySelectorAll("[data-m]").forEach(b => b.addEventListener("click", () => start(b.dataset.m)));
+  }
+  function start(m) {
+    const src = m === "rx" ? RX : CL;
+    S = { m, q: shuf(src).slice(0, 10).map(it => ({ it, rep: false })), k: 0, ok: 0, pick: null, total: 10 };
+    run();
+  }
+  function run() {
+    if (S.k >= S.q.length) return end();
+    const { it, rep } = S.q[S.k], done = S.pick != null;
+    let card, opts, good, ex;
+    if (S.m === "rx") {
+      const [a, ca, b, cb, yes, eq, why] = it;
+      card = `<div class="pair"><div class="sub"><span class="f">${chem(a)}</span><span class="cls">${ca}</span></div><span class="plus">+</span><div class="sub"><span class="f">${chem(b)}</span><span class="cls">${cb}</span></div></div><p class="q">Реакция пойдёт?</p>`;
+      opts = [["Да, пойдёт", 1], ["Нет", 0]].map(([t, v]) => ({ t, ok: v === yes }));
+      ex = `${eq ? `<span class="eq">${chem(eq)}</span>` : ""}<p>${why}</p>`;
+    } else {
+      const [f, ans, wrong, why] = it;
+      if (!S.q[S.k].ord) S.q[S.k].ord = shuf([ans, ...wrong]);
+      card = `<div class="pair"><span class="f">${chem(f)}</span></div><p class="q">${/раствор/.test(ans) ? "Какого цвета раствор?" : "К какому классу относится?"}</p>`;
+      opts = S.q[S.k].ord.map(t => ({ t, ok: t === ans }));
+      ex = `<p>${why}</p>`;
+    }
+    good = done && opts[S.pick].ok;
+    app.innerHTML = `
+      <div class="top"><button class="back" data-a="home">← Назад</button><span class="score">верно: ${S.ok}</span></div>
+      <div class="bar"><i style="width:${Math.round(100 * Math.min(S.k, S.q.length) / S.q.length)}%"></i></div>
+      <div class="card"><span class="tag${rep ? " repeat" : ""}">${rep ? "повтор" : `задание ${S.k + 1} из ${S.q.length}`}</span>${card}</div>
+      <div class="opts${opts.length === 2 ? " two" : ""}">${opts.map((o, j) => `<button class="opt${done ? (o.ok ? " good" : j === S.pick ? " bad" : " fade") : ""}" data-o="${j}"${done ? " disabled" : ""}>${o.t}</button>`).join("")}</div>
+      ${done ? `<div class="ex ${good ? "good" : "bad"}"><p class="head">${good ? "Верно!" : "Неверно — это задание вернётся в конце."}</p>${ex}</div><button class="next" data-a="next">${S.k + 1 < S.q.length ? "Дальше" : "Итог"}</button>` : ""}`;
+    app.querySelector('[data-a="home"]').addEventListener("click", home);
+    app.querySelectorAll("[data-o]").forEach(b => b.addEventListener("click", () => {
+      if (S.pick != null) return;
+      S.pick = +b.dataset.o;
+      const ok = opts[S.pick].ok;
+      if (ok && !rep) S.ok++;
+      if (!ok) S.q.push({ it, rep: true });
+      try { navigator.vibrate && navigator.vibrate(ok ? 15 : [30, 40, 30]); } catch (e) {}
+      run();
+    }));
+    const n = app.querySelector('[data-a="next"]');
+    if (n) n.addEventListener("click", () => { S.k++; S.pick = null; run(); window.scrollTo(0, 0); });
+  }
+  function end() {
+    const m = S.m;
+    app.innerHTML = `<div class="res"><span class="tag">итог</span><p class="big">${S.ok} / ${S.total}</p>
+      <p>${S.ok === S.total ? "С первого раза — без ошибок 🔥" : "Ошибки отработаны на повторе. Пройди ещё раз — задания перемешаются."}</p>
+      <button class="next" data-a="again">Ещё раз</button><button class="next" style="background:var(--bg);color:var(--ink);border:1.5px solid var(--line)" data-a="home">К разделам</button></div>`;
+    app.querySelector('[data-a="again"]').addEventListener("click", () => start(m));
+    app.querySelector('[data-a="home"]').addEventListener("click", home);
+  }
+  home();
+})();
+</script>
+</body>
+</html>
