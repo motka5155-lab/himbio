@@ -851,9 +851,54 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .v3-banner span { font-size: 13.5px; opacity: .92; }
 .v3-banner button { justify-self: start; margin-top: 6px; padding: 8px 14px; border-radius: 10px; border: 0; background: #fff; color: var(--accent); font: 700 13.5px var(--font-body); cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .mod.hot::after { animation: none; } }
+
+/* ── v3.1: «Мой план 80+» (PRO) ── */
+.plan-card { position: relative; display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 14px; width: 100%; margin: 0 0 16px; padding: 14px 14px 14px 12px; border-radius: 18px; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: var(--shadow); color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
+.plan-card:active { transform: scale(.99); }
+.plan-ico { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); }
+.plan-ico svg { width: 30px; height: 30px; }
+.plan-txt b { display: flex; align-items: center; gap: 8px; font: 700 17px/1.2 var(--font-display); }
+.plan-txt span { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.35; color: var(--ink-2); }
+.pro { display: inline-block; padding: 2px 7px; border-radius: 6px; background: var(--ink); color: var(--paper); font: 800 10.5px/1.3 var(--font-mono); letter-spacing: .08em; }
+.plan-go { font-weight: 700; color: var(--ink-2); }
+.plan-ov { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; background: rgba(10, 12, 20, .45); animation: planFade .2s ease-out; }
+.plan-ov[hidden] { display: none; }
+@media (min-width: 640px) { .plan-ov { align-items: center; } }
+@keyframes planFade { from { opacity: 0; } to { opacity: 1; } }
+.plan-sheet { position: relative; width: 100%; max-width: 480px; max-height: 92vh; overflow: auto; padding: 22px 18px calc(18px + env(safe-area-inset-bottom)); border-radius: 22px 22px 0 0; background: var(--paper); color: var(--ink); box-shadow: 0 -10px 40px rgba(0, 0, 0, .18); animation: planUp .32s cubic-bezier(.2, .9, .3, 1.1); }
+@media (min-width: 640px) { .plan-sheet { border-radius: 22px; } }
+@keyframes planUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+.plan-x { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font: 600 18px/1 var(--font-body); cursor: pointer; }
+.plan-sheet .pro { margin-bottom: 10px; }
+.plan-sheet h2 { margin: 0 40px 14px 0; font: 700 clamp(20px, 5.4vw, 24px)/1.2 var(--font-display); }
+.plan-list { display: grid; gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
+.plan-list li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 11px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); font-size: 14.5px; line-height: 1.4; }
+.plan-list li i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-style: normal; font-weight: 800; font-size: 13px; }
+.plan-price { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+.plan-price b { font: 800 34px/1 var(--font-display); }
+.plan-price s { color: var(--ink-2); font-size: 17px; }
+.plan-price span { margin-left: auto; padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font: 700 12.5px/1.4 var(--font-body); }
+.plan-buy { width: 100%; padding: 15px; font-size: 16px; }
+.plan-note { margin: 10px 0 0; text-align: center; font-size: 12.5px; color: var(--ink-2); }
+@media (prefers-reduced-motion: reduce) { .plan-ov, .plan-sheet { animation: none; } }
 </style>
 </head>
 <body class="locked">
+<div class="plan-ov" id="plan-ov" hidden>
+  <div class="plan-sheet" role="dialog" aria-modal="true" aria-labelledby="plan-h">
+    <button type="button" class="plan-x" id="plan-x" aria-label="Закрыть">✕</button>
+    <span class="pro">PRO</span>
+    <h2 id="plan-h">Адаптивная система подготовки к ЕГЭ</h2>
+    <ul class="plan-list">
+      <li><i>✓</i><span>Все 140 тем ФИПИ уже внесены и рассчитаны по часам.</span></li>
+      <li><i>✓</i><span>Автопересчёт: график сам адаптируется, если отстал или пропустил неделю.</span></li>
+      <li><i>✓</i><span>Встроенные циклы повторений (П1–П3) сложных тем.</span></li>
+    </ul>
+    <p class="plan-price"><b>490 ₽</b><s>1 200 ₽</s><span>−59%</span></p>
+    <button type="button" class="btn primary plan-buy" id="plan-buy">Забрать систему подготовки</button>
+    <p class="plan-note">Оплата и доступ — через Tribute в Телеграме</p>
+  </div>
+</div>
 
 <div class="splash" id="splash" aria-hidden="true">
   <div class="sp-box">
@@ -887,7 +932,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v3.0</span>
+      <span class="ver" id="ver">v3.1</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -954,7 +999,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 3.0. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 3.1. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1513,6 +1558,25 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (!opts.noScroll) scrollToTopOf(document.querySelector(".app-head"));
   }
 
+
+  /* ════════ v3.1: «Мой план 80+» — карточка PRO и окно продажи ════════ */
+  const PLAN_URL = "https://web.tribute.tg/p/J5o";
+  const planOv = document.getElementById("plan-ov");
+  const planCard = () => `<button type="button" class="plan-card" id="plan-open">
+      <span class="plan-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="24" height="22" rx="4"/><path d="M4 12h24M10 3v6M22 3v6"/><path d="M9 23l5-5 3 3 6-6"/></svg></span>
+      <span class="plan-txt"><b>Мой план 80+ <span class="pro">PRO</span></b><span>Умный планер подготовки: все темы ФИПИ, график сам подстраивается под тебя</span></span>
+      <span class="plan-go">→</span></button>`;
+  function planShow() { planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
+  function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
+  document.getElementById("plan-x").addEventListener("click", planHide);
+  planOv.addEventListener("click", (e) => { if (e.target === planOv) planHide(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !planOv.hidden) planHide(); });
+  document.getElementById("plan-buy").addEventListener("click", () => {
+    const w = window.Telegram && window.Telegram.WebApp;
+    if (w && w.openLink) { try { w.openLink(PLAN_URL); return; } catch (er) {} }
+    window.open(PLAN_URL, "_blank", "noopener");
+  });
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Проверка по биологии появится вместе с первым модулем</b><p>Сейчас готов модуль по химии. Пока можно проверить себя по карте органики.</p><button type="button" class="btn" id="go-chem-quiz" style="justify-self:start">Проверить себя по химии</button></div>`;
@@ -1528,7 +1592,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       ? "Выбери модуль. Готовые открываются сразу, остальные в работе."
       : "Модули по биологии в работе. Первым выйдет тот, который выберут подписчики.";
     const v3 = state.subject === "chem" && newestRel === "2026-10-31" ? `<div class="v3-banner"><b>🎉 Вышла версия 3.0 — 5 новых разделов</b><span>Равновесие №22 · гидролиз · электролиз · углеводороды · изомерия. Новые разделы отмечены значком «НОВОЕ». А в «Проверь себя» — микс по всем темам.</span><button type="button" id="v3-mix">Пройти микс →</button></div>` : "";
-    vList.innerHTML = v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
+    vList.innerHTML = planCard() + v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
       <div class="group">
         <h2>${g}</h2>
         <div class="mods">${mods.filter(m => m.group === g).map(m => `
@@ -1537,6 +1601,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
           </button>`).join("")}</div>
       </div>`).join("") +
       `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
+    document.getElementById("plan-open").addEventListener("click", planShow);
     const v3b = document.getElementById("v3-mix");
     if (v3b) v3b.addEventListener("click", () => go({ tab: "quiz", module: null }));
     vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
