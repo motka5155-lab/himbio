@@ -3,6 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Яндекс Метрика: счётчик 99834186. Цели: app_opened, test_started, test_failed, upsell_viewed, buy_button_clicked -->
+<script>
+window.HB_YM = /(^|\.)github\.io$/.test(location.hostname) ? 99834186 : 0;
+if (window.HB_YM) {
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();
+  for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+  k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+  (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  ym(window.HB_YM, "init", { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, trackHash: false });
+}
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/99834186" style="position:absolute; left:-9999px;" alt=""></div></noscript>
 <title>Химбио без зубрёжки</title>
 <meta name="description" content="Бесплатный тренажёр по органике к ЕГЭ от Матвея · канал matvéri">
 <script>
@@ -961,7 +973,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v3.3</span>
+      <span class="ver" id="ver">v3.4</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1028,7 +1040,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 3.3. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 3.4. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1435,7 +1447,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   let mode = "study";
   const quiz = { order: [], i: 0, right: 0, tries: 0, done: false };
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-  function startQuiz() { quiz.order = shuffle(RX.map(r => r.id)); quiz.i = 0; quiz.right = 0; showQuestion(); }
+  function startQuiz() { hbInTest = true; hbGoal("test_started", { module: "mapquiz" }); quiz.order = shuffle(RX.map(r => r.id)); quiz.i = 0; quiz.right = 0; showQuestion(); }
   function quizPeek(fb, nextBtn) {
     const r = R[quiz.order[quiz.i]];
     setPeek(`<div class="q">${chip(r.from)}<span class="arrow"><span class="cond">${chem(r.q)}</span><span class="shaft"></span></span><span class="qmark">?</span></div>` +
@@ -1595,16 +1607,60 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <span class="plan-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="24" height="22" rx="4"/><path d="M4 12h24M10 3v6M22 3v6"/><path d="M9 23l5-5 3 3 6-6"/></svg></span>
       <span class="plan-txt"><b>Мой план 80+ <span class="pro">PRO</span></b><span>Умный планер подготовки: все темы ФИПИ, график сам подстраивается под тебя</span></span>
       <span class="plan-go">→</span></button>`;
-  function planShow() { planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
+  function planShow() { hbGoalOnce("upsell_viewed", { how: "open" }); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
   function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
   document.getElementById("plan-x").addEventListener("click", planHide);
   planOv.addEventListener("click", (e) => { if (e.target === planOv) planHide(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !planOv.hidden) planHide(); });
   document.getElementById("plan-buy").addEventListener("click", () => {
+    hbGoal("buy_button_clicked", { price: 490 });
     const w = window.Telegram && window.Telegram.WebApp;
     if (w && w.openLink) { try { w.openLink(PLAN_URL); return; } catch (er) {} }
     window.open(PLAN_URL, "_blank", "noopener");
   });
+
+
+  /* ════════ v3.4: цели Яндекс Метрики — воронка ════════ */
+  const hbMod = () => state.module || (state.tab === "quiz" ? "mix" : state.tab) || "list";
+  function hbGoal(name, params) {
+    try { if (window.HB_YM && window.ym) window.ym(window.HB_YM, "reachGoal", name, Object.assign({ module: hbMod() }, params || {})); } catch (e) {}
+  }
+  const hbOnce = {};
+  const hbGoalOnce = (name, params) => { if (hbOnce[name]) return; hbOnce[name] = 1; hbGoal(name, params); };
+  /* a) открыл тренажёр */
+  hbGoal("app_opened", { start: window.HB_START || "main", tg: !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) });
+  /* b) начал решать — кнопки старта во всех разделах (ловим до того, как раздел перерисуется) */
+  const HB_START_SEL = '[data-l="go"],[data-l="again"],[data-s="go"],[data-s="again"],[data-s="ph"],[data-p="again"],[data-h="go"],[data-h="again"],' +
+    '[data-i="go"],[data-i="again"],[data-k="go"],[data-k="again"],[data-zrun],[data-zagain],[data-znextchain],[data-cdeck]';
+  let hbInTest = false;
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest && e.target.closest(HB_START_SEL);
+    if (b) { hbInTest = true; hbGoal("test_started"); }
+  }, true);
+  /* c) ошибся — любая красная плашка «Неверно» (не чаще раза в 5 секунд); бросил тест — ушёл из приложения посреди задания */
+  let hbFailAt = 0;
+  new MutationObserver((ms) => {
+    for (const m of ms) for (const n of m.addedNodes) {
+      if (n.nodeType === 1 && (n.matches(".fb.wrong") || n.querySelector(".fb.wrong")) && Date.now() - hbFailAt > 5000) {
+        hbFailAt = Date.now(); hbGoal("test_failed", { reason: "wrong" }); return;
+      }
+    }
+  }).observe(document.body, { childList: true, subtree: true });
+  const hbDrop = () => {
+    const live = hbInTest && !!document.querySelector(".view:not([hidden]) .cd-top") && !document.querySelector(".view:not([hidden]) .z-res");
+    if (live && !hbOnce.drop) { hbOnce.drop = 1; hbGoal("test_failed", { reason: "drop" }); }
+  };
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") hbDrop(); });
+  window.addEventListener("pagehide", hbDrop);
+  /* d) увидел плашку планера — карточка «Мой план 80+» хотя бы наполовину на экране, или открыл окно */
+  let hbIO = null;
+  function hbWatchUpsell() {
+    const el = document.getElementById("plan-open");
+    if (!el || hbOnce.upsell_viewed || !("IntersectionObserver" in window)) return;
+    if (hbIO) hbIO.disconnect();
+    hbIO = new IntersectionObserver((es) => { if (es.some(x => x.isIntersecting)) { hbGoalOnce("upsell_viewed", { how: "card" }); hbIO.disconnect(); } }, { threshold: 0.5 });
+    hbIO.observe(el);
+  }
 
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
@@ -1631,6 +1687,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       </div>`).join("") +
       `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
     document.getElementById("plan-open").addEventListener("click", planShow);
+    hbWatchUpsell();
     const v3b = document.getElementById("v3-mix");
     if (v3b) v3b.addEventListener("click", () => go({ tab: "quiz", module: null }));
     vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
