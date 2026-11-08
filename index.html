@@ -1003,6 +1003,37 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .kt-ans { margin: 12px 0 0; font-size: 15px; } .kt-ans b { font-size: 18px; letter-spacing: .1em; color: var(--accent); }
 .kt-ex { display: grid; gap: 6px; margin: 8px 0; } .kt-ex p { margin: 0; padding: 8px 10px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; background: var(--surface); border: 1px solid var(--line); }
 .kt-ex p.t { border-left: 4px solid var(--ok); } .kt-ex p.f { border-left: 4px solid var(--bad); }
+
+/* ── v4.2: вода и минеральные вещества ── */
+.vd-hero { padding: 10px 6px 4px; }
+.vd-mols { display: block; width: 100%; max-width: 420px; margin: 0 auto; }
+.vd-m { animation: vdWob 3.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes vdWob { 50% { translate: 0 -4px; } }
+.vd-o { fill: #e5484d; } .vd-h { fill: #e8ecf3; stroke: var(--edge); stroke-width: 1.2; }
+.vd-t { font: 800 14px var(--font-body); fill: #fff; text-anchor: middle; } .vd-t.s { font-size: 11px; fill: #333; }
+.vd-d { font: 700 11px var(--font-body); fill: #e5484d; text-anchor: middle; } .vd-d.p { fill: #3e7bfa; }
+.vd-hb { stroke: #3e7bfa; stroke-width: 2.4; stroke-dasharray: 4 5; animation: vdHb 1.4s linear infinite; }
+@keyframes vdHb { to { stroke-dashoffset: -18; } }
+.vd-cap { font: 500 11px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+.vd-q { margin: 0 0 6px; font: 600 16px/1.45 var(--font-body); }
+.vd-bins { display: grid; gap: 8px; }
+.vd-bin { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; width: 100%; padding: 11px 12px; border-radius: 14px; border: 1.5px dashed var(--edge); background: var(--surface); color: var(--ink); text-align: left; cursor: pointer; }
+.vd-bin b { font-size: 15px; } .vd-bin small { grid-column: 1; color: var(--ink-2); font-size: 12px; }
+.vd-bin span { grid-row: 1 / span 2; grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; color: var(--ink-2); }
+.vd-bin span i, .vd-el { display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 6px; border-radius: 10px; background: var(--paper); border: 1.5px solid var(--ink); font: 800 16px var(--font-body); font-style: normal; color: var(--ink); animation: lPop .3s; }
+.vd-bin span i.ok { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); } .vd-bin span i.no { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.vd-chip { min-width: 52px; font: 800 17px var(--font-body); }
+.vd-els .z-opt .ft b { font-size: 20px; }
+.vd-ord { display: grid; gap: 8px; }
+.vd-o { position: relative; display: grid; grid-template-columns: 32px 1fr auto; gap: 10px; align-items: center; width: 100%; padding: 12px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); text-align: left; font: 600 15px var(--font-body); cursor: pointer; overflow: hidden; }
+.vd-o i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1.5px dashed var(--edge); font: 800 14px var(--font-body); font-style: normal; }
+.vd-o.on i { border-style: solid; border-color: var(--accent); background: var(--accent); color: #fff; animation: lPop .3s; }
+.vd-o.ok { border-color: var(--ok); } .vd-o.no { border-color: var(--bad); }
+.vd-o b { position: relative; z-index: 1; font: 800 14px var(--font-body); color: #1d5fa8; }
+.vd-o.ok::after, .vd-o.no::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: rgba(62, 155, 216, .16); animation: vdFill 1s ease-out forwards; }
+@keyframes vdFill { to { width: var(--wf, 100%); } }
+.vd-o span { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .vd-m, .vd-hb { animation: none; } }
 </style>
 </head>
 <body class="locked">
@@ -1054,7 +1085,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.1</span>
+      <span class="ver" id="ver">v4.2</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1119,12 +1150,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-raschet" hidden></section>
   <section class="view" id="v-nauka" hidden></section>
   <section class="view" id="v-kl-teor" hidden></section>
+  <section class="view" id="v-kl-voda" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.1. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.2. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1150,7 +1182,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     bio: [
       {"group": "1 · Биология как наука", "id": "nauka", "title": "Биология как наука", "desc": "Уровни организации, методы, науки и свойства живого — задание 1 ЕГЭ.", "st": "4 таблицы · задание 1 ЕГЭ", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Свойства воды, макро- и микроэлементы, их роль.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Разложи элементы по группам, свяжи свойства воды с явлениями, расставь ткани по содержанию воды.", "st": "13 элементов · 10 свойств воды", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: структуры и функции", "desc": "Четыре уровня структуры, денатурация, функции белков.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты", "desc": "Фермент и субстрат, от чего зависит скорость реакции.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды", "desc": "Моно-, ди- и полисахариды, жиры, фосфолипиды.", "st": "скоро"},
@@ -1669,6 +1701,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showR = state.subject === "chem" && state.tab === "learn" && state.module === "raschet";
     const showN = state.subject === "bio" && state.tab === "learn" && state.module === "nauka";
     const showKT = state.subject === "bio" && state.tab === "learn" && state.module === "kl-teor";
+    const showVD = state.subject === "bio" && state.tab === "learn" && state.module === "kl-voda";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1689,7 +1722,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vR.hidden = !showR;
     vN.hidden = !showN;
     vKT.hidden = !showKT;
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || state.tab === "traps";
+    vVD.hidden = !showVD;
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1721,6 +1755,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showR) rRender();
       else if (showN) nRender();
       else if (showKT) ktRender();
+      else if (showVD) vdRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -2258,6 +2293,193 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Вирусы — вне клеточной теории", "Вирусы не имеют клеточного строения. Их открыл Д. И. Ивановский (1892)."],
   ];
 
+  /* ════════ v4.2: БИОЛОГИЯ 2.2 «Вода и минеральные вещества клетки» ════════ */
+  const vVD = document.getElementById("v-kl-voda");
+  const VDK = "hb.bio22.v1";
+  let vds = {};
+  try { vds = JSON.parse(localStorage.getItem(VDK) || "{}") || {}; } catch (e) { vds = {}; }
+  function vdsave() { try { localStorage.setItem(VDK, JSON.stringify(vds)); } catch (e) {} }
+  const VD_BINS = [["org", "Органогены", "≈ 98% массы клетки"], ["mac", "Другие макроэлементы", "десятые и сотые доли %"], ["mic", "Микроэлементы", "тысячные доли % и меньше"]];
+  const VD_EL = { org: ["O", "C", "H", "N"], mac: ["P", "S", "K", "Na", "Ca", "Mg", "Cl"], mic: ["Zn", "Cu", "I", "F", "Co", "Mn", "Mo", "Se"] };
+  const VD_ROLE = [   /* [элемент, роль] */
+    ["Fe", "Входит в состав гемоглобина, который переносит кислород"],
+    ["Mg", "Входит в состав хлорофилла"],
+    ["I", "Входит в состав гормонов щитовидной железы"],
+    ["Ca", "Входит в состав костей и необходим для свёртывания крови"],
+    ["P", "В виде остатков фосфорной кислоты входит в АТФ и нуклеотиды, а в виде фосфата кальция — в кости"],
+    ["K", "Главный катион внутри клетки, участвует в проведении нервного импульса"],
+    ["Na", "Главный катион межклеточной жидкости, участвует в проведении нервного импульса"],
+    ["Zn", "Входит в состав гормона инсулина"],
+    ["Co", "Входит в состав витамина B₁₂"],
+    ["F", "Входит в состав эмали зубов"],
+    ["S", "Входит в аминокислоты цистеин и метионин, образует дисульфидные мостики в белках"],
+    ["Cu", "Входит в гемоцианин — дыхательный пигмент моллюсков"],
+    ["Cl", "Входит в состав соляной кислоты желудочного сока"],
+  ];
+  const VD_PROP = ["высокая теплоёмкость", "высокая теплота испарения", "полярность молекул — хороший растворитель", "несжимаемость", "поверхностное натяжение и капиллярность", "наибольшая плотность при +4 °C", "высокая теплопроводность"];
+  const VD_PH = [   /* [явление, номер свойства, почему] */
+    ["Температура тела почти не меняется при колебаниях температуры среды", 0, "Вода поглощает много тепла, мало нагреваясь, — это смягчает перепады температуры."],
+    ["Выделение пота охлаждает тело", 1, "На испарение воды тратится много энергии — поверхность охлаждается."],
+    ["Транспирация защищает листья от перегрева", 1, "Испаряясь с листьев, вода уносит много тепла."],
+    ["Соли, сахара и аминокислоты растворяются в цитоплазме", 2, "Молекула воды — диполь, поэтому растворяет полярные и ионные вещества."],
+    ["Тургор поддерживает форму травянистых растений", 3, "Вода практически не сжимается и давит на клеточную стенку изнутри."],
+    ["Гидростатический скелет дождевого червя", 3, "Жидкость в полости тела не сжимается и служит опорой для мышц."],
+    ["Подъём воды по сосудам растения", 4, "Молекулы воды сцепляются друг с другом и со стенками сосудов — вода поднимается по тонким трубкам."],
+    ["Водомерка бегает по поверхности пруда", 4, "Поверхностное натяжение держит лёгкое насекомое."],
+    ["Водоёмы зимой не промерзают до дна", 5, "Вода плотнее всего при +4 °C, а лёд легче воды и остаётся сверху."],
+    ["Тепло быстро распределяется по всему телу", 6, "Вода хорошо проводит тепло, поэтому температура в разных частях тела выравнивается."],
+  ];
+  const VD_AVOID = { 0: 6, 6: 0 };   /* теплоёмкость и теплопроводность не ставим рядом — легко спорить */
+  const VD_WAT = [["Тело медузы", 98], ["Клетки зародыша человека", 95], ["Серое вещество мозга", 85], ["Скелетные мышцы", 76], ["Костная ткань", 20], ["Эмаль зубов", 10]];
+  const VD_ST = [
+    ["Молекула воды — диполь", 1, "Атом кислорода оттягивает электроны: на O частичный минус, на H — плюс."],
+    ["Между молекулами воды образуются водородные связи", 1, "Именно они дают воде высокую теплоёмкость и поверхностное натяжение."],
+    ["Вода — источник кислорода, который выделяется при фотосинтезе", 1, "Кислород образуется при фотолизе воды в световой фазе."],
+    ["Вода участвует в реакциях гидролиза", 1, "Гидролиз — расщепление веществ с участием воды."],
+    ["В клетках зародыша воды больше, чем в клетках костной ткани", 1, "Чем активнее обмен веществ, тем больше воды."],
+    ["Ионы K⁺ и Na⁺ участвуют в проведении нервного импульса", 1, "Разная концентрация K⁺ и Na⁺ внутри и снаружи клетки создаёт потенциал."],
+    ["Магний входит в состав хлорофилла", 1, "Ион Mg²⁺ — в центре молекулы хлорофилла."],
+    ["Жиры гидрофобны и не растворяются в воде", 1, "Неполярные молекулы с водой не взаимодействуют."],
+    ["Лёд тяжелее воды и опускается на дно", 0, "Неверно: лёд легче воды, поэтому водоёмы замерзают сверху."],
+    ["Вода — неполярный растворитель", 0, "Неверно: молекула воды полярна — это диполь."],
+    ["Жиры и воски хорошо растворяются в воде", 0, "Неверно: они гидрофобны."],
+    ["С возрастом содержание воды в клетках увеличивается", 0, "Неверно: с возрастом воды становится меньше."],
+    ["Железо входит в состав хлорофилла", 0, "Неверно: в хлорофилле — магний, а железо — в гемоглобине."],
+    ["Йод входит в состав инсулина", 0, "Неверно: йод — в гормонах щитовидной железы, в инсулине — цинк."],
+    ["Кислород при фотосинтезе выделяется из углекислого газа", 0, "Неверно: кислород выделяется из воды."],
+  ];
+  const VDR = { run: null };
+  const vdEl = (e) => `<b class="vd-el">${e}</b>`;
+  function vdSort() {
+    const items = sShuf([...sShuf(VD_EL.org).slice(0, 2).map(e => [e, "org"]), ...sShuf(VD_EL.mac).slice(0, 2).map(e => [e, "mac"]), ...sShuf(VD_EL.mic).slice(0, 2).map(e => [e, "mic"])]);
+    return { t: "sort", items, put: {}, sel: null, done: false };
+  }
+  function vdRole() {
+    const [el, role] = sPick(VD_ROLE);
+    let pool = VD_ROLE.map(x => x[0]).filter(x => x !== el);
+    if (el === "K") pool = pool.filter(x => x !== "Na"); if (el === "Na") pool = pool.filter(x => x !== "K");
+    return { t: "role", el, role, opts: sShuf([el, ...sShuf(pool).slice(0, 3)]), pick: null };
+  }
+  function vdProp() {
+    const [ph, n, why] = sPick(VD_PH), pool = VD_PROP.map((_, i) => i).filter(i => i !== n && i !== VD_AVOID[n]);
+    return { t: "prop", ph, n, why, opts: sShuf([n, ...sShuf(pool).slice(0, 3)]), pick: null };
+  }
+  function vdOrder() { const items = sShuf(VD_WAT).slice(0, 4); return { t: "order", items, seq: [], done: false }; }
+  function vdThree() { return { t: "three", items: sShuf([...sShuf(VD_ST.filter(x => x[1])).slice(0, 3), ...sShuf(VD_ST.filter(x => !x[1])).slice(0, 3)]), pick: [], done: false }; }
+  const vdNew = () => [vdSort(), vdRole(), vdProp(), vdOrder(), vdThree(), vdRole(), vdProp(), vdThree()];
+  const VD_MOL = `<svg class="vd-mols" viewBox="0 0 330 120" aria-hidden="true">
+    ${[[55, 48], [165, 48], [275, 48]].map(([x, y], i) => `<g class="vd-m" style="animation-delay:${i * 0.6}s" transform="translate(${x} ${y})">
+      <circle cx="-20" cy="18" r="11" class="vd-h"/><circle cx="20" cy="18" r="11" class="vd-h"/><circle r="18" class="vd-o"/>
+      <text y="5" class="vd-t">O</text><text x="-20" y="22" class="vd-t s">H</text><text x="20" y="22" class="vd-t s">H</text>
+      <text y="-24" class="vd-d">δ−</text><text x="-22" y="44" class="vd-d p">δ+</text><text x="22" y="44" class="vd-d p">δ+</text></g>`).join("")}
+    <line x1="86" y1="66" x2="146" y2="52" class="vd-hb"/><line x1="196" y1="66" x2="256" y2="52" class="vd-hb"/>
+    <text x="165" y="112" class="vd-cap">пунктир — водородные связи между молекулами</text></svg>`;
+  function vdRender() {
+    if (VDR.run) return vdRun();
+    vVD.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-vd="back">← к модулям</button><h2 class="mod-title">Вода и минеральные вещества</h2></div>
+      <p class="intro">Элементы клетки и их роль, свойства воды и где их видно в жизни, где воды больше всего. Задания в форматах ЕГЭ: соответствие, последовательность, «три верных».</p>
+      <div class="l-card vd-hero">${VD_MOL}</div>
+      <div class="l-start">${vds.best != null ? `<p class="cd-total">Лучший результат: <b>${vds.best}</b> из 8</p>` : ""}<button type="button" class="btn primary" data-vd="go">Начать: 8 заданий</button></div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">
+        <div><b>Органогены — 98%</b><span>O, C, H, N. Макроэлементы (десятые–сотые %): P, S, K, Na, Ca, Mg, Cl, Fe. Микроэлементы: Zn, Cu, I, F, Co, Mn, Mo, Se.</span></div>
+        <div><b>Кто где</b><span>Fe — гемоглобин, Mg — хлорофилл, I — гормоны щитовидной железы, Zn — инсулин, Co — витамин B₁₂, F — эмаль, Ca — кости и свёртывание крови, K⁺ и Na⁺ — нервный импульс, S — дисульфидные мостики, Cl — соляная кислота желудка.</span></div>
+        <div><b>Свойства воды</b><span>Диполь → растворитель. Теплоёмкость → устойчивая температура. Теплота испарения → охлаждение потом и транспирацией. Несжимаемость → тургор. Капиллярность → подъём по сосудам. Плотность максимальна при +4 °C → лёд сверху.</span></div>
+        <div><b>Где больше воды</b><span>Медуза 98% → зародыш 95% → мозг 85% → мышцы 76% → кость 20% → эмаль 10%. С возрастом воды меньше.</span></div>
+      </div>`;
+    vVD.querySelector('[data-vd="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vVD.querySelector('[data-vd="go"]').addEventListener("click", () => { VDR.run = { qs: vdNew(), k: 0, ok: 0 }; vdRun(); zScroll(vVD); });
+  }
+  function vdRun() {
+    const r = VDR.run;
+    if (r.k >= r.qs.length) return vdEnd();
+    const q = r.qs[r.k];
+    let body = "", ready = false, good = false, ex = "", name = "", done = false, single = false;
+    if (q.t === "sort") {
+      name = "Распредели элементы"; done = q.done; ready = q.items.every(([e]) => q.put[e]);
+      good = done && q.items.every(([e, b]) => q.put[e] === b);
+      body = `<p class="l-ask">Нажми на элемент, потом на группу, куда он относится.</p>
+        <div class="vd-bins">${VD_BINS.map(([id, t, s]) => `<button type="button" class="vd-bin" data-vb="${id}"${done ? " disabled" : ""}><b>${t}</b><small>${s}</small><span>${q.items.filter(([e]) => q.put[e] === id).map(([e, b]) => `<i class="${done ? (b === id ? "ok" : "no") : ""}" data-vx="${e}">${e}</i>`).join("") || "—"}</span></button>`).join("")}</div>
+        ${done ? "" : `<div class="kt-chips">${q.items.filter(([e]) => !q.put[e]).map(([e]) => `<button type="button" class="kt-chip vd-chip${q.sel === e ? " on" : ""}" data-vc="${e}">${e}</button>`).join("")}</div>`}`;
+      if (done && !good) ex = q.items.filter(([e, b]) => q.put[e] !== b).map(([e, b]) => `${e} — ${VD_BINS.find(x => x[0] === b)[1].toLowerCase()}`).join(" · ");
+    } else if (q.t === "role" || q.t === "prop") {
+      single = true; done = q.pick != null;
+      const right = q.t === "role" ? q.el : q.n;
+      good = done && q.opts[q.pick] === right;
+      name = q.t === "role" ? "Роль элемента" : "Свойства воды";
+      body = q.t === "role" ? `<p class="vd-q">${q.role}.</p><p class="l-ask">Какой это элемент?</p>` : `<p class="vd-q">${q.ph}.</p><p class="l-ask">Какое свойство воды это объясняет?</p>`;
+      body += `<div class="z-opts s-opts${q.t === "role" ? " vd-els" : ""}">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o === right ? " good" : j === q.pick ? " bad" : " fade") : ""}" data-vo="${j}"${done ? " disabled" : ""}><span class="ft"><b>${q.t === "role" ? o : VD_PROP[o]}</b></span></button>`).join("")}</div>`;
+      ex = q.t === "role" ? `${q.el}: ${q.role.toLowerCase()}.` : q.why;
+    } else if (q.t === "order") {
+      name = "Последовательность"; done = q.done; ready = q.seq.length === 4;
+      const ans = q.items.map((x, i) => [x, i]).sort((a, b) => b[0][1] - a[0][1]).map(x => x[1]);
+      good = done && q.seq.every((v, i) => v === ans[i]);
+      if (done) ex = "Правильно: " + ans.map(i => `${q.items[i][0].toLowerCase()} ${q.items[i][1]}%`).join(" → ") + ". Чем активнее обмен веществ, тем больше воды.";
+      body = `<p class="l-ask">Расставь от большего содержания воды к меньшему: нажимай по порядку.</p>
+        <div class="vd-ord">${q.items.map(([t, p], i) => { const k = q.seq.indexOf(i); return `<button type="button" class="vd-o${k >= 0 ? " on" : ""}${done ? (ans[k] === i ? " ok" : " no") : ""}" data-vr="${i}" style="--wf:${p}%"${done ? " disabled" : ""}><i>${k >= 0 ? k + 1 : ""}</i><span>${t}</span>${done ? `<b>${p}%</b>` : ""}</button>`; }).join("")}</div>
+        ${done ? `<p class="kt-ans">Ответ: <b>${ans.map(i => i + 1).join("")}</b>${good ? "" : ` · у тебя: ${q.seq.map(i => i + 1).join("")}`} <small>(номера — по порядку в списке)</small></p>` : ""}`;
+    } else {
+      name = "Три верных"; done = q.done; ready = q.pick.length === 3;
+      const ans = q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join("");
+      good = done && q.pick.slice().sort().join("") === ans;
+      body = `<p class="l-ask">Выберите три верных утверждения.</p>
+        <div class="kt-list">${q.items.map((x, i) => { const on = q.pick.includes(i + 1), st = done ? (x[1] ? " ok" : on ? " no" : " fade") : on ? " on" : ""; return `<button type="button" class="kt-st${st}" data-vs="${i + 1}"${done ? " disabled" : ""}><i>${i + 1}</i><span>${x[0]}</span></button>`; }).join("")}</div>
+        ${done ? `<p class="kt-ans">Ответ: <b>${ans}</b>${good ? "" : ` · у тебя: ${q.pick.slice().sort().join("")}`}</p>` : ""}`;
+      if (done) ex = `<div class="kt-ex">${q.items.map((x, i) => `<p class="${x[1] ? "t" : "f"}"><b>${i + 1}.</b> ${x[2]}</p>`).join("")}</div>`;
+    }
+    vVD.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-vd="list">← Вода и минеральные вещества</button></div>
+      <div class="cd-top"><span class="num">${name} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card kt-card">${body}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : "Неверно."} ${ex && !ex.startsWith("<div") ? ex : ""}</p>${ex.startsWith("<div") ? ex : ""}
+        <div class="actions"><button type="button" class="btn primary" data-vd="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
+        : single ? "" : `<div class="actions l-act"><button type="button" class="btn primary" data-vd="check"${ready ? "" : " disabled"}>Проверить</button></div>`}`;
+    vVD.querySelector('[data-vd="list"]').addEventListener("click", () => { VDR.run = null; vdRender(); zScroll(vVD); });
+    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); vdRun(); zScroll(vVD.querySelector(".z-ex"), 160); };
+    if (!done) {
+      vVD.querySelectorAll("[data-vc]").forEach(b => b.addEventListener("click", () => { q.sel = q.sel === b.dataset.vc ? null : b.dataset.vc; vdRun(); }));
+      vVD.querySelectorAll("[data-vb]").forEach(b => b.addEventListener("click", (e) => {
+        const x = e.target.closest("[data-vx]");
+        if (x) { delete q.put[x.dataset.vx]; vdRun(); return; }
+        if (q.sel) { q.put[q.sel] = b.dataset.vb; q.sel = null; vdRun(); }
+      }));
+      vVD.querySelectorAll("[data-vo]").forEach(b => b.addEventListener("click", () => { q.pick = +b.dataset.vo; fin(q.opts[q.pick] === (q.t === "role" ? q.el : q.n)); }));
+      vVD.querySelectorAll("[data-vr]").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.vr, k = q.seq.indexOf(i); if (k >= 0) q.seq.splice(k); else q.seq.push(i); vdRun(); }));
+      vVD.querySelectorAll("[data-vs]").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.vs, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); vdRun(); }));
+      const ch = vVD.querySelector('[data-vd="check"]');
+      if (ch) ch.addEventListener("click", () => {
+        q.done = true;
+        let ok;
+        if (q.t === "sort") ok = q.items.every(([e, b]) => q.put[e] === b);
+        else if (q.t === "order") { const ans = q.items.map((x, i) => [x, i]).sort((a, b) => b[0][1] - a[0][1]).map(x => x[1]); ok = q.seq.every((v, i) => v === ans[i]); }
+        else ok = q.pick.slice().sort().join("") === q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join("");
+        fin(ok);
+      });
+    } else vVD.querySelector('[data-vd="next"]').addEventListener("click", () => { r.k++; vdRun(); zScroll(vVD); });
+  }
+  function vdEnd() {
+    const r = VDR.run;
+    if (vds.best == null || r.ok > vds.best) { vds.best = r.ok; vdsave(); }
+    vVD.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-vd="list">← Вода и минеральные вещества</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Всё верно 🔥" : "Загляни в шпаргалку — и ещё раз, задания будут новые."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-vd="again">Ещё раз</button><button type="button" class="btn" data-vd="list2">Шпаргалка</button></div></div>`;
+    const back = () => { VDR.run = null; vdRender(); zScroll(vVD); };
+    vVD.querySelector('[data-vd="list"]').addEventListener("click", back);
+    vVD.querySelector('[data-vd="list2"]').addEventListener("click", back);
+    vVD.querySelector('[data-vd="again"]').addEventListener("click", () => { VDR.run = { qs: vdNew(), k: 0, ok: 0 }; vdRun(); zScroll(vVD); });
+  }
+  const VD_TRAPS = [
+    ["Магний — хлорофилл, железо — гемоглобин", "Самая частая путаница: в центре хлорофилла Mg²⁺, в геме гемоглобина — Fe²⁺."],
+    ["Инсулин — цинк, тироксин — йод", "Цинк входит в инсулин (поджелудочная железа), йод — в гормоны щитовидной железы."],
+    ["Кислород при фотосинтезе — из воды", "O₂ выделяется при фотолизе воды, а не из CO₂."],
+    ["Лёд легче воды", "Плотность воды максимальна при +4 °C, поэтому лёд плавает, а водоёмы не промерзают до дна."],
+    ["С возрастом воды меньше", "Больше всего воды в клетках зародыша и в активно работающих тканях, меньше всего — в эмали и костях."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -2299,7 +2521,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -3937,6 +4159,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "raschet") go({ module: "raschet" }, { noScroll: true });
   else if (h === "nauka") go({ subject: "bio", module: "nauka" }, { noScroll: true });
   else if (h === "klteor") go({ subject: "bio", module: "kl-teor" }, { noScroll: true });
+  else if (h === "klvoda") go({ subject: "bio", module: "kl-voda" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
