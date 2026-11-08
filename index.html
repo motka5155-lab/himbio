@@ -922,6 +922,37 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 @media (prefers-reduced-motion: reduce) { .p-chip, .p-tube.done .p-chip { transition: none; } }
 .p-f.nm { font-size: 15px; font-weight: 600; line-height: 1.2; }
 .p-ans { font-size: 1.15em; letter-spacing: .08em; }
+
+/* ── v3.5: расчётные задачи ── */
+.rc-card { text-align: left; }
+.rc-eq { margin: 0 0 10px; padding: 8px 10px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font: 600 15.5px/1.4 var(--font-body); text-align: center; }
+.rc-q { margin: 0; font: 500 16px/1.5 var(--font-body); }
+.rc-prec { margin: 10px 0 0; font-size: 13px; color: var(--ink-2); }
+.rc-bs { display: flex; align-items: flex-end; justify-content: center; gap: 6px; margin-top: 14px; }
+.rc-bs > i { font: 700 20px var(--font-body); color: var(--ink-2); font-style: normal; padding-bottom: 34px; }
+.rc-b { display: grid; justify-items: center; gap: 2px; width: 88px; animation: lPop .45s both; }
+.rc-b svg { width: 60px; height: 70px; }
+.rc-glass { fill: none; stroke: var(--edge); stroke-width: 2.4; }
+.rc-liq { fill: #9fd0f0; opacity: .55; }
+.rc-liq.water { fill: #cfe8f7; } .rc-liq.salt { opacity: 0; }
+.rc-sol { fill: var(--accent); opacity: .55; transition: y .8s, height .8s; } .rc-sol.salt { fill: #e9e3d6; opacity: 1; }
+.rc-b span { font-size: 12px; color: var(--ink-2); } .rc-b b { font: 700 13.5px var(--font-body); }
+.rc-heat { margin-top: 14px; display: grid; gap: 6px; font-size: 13px; color: var(--ink-2); }
+.rc-heat > div { height: 12px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
+.rc-heat i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #f2c94c, #e5484d); transition: width 1s cubic-bezier(.3, 1, .4, 1); }
+.rc-heat.endo i { background: linear-gradient(90deg, #9fd0f0, #3e7bfa); }
+.rc-heat small { font-weight: 600; color: var(--ink); }
+.rc-in { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; max-width: 520px; margin: 4px 0 8px; }
+.rc-in input { min-width: 0; padding: 13px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); font: 700 18px var(--font-body); }
+.rc-in input:focus { outline: none; border-color: var(--accent); }
+.rc-in input.shake { animation: shake .35s; border-color: var(--bad); }
+.rc-in span { font: 600 15px var(--font-body); color: var(--ink-2); }
+.rc-hint { font-size: 13.5px; }
+.rc-steps { display: grid; gap: 6px; margin: 10px 0; }
+.rc-steps p { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; margin: 0; padding: 9px 11px; border-radius: 11px; background: var(--surface); border: 1px solid var(--line); font-size: 14.5px; line-height: 1.45; opacity: 0; animation: iIn .4s ease-out forwards; }
+.rc-steps p:not(:has(i)) { grid-template-columns: 1fr; opacity: 1; animation: none; }
+.rc-steps i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 800 12px var(--font-body); font-style: normal; }
+@media (prefers-reduced-motion: reduce) { .rc-b, .rc-steps p { animation: none; opacity: 1; } }
 </style>
 </head>
 <body class="locked">
@@ -973,7 +1004,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v3.4</span>
+      <span class="ver" id="ver">v3.5</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1035,12 +1066,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-uglevodorody" hidden></section>
   <section class="view" id="v-izomeriya" hidden></section>
   <section class="view" id="v-check" hidden></section>
+  <section class="view" id="v-raschet" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 3.4. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 3.5. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1055,6 +1087,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     chem: [
       { group: "ЕГЭ · вторая часть", id: "z32", title: "Задание 32: цепочки", desc: "Цепочки превращений органики как на ЕГЭ. Решаешь по шагам, тренажёр проверяет и объясняет ошибки.", st: "74 цепочки · готово", ready: true, rel: "2026-10-21" },
       { group: "ЕГЭ · первая часть", id: "lechat", title: "Задание 22: химическое равновесие", desc: "Принцип Ле Шателье на ползунке: куда сместится равновесие при нагреве, давлении, концентрации, катализаторе.", st: "25 равновесий · бесконечные задания", ready: true, rel: "2026-10-31" },
+      { group: "ЕГЭ · первая часть", id: "raschet", title: "Задания 26–28: расчётные задачи", desc: "Растворы, термохимия, расчёт по уравнению с выходом и примесями. Вводишь ответ числом — потом пошаговое решение.", st: "бесконечные задачи · числа каждый раз новые", ready: true, rel: "2026-11-08" },
       { group: "Запоминалки", id: "cards", title: "Карточки: тривиальные названия", desc: "193 карточки: тривиальные названия, кислоты и остатки, радикалы, полимеры. Переворачиваешь и проверяешь себя.", st: "193 карточки · готово", ready: true, rel: "2026-10-25" },
       { group: "Органика", id: "organika", title: "Карта превращений органики", desc: "Этан, этанол, этаналь, кислота, эфиры: что во что превращается и при каких условиях.", st: "19 реакций · готово", ready: true, rel: "2026-10-17" },
       { group: "Органика", id: "uglevodorody", title: "Углеводороды", desc: "Вещество + реагент → продукт: Марковников, Зайцев, Кучеров, KMnO₄, арены. Подсветка того, что изменилось.", st: "50 реакций · 5 классов", ready: true, rel: "2026-10-31" },
@@ -1547,6 +1580,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 
     const chemQuiz = state.subject === "chem" && state.tab === "quiz" && state.module === "mapquiz";
     const showK = state.subject === "chem" && state.tab === "quiz" && state.module !== "mapquiz";
+    const showR = state.subject === "chem" && state.tab === "learn" && state.module === "raschet";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1564,7 +1598,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vH.hidden = !showH;
     vI.hidden = !showI;
     vK.hidden = !showK;
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || state.tab === "traps";
+    vR.hidden = !showR;
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1593,6 +1628,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showH) hRender();
       else if (showI) iRender();
       else if (showK) kRender();
+      else if (showR) rRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -1660,6 +1696,211 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (hbIO) hbIO.disconnect();
     hbIO = new IntersectionObserver((es) => { if (es.some(x => x.isIntersecting)) { hbGoalOnce("upsell_viewed", { how: "card" }); hbIO.disconnect(); } }, { threshold: 0.5 });
     hbIO.observe(el);
+  }
+
+  /* ════════ v3.5: РАСЧЁТНЫЕ ЗАДАЧИ — задания 26, 27, 28 ЕГЭ ════════
+     Числа генерируются, ответ считается тут же — задачи бесконечные. Ответ вводят числом, как в бланке. */
+  const vR = document.getElementById("v-raschet");
+  const RK = "hb.calc.v1";
+  let rs = {};
+  try { rs = JSON.parse(localStorage.getItem(RK) || "{}") || {}; } catch (e) { rs = {}; }
+  function rsave() { try { localStorage.setItem(RK, JSON.stringify(rs)); } catch (e) {} }
+  const RR = { run: null, kind: rs.kind || "all" };
+  const rInt = (a, b, st = 1) => a + st * Math.floor(Math.random() * (Math.floor((b - a) / st) + 1));
+  const rRound = (x, p) => { const k = 10 ** p; return Math.round(x * k + 1e-9) / k; };
+  const rFmt = (x, p) => (p == null ? String(rRound(x, 3)) : rRound(x, p).toFixed(p)).replace(".", ",");
+  const PREC = ["до целых", "до десятых", "до сотых"];
+  /* молярные массы — как в ЕГЭ (Cl = 35,5, Cu = 64) */
+  const AR = { H: 1, C: 12, N: 14, O: 16, Na: 23, Mg: 24, Al: 27, P: 31, S: 32, Cl: 35.5, K: 39, Ca: 40, Mn: 55, Fe: 56, Cu: 64, Zn: 65 };
+  function rM(f) {
+    const s = f.replace(/·/g, "");
+    const grp = (t) => { let sum = 0, m, re = /([A-Z][a-z]?)(\d*)|\(([^()]*)\)(\d*)/g; while ((m = re.exec(t))) sum += m[1] ? AR[m[1]] * (+m[2] || 1) : grp(m[3]) * (+m[4] || 1); return sum; };
+    return grp(s);
+  }
+  /* ── 26: растворы ── */
+  const SOLUTES = [["хлорида натрия", "NaCl"], ["нитрата калия", "KNO3"], ["сульфата натрия", "Na2SO4"], ["глюкозы", "C6H12O6"], ["хлорида калия", "KCl"], ["нитрата натрия", "NaNO3"]];
+  function r26() {
+    const [nm] = sPick(SOLUTES), t = sPick(["mix", "water", "evap", "salt", "need"]);
+    let q, ans, steps, vis;
+    if (t === "mix") {
+      const m1 = rInt(50, 300, 10), w1 = sPick([5, 8, 10, 12, 15, 20]), m2 = rInt(50, 300, 10);
+      let w2 = sPick([2, 3, 4, 5, 6, 25, 30]); if (w2 === w1) w2 = w1 + 10;
+      const s1 = m1 * w1 / 100, s2 = m2 * w2 / 100; ans = (s1 + s2) / (m1 + m2) * 100;
+      q = `Смешали ${m1} г раствора ${nm} с массовой долей ${w1}% и ${m2} г раствора этой же соли с массовой долей ${w2}%. Вычислите массовую долю соли в полученном растворе.`;
+      steps = [`m₁(соли) = ${m1} · ${rFmt(w1 / 100)} = ${rFmt(s1)} г`, `m₂(соли) = ${m2} · ${rFmt(w2 / 100)} = ${rFmt(s2)} г`,
+        `m(р-ра) = ${m1} + ${m2} = ${m1 + m2} г`, `ω = ${rFmt(s1 + s2)} / ${m1 + m2} · 100% = <b>${rFmt(ans, 1)}%</b>`];
+      vis = [[m1, w1], [m2, w2], [m1 + m2, ans]];
+    } else if (t === "water") {
+      const m = rInt(100, 400, 20), w1 = sPick([10, 12, 15, 20, 25]), x = rInt(20, 200, 10), s = m * w1 / 100; ans = s / (m + x) * 100;
+      q = `К ${m} г раствора ${nm} с массовой долей ${w1}% добавили ${x} г воды. Вычислите массовую долю соли в полученном растворе.`;
+      steps = [`m(соли) = ${m} · ${rFmt(w1 / 100)} = ${rFmt(s)} г — при разбавлении не меняется`, `m(р-ра) = ${m} + ${x} = ${m + x} г`, `ω = ${rFmt(s)} / ${m + x} · 100% = <b>${rFmt(ans, 1)}%</b>`];
+      vis = [[m, w1], [x, 0], [m + x, ans]];
+    } else if (t === "evap") {
+      const m = rInt(150, 400, 25), w1 = sPick([5, 8, 10, 12]), x = rInt(20, Math.floor(m * 0.5), 10), s = m * w1 / 100; ans = s / (m - x) * 100;
+      q = `Из ${m} г раствора ${nm} с массовой долей ${w1}% выпарили ${x} г воды. Вычислите массовую долю соли в полученном растворе.`;
+      steps = [`m(соли) = ${m} · ${rFmt(w1 / 100)} = ${rFmt(s)} г — при упаривании не меняется`, `m(р-ра) = ${m} − ${x} = ${m - x} г`, `ω = ${rFmt(s)} / ${m - x} · 100% = <b>${rFmt(ans, 1)}%</b>`];
+      vis = [[m, w1], [-x, 0], [m - x, ans]];
+    } else if (t === "salt") {
+      const m = rInt(100, 300, 20), w1 = sPick([5, 10, 15, 20]), x = rInt(5, 40, 5), s = m * w1 / 100; ans = (s + x) / (m + x) * 100;
+      q = `В ${m} г раствора ${nm} с массовой долей ${w1}% растворили ещё ${x} г этой же соли. Вычислите массовую долю соли в полученном растворе.`;
+      steps = [`m(соли) = ${m} · ${rFmt(w1 / 100)} + ${x} = ${rFmt(s + x)} г`, `m(р-ра) = ${m} + ${x} = ${m + x} г`, `ω = ${rFmt(s + x)} / ${m + x} · 100% = <b>${rFmt(ans, 1)}%</b>`];
+      vis = [[m, w1], [x, 100], [m + x, ans]];
+    } else {
+      const m = rInt(100, 500, 25), w = sPick([3, 4, 5, 6, 8, 12, 15]); ans = m * w / 100;
+      q = `Какую массу ${nm} нужно растворить в воде, чтобы получить ${m} г раствора с массовой долей соли ${w}%?`;
+      steps = [`m(соли) = m(р-ра) · ω = ${m} · ${rFmt(w / 100)} = <b>${rFmt(ans, 1)} г</b>`, `Воды при этом нужно ${m} − ${rFmt(ans, 1)} = ${rFmt(m - ans, 1)} г`];
+      vis = [[m, w]];
+    }
+    return { n: 26, tag: "Растворы", q, ans, p: 1, unit: t === "need" ? "г" : "%", steps, vis };
+  }
+  /* ── 27: термохимия ── */
+  const THERMO = [   /* [уравнение, вещество для расчёта, коэффициент, Q (кДж, + выделяется / − поглощается), газ?] */
+    ["CH4 + 2O2 → CO2 + 2H2O + 802 кДж", "CH4", 1, 802, 1, "метана"],
+    ["2H2 + O2 → 2H2O + 572 кДж", "H2", 2, 572, 1, "водорода"],
+    ["S + O2 → SO2 + 297 кДж", "S", 1, 297, 0, "серы"],
+    ["C + O2 → CO2 + 393 кДж", "C", 1, 393, 0, "углерода"],
+    ["2Mg + O2 → 2MgO + 1204 кДж", "Mg", 2, 1204, 0, "магния"],
+    ["4P + 5O2 → 2P2O5 + 3010 кДж", "P", 4, 3010, 0, "фосфора"],
+    ["N2 + 3H2 ⇄ 2NH3 + 92 кДж", "NH3", 2, 92, 1, "аммиака", 1],
+    ["CaCO3 → CaO + CO2 − 178 кДж", "CaCO3", 1, -178, 0, "карбоната кальция"],
+  ];
+  function r27() {
+    const [eq, f, k, Q, gas, nm, prod] = sPick(THERMO), M = rM(f), n = k * sPick([0.25, 0.5, 1, 1.5, 2, 2.5, 3, 4, 0.2, 0.1]), q1 = Math.abs(Q) * n / k;
+    const exo = Q > 0, verb = exo ? "выделится" : "потребуется", verbP = exo ? "выделилось" : "было затрачено";
+    const by = gas && Math.random() < 0.5 ? "V" : "m", amt = by === "V" ? n * 22.4 : n * M;
+    const amtS = by === "V" ? `${rFmt(amt)} л (н. у.)` : `${rFmt(amt)} г`;
+    const nStep = by === "V" ? `n(${chem(f)}) = ${rFmt(amt)} / 22,4 = ${rFmt(n)} моль` : `n(${chem(f)}) = ${rFmt(amt)} / ${M} = ${rFmt(n)} моль`;
+    if (Math.random() < 0.55) {
+      return { n: 27, tag: "Термохимия", eq,
+        q: `Какое количество теплоты ${verb} в соответствии с термохимическим уравнением, если ${prod ? "образовалось" : exo ? "в реакцию вступило" : "разложилось"} ${amtS} ${nm}?`,
+        ans: q1, p: 0, unit: "кДж", steps: [nStep, `По уравнению на ${k} моль ${chem(f)} — ${Math.abs(Q)} кДж`, `Q = ${Math.abs(Q)} · ${rFmt(n)} / ${k} = <b>${rFmt(q1, 0)} кДж</b>`], vis: [Math.abs(Q), q1, exo] };
+    }
+    return { n: 27, tag: "Термохимия", eq,
+      q: `В соответствии с термохимическим уравнением реакции ${verbP} ${rFmt(q1)} кДж теплоты. ${by === "V" ? `Какой объём (н. у.) ${nm}` : `Сколько граммов ${nm}`} ${prod ? (by === "V" ? "образовался" : "образовалось") : exo ? (by === "V" ? "вступил в реакцию" : "вступило в реакцию") : "разложилось"}?`,
+      ans: amt, p: 1, unit: by === "V" ? "л" : "г",
+      steps: [`n(${chem(f)}) = ${k} · ${rFmt(q1)} / ${Math.abs(Q)} = ${rFmt(n)} моль`, by === "V" ? `V = ${rFmt(n)} · 22,4 = <b>${rFmt(amt, 1)} л</b>` : `m = ${rFmt(n)} · ${M} = <b>${rFmt(amt, 1)} г</b>`], vis: [Math.abs(Q), q1, exo] };
+  }
+  /* ── 28: расчёт по уравнению (выход, примеси) ── */
+  const STOICH = [   /* [уравнение, исходное, коэф., продукт, коэф., газ-продукт?, названия] */
+    ["CaCO3 + 2HCl → CaCl2 + CO2↑ + H2O", "CaCO3", 1, "CO2", 1, 1, "карбоната кальция", "углекислого газа"],
+    ["Zn + 2HCl → ZnCl2 + H2↑", "Zn", 1, "H2", 1, 1, "цинка", "водорода"],
+    ["2Al + 6HCl → 2AlCl3 + 3H2↑", "Al", 2, "H2", 3, 1, "алюминия", "водорода"],
+    ["Fe2O3 + 3H2 → 2Fe + 3H2O", "Fe2O3", 1, "Fe", 2, 0, "оксида железа(III)", "железа"],
+    ["CuO + H2 → Cu + H2O", "CuO", 1, "Cu", 1, 0, "оксида меди(II)", "меди"],
+    ["2KMnO4 → K2MnO4 + MnO2 + O2↑", "KMnO4", 2, "O2", 1, 1, "перманганата калия", "кислорода"],
+    ["Na2CO3 + 2HCl → 2NaCl + CO2↑ + H2O", "Na2CO3", 1, "CO2", 1, 1, "карбоната натрия", "углекислого газа"],
+    ["CuSO4 + 2NaOH → Cu(OH)2↓ + Na2SO4", "CuSO4", 1, "Cu(OH)2", 1, 0, "сульфата меди(II)", "гидроксида меди(II)"],
+    ["CaCO3 → CaO + CO2↑", "CaCO3", 1, "CaO", 1, 0, "карбоната кальция", "оксида кальция"],
+    ["Fe + CuSO4 → FeSO4 + Cu", "Fe", 1, "Cu", 1, 0, "железа", "меди"],
+  ];
+  function r28() {
+    const [eq, a, ka, b, kb, gas, na, nb] = sPick(STOICH), Ma = rM(a), Mb = rM(b);
+    const na0 = ka * sPick([0.1, 0.2, 0.25, 0.4, 0.5, 1, 1.5, 2]), mode = sPick(["plain", "yield", "imp"]);
+    let mA = na0 * Ma, q, pre = [], k = 1;
+    if (mode === "imp") { const imp = sPick([5, 10, 15, 20, 25]); k = 1 - imp / 100; mA = rRound(na0 * Ma / k, 1);
+      q = `${gas ? "Какой объём (н. у.)" : "Какую массу"} ${nb} можно получить из ${rFmt(mA)} г ${na}, содержащего ${imp}% примесей?`;
+      pre = [`m(чистого ${chem(a)}) = ${rFmt(mA)} · ${rFmt(k)} = ${rFmt(mA * k, 2)} г`];
+    } else if (mode === "yield") { const y = sPick([70, 75, 80, 85, 90]); k = y / 100;
+      q = `${gas ? "Какой объём (н. у.)" : "Какую массу"} ${nb} можно получить из ${rFmt(mA)} г ${na}, если выход продукта составляет ${y}% от теоретически возможного?`;
+    } else q = `${gas ? "Какой объём (н. у.)" : "Какую массу"} ${nb} можно получить из ${rFmt(mA)} г ${na}?`;
+    const nA = mode === "imp" ? mA * k / Ma : mA / Ma, nB = nA * kb / ka, theo = gas ? nB * 22.4 : nB * Mb;
+    const ans = mode === "yield" ? theo * k : theo;
+    const steps = [...pre, `n(${chem(a)}) = ${rFmt(mode === "imp" ? mA * k : mA)} / ${Ma} = ${rFmt(nA)} моль`,
+      `По уравнению n(${chem(b)}) = n(${chem(a)}) · ${kb}/${ka} = ${rFmt(nB)} моль`,
+      gas ? `V(${chem(b)}) = ${rFmt(nB)} · 22,4 = ${rFmt(theo, 2)} л` : `m(${chem(b)}) = ${rFmt(nB)} · ${Mb} = ${rFmt(theo, 2)} г`];
+    if (mode === "yield") steps.push(`С учётом выхода: ${rFmt(theo, 2)} · ${rFmt(k)} = <b>${rFmt(ans, 1)} ${gas ? "л" : "г"}</b>`);
+    else steps[steps.length - 1] = steps[steps.length - 1].replace(/= ([\d,]+) (л|г)$/, (s, v, u) => `= <b>${rFmt(ans, 1)} ${u}</b>`);
+    return { n: 28, tag: mode === "yield" ? "Выход продукта" : mode === "imp" ? "Примеси" : "По уравнению", eq, q, ans, p: 1, unit: gas ? "л" : "г", steps, vis: null };
+  }
+  const RGEN = { 26: r26, 27: r27, 28: r28 };
+  function rNew(n) { const ks = RR.kind === "all" ? [26, 27, 28] : [+RR.kind]; return Array.from({ length: n }, (_, i) => RGEN[ks[i % ks.length]]()).sort(() => Math.random() - 0.5); }
+  /* ── картинки ── */
+  function rBeakers(v, done) {
+    const one = (m, w, lbl, i, show) => {
+      const sol = w === 0 ? 0 : w === 100 ? 1 : Math.min(1, w / 40), h = 54;
+      return `<div class="rc-b" style="animation-delay:${i * 0.12}s"><svg viewBox="0 0 60 70"><path class="rc-glass" d="M8 6 V60 a6 6 0 0 0 6 6 H46 a6 6 0 0 0 6 -6 V6"/>
+        <rect x="10" y="${64 - h}" width="40" height="${h}" rx="4" class="rc-liq${w === 100 ? " salt" : ""}${w === 0 ? " water" : ""}"/>
+        <rect x="10" y="${64 - h * sol}" width="40" height="${h * sol}" rx="4" class="rc-sol${w === 100 ? " salt" : ""}"/></svg>
+        <span>${lbl}</span><b>${show ? (w === 0 ? (m < 0 ? `−${-m} г воды` : `${m} г воды`) : w === 100 ? `+${m} г соли` : `${rFmt(w, Number.isInteger(w) ? 0 : 1)}%`) : "?"}</b></div>`;
+    };
+    if (!v) return "";
+    if (v.length === 1) return `<div class="rc-bs">${one(v[0][0], v[0][1], `${v[0][0]} г`, 0, true)}</div>`;
+    return `<div class="rc-bs">${one(v[0][0], v[0][1], `${v[0][0]} г`, 0, true)}<i>${v[1][0] < 0 ? "−" : "+"}</i>${one(Math.abs(v[1][0]), v[1][1], v[1][1] === 0 ? (v[1][0] < 0 ? "выпарили" : "вода") : v[1][1] === 100 ? "соль" : `${v[1][0]} г`, 1, true)}<i>=</i>${one(v[2][0], v[2][1], `${v[2][0]} г`, 2, done)}</div>`;
+  }
+  function rHeat(v, done) {
+    if (!v) return "";
+    const [Q, q, exo] = v, pct = Math.min(100, q / Q * 100);
+    return `<div class="rc-heat${exo ? "" : " endo"}"><span>${exo ? "🔥 выделяется" : "❄️ поглощается"} по уравнению: ${Q} кДж</span><div><i style="width:${done ? pct : 0}%"></i></div>${done ? `<small>у тебя в задаче: ${rFmt(q, 0)} кДж (${rFmt(pct, 0)}% от уравнения)</small>` : ""}</div>`;
+  }
+  /* ── экраны ── */
+  function rRender() {
+    if (RR.run) return rRun();
+    const kinds = [["all", "Все"], ["26", "26 · растворы"], ["27", "27 · термохимия"], ["28", "28 · по уравнению"]];
+    vR.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-r="back">← к модулям</button><h2 class="mod-title">Расчётные задачи</h2></div>
+      <p class="intro">Задания 26, 27 и 28 ЕГЭ. Числа каждый раз новые — задачи не заканчиваются. Ответ вводишь числом, как в бланке, а после — пошаговое решение.</p>
+      <div class="h-chips">${kinds.map(([k, t]) => `<button type="button" class="h-chip${RR.kind === k ? " on" : ""}" data-rk="${k}">${t}</button>`).join("")}</div>
+      <div class="l-start">${rs.best != null ? `<p class="cd-total">Лучший результат: <b>${rs.best}</b> из 10</p>` : ""}<button type="button" class="btn primary" data-r="go">Начать: 10 задач</button></div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">
+        <div><b>26 · Растворы</b><span>ω = m(в-ва) / m(р-ра) · 100%. Воду добавили или выпарили — масса соли та же, меняется масса раствора. Смешали — складываем и соль, и растворы.</span></div>
+        <div><b>27 · Термохимия</b><span>Q в уравнении — на те моли, что стоят коэффициентами. Q = Q(ур.) · n / коэффициент. Газ: n = V / 22,4.</span></div>
+        <div><b>28 · По уравнению</b><span>n = m / M → по коэффициентам n(продукта) → m = n · M или V = n · 22,4. Примеси: сначала масса чистого вещества. Выход: умножь теоретическое на η.</span></div>
+        <div><b>Округление</b><span>Как просят в задаче: до целых или до десятых. Промежуточные значения не округляй сильно.</span></div>
+      </div>`;
+    vR.querySelector('[data-r="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vR.querySelectorAll("[data-rk]").forEach(b => b.addEventListener("click", () => { RR.kind = b.dataset.rk; rs.kind = RR.kind; rsave(); rRender(); }));
+    vR.querySelector('[data-r="go"]').addEventListener("click", () => { RR.run = { qs: rNew(10), k: 0, ok: 0 }; rRun(); zScroll(vR); });
+  }
+  function rRun() {
+    const r = RR.run;
+    if (r.k >= r.qs.length) return rEnd();
+    const T = r.qs[r.k], done = T.done, good = done && T.good;
+    const ansS = rFmt(T.ans, T.p);
+    vR.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-r="list">← Расчётные задачи</button></div>
+      <div class="cd-top"><span class="num">Задание ${T.n} · ${T.tag} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card rc-card">
+        ${T.eq ? `<p class="rc-eq">${chem(T.eq)}</p>` : ""}
+        <p class="rc-q">${T.q}</p>
+        ${T.n === 26 ? rBeakers(T.vis, done) : T.n === 27 ? rHeat(T.vis, done) : ""}
+        <p class="rc-prec">Ответ запишите ${PREC[T.p]}${T.unit === "%" ? " (в процентах)" : ""}.</p>
+      </div>
+      ${done ? "" : `<div class="rc-in"><input type="text" inputmode="decimal" autocomplete="off" placeholder="Ответ" id="rc-ans" aria-label="Ответ"><span>${T.unit}</span><button type="button" class="btn primary" data-r="check">Проверить</button></div>
+        ${T.hint ? `<div class="rc-steps">${T.steps.slice(0, 1).map(s => `<p>${s}</p>`).join("")}</div>` : `<button type="button" class="linkbtn rc-hint" data-r="hint">Подсказка: первый шаг</button>`}`}
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : `Неверно${T.user != null ? ` (у тебя ${String(T.user).replace(".", ",")})` : ""}. Правильный ответ: <b>${ansS}</b> ${T.unit}.`}</p>
+        <div class="rc-steps">${T.steps.map((s, i) => `<p style="animation-delay:${(i * 0.25).toFixed(2)}s"><i>${i + 1}</i><span>${s}</span></p>`).join("")}</div>
+        <div class="actions"><button type="button" class="btn primary" data-r="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    vR.querySelector('[data-r="list"]').addEventListener("click", () => { RR.run = null; rRender(); zScroll(vR); });
+    if (!done) {
+      const inp = vR.querySelector("#rc-ans");
+      const check = () => {
+        const v = parseFloat(String(inp.value).replace(",", ".").replace(/[^\d.\-]/g, ""));
+        if (!isFinite(v)) { inp.classList.add("shake"); setTimeout(() => inp.classList.remove("shake"), 400); return; }
+        T.done = true; T.user = v;
+        T.good = Math.round(v * 10 ** T.p + 1e-9) === Math.round(T.ans * 10 ** T.p + 1e-9);
+        if (T.good && !T.hint) r.ok++;
+        haptic(T.good ? "success" : "error"); rRun(); zScroll(vR.querySelector(".z-ex"), 160);
+      };
+      vR.querySelector('[data-r="check"]').addEventListener("click", check);
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+      const h = vR.querySelector('[data-r="hint"]');
+      if (h) h.addEventListener("click", () => { T.hint = true; rRun(); const i2 = vR.querySelector("#rc-ans"); if (i2) i2.focus(); });
+    } else vR.querySelector('[data-r="next"]').addEventListener("click", () => { r.k++; rRun(); zScroll(vR); });
+  }
+  function rEnd() {
+    const r = RR.run;
+    if (rs.best == null || r.ok > rs.best) { rs.best = r.ok; rsave(); }
+    vR.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-r="list">← Расчётные задачи</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все задачи решены 🔥" : "Задачи с подсказкой в счёт не идут. Ещё раз — числа будут новые."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-r="again">Ещё 10 задач</button><button type="button" class="btn" data-r="list2">Шпаргалка</button></div></div>`;
+    const back = () => { RR.run = null; rRender(); zScroll(vR); };
+    vR.querySelector('[data-r="list"]').addEventListener("click", back);
+    vR.querySelector('[data-r="list2"]').addEventListener("click", back);
+    vR.querySelector('[data-r="again"]').addEventListener("click", () => { RR.run = { qs: rNew(10), k: 0, ok: 0 }; rRun(); zScroll(vR); });
   }
 
   function renderList() {
@@ -3329,6 +3570,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "elektroliz") go({ module: "elektroliz" }, { noScroll: true });
   else if (h === "uglevodor" || h === "uglevodorody") go({ module: "uglevodorody" }, { noScroll: true });
   else if (h === "izomeriya") go({ module: "izomeriya" }, { noScroll: true });
+  else if (h === "raschet") go({ module: "raschet" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
