@@ -1034,6 +1034,70 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 @keyframes vdFill { to { width: var(--wf, 100%); } }
 .vd-o span { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .vd-m, .vd-hb { animation: none; } }
+
+/* ── v4.3: белки — лаборатория ── */
+.bk-lab-card { padding: 12px 10px 14px; text-align: left; }
+.bk-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
+.bk-tabs::-webkit-scrollbar { display: none; }
+.bk-tabs button { flex: none; display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink-2); font: 600 12.5px var(--font-body); cursor: pointer; }
+.bk-tabs i { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-2); font: 800 11px var(--font-body); font-style: normal; }
+.bk-tabs .on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); } .bk-tabs .on i { background: var(--accent); color: #fff; }
+.bk-tabs .past i { background: var(--ok); color: #fff; }
+.bk-stage { margin: 4px 0 2px; border-radius: 16px; background: radial-gradient(circle at 50% 45%, var(--paper), var(--surface)); border: 1px solid var(--line); }
+.bk-svg { display: block; width: 100%; height: auto; }
+.bk-bb { fill: none; stroke: var(--ink-2); stroke-width: 2.2; stroke-linejoin: round; opacity: .55; }
+.bk-bb.al { stroke: #e5484d; opacity: .7; } .bk-bb.be { stroke: #3e7bfa; opacity: .7; }
+.bk-aa { stroke: rgba(0, 0, 0, .25); stroke-width: 1; }
+.bk-hb { stroke: #3e7bfa; stroke-width: 1.6; stroke-dasharray: 3 3; animation: bkFade .6s .5s both; }
+.bk-ss { stroke: #d8b21a; stroke-width: 3.2; stroke-linecap: round; animation: bkFade .6s .5s both; }
+.bk-sst { font: 800 11px var(--font-body); fill: #b08a00; text-anchor: middle; animation: bkFade .6s .6s both; }
+.bk-heme { fill: #c2185b; stroke: #fff; stroke-width: 1.2; }
+.bk-lab { font: 800 13px var(--font-body); fill: var(--ink); text-anchor: middle; }
+.bk-cap { font: 600 11px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+.bk-sub { animation: bkIn .7s cubic-bezier(.2, .9, .3, 1.2) both; transform-box: fill-box; transform-origin: center; }
+@keyframes bkIn { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+@keyframes bkFade { from { opacity: 0; } to { opacity: 1; } }
+.bk-svg.den .bk-bb { stroke: #e5484d; }
+.bk-leg { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 2px 0; font-size: 11.5px; color: var(--ink-2); }
+.bk-leg i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; border: 1px solid rgba(0, 0, 0, .2); }
+.bk-ctl { display: grid; gap: 10px; margin-top: 12px; }
+.bk-ctl label { display: grid; gap: 4px; font-size: 13.5px; color: var(--ink-2); }
+.bk-ctl label b { color: var(--ink); }
+.bk-ctl input[type=range] { width: 100%; accent-color: var(--accent); }
+.bk-btns { display: flex; flex-wrap: wrap; gap: 8px; } .bk-btns .btn { font-size: 13.5px; padding: 9px 12px; }
+.bk-lv { display: flex; flex-wrap: wrap; gap: 6px; }
+.bk-lv span { padding: 4px 10px; border-radius: 999px; font: 700 12.5px var(--font-body); animation: lPop .35s; }
+.bk-lv .ok { background: var(--ok-soft); color: var(--ok); } .bk-lv .no { background: var(--bad-soft); color: var(--bad); }
+.bk-st { margin: 8px 0 0; font-size: 13.5px; line-height: 1.45; }
+.bk-info { margin: 12px 2px 0; font-size: 14.5px; line-height: 1.5; }
+.bk-nav { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.bk-skip { display: block; margin: 10px auto 0; font-size: 13.5px; }
+@media (prefers-reduced-motion: reduce) { .bk-hb, .bk-ss, .bk-sst, .bk-sub { animation: none; } }
+.bk-glob { stroke-width: 1.5; stroke-dasharray: 3 3; } .bk-glob.al { fill: rgba(229, 72, 77, .07); stroke: rgba(229, 72, 77, .45); } .bk-glob.be { fill: rgba(62, 123, 250, .07); stroke: rgba(62, 123, 250, .45); }
+.bk-core { fill: rgba(240, 164, 58, .14); stroke: rgba(240, 164, 58, .5); stroke-dasharray: 3 3; }
+/* детализация */
+.bk-stage { background: radial-gradient(circle at 50% 40%, #fff, #f3f0f6); }
+.bk-bb.thick { stroke-width: 3.2; opacity: .45; } .bk-bb.sub { stroke: rgba(80, 20, 40, .45); stroke-width: 1.6; opacity: 1; } .bk-bb.den { stroke: #e5484d; opacity: .5; }
+.bk-code { font: 700 7.4px var(--font-body); fill: #1d1630; text-anchor: middle; pointer-events: none; }
+.bk-rib { stroke-linecap: round; } .bk-rib.b { stroke: #b9a7c9; stroke-width: 7; } .bk-rib.f { stroke: #8e5bd0; stroke-width: 10; opacity: .9; }
+.bk-hb { stroke: #3e7bfa; stroke-width: 1.8; stroke-dasharray: 2 3; animation: none; }
+.bk-ss { stroke: #e3b300; stroke-width: 4.5; stroke-linecap: round; animation: none; }
+.bk-ion { stroke: #8e5bd0; stroke-width: 2; stroke-dasharray: 1 3; stroke-linecap: round; }
+.bk-hull { fill: url(#bkg-glob); stroke: rgba(142, 91, 208, .35); stroke-width: 1.5; }
+.bk-core { fill: rgba(240, 164, 58, .16); stroke: rgba(240, 164, 58, .55); stroke-dasharray: 3 3; }
+.bk-sphere { stroke: rgba(0, 0, 0, .12); }
+.bk-lead { stroke: var(--ink-2); stroke-width: 1; opacity: .7; }
+.bk-callt { font: 700 10px var(--font-body); fill: var(--ink); text-anchor: middle; } .bk-callt.sm { font-size: 9px; font-weight: 600; fill: var(--ink-2); }
+.bk-callt.hb { fill: #2f62c9; } .bk-callt.ss { fill: #a07c00; } .bk-callt.ion { fill: #6d3fb0; } .bk-callt.core { fill: #b26a00; }
+.bk-lens rect { fill: #fff; stroke: var(--accent); stroke-width: 1.5; filter: drop-shadow(0 2px 4px rgba(0,0,0,.12)); }
+.bk-lens-ring { fill: none; stroke: var(--accent); stroke-width: 2; }
+.bk-chem { font: 800 15px var(--font-body); fill: var(--ink); } .bk-chem.pb { fill: var(--accent); } .bk-chem.s { font-size: 12px; }
+.bk-dbl, .bk-sgl { stroke: var(--ink); stroke-width: 1.4; }
+.bk-fe { font: 800 7px var(--font-body); fill: #fff; text-anchor: middle; }
+.bk-jit { animation: bkJit .5s ease-in-out infinite alternate; transform-box: fill-box; }
+@keyframes bkJit { from { transform: translate(-1.2px, .8px); } to { transform: translate(1.2px, -.8px); } }
+.bk-svg:not(.den) .bk-jit { animation: none; }
+@media (prefers-reduced-motion: reduce) { .bk-jit { animation: none; } }
 </style>
 </head>
 <body class="locked">
@@ -1085,7 +1149,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.2</span>
+      <span class="ver" id="ver">v4.3</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1151,12 +1215,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-nauka" hidden></section>
   <section class="view" id="v-kl-teor" hidden></section>
   <section class="view" id="v-kl-voda" hidden></section>
+  <section class="view" id="v-kl-belki" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.2. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.3. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1183,7 +1248,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "1 · Биология как наука", "id": "nauka", "title": "Биология как наука", "desc": "Уровни организации, методы, науки и свойства живого — задание 1 ЕГЭ.", "st": "4 таблицы · задание 1 ЕГЭ", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Разложи элементы по группам, свяжи свойства воды с явлениями, расставь ткани по содержанию воды.", "st": "13 элементов · 10 свойств воды", "ready": true, "rel": "2026-11-08"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: структуры и функции", "desc": "Четыре уровня структуры, денатурация, функции белков.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: лаборатория", "desc": "Собери белок от цепочки до гемоглобина и сломай его нагревом и кислотой. Связи, денатурация, функции.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты", "desc": "Фермент и субстрат, от чего зависит скорость реакции.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды", "desc": "Моно-, ди- и полисахариды, жиры, фосфолипиды.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ", "desc": "Строение нуклеотидов, комплементарность, правило Чаргаффа, АТФ.", "st": "скоро"},
@@ -1702,6 +1767,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showN = state.subject === "bio" && state.tab === "learn" && state.module === "nauka";
     const showKT = state.subject === "bio" && state.tab === "learn" && state.module === "kl-teor";
     const showVD = state.subject === "bio" && state.tab === "learn" && state.module === "kl-voda";
+    const showBK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-belki";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1723,7 +1789,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vN.hidden = !showN;
     vKT.hidden = !showKT;
     vVD.hidden = !showVD;
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || state.tab === "traps";
+    vBK.hidden = !showBK;
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1756,6 +1823,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showN) nRender();
       else if (showKT) ktRender();
       else if (showVD) vdRender();
+      else if (showBK) bkRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -2480,6 +2548,286 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["С возрастом воды меньше", "Больше всего воды в клетках зародыша и в активно работающих тканях, меньше всего — в эмали и костях."],
   ];
 
+  /* ════════ v4.3: БИОЛОГИЯ 2.3 «Белки» — лаборатория сворачивания и денатурации + задания ЕГЭ ════════ */
+  const vBK = document.getElementById("v-kl-belki");
+  const BKK = "hb.bio23.v1";
+  let bks = {};
+  try { bks = JSON.parse(localStorage.getItem(BKK) || "{}") || {}; } catch (e) { bks = {}; }
+  function bksave() { try { localStorage.setItem(BKK, JSON.stringify(bks)); } catch (e) {} }
+  /* ── лаборатория: 20 аминокислот, раскладки для каждой структуры ── */
+  const BK_N = 20;
+  /* типы радикалов: h — гидрофобный, p — полярный, a — кислый (−), b — основный (+), c — цистеин (S) */
+  const BK_T = ["p", "h", "a", "h", "c", "p", "h", "b", "h", "p", "h", "a", "h", "p", "b", "c", "h", "p", "h", "a"];
+  const BK_COL = { h: "#f0a43a", p: "#3fb5a3", a: "#e5484d", b: "#3e7bfa", c: "#f2d14c" };
+  const BK_W = 340, BK_H = 250, BK_CX = 170, BK_CY = 118;
+  const BK_AA = ["Сер", "Ала", "Асп", "Вал", "Цис", "Тре", "Лей", "Лиз", "Иле", "Асн", "Фен", "Глу", "Вал", "Глн", "Арг", "Цис", "Лей", "Тир", "Ала", "Асп"];
+  /* α-спираль: 3,6 остатка на виток; глубина — для объёма */
+  const bkHx = (t) => 34 + t * 14.4, bkHy = (t) => BK_CY - 4 + 36 * Math.sin(t * 1.745), bkHz = (t) => Math.cos(t * 1.745);
+  /* спираль Архимеда с равным шагом — аккуратная глобула */
+  function bkSpiral(cx, cy, k) {
+    const out = []; let th = 1.2;
+    for (let i = 0; i < BK_N; i++) { out.push([cx + k * 5.2 * th * Math.cos(th), cy + k * 5.2 * th * Math.sin(th)]); th += (16 * k) / (k * 5.2 * Math.sqrt(1 + th * th)); }
+    const mx = out.reduce((a, p) => a + p[0], 0) / out.length - cx, my = out.reduce((a, p) => a + p[1], 0) / out.length - cy;
+    return out.map(([x, y]) => [x - mx, y - my]);
+  }
+  const bkLay = {
+    1: () => Array.from({ length: BK_N }, (_, i) => i < 10 ? [28 + i * 31.5, 52] : [28 + (19 - i) * 31.5, 126]),
+    2: () => Array.from({ length: BK_N }, (_, i) => [bkHx(i), bkHy(i)]),
+    3: () => bkSpiral(BK_CX, BK_CY, 1.3),
+    4: () => bkSpiral(BK_CX - 72, BK_CY - 50, 0.6),
+    coil: () => Array.from({ length: BK_N }, (_, i) => [22 + i * 15.5, BK_CY + 38 * Math.sin(i * 0.55) + 18 * Math.sin(i * 1.9 + 1)]),
+    hyd: () => Array.from({ length: BK_N }, (_, i) => [40 + (i % 5) * 64 + ((i * 37) % 23) - 11, 44 + Math.floor(i / 5) * 44 + ((i * 53) % 19) - 9]),
+  };
+  /* сглаженная линия через точки (Catmull-Rom → кривые Безье) */
+  function bkPath(p) {
+    let d = `M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`;
+    for (let i = 0; i < p.length - 1; i++) {
+      const a = p[i - 1] || p[i], b = p[i], c = p[i + 1], e = p[i + 2] || c;
+      d += ` C${(b[0] + (c[0] - a[0]) / 6).toFixed(1)},${(b[1] + (c[1] - a[1]) / 6).toFixed(1)} ${(c[0] - (e[0] - b[0]) / 6).toFixed(1)},${(c[1] - (e[1] - b[1]) / 6).toFixed(1)} ${c[0].toFixed(1)},${c[1].toFixed(1)}`;
+    }
+    return d;
+  }
+  const BK_STEPS = [
+    ["Первичная", "Последовательность аминокислот в цепи. Их соединяют <b>пептидные связи</b> (–CO–NH–) — ковалентные и прочные. Порядок аминокислот определяет все остальные структуры. Пример: 51 аминокислота инсулина."],
+    ["Вторичная", "Цепь закручивается в <b>α-спираль</b> (или складывается в β-слой). Её держат <b>водородные связи</b> между группами –CO– и –NH– соседних витков (пунктир). Пример: кератин волос."],
+    ["Третичная", "Спираль укладывается в <b>глобулу</b>. Её держат связи между радикалами: <b>дисульфидные мостики</b> S–S между цистеинами, ионные, водородные и <b>гидрофобные</b> взаимодействия — гидрофобные радикалы (оранжевые) прячутся внутрь. Пример: миоглобин."],
+    ["Четвертичная", "Несколько глобул-<b>субъединиц</b> объединяются в один белок. Пример: <b>гемоглобин</b> — две α- и две β-цепи, у каждой гем с железом. Четвертичная структура есть не у всех белков."],
+    ["Денатурация", "Двигай температуру и pH. Сильный нагрев, кислота или щёлочь рушат слабые связи — белок теряет форму и функцию. <b>Первичная структура при денатурации сохраняется</b>, а при гидролизе — разрушается."],
+  ];
+  const BL = { step: 0, pos: null, raf: 0, T: 37, pH: 7, hyd: false, settled: true };
+  function bkTarget() {
+    if (BL.step < 4) return bkLay[BL.step + 1]();
+    if (BL.hyd) return bkLay.hyd();
+    return bkDen() ? bkLay.coil() : bkLay[3]();
+  }
+  const bkDen = () => BL.T >= 60 || BL.pH <= 3 || BL.pH >= 11;
+  const BK_DEFS = `<defs>${Object.entries(BK_COL).map(([k, c]) => `<radialGradient id="bkg-${k}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".28" stop-color="${c}"/><stop offset="1" stop-color="${c}" stop-opacity="1"/><stop offset="1" stop-color="#000"/></radialGradient>`).join("")}
+    <radialGradient id="bkg-glob" cx="38%" cy="32%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".6" stop-color="#f6eef3" stop-opacity=".9"/><stop offset="1" stop-color="#e7d3df" stop-opacity=".9"/></radialGradient>
+    <radialGradient id="bkg-al" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f6c3c6"/><stop offset="1" stop-color="#d9727a"/></radialGradient>
+    <radialGradient id="bkg-be" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#c3d5f6"/><stop offset="1" stop-color="#6f93d9"/></radialGradient>
+    <radialGradient id="bkg-heme" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#ff9aa8"/><stop offset=".6" stop-color="#c2185b"/><stop offset="1" stop-color="#7a0d38"/></radialGradient>
+    <filter id="bk-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.5" stdDeviation="1.4" flood-color="#1a1030" flood-opacity=".28"/></filter></defs>`;
+  const bkBead = (p, i, r, lab) => `<g class="bk-aa" filter="url(#bk-sh)"><circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${r}" fill="url(#bkg-${BK_T[i]})"/>${lab ? `<text x="${p[0].toFixed(1)}" y="${(p[1] + 2.6).toFixed(1)}" class="bk-code">${BK_AA[i]}</text>` : ""}</g>`;
+  function bkHull(pos, pad) {   /* мягкая оболочка глобулы */
+    const c = [pos.reduce((a, p) => a + p[0], 0) / pos.length, pos.reduce((a, p) => a + p[1], 0) / pos.length];
+    let rs = Array.from({ length: 28 }, (_, k) => { const a = k / 28 * Math.PI * 2, dx = Math.cos(a), dy = Math.sin(a); return Math.max(...pos.map(p => (p[0] - c[0]) * dx + (p[1] - c[1]) * dy)) + pad; });
+    for (let it = 0; it < 2; it++) rs = rs.map((r, k) => (rs[(k + 27) % 28] + 2 * r + rs[(k + 1) % 28]) / 4);
+    const pts = rs.map((r, k) => { const a = k / 28 * Math.PI * 2; return [c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]; });
+    return { c, R: Math.max(...rs), d: bkPath([...pts, pts[0], pts[1]]).replace(/^M[^C]*C/, `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)} C`) + "Z" };
+  }
+  const bkCall = (x1, y1, x2, y2, t, cls) => { const w = t.length * 5.4, tx = Math.min(Math.max(x2, w / 2 + 6), BK_W - w / 2 - 6); return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="bk-lead"/><text x="${tx.toFixed(1)}" y="${(y2 + (y2 < y1 ? -3 : 10)).toFixed(1)}" class="bk-callt ${cls || ""}">${t}</text>`; };
+  function bkSvg(pos) {
+    const st = BL.step, den = st === 4 && (bkDen() || BL.hyd), hyd = st === 4 && BL.hyd, ok = BL.settled;
+    let g = "";
+    if (st === 0) {   /* первичная: цепочка «змейкой», подписи аминокислот, лупа на пептидной связи */
+      g += `<path d="${bkPath(pos)}" class="bk-bb thick"/>`;
+      g += pos.map((p, i) => bkBead(p, i, 12, true)).join("");
+      if (ok) {
+        const m = [(pos[3][0] + pos[4][0]) / 2, pos[3][1]];
+        g += `<circle cx="${m[0]}" cy="${m[1]}" r="9" class="bk-lens-ring"/><line x1="${m[0]}" y1="${m[1] + 9}" x2="${m[0]}" y2="172" class="bk-lead"/>
+          <g class="bk-lens" transform="translate(${m[0] - 92} 172)"><rect width="200" height="70" rx="12"/>
+          <text x="100" y="16" class="bk-callt">пептидная связь</text>
+          <text x="14" y="48" class="bk-chem">–C</text><text x="50" y="48" class="bk-chem pb">–N–</text><text x="92" y="48" class="bk-chem">C–</text>
+          <line x1="30" y1="34" x2="30" y2="24" class="bk-dbl"/><line x1="34" y1="34" x2="34" y2="24" class="bk-dbl"/><text x="25" y="23" class="bk-chem s">O</text>
+          <line x1="66" y1="52" x2="66" y2="58" class="bk-sgl"/><text x="62" y="68" class="bk-chem s">H</text>
+          <text x="160" y="40" class="bk-callt sm">ковалентная,</text><text x="160" y="52" class="bk-callt sm">прочная</text></g>
+          <text x="${pos[0][0]}" y="${pos[0][1] - 18}" class="bk-lab">N-конец</text><text x="${pos[19][0]}" y="${pos[19][1] + 26}" class="bk-lab">C-конец</text>`;
+      }
+    } else if (st === 1) {   /* вторичная: лента α-спирали с объёмом, водородные связи между витками */
+      const seg = [];
+      for (let t = 0; t < BK_N - 1; t += 0.25) seg.push([bkHx(t), bkHy(t), bkHz(t), bkHx(t + 0.25), bkHy(t + 0.25)]);
+      const ribbon = (front) => seg.filter(q => (q[2] > 0) === front).map(q => `<line x1="${q[0].toFixed(1)}" y1="${q[1].toFixed(1)}" x2="${q[3].toFixed(1)}" y2="${q[4].toFixed(1)}" class="bk-rib ${front ? "f" : "b"}"/>`).join("");
+      if (ok) g += ribbon(false);
+      else g += `<path d="${bkPath(pos)}" class="bk-bb"/>`;
+      const order = pos.map((p, i) => i).sort((a, b) => bkHz(a) - bkHz(b));
+      if (ok) for (let i = 0; i + 4 < BK_N; i += 3) g += `<line x1="${pos[i][0]}" y1="${pos[i][1]}" x2="${pos[i + 4][0]}" y2="${pos[i + 4][1]}" class="bk-hb"/>`;
+      g += order.filter(i => bkHz(i) <= 0).map(i => bkBead(pos[i], i, ok ? 6.5 + 2 * bkHz(i) : 7)).join("");
+      if (ok) g += ribbon(true);
+      g += order.filter(i => bkHz(i) > 0).map(i => bkBead(pos[i], i, ok ? 7 + 3 * bkHz(i) : 7)).join("");
+      if (ok) g += bkCall(pos[4][0], pos[4][1] - 4, 96, 22, "водородные связи (C=O ··· H–N)", "hb") + bkCall(bkHx(15.5), bkHy(15.5) + 4, 200, 230, "α-спираль: 3,6 аминокислоты на виток");
+    } else if (st === 2 || (st === 4 && !den)) {   /* третичная: глобула с оболочкой, мостик S–S, ионная связь, гидрофобное ядро */
+      const H = bkHull(pos, 15);
+      g += `<path d="${H.d}" class="bk-hull"/><circle cx="${H.c[0]}" cy="${H.c[1]}" r="${H.R * 0.42}" class="bk-core"/>`;
+      g += `<path d="${bkPath(pos)}" class="bk-bb thick"/>`;
+      if (ok) {
+        g += `<line x1="${pos[4][0]}" y1="${pos[4][1]}" x2="${pos[15][0]}" y2="${pos[15][1]}" class="bk-ss"/>`;
+        g += `<line x1="${pos[2][0]}" y1="${pos[2][1]}" x2="${pos[7][0]}" y2="${pos[7][1]}" class="bk-ion"/>`;
+      }
+      g += pos.map((p, i) => bkBead(p, i, 9)).join("");
+      if (ok) {
+        const mid = (a, b) => [(pos[a][0] + pos[b][0]) / 2, (pos[a][1] + pos[b][1]) / 2];
+        const ss = mid(4, 15), io = mid(2, 7);
+        g += bkCall(ss[0], ss[1], 40, 26, "дисульфидный мостик S–S", "ss") + bkCall(io[0], io[1], 236, 30, "ионная связь (+ −)", "ion") + bkCall(H.c[0], H.c[1] + 6, 214, 236, "гидрофобное ядро", "core");
+      }
+    } else if (st === 3) {   /* четвертичная: 4 объёмные субъединицы гемоглобина с гемами */
+      const subs = [[-72, -52, "al", "α₁"], [72, -52, "al", "α₂"], [-72, 54, "be", "β₁"], [72, 54, "be", "β₂"]];
+      subs.forEach(([dx, dy, c, l], k) => {
+        if (k > 0 && !ok) return;
+        const pts = k === 0 ? pos : bkSpiral(BK_CX + dx, BK_CY + dy, 0.6);
+        g += `<g class="${k ? "bk-sub" : ""}" style="animation-delay:${k * 0.15}s"><circle cx="${BK_CX + dx}" cy="${BK_CY + dy}" r="46" fill="url(#bkg-${c})" class="bk-sphere" filter="url(#bk-sh)"/>
+          <path d="${bkPath(pts)}" class="bk-bb sub"/>${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${BK_COL[BK_T[i]]}" opacity=".85"/>`).join("")}
+          ${ok ? `<circle cx="${BK_CX + dx + (dx > 0 ? -26 : 26)}" cy="${BK_CY + dy + (dy > 0 ? -22 : 22)}" r="8" fill="url(#bkg-heme)" filter="url(#bk-sh)"/><text x="${BK_CX + dx + (dx > 0 ? -26 : 26)}" y="${BK_CY + dy + (dy > 0 ? -19 : 25)}" class="bk-fe">Fe</text>` : ""}
+          <text x="${BK_CX + dx + (dx > 0 ? 30 : -30)}" y="${BK_CY + dy + (dy > 0 ? 44 : -36)}" class="bk-lab">${l}</text></g>`;
+      });
+      if (ok) g += `<text x="${BK_CX}" y="${BK_CY + 4}" class="bk-cap">2α + 2β · в каждой гем с Fe²⁺</text>`;
+    } else {   /* денатурация / гидролиз */
+      if (!hyd) g += `<path d="${bkPath(pos)}" class="bk-bb thick den"/>`;
+      g += pos.map((p, i) => `<g class="bk-jit" style="animation-delay:${(i % 5) * 0.12}s">${bkBead(p, i, hyd ? 10 : 9, hyd)}</g>`).join("");
+      g += `<text x="${BK_CX}" y="${BK_H - 8}" class="bk-cap">${hyd ? "пептидные связи разорваны — свободные аминокислоты" : "цепь развернулась, но порядок аминокислот тот же"}</text>`;
+    }
+    return `<svg class="bk-svg${den ? " den" : ""}" viewBox="0 0 ${BK_W} ${BK_H}" aria-hidden="true">${BK_DEFS}${g}</svg>`;
+  }
+  function bkDraw() { const box = vBK.querySelector(".bk-stage"); if (box) box.innerHTML = bkSvg(BL.pos); }
+  function bkMove() {
+    const from = BL.pos ? BL.pos.map(p => p.slice()) : bkTarget(), to = bkTarget(), t0 = performance.now(), D = 750;
+    cancelAnimationFrame(BL.raf);
+    const tick = (now) => {
+      const k = Math.min(1, (now - t0) / D), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      BL.pos = from.map((p, i) => [p[0] + (to[i][0] - p[0]) * e, p[1] + (to[i][1] - p[1]) * e]);
+      BL.settled = k >= 1; bkDraw();
+      if (k < 1) BL.raf = requestAnimationFrame(tick);
+    };
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { BL.pos = to; BL.settled = true; bkDraw(); } else BL.raf = requestAnimationFrame(tick);
+  }
+  function bkLevels() {
+    const d = bkDen(), h = BL.hyd, lv = ["первичная", "вторичная", "третичная"];
+    return `<div class="bk-lv">${lv.map((t, i) => { const ok = h ? false : i === 0 ? true : !d; return `<span class="${ok ? "ok" : "no"}">${ok ? "✓" : "✕"} ${t}</span>`; }).join("")}</div>
+      <p class="bk-st">${h ? "<b>Гидролиз:</b> разрушены все структуры, даже первичная — белок распался на аминокислоты." : d ? `<b>Денатурация</b> (${BL.T >= 60 ? "нагрев" : BL.pH <= 3 ? "кислая среда" : "щелочная среда"}): разрушены вторичная и третичная структуры, первичная сохранилась. Фермент перестаёт работать.` : "Нативный белок: все структуры на месте, белок работает."}</p>`;
+  }
+  function bkLabHtml() {
+    const s = BL.step;
+    return `<div class="l-card bk-lab-card">
+      <div class="bk-tabs">${BK_STEPS.map(([t], i) => `<button type="button" class="${i === s ? "on" : i < s ? "past" : ""}" data-bs="${i}"><i>${i + 1}</i>${t}</button>`).join("")}</div>
+      <div class="bk-stage"></div>
+      <div class="bk-leg"><span><i style="background:${BK_COL.h}"></i>гидрофобный</span><span><i style="background:${BK_COL.p}"></i>полярный</span><span><i style="background:${BK_COL.a}"></i>−</span><span><i style="background:${BK_COL.b}"></i>+</span><span><i style="background:${BK_COL.c}"></i>цистеин (S)</span></div>
+      ${s === 4 ? `<div class="bk-ctl">
+        <label>Температура: <b>${BL.T} °C</b><input type="range" min="20" max="100" step="1" value="${BL.T}" data-bt></label>
+        <label>pH среды: <b>${BL.pH}</b><input type="range" min="1" max="14" step="1" value="${BL.pH}" data-bp></label>
+        <div class="bk-btns"><button type="button" class="btn" data-bh>${BL.hyd ? "Отменить гидролиз" : "Гидролиз (пептидные связи)"}</button><button type="button" class="btn" data-bn>Норма: 37 °C, pH 7</button></div>
+        <div class="bk-lvwrap">${bkLevels()}</div></div>` : ""}
+      <p class="bk-info">${BK_STEPS[s][1]}</p>
+      <div class="bk-nav">${s > 0 ? `<button type="button" class="btn" data-bprev>← Назад</button>` : "<span></span>"}${s < 4 ? `<button type="button" class="btn primary" data-bnext>${BK_STEPS[s + 1][0]} структура →`.replace("Денатурация структура", "Денатурация") + `</button>` : `<button type="button" class="btn primary" data-bq>Проверить себя →</button>`}</div>
+    </div>`;
+  }
+  function bkBindLab() {
+    bkDraw();
+    const go2 = (s) => { BL.step = s; BL.hyd = false; bkRender(true); bkMove(); };
+    vBK.querySelectorAll("[data-bs]").forEach(b => b.addEventListener("click", () => go2(+b.dataset.bs)));
+    const nx = vBK.querySelector("[data-bnext]"); if (nx) nx.addEventListener("click", () => go2(BL.step + 1));
+    const pv = vBK.querySelector("[data-bprev]"); if (pv) pv.addEventListener("click", () => go2(BL.step - 1));
+    const upd = () => { const w = vBK.querySelector(".bk-lvwrap"); if (w) w.innerHTML = bkLevels(); bkMove(); };
+    const t = vBK.querySelector("[data-bt]"); if (t) t.addEventListener("input", () => { const was = bkDen(); BL.T = +t.value; t.previousElementSibling.textContent = BL.T + " °C"; if (was !== bkDen()) { upd(); haptic(bkDen() ? "error" : "success"); } });
+    const p = vBK.querySelector("[data-bp]"); if (p) p.addEventListener("input", () => { const was = bkDen(); BL.pH = +p.value; p.previousElementSibling.textContent = BL.pH; if (was !== bkDen()) { upd(); haptic(bkDen() ? "error" : "success"); } });
+    const h = vBK.querySelector("[data-bh]"); if (h) h.addEventListener("click", () => { BL.hyd = !BL.hyd; h.textContent = BL.hyd ? "Отменить гидролиз" : "Гидролиз (пептидные связи)"; upd(); });
+    const n = vBK.querySelector("[data-bn]"); if (n) n.addEventListener("click", () => { BL.T = 37; BL.pH = 7; BL.hyd = false; bkRender(true); bkMove(); });
+    const q = vBK.querySelector("[data-bq]"); if (q) q.addEventListener("click", () => { BKR.run = { qs: bkNew(), k: 0, ok: 0 }; bkRun(); zScroll(vBK); });
+  }
+  /* ── задания ── */
+  const BK_BOND = [   /* [структура, связи] */
+    ["Первичная", "пептидные связи между аминокислотами"],
+    ["Вторичная", "водородные связи между группами –CO– и –NH–"],
+    ["Третичная", "дисульфидные мостики, ионные, водородные и гидрофобные взаимодействия радикалов"],
+    ["Четвертичная", "нековалентные связи между отдельными полипептидными цепями"],
+  ];
+  const BK_EXS = [["Последовательность 51 аминокислоты в молекуле инсулина", 0], ["α-спираль в молекуле кератина волоса", 1], ["Компактная глобула миоглобина", 2], ["Гемоглобин из двух α- и двух β-цепей", 3], ["β-слой фиброина шёлка", 1], ["Порядок аминокислот, закодированный в гене", 0]];
+  const BK_FN = [   /* [белок, функция] */
+    ["Гемоглобин", "транспортная"], ["Инсулин", "регуляторная (гормон)"], ["Коллаген", "структурная"], ["Кератин", "структурная"],
+    ["Актин и миозин", "двигательная (сократительная)"], ["Антитела", "защитная"], ["Фибриноген", "защитная"], ["Пепсин", "каталитическая (фермент)"],
+    ["Амилаза", "каталитическая (фермент)"], ["Родопсин", "сигнальная (рецепторная)"], ["Казеин молока", "запасающая"], ["Глюкагон", "регуляторная (гормон)"],
+  ];
+  const BK_ST = [
+    ["Мономеры белков — аминокислоты", 1, "В белках встречается 20 видов аминокислот."],
+    ["Аминокислоты в цепи соединены пептидными связями", 1, "Пептидная связь –CO–NH– возникает между карбоксильной и аминогруппой."],
+    ["Вторичная структура поддерживается водородными связями", 1, "Водородные связи между витками спирали."],
+    ["При денатурации первичная структура сохраняется", 1, "Пептидные связи разрушаются только при гидролизе."],
+    ["Ферменты — белки-катализаторы", 1, "Ускоряют реакции в клетке."],
+    ["Гемоглобин обладает четвертичной структурой", 1, "Четыре субъединицы."],
+    ["Дисульфидные мостики образуются между остатками цистеина", 1, "Цистеин содержит серу — связь S–S."],
+    ["Мономеры белков — нуклеотиды", 0, "Неверно: нуклеотиды — мономеры нуклеиновых кислот."],
+    ["Пептидная связь — разновидность водородной", 0, "Неверно: пептидная связь ковалентная."],
+    ["При денатурации разрушается первичная структура", 0, "Неверно: первичная структура разрушается только при гидролизе."],
+    ["Все белки имеют четвертичную структуру", 0, "Неверно: только белки из нескольких цепей."],
+    ["Вторичная структура держится на дисульфидных мостиках", 0, "Неверно: это связи третичной структуры."],
+    ["Инсулин выполняет транспортную функцию", 0, "Неверно: инсулин — гормон, регуляторная функция."],
+    ["Коллаген — фермент", 0, "Неверно: коллаген — структурный белок."],
+  ];
+  const BKR = { run: null };
+  function bkQBond() { const i = Math.floor(Math.random() * 4); return { t: "s", name: "Связи", q: `Что стабилизирует <b>${BK_BOND[i][0].toLowerCase()}</b> структуру белка?`, opts: sShuf(BK_BOND.map(x => x[1])), ans: BK_BOND[i][1], ex: `${BK_BOND[i][0]} структура — ${BK_BOND[i][1]}.` }; }
+  function bkQEx() { const [t, i] = sPick(BK_EXS); return { t: "s", name: "Уровень структуры", q: `«${t}» — какая это структура белка?`, opts: BK_BOND.map(x => x[0]), ans: BK_BOND[i][0], ex: BK_STEPS[i][1].replace(/<[^>]+>/g, "") }; }
+  function bkQFn() {
+    const [p, f] = sPick(BK_FN), pool = [...new Set(BK_FN.map(x => x[1]))].filter(x => x !== f);
+    return { t: "s", name: "Функция белка", q: `Какую функцию выполняет белок <b>${p.toLowerCase()}</b>?`, opts: sShuf([f, ...sShuf(pool).slice(0, 3)]), ans: f, ex: `${p} — ${f} функция.` };
+  }
+  function bkQDen() {
+    return sPick([
+      { t: "s", name: "Денатурация", q: "Какая структура белка сохраняется при денатурации?", opts: BK_BOND.map(x => x[0]), ans: "Первичная", ex: "Денатурация рвёт слабые связи; пептидные связи (первичная структура) остаются." },
+      { t: "s", name: "Гидролиз", q: "Что разрушается при гидролизе белка в отличие от денатурации?", opts: ["пептидные связи", "только водородные связи", "только дисульфидные мостики", "только гидрофобные взаимодействия"], ans: "пептидные связи", ex: "Гидролиз разрывает пептидные связи — белок распадается на аминокислоты." },
+      { t: "s", name: "Денатурация", q: "Что вызывает денатурацию белка?", opts: ["нагревание выше 60 °C", "охлаждение до +4 °C", "растворение в воде", "присоединение гема"], ans: "нагревание выше 60 °C", ex: "Денатурацию вызывают нагрев, кислоты и щёлочи, соли тяжёлых металлов, спирт." },
+    ]);
+  }
+  function bkQThree() { return { t: "3", name: "Три верных", items: sShuf([...sShuf(BK_ST.filter(x => x[1])).slice(0, 3), ...sShuf(BK_ST.filter(x => !x[1])).slice(0, 3)]), pick: [], done: false }; }
+  const bkNew = () => [bkQBond(), bkQEx(), bkQFn(), bkQDen(), bkQThree(), bkQFn(), bkQBond(), bkQThree()].map(q => (q.t === "s" ? Object.assign(q, { opts: q.opts.slice(), pick: null }) : q));
+  function bkRender(keep) {
+    if (BKR.run) return bkRun();
+    if (!keep) { BL.step = 0; BL.T = 37; BL.pH = 7; BL.hyd = false; BL.pos = bkLay[1](); }
+    vBK.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-bk="back">← к модулям</button><h2 class="mod-title">Белки: лаборатория</h2></div>
+      <p class="intro">Собери белок от цепочки до гемоглобина, а потом сломай его нагревом и кислотой. После лаборатории — 8 заданий ЕГЭ.${bks.best != null ? ` Рекорд: <b>${bks.best}</b> из 8.` : ""}</p>
+      ${bkLabHtml()}
+      <button type="button" class="linkbtn bk-skip">Сразу к заданиям →</button>`;
+    vBK.querySelector('[data-bk="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vBK.querySelectorAll(".bk-skip").forEach(b => b.addEventListener("click", () => { BKR.run = { qs: bkNew(), k: 0, ok: 0 }; bkRun(); zScroll(vBK); }));
+    bkBindLab();
+  }
+  function bkRun() {
+    const r = BKR.run;
+    if (r.k >= r.qs.length) return bkEnd();
+    const q = r.qs[r.k];
+    let body, done, good;
+    if (q.t === "s") {
+      done = q.pick != null; good = done && q.opts[q.pick] === q.ans;
+      body = `<p class="vd-q">${q.q}</p><div class="z-opts s-opts">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o === q.ans ? " good" : j === q.pick ? " bad" : " fade") : ""}" data-bo="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o}</b></span></button>`).join("")}</div>`;
+    } else {
+      done = q.done; const ans = q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join(""); good = done && q.pick.slice().sort().join("") === ans;
+      body = `<p class="l-ask">Выберите три верных утверждения о белках.</p><div class="kt-list">${q.items.map((x, i) => { const on = q.pick.includes(i + 1), st = done ? (x[1] ? " ok" : on ? " no" : " fade") : on ? " on" : ""; return `<button type="button" class="kt-st${st}" data-bs3="${i + 1}"${done ? " disabled" : ""}><i>${i + 1}</i><span>${x[0]}</span></button>`; }).join("")}</div>
+        ${done ? `<p class="kt-ans">Ответ: <b>${ans}</b>${good ? "" : ` · у тебя: ${q.pick.slice().sort().join("")}`}</p>` : ""}`;
+    }
+    vBK.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-bk="list">← Белки: лаборатория</button></div>
+      <div class="cd-top"><span class="num">${q.name} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card kt-card">${body}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : `Неверно.${q.t === "s" ? ` Правильно: <b>${q.ans}</b>.` : ""}`} ${q.t === "s" ? q.ex : ""}</p>${q.t === "3" ? `<div class="kt-ex">${q.items.map((x, i) => `<p class="${x[1] ? "t" : "f"}"><b>${i + 1}.</b> ${x[2]}</p>`).join("")}</div>` : ""}
+        <div class="actions"><button type="button" class="btn primary" data-bk="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
+        : q.t === "3" ? `<div class="actions l-act"><button type="button" class="btn primary" data-bk="check"${q.pick.length === 3 ? "" : " disabled"}>Проверить</button></div>` : ""}`;
+    vBK.querySelector('[data-bk="list"]').addEventListener("click", () => { BKR.run = null; bkRender(true); zScroll(vBK); });
+    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); bkRun(); zScroll(vBK.querySelector(".z-ex"), 160); };
+    if (!done) {
+      vBK.querySelectorAll("[data-bo]").forEach(b => b.addEventListener("click", () => { q.pick = +b.dataset.bo; fin(q.opts[q.pick] === q.ans); }));
+      vBK.querySelectorAll("[data-bs3]").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.bs3, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); bkRun(); }));
+      const ch = vBK.querySelector('[data-bk="check"]');
+      if (ch) ch.addEventListener("click", () => { q.done = true; fin(q.pick.slice().sort().join("") === q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join("")); });
+    } else vBK.querySelector('[data-bk="next"]').addEventListener("click", () => { r.k++; bkRun(); zScroll(vBK); });
+  }
+  function bkEnd() {
+    const r = BKR.run;
+    if (bks.best == null || r.ok > bks.best) { bks.best = r.ok; bksave(); }
+    vBK.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-bk="list">← Белки: лаборатория</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Всё верно 🔥" : "Пройди лабораторию ещё раз — особенно денатурацию."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-bk="again">Ещё 8 заданий</button><button type="button" class="btn" data-bk="list2">В лабораторию</button></div></div>`;
+    const back = () => { BKR.run = null; bkRender(true); zScroll(vBK); };
+    vBK.querySelector('[data-bk="list"]').addEventListener("click", back);
+    vBK.querySelector('[data-bk="list2"]').addEventListener("click", back);
+    vBK.querySelector('[data-bk="again"]').addEventListener("click", () => { BKR.run = { qs: bkNew(), k: 0, ok: 0 }; bkRun(); zScroll(vBK); });
+  }
+  const BK_TRAPS = [
+    ["Денатурация ≠ гидролиз", "Денатурация рушит вторичную, третичную и четвертичную структуры, а первичная сохраняется. Гидролиз разрывает пептидные связи — первичная структура разрушена."],
+    ["Вторичная — водородные, третичная — S–S и другие", "Вторичную структуру держат водородные связи остова цепи. Дисульфидные мостики, ионные и гидрофобные взаимодействия — это третичная структура."],
+    ["Четвертичная — не у всех белков", "Только у белков из нескольких полипептидных цепей: гемоглобин, ДНК-полимераза. У миоглобина её нет."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -2521,7 +2869,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -4160,6 +4508,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "nauka") go({ subject: "bio", module: "nauka" }, { noScroll: true });
   else if (h === "klteor") go({ subject: "bio", module: "kl-teor" }, { noScroll: true });
   else if (h === "klvoda") go({ subject: "bio", module: "kl-voda" }, { noScroll: true });
+  else if (h === "belki") go({ subject: "bio", module: "kl-belki" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
