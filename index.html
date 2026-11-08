@@ -953,6 +953,22 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .rc-steps p:not(:has(i)) { grid-template-columns: 1fr; opacity: 1; animation: none; }
 .rc-steps i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 800 12px var(--font-body); font-style: normal; }
 @media (prefers-reduced-motion: reduce) { .rc-b, .rc-steps p { animation: none; opacity: 1; } }
+
+/* ── v4.0: биология · раздел 1 ── */
+.nb-card { text-align: left; }
+.nb-t { margin: 0 0 12px; font: 500 15px/1.45 var(--font-body); }
+.nb-tab { width: 100%; border-collapse: separate; border-spacing: 0; border: 1.5px solid var(--edge); border-radius: 14px; overflow: hidden; background: var(--paper); font-size: 14.5px; }
+.nb-tab th { padding: 9px 10px; text-align: left; background: var(--surface-2); font: 700 12.5px/1.3 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
+.nb-tab td { padding: 11px 10px; border-top: 1px solid var(--line); vertical-align: top; line-height: 1.35; }
+.nb-tab th + th, .nb-tab td + td { border-left: 1px solid var(--line); }
+.nb-tab th:first-child, .nb-tab td:first-child { width: 38%; }
+.nb-hole { background: var(--accent-soft); color: var(--accent); font: 800 20px var(--font-body); text-align: center; vertical-align: middle !important; animation: hPulse 1.6s ease-in-out infinite; }
+.nb-hole.ok { background: var(--ok-soft); color: var(--ok); animation: none; text-align: left; font: 700 14.5px/1.35 var(--font-body); }
+.nb-hole.no { background: var(--bad-soft); color: var(--bad); animation: none; text-align: left; font: 700 14.5px/1.35 var(--font-body); }
+.nb-fill { display: inline-block; animation: hIn .5s cubic-bezier(.2, .9, .3, 1.25); }
+.nb-opts .z-opt .ft b { font-weight: 600; line-height: 1.3; }
+.bio-road { margin: 0 0 14px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.bio-road b { color: var(--ink); }
 </style>
 </head>
 <body class="locked">
@@ -1004,7 +1020,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v3.5</span>
+      <span class="ver" id="ver">v4.0</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1067,12 +1083,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-izomeriya" hidden></section>
   <section class="view" id="v-check" hidden></section>
   <section class="view" id="v-raschet" hidden></section>
+  <section class="view" id="v-nauka" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 3.5. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.0. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1096,8 +1113,42 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       { group: "Неорганика", id: "elektroliz", title: "Электролиз", desc: "Что выделяется на катоде и аноде при электролизе растворов солей, кислот и щелочей.", st: "40 растворов · бесконечные задания", ready: true, rel: "2026-10-31" },
     ],
     bio: [
-      { group: "Ботаника", id: "cikly", title: "Жизненные циклы растений", desc: "Где n, а где 2n: мхи, папоротники, голосеменные, цветковые.", st: "скоро" },
-      { group: "Генетика", id: "genetika", title: "Задачи на скрещивание", desc: "Решётка Пеннета, которую можно собрать руками.", st: "скоро" },
+      {"group": "1 · Биология как наука", "id": "nauka", "title": "Биология как наука", "desc": "Уровни организации, методы, науки и свойства живого — задание 1 ЕГЭ.", "st": "4 таблицы · задание 1 ЕГЭ", "ready": true, "rel": "2026-11-08"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Положения теории, кто и что открыл, методы изучения клетки.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Свойства воды, макро- и микроэлементы, их роль.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: структуры и функции", "desc": "Четыре уровня структуры, денатурация, функции белков.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты", "desc": "Фермент и субстрат, от чего зависит скорость реакции.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды", "desc": "Моно-, ди- и полисахариды, жиры, фосфолипиды.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ", "desc": "Строение нуклеотидов, комплементарность, правило Чаргаффа, АТФ.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: органоиды", "desc": "Животная, растительная, грибная и бактериальная клетка — с приближением.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-mem", "title": "Мембрана и транспорт веществ", "desc": "Диффузия, активный транспорт, эндо- и экзоцитоз.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-osm", "title": "Осмос, тургор, плазмолиз", "desc": "Клетка в растворах разной концентрации.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-sekr", "title": "Секреторный путь", "desc": "ЭПС → аппарат Гольджи → мембрана клетки.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-energ", "title": "Энергетический обмен", "desc": "Гликолиз, брожение, клеточное дыхание, выход АТФ.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-foto", "title": "Фотосинтез и хемосинтез", "desc": "Световая и темновая фазы, хемосинтезирующие бактерии.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-bios", "title": "Биосинтез белка", "desc": "Репликация, транскрипция, трансляция, генетический код.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-del", "title": "Митоз и мейоз", "desc": "Фазы деления, наборы n и c на каждом этапе.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-vir", "title": "Вирусы", "desc": "Строение, размножение, бактериофаги.", "st": "скоро"},
+      {"group": "3 · Организм как биологическая система", "id": "org-razm", "title": "Размножение и гаметогенез", "desc": "Бесполое и половое размножение, сперматогенез, овогенез.", "st": "скоро"},
+      {"group": "3 · Организм как биологическая система", "id": "org-ontog", "title": "Оплодотворение и онтогенез", "desc": "Путь сперматозоида, дробление, гаструляция, органогенез.", "st": "скоро"},
+      {"group": "3 · Организм как биологическая система", "id": "genetika", "title": "Генетика: задачи на скрещивание", "desc": "Решётка Пеннета, которую можно собрать руками.", "st": "скоро"},
+      {"group": "3 · Организм как биологическая система", "id": "org-izm", "title": "Изменчивость и мутации", "desc": "Модификационная, комбинативная, мутационная.", "st": "скоро"},
+      {"group": "3 · Организм как биологическая система", "id": "org-sel", "title": "Селекция и биотехнология", "desc": "Методы селекции, генная инженерия, клонирование.", "st": "скоро"},
+      {"group": "4 · Многообразие органического мира", "id": "mn-bakt", "title": "Бактерии", "desc": "Строение, питание, размножение, роль в природе.", "st": "скоро"},
+      {"group": "4 · Многообразие органического мира", "id": "mn-grib", "title": "Грибы и лишайники", "desc": "Строение, питание, симбиоз.", "st": "скоро"},
+      {"group": "4 · Многообразие органического мира", "id": "mn-rast", "title": "Растения: ткани и органы", "desc": "Корень, стебель, лист, цветок, плод.", "st": "скоро"},
+      {"group": "4 · Многообразие органического мира", "id": "cikly", "title": "Жизненные циклы растений", "desc": "Где n, а где 2n: мхи, папоротники, голосеменные, цветковые.", "st": "скоро"},
+      {"group": "4 · Многообразие органического мира", "id": "mn-zhiv", "title": "Животные", "desc": "От простейших до млекопитающих.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "ch-tkani", "title": "Ткани и органы человека", "desc": "Строение и функции тканей.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "ch-reg", "title": "Нервная и эндокринная регуляция", "desc": "Рефлекторная дуга, гормоны.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "ch-krov", "title": "Кровь и кровообращение", "desc": "Сердце, круги кровообращения, иммунитет.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "ch-obmen", "title": "Дыхание, пищеварение, выделение", "desc": "Как работают системы органов.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "ch-analiz", "title": "Анализаторы", "desc": "Зрение, слух, равновесие.", "st": "скоро"},
+      {"group": "6 · Эволюция живой природы", "id": "ev-uch", "title": "Эволюционное учение", "desc": "Движущие силы, видообразование, доказательства эволюции.", "st": "скоро"},
+      {"group": "6 · Эволюция живой природы", "id": "ev-chel", "title": "Происхождение человека", "desc": "Антропогенез, предки человека.", "st": "скоро"},
+      {"group": "7 · Экосистемы", "id": "eko-sist", "title": "Экосистемы и цепи питания", "desc": "Продуценты, консументы, редуценты, правило 10%.", "st": "скоро"},
+      {"group": "7 · Экосистемы", "id": "eko-bio", "title": "Биосфера", "desc": "Круговорот веществ, учение Вернадского.", "st": "скоро"},
     ],
   };
 
@@ -1581,6 +1632,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const chemQuiz = state.subject === "chem" && state.tab === "quiz" && state.module === "mapquiz";
     const showK = state.subject === "chem" && state.tab === "quiz" && state.module !== "mapquiz";
     const showR = state.subject === "chem" && state.tab === "learn" && state.module === "raschet";
+    const showN = state.subject === "bio" && state.tab === "learn" && state.module === "nauka";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1599,7 +1651,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vI.hidden = !showI;
     vK.hidden = !showK;
     vR.hidden = !showR;
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || state.tab === "traps";
+    vN.hidden = !showN;
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1629,6 +1682,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showI) iRender();
       else if (showK) kRender();
       else if (showR) rRender();
+      else if (showN) nRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -1903,8 +1957,136 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vR.querySelector('[data-r="again"]').addEventListener("click", () => { RR.run = { qs: rNew(10), k: 0, ok: 0 }; rRun(); zScroll(vR); });
   }
 
+  /* ════════ v4.0: БИОЛОГИЯ · Раздел 1 «Биология как наука» — задание 1 ЕГЭ (таблица с пропуском) ════════ */
+  const vN = document.getElementById("v-nauka");
+  const NK = "hb.bio1.v1";
+  let ns = {};
+  try { ns = JSON.parse(localStorage.getItem(NK) || "{}") || {}; } catch (e) { ns = {}; }
+  function nsave() { try { localStorage.setItem(NK, JSON.stringify(ns)); } catch (e) {} }
+  /* таблицы: [название, левый столбец, правый столбец, строки [слева, справа]] */
+  const NT = {
+    lvl: ["Уровни организации живой природы", "Уровень", "Пример процесса или объекта", [
+      ["молекулярный", "Репликация ДНК"], ["молекулярный", "Денатурация белка"], ["молекулярный", "Расщепление крахмала ферментом амилазой"],
+      ["клеточный", "Митотическое деление клеток кожи"], ["клеточный", "Фагоцитоз бактерии лейкоцитом"], ["клеточный", "Образование лизосом в аппарате Гольджи"],
+      ["тканевый", "Проведение нервного импульса по нервной ткани"], ["тканевый", "Сокращение гладкой мышечной ткани"],
+      ["органный", "Работа сердца как насоса"], ["органный", "Строение и функции листа"],
+      ["организменный", "Поддержание постоянной температуры тела у млекопитающих"], ["организменный", "Индивидуальное развитие лягушки"],
+      ["популяционно-видовой", "Изменение численности зайцев в популяции"], ["популяционно-видовой", "Образование нового вида"], ["популяционно-видовой", "Свободное скрещивание особей одного вида"],
+      ["биогеоценотический", "Цепи питания в лесу"], ["биогеоценотический", "Смена сообществ на зарастающем озере (сукцессия)"], ["биогеоценотический", "Круговорот веществ в пруду"],
+      ["биосферный", "Глобальный круговорот углерода"], ["биосферный", "Образование озонового слоя"], ["биосферный", "Изменение климата всей планеты"],
+    ]],
+    met: ["Методы биологических исследований", "Метод", "Применение", [
+      ["наблюдение", "Изучение поведения птиц в природе"], ["эксперимент", "Изучение влияния света на образование крахмала в листьях"],
+      ["измерение", "Определение массы тела новорождённых телят"], ["моделирование", "Создание компьютерной модели роста популяции"],
+      ["сравнение", "Выявление сходства в строении конечностей позвоночных"], ["описание", "Фиксация признаков нового вида насекомого"],
+      ["световая микроскопия", "Наблюдение движения инфузории-туфельки"], ["электронная микроскопия", "Изучение строения рибосом"],
+      ["центрифугирование", "Разделение органоидов клетки по плотности"], ["хроматография", "Разделение пигментов хлоропластов"],
+      ["метод меченых атомов", "Выяснение источника кислорода при фотосинтезе"], ["культура клеток", "Выращивание клеток вне организма на питательной среде"],
+      ["гибридологический", "Скрещивание растений гороха с жёлтыми и зелёными семенами"], ["генеалогический", "Составление родословной семьи для изучения наследования гемофилии"],
+      ["близнецовый", "Изучение влияния среды на развитие признаков у однояйцевых близнецов"], ["цитогенетический", "Выявление синдрома Дауна по кариотипу"],
+      ["биохимический", "Определение уровня глюкозы в крови"], ["палеонтологический", "Изучение ископаемых остатков предков лошади"],
+      ["мониторинг", "Регулярное отслеживание численности редкого вида"],
+    ]],
+    sci: ["Биологические науки", "Наука", "Объект изучения", [
+      ["ботаника", "Растения"], ["зоология", "Животные"], ["микология", "Грибы"], ["микробиология", "Микроорганизмы"], ["вирусология", "Вирусы"],
+      ["цитология", "Строение и функции клетки"], ["гистология", "Ткани"], ["анатомия", "Строение организма и его органов"], ["физиология", "Процессы жизнедеятельности организма"],
+      ["генетика", "Наследственность и изменчивость"], ["эмбриология", "Зародышевое развитие организмов"], ["экология", "Взаимоотношения организмов со средой и друг с другом"],
+      ["палеонтология", "Ископаемые организмы"], ["систематика", "Классификация организмов"], ["этология", "Поведение животных"], ["биохимия", "Химические процессы в живых организмах"],
+      ["селекция", "Выведение новых сортов растений и пород животных"], ["биотехнология", "Использование организмов в производстве"], ["антропология", "Происхождение и эволюция человека"],
+      ["орнитология", "Птицы"], ["ихтиология", "Рыбы"], ["энтомология", "Насекомые"], ["герпетология", "Земноводные и пресмыкающиеся"], ["териология", "Млекопитающие"],
+      ["альгология", "Водоросли"], ["бриология", "Мхи"],
+    ]],
+    sv: ["Свойства живого", "Свойство", "Пример", [
+      ["раздражимость", "Складывание листьев мимозы при прикосновении"], ["раздражимость", "Движение инфузории от капли соли"],
+      ["обмен веществ", "Поглощение питательных веществ и выделение продуктов распада"], ["размножение", "Образование новых особей у дрожжей почкованием"],
+      ["рост и развитие", "Превращение головастика в лягушку"], ["наследственность", "Сходство потомков с родителями"], ["изменчивость", "Появление у потомков новых признаков"],
+      ["саморегуляция", "Поддержание постоянной температуры тела"], ["дискретность", "Организм состоит из отдельных клеток"],
+    ]],
+  };
+  const NASK = { lvl: "Какой уровень организации пропущен?", met: "Какой метод пропущен?", sci: "Какая наука пропущена?", sv: "Какое свойство живого пропущено?" };
+  const NKEYS = { all: "Все", lvl: "Уровни", met: "Методы", sci: "Науки", sv: "Свойства живого" };
+  const NR = { run: null, kind: ns.kind || "all" };
+  function nQ() {
+    const key = NR.kind === "all" ? sPick(Object.keys(NT)) : NR.kind, [title, cl, cr, rows] = NT[key];
+    const ask = sPick(rows), side = Math.random() < 0.5 ? 0 : 1;   /* что спрятано: 0 — левая ячейка, 1 — правая */
+    const ex = sPick(rows.filter(r => r[0] !== ask[0] && r[1] !== ask[1]));
+    const pool = [...new Set(rows.map(r => r[side]).filter(v => v !== ask[side] && v !== ex[side] && !(side === 1 && rows.some(r => r[1] === v && r[0] === ask[0]))))];
+    const opts = sShuf([ask[side], ...sShuf(pool).slice(0, 3)]);
+    return { key, title, cl, cr, ask, ex, side, opts, order: Math.random() < 0.5 };
+  }
+  function nRender() {
+    if (NR.run) return nRun();
+    vN.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-n="back">← к модулям</button><h2 class="mod-title">Биология как наука</h2></div>
+      <p class="intro">Задание 1 ЕГЭ: в таблице пропущена ячейка — выбери, что в неё вписать. Уровни организации, методы, биологические науки и свойства живого.</p>
+      <div class="h-chips">${Object.entries(NKEYS).map(([k, t]) => `<button type="button" class="h-chip${NR.kind === k ? " on" : ""}" data-nk="${k}">${t}</button>`).join("")}</div>
+      <div class="l-start">${ns.best != null ? `<p class="cd-total">Лучший результат: <b>${ns.best}</b> из 10</p>` : ""}<button type="button" class="btn primary" data-n="go">Начать: 10 заданий</button></div>
+      <h3 class="cd-h">Шпаргалка</h3>
+      <div class="l-rules">
+        <div><b>Уровни — снизу вверх</b><span>молекулярный → клеточный → тканевый → органный → организменный → популяционно-видовой → биогеоценотический → биосферный. Процесс в одной клетке — клеточный, в одной молекуле — молекулярный, вся планета — биосферный.</span></div>
+        <div><b>Методы, которые путают</b><span>Рибосомы видны только в электронный микроскоп. Центрифугирование делит органоиды по плотности, хроматография — пигменты. Меченые атомы — проследить путь вещества (откуда O₂ при фотосинтезе).</span></div>
+        <div><b>Методы генетики человека</b><span>Генеалогический — родословная. Близнецовый — роль среды и наследственности. Цитогенетический — хромосомы, кариотип. Гибридологический — скрещивания, к человеку не применяется.</span></div>
+        <div><b>Науки по объекту</b><span>Микология — грибы, альгология — водоросли, бриология — мхи, ихтиология — рыбы, орнитология — птицы, энтомология — насекомые, герпетология — земноводные и пресмыкающиеся, териология — млекопитающие, этология — поведение.</span></div>
+      </div>`;
+    vN.querySelector('[data-n="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vN.querySelectorAll("[data-nk]").forEach(b => b.addEventListener("click", () => { NR.kind = b.dataset.nk; ns.kind = NR.kind; nsave(); nRender(); }));
+    vN.querySelector('[data-n="go"]').addEventListener("click", () => { NR.run = { qs: Array.from({ length: 10 }, nQ), k: 0, ok: 0, pick: null }; nRun(); zScroll(vN); });
+  }
+  function nRun() {
+    const r = NR.run;
+    if (r.k >= r.qs.length) return nEnd();
+    const q = r.qs[r.k], done = r.pick != null, good = done && q.opts[r.pick] === q.ask[q.side];
+    const cell = (v, hole) => hole ? `<td class="nb-hole${done ? (good ? " ok" : " no") : ""}">${done ? `<span class="nb-fill">${v}</span>` : "?"}</td>` : `<td>${v}</td>`;
+    const rowEx = `<tr>${cell(q.ex[0])}${cell(q.ex[1])}</tr>`, rowQ = `<tr>${cell(q.ask[0], q.side === 0)}${cell(q.ask[1], q.side === 1)}</tr>`;
+    vN.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-n="list">← Биология как наука</button></div>
+      <div class="cd-top"><span class="num">Задание 1 · ${NKEYS[q.key]} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card nb-card">
+        <p class="nb-t">Рассмотрите таблицу «${q.title}» и заполните пустую ячейку.</p>
+        <table class="nb-tab"><thead><tr><th>${q.cl}</th><th>${q.cr}</th></tr></thead><tbody>${q.order ? rowEx + rowQ : rowQ + rowEx}</tbody></table>
+      </div>
+      <p class="l-ask">${q.side === 0 ? NASK[q.key] : "Что вписать в пустую ячейку?"}</p>
+      <div class="z-opts s-opts nb-opts">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o === q.ask[q.side] ? " good" : j === r.pick ? " bad" : " fade") : ""}" data-no="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o}</b></span></button>`).join("")}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : `Неверно. Правильно: <b>${q.ask[q.side]}</b>.`} «${q.ask[1]}» — ${q.cl.toLowerCase()}: <b>${q.ask[0]}</b>.</p>
+        <div class="actions"><button type="button" class="btn primary" data-n="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    vN.querySelector('[data-n="list"]').addEventListener("click", () => { NR.run = null; nRender(); zScroll(vN); });
+    vN.querySelectorAll("[data-no]").forEach(b => b.addEventListener("click", () => {
+      if (r.pick != null) return;
+      r.pick = +b.dataset.no; const ok = q.opts[r.pick] === q.ask[q.side]; if (ok) r.ok++;
+      haptic(ok ? "success" : "error"); nRun(); zScroll(vN.querySelector(".nb-card"), 90);
+    }));
+    const nx = vN.querySelector('[data-n="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; r.pick = null; nRun(); zScroll(vN); });
+  }
+  function nEnd() {
+    const r = NR.run;
+    if (ns.best == null || r.ok > ns.best) { ns.best = r.ok; nsave(); }
+    vN.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-n="list">← Биология как наука</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все ячейки заполнены верно 🔥" : "Загляни в шпаргалку — и ещё раз, таблицы будут новые."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-n="again">Ещё 10 заданий</button><button type="button" class="btn" data-n="list2">Шпаргалка</button></div></div>`;
+    const back = () => { NR.run = null; nRender(); zScroll(vN); };
+    vN.querySelector('[data-n="list"]').addEventListener("click", back);
+    vN.querySelector('[data-n="list2"]').addEventListener("click", back);
+    vN.querySelector('[data-n="again"]').addEventListener("click", () => { NR.run = { qs: Array.from({ length: 10 }, nQ), k: 0, ok: 0, pick: null }; nRun(); zScroll(vN); });
+  }
+  /* ловушки раздела 1 — для вкладки «Ловушки ЕГЭ» в биологии */
+  const BIO_TRAPS = [
+    ["Одноклеточные: клетка = организм", "У амёбы или инфузории клеточный и организменный уровни совпадают. В задании обычно пример подобран так, чтобы ответ был однозначным — смотри, о чём именно речь."],
+    ["Рибосомы — только электронный микроскоп", "В световой микроскоп видны ядро, хлоропласты, вакуоли. Рибосомы, строение мембран и митохондрий изнутри — только электронная микроскопия."],
+    ["Центрифугирование ≠ хроматография", "Центрифуга делит органоиды по плотности. Хроматография разделяет смесь веществ — например, пигменты хлоропластов."],
+    ["Гибридологический метод не для человека", "Скрещивания ставят на горохе, дрозофиле. Для человека — генеалогический, близнецовый, цитогенетический, биохимический."],
+    ["Сукцессия — биогеоценотический уровень", "Смена сообществ на одной территории — это уровень экосистемы, а не популяции и не биосферы."],
+    ["Экология — не «охрана природы»", "Экология — наука о взаимоотношениях организмов со средой и друг с другом. Охрана природы опирается на экологию, но это не одно и то же."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
+      vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
+      document.getElementById("go-bio1").addEventListener("click", () => go({ tab: "learn", module: "nauka" }));
+      return;
       vList.innerHTML = `<div class="empty-state"><b>Проверка по биологии появится вместе с первым модулем</b><p>Сейчас готов модуль по химии. Пока можно проверить себя по карте органики.</p><button type="button" class="btn" id="go-chem-quiz" style="justify-self:start">Проверить себя по химии</button></div>`;
       document.getElementById("go-chem-quiz").addEventListener("click", () => go({ subject: "chem", tab: "quiz", module: null }));
       return;
@@ -1916,7 +2098,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const isNew = (m) => !!(m.ready && m.rel && m.rel === newestRel);   /* в один день вышло несколько — «новое» у всех */
     const intro = state.subject === "chem"
       ? "Выбери модуль. Готовые открываются сразу, остальные в работе."
-      : "Модули по биологии в работе. Первым выйдет тот, который выберут подписчики.";
+      : "Биология идёт по кодификатору ФИПИ — раздел за разделом. Готовые модули открываются сразу, остальные выходят по порядку.";
     const v3 = state.subject === "chem" && newestRel === "2026-10-31" ? `<div class="v3-banner"><b>🎉 Вышла версия 3.0 — 5 новых разделов</b><span>Равновесие №22 · гидролиз · электролиз · углеводороды · изомерия. Новые разделы отмечены значком «НОВОЕ». А в «Проверь себя» — микс по всем темам.</span><button type="button" id="v3-mix">Пройти микс →</button></div>` : "";
     vList.innerHTML = planCard() + v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
       <div class="group">
@@ -1934,12 +2116,17 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
       const m = mods.find(x => x.id === b.dataset.mod);
       if (m.ready) go({ tab: "learn", module: m.id });
-      else toast(`«${m.title}» в работе. Голосуй за эту тему в канале matvéri, если хочешь её раньше.`);
+      else toast(state.subject === "bio" ? `«${m.title}» в работе — выйдет по порядку кодификатора. Новинки — в канале matvéri.` : `«${m.title}» в работе. Голосуй за эту тему в канале matvéri, если хочешь её раньше.`);
     }));
   }
 
   function renderTraps() {
     if (state.subject === "bio") {
+      vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
+      <h3 class="cd-h k-th">Биология как наука <button type="button" class="linkbtn" data-bmod="nauka">потренировать →</button></h3>
+      <div class="traps">${BIO_TRAPS.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`;
+      vTraps.querySelector("[data-bmod]").addEventListener("click", () => go({ tab: "learn", module: "nauka" }));
+      return;
       vTraps.innerHTML = `<div class="empty-state"><b>Ловушки по биологии появятся с первым модулем</b><p>Пока здесь собраны ловушки по химии.</p><button type="button" class="btn" id="go-chem-traps" style="justify-self:start">Смотреть ловушки по химии</button></div>`;
       document.getElementById("go-chem-traps").addEventListener("click", () => go({ subject: "chem", tab: "traps" }));
       return;
@@ -3571,6 +3758,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "uglevodor" || h === "uglevodorody") go({ module: "uglevodorody" }, { noScroll: true });
   else if (h === "izomeriya") go({ module: "izomeriya" }, { noScroll: true });
   else if (h === "raschet") go({ module: "raschet" }, { noScroll: true });
+  else if (h === "nauka") go({ subject: "bio", module: "nauka" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
