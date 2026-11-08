@@ -969,6 +969,40 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .nb-opts .z-opt .ft b { font-weight: 600; line-height: 1.3; }
 .bio-road { margin: 0 0 14px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
 .bio-road b { color: var(--ink); }
+
+/* ── v4.1: клеточная теория ── */
+.kt-line { position: relative; display: grid; gap: 8px; margin: 0 0 18px; padding-left: 18px; max-width: 620px; }
+.kt-line::before { content: ""; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+.kt-ev { position: relative; display: grid; grid-template-columns: 52px 1fr; gap: 0 10px; padding: 8px 10px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.kt-ev::before { content: ""; position: absolute; left: -16px; top: 14px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.kt-ev i { grid-row: span 2; font: 800 15px var(--font-mono); font-style: normal; color: var(--accent); }
+.kt-ev b { font-size: 14.5px; } .kt-ev span { font-size: 13px; color: var(--ink-2); line-height: 1.35; }
+.kt-card { text-align: left; }
+.kt-card .l-ask { margin-top: 0; }
+.kt-slots { display: grid; gap: 8px; }
+.kt-slot { display: grid; grid-template-columns: 48px 1fr; gap: 6px 10px; align-items: center; padding: 10px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--paper); }
+.kt-slot i { grid-row: span 2; font: 800 14px var(--font-mono); font-style: normal; color: var(--accent); text-align: center; }
+.kt-slot > span { font-size: 14px; line-height: 1.35; }
+.kt-drop { justify-self: start; min-width: 140px; padding: 8px 12px; border-radius: 10px; border: 1.5px dashed var(--edge); background: var(--surface); color: var(--ink-2); font: 600 14px var(--font-body); cursor: pointer; }
+.kt-drop.full { border-style: solid; border-color: var(--accent); color: var(--accent); background: var(--accent-soft); animation: lPop .3s; }
+.kt-drop.wait { border-color: var(--accent); animation: hPulse 1.2s ease-in-out infinite; }
+.kt-slot.ok { border-color: var(--ok); background: var(--ok-soft); } .kt-slot.ok .kt-drop { color: var(--ok); border-color: var(--ok); background: transparent; }
+.kt-slot.no { border-color: var(--bad); background: var(--bad-soft); } .kt-slot.no .kt-drop { color: var(--bad); border-color: var(--bad); background: transparent; text-decoration: line-through; }
+.kt-slot small { grid-column: 2; font-weight: 700; color: var(--ok); font-size: 13px; }
+.kt-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.kt-chip { padding: 9px 13px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); font: 600 14px var(--font-body); cursor: pointer; }
+.kt-chip.on { background: var(--ink); color: var(--paper); transform: translateY(-2px); box-shadow: var(--shadow); }
+.kt-chip.used { opacity: .3; }
+.kt-list { display: grid; gap: 8px; }
+.kt-st { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; width: 100%; padding: 11px 12px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); text-align: left; font: 500 14.5px/1.4 var(--font-body); cursor: pointer; }
+.kt-st i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; border: 1.5px solid var(--edge); font: 800 13px var(--font-body); font-style: normal; }
+.kt-st.on { border-color: var(--accent); background: var(--accent-soft); } .kt-st.on i { background: var(--accent); border-color: var(--accent); color: #fff; }
+.kt-st.ok { border-color: var(--ok); background: var(--ok-soft); } .kt-st.ok i { background: var(--ok); border-color: var(--ok); color: #fff; }
+.kt-st.no { border-color: var(--bad); background: var(--bad-soft); } .kt-st.no i { background: var(--bad); border-color: var(--bad); color: #fff; }
+.kt-st.fade { opacity: .5; }
+.kt-ans { margin: 12px 0 0; font-size: 15px; } .kt-ans b { font-size: 18px; letter-spacing: .1em; color: var(--accent); }
+.kt-ex { display: grid; gap: 6px; margin: 8px 0; } .kt-ex p { margin: 0; padding: 8px 10px; border-radius: 10px; font-size: 13.5px; line-height: 1.4; background: var(--surface); border: 1px solid var(--line); }
+.kt-ex p.t { border-left: 4px solid var(--ok); } .kt-ex p.f { border-left: 4px solid var(--bad); }
 </style>
 </head>
 <body class="locked">
@@ -1020,7 +1054,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.0</span>
+      <span class="ver" id="ver">v4.1</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1084,12 +1118,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-check" hidden></section>
   <section class="view" id="v-raschet" hidden></section>
   <section class="view" id="v-nauka" hidden></section>
+  <section class="view" id="v-kl-teor" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.0. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.1. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1114,7 +1149,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ],
     bio: [
       {"group": "1 · Биология как наука", "id": "nauka", "title": "Биология как наука", "desc": "Уровни организации, методы, науки и свойства живого — задание 1 ЕГЭ.", "st": "4 таблицы · задание 1 ЕГЭ", "ready": true, "rel": "2026-11-08"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Положения теории, кто и что открыл, методы изучения клетки.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Свойства воды, макро- и микроэлементы, их роль.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: структуры и функции", "desc": "Четыре уровня структуры, денатурация, функции белков.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты", "desc": "Фермент и субстрат, от чего зависит скорость реакции.", "st": "скоро"},
@@ -1633,6 +1668,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showK = state.subject === "chem" && state.tab === "quiz" && state.module !== "mapquiz";
     const showR = state.subject === "chem" && state.tab === "learn" && state.module === "raschet";
     const showN = state.subject === "bio" && state.tab === "learn" && state.module === "nauka";
+    const showKT = state.subject === "bio" && state.tab === "learn" && state.module === "kl-teor";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1652,7 +1688,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vK.hidden = !showK;
     vR.hidden = !showR;
     vN.hidden = !showN;
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || state.tab === "traps";
+    vKT.hidden = !showKT;
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1683,6 +1720,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showK) kRender();
       else if (showR) rRender();
       else if (showN) nRender();
+      else if (showKT) ktRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -2082,6 +2120,144 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Экология — не «охрана природы»", "Экология — наука о взаимоотношениях организмов со средой и друг с другом. Охрана природы опирается на экологию, но это не одно и то же."],
   ];
 
+  /* ════════ v4.1: БИОЛОГИЯ 2.1 «Клеточная теория» — лента открытий + «выберите три верных утверждения» ════════ */
+  const vKT = document.getElementById("v-kl-teor");
+  const KTK = "hb.bio21.v1";
+  let kts = {};
+  try { kts = JSON.parse(localStorage.getItem(KTK) || "{}") || {}; } catch (e) { kts = {}; }
+  function ktsave() { try { localStorage.setItem(KTK, JSON.stringify(kts)); } catch (e) {} }
+  /* [учёный, открытие, год] */
+  const KT_SCI = [
+    ["Роберт Гук", "Увидел ячейки в срезе пробки и ввёл термин «клетка»", 1665],
+    ["Антони ван Левенгук", "Первым увидел одноклеточные организмы и бактерии", 1676],
+    ["Карл Бэр", "Открыл яйцеклетку млекопитающих", 1827],
+    ["Роберт Броун", "Описал ядро в клетках растений", 1831],
+    ["Маттиас Шлейден", "Доказал, что все ткани растений состоят из клеток", 1838],
+    ["Теодор Шванн", "Сформулировал клеточную теорию для растений и животных", 1839],
+    ["Рудольф Вирхов", "Дополнил теорию: «всякая клетка — от клетки»", 1855],
+    ["Илья Мечников", "Открыл фагоцитоз", 1882],
+    ["Дмитрий Ивановский", "Открыл вирусы, изучая мозаичную болезнь табака", 1892],
+    ["Камилло Гольджи", "Описал органоид, названный позже его именем", 1898],
+  ];
+  /* утверждения: [текст, верно?, пояснение] */
+  const KT_ST = [
+    ["Клетка — элементарная единица строения и жизнедеятельности живых организмов", 1, "Основное положение клеточной теории."],
+    ["Клетки всех организмов сходны по строению, химическому составу и обмену веществ", 1, "Положение о сходстве (гомологии) клеток."],
+    ["Новые клетки образуются только делением материнских клеток", 1, "Положение Вирхова: «всякая клетка — от клетки»."],
+    ["Клетки многоклеточных организмов специализированы и образуют ткани", 1, "Положение о специализации клеток."],
+    ["Сходство строения клеток — доказательство единства происхождения живого", 1, "Клеточная теория — одно из доказательств эволюции."],
+    ["Клетка — единица роста и развития организмов", 1, "Организм растёт за счёт деления и роста клеток."],
+    ["Шлейден и Шванн — авторы клеточной теории", 1, "Шлейден — растения (1838), Шванн обобщил на животных (1839)."],
+    ["Клетки могут возникать из неклеточного вещества", 0, "Неверно: Вирхов показал, что клетка возникает только из клетки."],
+    ["Клеточную теорию сформулировал Роберт Гук", 0, "Неверно: Гук ввёл термин «клетка», а теорию создали Шлейден и Шванн."],
+    ["Вирусы имеют клеточное строение", 0, "Неверно: вирусы — неклеточная форма жизни."],
+    ["Клетки растений и животных принципиально различаются по химическому составу", 0, "Неверно: химический состав клеток сходен — это одно из положений теории."],
+    ["Ядро есть в клетках всех живых организмов", 0, "Неверно: у бактерий (прокариот) оформленного ядра нет."],
+    ["Ядро открыл Антони ван Левенгук", 0, "Неверно: ядро описал Роберт Броун в 1831 году."],
+    ["У многоклеточных организмов каждая клетка способна жить самостоятельно", 0, "Неверно: клетки многоклеточных специализированы и зависят друг от друга."],
+  ];
+  const KTR = { run: null };
+  function ktMatch() {
+    const set = sShuf(KT_SCI).slice(0, 4).sort((a, b) => a[2] - b[2]);
+    return { t: "m", set, chips: sShuf(set.map(x => x[0])), place: [null, null, null, null], sel: null, done: false };
+  }
+  function ktChoose() {
+    const tr = sShuf(KT_ST.filter(x => x[1])).slice(0, 3), fl = sShuf(KT_ST.filter(x => !x[1])).slice(0, 3);
+    return { t: "c", items: sShuf([...tr, ...fl]), pick: [], done: false };
+  }
+  function ktNew() { return [ktMatch(), ktChoose(), ktMatch(), ktChoose(), ktMatch(), ktChoose()]; }
+  function ktRender() {
+    if (KTR.run) return ktRun();
+    vKT.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-kt="back">← к модулям</button><h2 class="mod-title">Клеточная теория</h2></div>
+      <p class="intro">Два вида заданий: расставь учёных на ленте открытий и выбери три верных утверждения о клеточной теории — как в ЕГЭ.</p>
+      <div class="l-start">${kts.best != null ? `<p class="cd-total">Лучший результат: <b>${kts.best}</b> из 6</p>` : ""}<button type="button" class="btn primary" data-kt="go">Начать: 6 заданий</button></div>
+      <h3 class="cd-h">Лента открытий</h3>
+      <div class="kt-line">${KT_SCI.map(([p, d, y]) => `<div class="kt-ev"><i>${y}</i><b>${p}</b><span>${d}</span></div>`).join("")}</div>
+      <h3 class="cd-h">Положения современной клеточной теории</h3>
+      <div class="l-rules">
+        <div><b>1</b><span>Клетка — элементарная единица строения, жизнедеятельности, роста и развития живых организмов.</span></div>
+        <div><b>2</b><span>Клетки всех организмов сходны по строению, химическому составу и обмену веществ.</span></div>
+        <div><b>3</b><span>Новые клетки образуются только делением исходной материнской клетки.</span></div>
+        <div><b>4</b><span>Клетки многоклеточных организмов специализированы и образуют ткани.</span></div>
+        <div><b>5</b><span>Клеточное строение — свидетельство единства происхождения живого. Вирусы — неклеточная форма жизни.</span></div>
+      </div>`;
+    vKT.querySelector('[data-kt="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vKT.querySelector('[data-kt="go"]').addEventListener("click", () => { KTR.run = { qs: ktNew(), k: 0, ok: 0 }; ktRun(); zScroll(vKT); });
+  }
+  function ktRun() {
+    const r = KTR.run;
+    if (r.k >= r.qs.length) return ktEnd();
+    const q = r.qs[r.k];
+    let body, ready, good = false, ex = "";
+    if (q.t === "m") {
+      ready = q.place.every(x => x);
+      if (q.done) good = q.place.every((p, i) => p === q.set[i][0]);
+      body = `<p class="l-ask">Расставь учёных по открытиям: нажми на имя, потом на пустое место.</p>
+        <div class="kt-slots">${q.set.map(([p, d, y], i) => {
+          const v = q.place[i], st = q.done ? (v === p ? " ok" : " no") : "";
+          return `<div class="kt-slot${st}"><i>${q.done ? y : "?"}</i><span>${d}</span><button type="button" class="kt-drop${v ? " full" : ""}${!q.done && q.sel && !v ? " wait" : ""}" data-kd="${i}"${q.done ? " disabled" : ""}>${v || "сюда"}</button>${q.done && v !== p ? `<small>верно: ${p}</small>` : ""}</div>`;
+        }).join("")}</div>
+        ${q.done ? "" : `<div class="kt-chips">${q.chips.map(c => `<button type="button" class="kt-chip${q.sel === c ? " on" : ""}${q.place.includes(c) ? " used" : ""}" data-kc="${c}"${q.place.includes(c) ? " disabled" : ""}>${c}</button>`).join("")}</div>`}`;
+    } else {
+      ready = q.pick.length === 3;
+      const ans = q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join("");
+      if (q.done) { good = q.pick.slice().sort().join("") === ans; ex = q.items.map((x, i) => `<p class="${x[1] ? "t" : "f"}"><b>${i + 1}.</b> ${x[2]}</p>`).join(""); }
+      body = `<p class="l-ask">Выберите три верных утверждения о клеточной теории.</p>
+        <div class="kt-list">${q.items.map((x, i) => {
+          const on = q.pick.includes(i + 1), st = q.done ? (x[1] ? " ok" : on ? " no" : " fade") : on ? " on" : "";
+          return `<button type="button" class="kt-st${st}" data-ks="${i + 1}"${q.done ? " disabled" : ""}><i>${i + 1}</i><span>${x[0]}</span></button>`;
+        }).join("")}</div>
+        ${q.done ? `<p class="kt-ans">Ответ: <b>${ans}</b>${good ? "" : ` · у тебя: ${q.pick.slice().sort().join("")}`}</p>` : ""}`;
+    }
+    vKT.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-kt="list">← Клеточная теория</button></div>
+      <div class="cd-top"><span class="num">${q.t === "m" ? "Лента открытий" : "Три верных"} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card kt-card">${body}</div>
+      ${q.done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : "Есть ошибки — посмотри, что где."}</p>${ex ? `<div class="kt-ex">${ex}</div>` : ""}
+        <div class="actions"><button type="button" class="btn primary" data-kt="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
+        : `<div class="actions l-act"><button type="button" class="btn primary" data-kt="check"${ready ? "" : " disabled"}>Проверить</button></div>`}`;
+    vKT.querySelector('[data-kt="list"]').addEventListener("click", () => { KTR.run = null; ktRender(); zScroll(vKT); });
+    if (!q.done) {
+      vKT.querySelectorAll("[data-kc]").forEach(b => b.addEventListener("click", () => { q.sel = q.sel === b.dataset.kc ? null : b.dataset.kc; ktRun(); }));
+      vKT.querySelectorAll("[data-kd]").forEach(b => b.addEventListener("click", () => {
+        const i = +b.dataset.kd;
+        if (q.place[i]) { q.place[i] = null; } else if (q.sel) { q.place[i] = q.sel; q.sel = null; }
+        ktRun();
+      }));
+      vKT.querySelectorAll("[data-ks]").forEach(b => b.addEventListener("click", () => {
+        const i = +b.dataset.ks, j = q.pick.indexOf(i);
+        if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i);
+        ktRun();
+      }));
+      vKT.querySelector('[data-kt="check"]').addEventListener("click", () => {
+        q.done = true;
+        const ok = q.t === "m" ? q.place.every((p, i) => p === q.set[i][0]) : q.pick.slice().sort().join("") === q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join("");
+        if (ok) r.ok++;
+        haptic(ok ? "success" : "error"); ktRun(); zScroll(vKT.querySelector(".z-ex"), 160);
+      });
+    } else vKT.querySelector('[data-kt="next"]').addEventListener("click", () => { r.k++; ktRun(); zScroll(vKT); });
+  }
+  function ktEnd() {
+    const r = KTR.run;
+    if (kts.best == null || r.ok > kts.best) { kts.best = r.ok; ktsave(); }
+    vKT.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-kt="list">← Клеточная теория</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Всё верно 🔥" : "Посмотри ленту открытий и положения теории — и ещё раз."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-kt="again">Ещё раз</button><button type="button" class="btn" data-kt="list2">Лента и положения</button></div></div>`;
+    const back = () => { KTR.run = null; ktRender(); zScroll(vKT); };
+    vKT.querySelector('[data-kt="list"]').addEventListener("click", back);
+    vKT.querySelector('[data-kt="list2"]').addEventListener("click", back);
+    vKT.querySelector('[data-kt="again"]').addEventListener("click", () => { KTR.run = { qs: ktNew(), k: 0, ok: 0 }; ktRun(); zScroll(vKT); });
+  }
+  const KT_TRAPS = [
+    ["Гук ≠ автор клеточной теории", "Роберт Гук увидел ячейки пробки и придумал слово «клетка». Теорию создали Шлейден и Шванн (1838–1839), Вирхов дополнил её."],
+    ["Ядро открыл Броун, а не Левенгук", "Левенгук первым увидел одноклеточных и бактерий. Ядро описал Роберт Броун в 1831 году."],
+    ["Вирусы — вне клеточной теории", "Вирусы не имеют клеточного строения. Их открыл Д. И. Ивановский (1892)."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -2123,9 +2299,10 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      <h3 class="cd-h k-th">Биология как наука <button type="button" class="linkbtn" data-bmod="nauka">потренировать →</button></h3>
-      <div class="traps">${BIO_TRAPS.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`;
-      vTraps.querySelector("[data-bmod]").addEventListener("click", () => go({ tab: "learn", module: "nauka" }));
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS]].map(([id, t, list]) => `
+      <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
+      <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
+      vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
       return;
       vTraps.innerHTML = `<div class="empty-state"><b>Ловушки по биологии появятся с первым модулем</b><p>Пока здесь собраны ловушки по химии.</p><button type="button" class="btn" id="go-chem-traps" style="justify-self:start">Смотреть ловушки по химии</button></div>`;
       document.getElementById("go-chem-traps").addEventListener("click", () => go({ subject: "chem", tab: "traps" }));
@@ -3759,6 +3936,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "izomeriya") go({ module: "izomeriya" }, { noScroll: true });
   else if (h === "raschet") go({ module: "raschet" }, { noScroll: true });
   else if (h === "nauka") go({ subject: "bio", module: "nauka" }, { noScroll: true });
+  else if (h === "klteor") go({ subject: "bio", module: "kl-teor" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
