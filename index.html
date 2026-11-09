@@ -1180,6 +1180,42 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   .bk-skip { margin-top: 12px; }
   #v-kl-belki .kt-card, #v-kl-ferm .kt-card, #v-kl-belki .z-ex, #v-kl-ferm .z-ex, #v-kl-belki .cd-top, #v-kl-ferm .cd-top { max-width: 680px; }
 }
+/* ── углеводы и липиды ── */
+.ul-poly { stroke: rgba(0, 0, 0, .25); stroke-width: 1.2; stroke-linejoin: round; }
+.ul-o { fill: #e5484d; stroke: #fff; stroke-width: 1.2; }
+.ul-ot { font-weight: 800; font-family: var(--font-body); fill: #fff; text-anchor: middle; }
+.ul-rt { font-weight: 800; font-family: var(--font-body); fill: #17213A; text-anchor: middle; }
+.ul-lab { font: 700 11px var(--font-body); fill: var(--ink-2); text-anchor: middle; } .ul-lab.b { fill: var(--ink); font-weight: 800; }
+.ul-pick { cursor: pointer; } .ul-pick:active { opacity: .7; }
+.ul-sep { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; }
+.ul-slot { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: .5; }
+.ul-plus { font: 800 22px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+.ul-bond { stroke: #e5484d; stroke-width: 3; stroke-linecap: round; }
+.ul-h2o { font: 800 10px var(--font-body); fill: #2f62c9; }
+.ul-shake { animation: fmShake .3s 2; transform-box: fill-box; }
+.ul-unit { fill: #fffaf0; stroke: #b9a27a; stroke-width: 1; }
+.ul-hb { stroke: #3e7bfa; stroke-width: 1.2; stroke-dasharray: 2 2.5; opacity: .8; }
+.ul-n { font: 800 7px var(--font-body); fill: #2f62c9; text-anchor: middle; }
+.ul-gly { stroke: rgba(60, 20, 120, .25); }
+.ul-c { font: 800 14px var(--font-body); fill: #4b2a99; text-anchor: middle; }
+.ul-oh { font: 700 12px var(--font-body); fill: #2f62c9; }
+.ul-est { stroke: #8a6fd1; stroke-width: 2.5; }
+.ul-fa { fill: none; stroke: #e8a020; stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; } .ul-fa.un { stroke: #d9731a; }
+.ul-state { font: 800 12px var(--font-body); } .ul-state.sol { fill: #b26a00; } .ul-state.liq { fill: #2f9e5b; }
+.ul-tail { stroke: #e8a020; stroke-width: 2.6; stroke-linecap: round; }
+.ul-head { stroke: rgba(0, 0, 0, .2); stroke-width: 1; }
+.ul-core { fill: rgba(255, 214, 140, .35); }
+.ul-card { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ul-card p { margin: 0; padding: 8px 10px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; line-height: 1.3; }
+.ul-card span { display: block; font-size: 11px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
+.ul-energy { display: grid; gap: 14px; padding: 16px 14px; }
+.ul-en-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; color: var(--ink); } .ul-en-h span { font-size: 12px; color: var(--ink-2); }
+.ul-en-bar { height: 22px; border-radius: 8px; background: #EFF2F8; overflow: hidden; margin: 6px 0 4px; }
+.ul-en-bar i { display: block; height: 100%; border-radius: 8px; transition: width .35s cubic-bezier(.2,.9,.3,1); }
+.ul-en.c i { background: linear-gradient(90deg, #7fb2ff, #2f62c9); } .ul-en.f i { background: linear-gradient(90deg, #ffd27a, #ec8a1c); }
+.ul-en-v { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); } .ul-en-v b { font-size: 18px; color: var(--ink); }
+.ul-camel { margin: 0; font-size: 13px; color: var(--ink-2); }
+.ul-link { stroke: #b9a27a; stroke-width: 2.2; stroke-linecap: round; }
 </style>
 </head>
 <body class="locked">
@@ -1231,7 +1267,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.4</span>
+      <span class="ver" id="ver">v4.5</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1299,12 +1335,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-kl-voda" hidden></section>
   <section class="view" id="v-kl-belki" hidden></section>
   <section class="view" id="v-kl-ferm" hidden></section>
+  <section class="view" id="v-kl-ugl" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.4. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.5. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1333,7 +1370,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Разложи элементы по группам, свяжи свойства воды с явлениями, расставь ткани по содержанию воды.", "st": "13 элементов · 10 свойств воды", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: лаборатория", "desc": "Собери белок от цепочки до гемоглобина и сломай его нагревом и кислотой. Связи, денатурация, функции.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды", "desc": "Моно-, ди- и полисахариды, жиры, фосфолипиды.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ", "desc": "Строение нуклеотидов, комплементарность, правило Чаргаффа, АТФ.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: органоиды", "desc": "Животная, растительная, грибная и бактериальная клетка — с приближением.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
@@ -1852,6 +1889,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showVD = state.subject === "bio" && state.tab === "learn" && state.module === "kl-voda";
     const showBK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-belki";
     const showFM = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ferm";
+    const showUL = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ugl";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1876,7 +1914,9 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vBK.hidden = !showBK;
     vFM.hidden = !showFM;
     if (!showFM) cancelAnimationFrame(FM.raf);
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || state.tab === "traps";
+    vUL.hidden = !showUL;
+    if (!showUL) cancelAnimationFrame(UL.raf);
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || showUL || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1911,6 +1951,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showVD) vdRender();
       else if (showBK) bkRender();
       else if (showFM) fmRender();
+      else if (showUL) ulRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -3320,6 +3361,337 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Конкурентный — в активный центр, неконкурентный — в другой участок", "Конкурентный ингибитор вытесняется избытком субстрата, неконкурентный — нет."],
   ];
 
+  /* ══ БИОЛОГИЯ 2.5 · УГЛЕВОДЫ И ЛИПИДЫ: ЛАБОРАТОРИЯ ══ */
+  const vUL = document.getElementById("v-kl-ugl");
+  const ULK = "hb.bio25.v1";
+  let uls = {};
+  try { uls = JSON.parse(localStorage.getItem(ULK) || "{}") || {}; } catch (e) { uls = {}; }
+  function ulsave() { try { localStorage.setItem(ULK, JSON.stringify(uls)); } catch (e) {} }
+  const UL_STEPS = [
+    ["Сахара", "Моносахариды — <b>глюкоза, фруктоза, галактоза</b> (C₆H₁₂O₆), а также пентозы <b>рибоза и дезоксирибоза</b>. Два моносахарида соединяются <b>гликозидной связью</b>, при этом выделяется <b>вода</b> — получается дисахарид. Обратный процесс — <b>гидролиз</b>: вода присоединяется, связь рвётся. Моно- и дисахариды сладкие и хорошо растворяются в воде."],
+    ["Полисахариды", "Полисахариды — полимеры из сотен и тысяч остатков глюкозы. Они не сладкие и почти не растворяются в воде. <b>Крахмал</b> и <b>гликоген</b> — запасные, <b>целлюлоза</b> и <b>хитин</b> — структурные. Клеточная стенка бактерий — из <b>муреина</b>. Капни йодом и сравни."],
+    ["Жиры", "Жир (триглицерид) — <b>глицерин + 3 жирные кислоты</b>; при соединении выделяются 3 молекулы воды. <b>Насыщенные</b> кислоты прямые и укладываются плотно — жир твёрдый (животные жиры). <b>Ненасыщенные</b> с двойными связями изогнуты — масло жидкое (растительные масла). К липидам относят и <b>стероиды</b>: холестерин, половые гормоны, витамин D."],
+    ["Мембрана", "Фосфолипид — это <b>гидрофильная головка</b> (глицерин + остаток фосфорной кислоты) и <b>два гидрофобных хвоста</b> из жирных кислот. В воде фосфолипиды сами выстраиваются в <b>двойной слой</b>: головки — к воде, хвосты — внутрь. Это основа всех клеточных мембран."],
+    ["Энергия", "При полном окислении <b>1 г углеводов</b> выделяется <b>17,6 кДж</b>, <b>1 г жира</b> — <b>38,9 кДж</b>, почти вдвое больше. Поэтому жир — главный энергетический запас. При окислении жира образуется много <b>метаболической воды</b> — так горб верблюда (это жир!) помогает в пустыне. Ещё жир даёт теплоизоляцию, защиту органов и плавучесть."],
+  ];
+  const UL = { step: 0, a: null, b: null, bond: 0, anim: null, raf: 0, msg: "", poly: "kr", iod: 0, fa: [], faT: 0, mem: 0, memT: 0, g: 10 };
+  const UL_W = 340;
+  const ulE = (x) => (x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3));
+  const ulL = (a, b, t) => a + (b - a) * t;
+  const UL_DEFS = `<defs>
+    <radialGradient id="ulg-glu" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#e3f0ff"/><stop offset="1" stop-color="#4a8fe0"/></radialGradient>
+    <radialGradient id="ulg-fru" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff0d9"/><stop offset="1" stop-color="#ec8a1c"/></radialGradient>
+    <radialGradient id="ulg-gal" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#e2f7e9"/><stop offset="1" stop-color="#2f9e5b"/></radialGradient>
+    <radialGradient id="ulg-head" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#7fb2ff"/><stop offset="1" stop-color="#2f62c9"/></radialGradient>
+    <linearGradient id="ulg-gly" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#efe6ff"/><stop offset="1" stop-color="#a98be6"/></linearGradient>
+    <linearGradient id="ulg-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9ecff"/><stop offset="1" stop-color="#b9dafc"/></linearGradient>
+    <filter id="ul-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1a1030" flood-opacity=".22"/></filter></defs>`;
+  const ulWrap = (h, g) => `<svg class="bk-svg ul-svg" viewBox="0 0 ${UL_W} ${h}" aria-hidden="true">${UL_DEFS}${g}</svg>`;
+  const ulPts = (cx, cy, r, n, a0) => Array.from({ length: n }, (_, k) => { const a = a0 + (k * 2 * Math.PI) / n; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; });
+  const UL_MONO = { glu: { n: "глюкоза", s: "Глю", sides: 6 }, fru: { n: "фруктоза", s: "Фру", sides: 5 }, gal: { n: "галактоза", s: "Гал", sides: 6 } };
+  function ulRing(k, cx, cy, r, extra) {
+    const m = UL_MONO[k], p = ulPts(cx, cy, r, m.sides, m.sides === 6 ? -Math.PI / 2 : -Math.PI / 2), o = p[1];
+    return `<g class="ul-ring ${extra || ""}" filter="url(#ul-sh)"><polygon points="${p.map((q) => q.map((v) => v.toFixed(1)).join(",")).join(" ")}" fill="url(#ulg-${k})" class="ul-poly"/>
+      <circle cx="${o[0].toFixed(1)}" cy="${o[1].toFixed(1)}" r="${(r * .26).toFixed(1)}" class="ul-o"/><text x="${o[0].toFixed(1)}" y="${(o[1] + r * .1).toFixed(1)}" class="ul-ot" style="font-size:${(r * .3).toFixed(1)}px">O</text>
+      <text x="${cx}" y="${(cy + r * .16).toFixed(1)}" class="ul-rt" style="font-size:${(r * .42).toFixed(1)}px">${m.s}</text></g>`;
+  }
+  const ulDrop = (x, y, op, lab) => `<g opacity="${op.toFixed(2)}"><path d="M${x},${y - 11} C${x + 7},${y - 2} ${x + 8},${y + 3} ${x},${y + 8} C${x - 8},${y + 3} ${x - 7},${y - 2} ${x},${y - 11} Z" fill="#7fc4ff" stroke="#2f62c9" stroke-width="1"/>${lab ? `<text x="${x + 12}" y="${y + 4}" class="ul-h2o">H₂O</text>` : ""}</g>`;
+  /* ── шаг 1: моносахариды → дисахарид ── */
+  const UL_DI = { "fru+glu": ["Сахароза", "свекловичный и тростниковый сахар"], "gal+glu": ["Лактоза", "молочный сахар"], "glu+glu": ["Мальтоза", "солодовый сахар — из крахмала"] };
+  const ulKey = () => [UL.a, UL.b].sort().join("+");
+  function ul1Svg() {
+    let g = "";
+    [["glu", 70], ["fru", 170], ["gal", 270]].forEach(([k, x]) => { g += `<g class="ul-pick" data-um="${k}">${ulRing(k, x, 46, 24)}<text x="${x}" y="88" class="ul-lab">${UL_MONO[k].n}</text></g>`; });
+    g += `<line x1="20" y1="104" x2="320" y2="104" class="ul-sep"/>`;
+    const A = UL.anim, e = A ? performance.now() - A.t0 : 0;
+    let p = UL.bond;
+    if (A && A.kind === "bond") p = ulE(e / 600);
+    if (A && A.kind === "split") p = 1 - ulE((e - 300) / 600);
+    const xa = ulL(110, 132, p), xb = ulL(230, 208, p), y = 160;
+    if (!UL.a) g += `<circle cx="110" cy="${y}" r="28" class="ul-slot"/>`;
+    if (!UL.b) g += `<circle cx="230" cy="${y}" r="28" class="ul-slot"/>`;
+    if (p < .5) g += `<text x="170" y="${y + 7}" class="ul-plus">+</text>`;
+    if (p > .5) g += `<line x1="${xa + 26}" y1="${y}" x2="${xb - 26}" y2="${y}" class="ul-bond"/><circle cx="170" cy="${y}" r="7" class="ul-o"/><text x="170" y="${y + 3.5}" class="ul-ot" style="font-size:9px">O</text>`;
+    if (UL.a) g += ulRing(UL.a, xa, y, 28, A && A.kind === "miss" ? "" : "");
+    if (UL.b) g += ulRing(UL.b, xb, y, 28, A && A.kind === "miss" ? "ul-shake" : "");
+    if (A && A.kind === "bond" && e > 500) { const q = ulE((e - 500) / 900); g += ulDrop(170, ulL(y - 22, y - 46, q), 1 - q, true); }
+    if (A && A.kind === "split" && e < 500) { const q = ulE(e / 400); g += ulDrop(170, ulL(y - 46, y - 14, q), 1, true); }
+    const di = UL.a && UL.b && UL_DI[ulKey()];
+    const cap = UL.bond && di ? `${di[0]} = ${UL_MONO[UL.a].n} + ${UL_MONO[UL.b].n}` : UL.a && !UL.b ? "выбери второй моносахарид" : !UL.a ? "тапни два моносахарида" : "";
+    g += `<text x="170" y="236" class="bk-cap">${cap}</text>`;
+    return ulWrap(250, g);
+  }
+  function ulAnim(kind, dur, done) {
+    UL.anim = { kind, t0: performance.now() };
+    const tick = () => { if (performance.now() - UL.anim.t0 >= dur) { UL.anim = null; done(); ulDraw(); ulStat(); ulCtlRefresh(); return; } ulDraw(); UL.raf = requestAnimationFrame(tick); };
+    cancelAnimationFrame(UL.raf); UL.raf = requestAnimationFrame(tick);
+  }
+  function ul1Pick(k) {
+    if (UL.anim || UL.bond) return;
+    if (!UL.a) { UL.a = k; haptic("success"); ulDraw(); ulStat(); return; }
+    UL.b = k;
+    if (UL_DI[ulKey()]) { haptic("success"); UL.msg = ""; ulAnim("bond", 1400, () => { UL.bond = 1; }); }
+    else { haptic("error"); UL.msg = "Такой дисахарид в ЕГЭ не встречается. Запомни три главных: <b>сахароза, лактоза, мальтоза</b>."; ulStat(); ulAnim("miss", 900, () => { UL.b = null; }); }
+  }
+  /* ── шаг 2: полисахариды ── */
+  const UL_POLY = {
+    kr: { n: "Крахмал", where: "растения: клубни, зёрна, семена", mono: "α-глюкоза", fn: "запасной", form: "спиральные цепи с ветвлениями", iod: "синее окрашивание", col: "#3b2f9e" },
+    gl: { n: "Гликоген", where: "животные и грибы: печень, мышцы", mono: "α-глюкоза", fn: "запасной", form: "очень сильно разветвлён", iod: "красно-бурое окрашивание", col: "#9a3b1d" },
+    ce: { n: "Целлюлоза", where: "клеточная стенка растений", mono: "β-глюкоза", fn: "структурный", form: "прямые цепи, сшитые в волокна", iod: "не окрашивается", col: null },
+    hi: { n: "Хитин", where: "клеточная стенка грибов, покровы членистоногих", mono: "производное глюкозы с азотом", fn: "структурный", form: "прямые прочные цепи", iod: "не окрашивается", col: null },
+  };
+  let ulPolyCache = {};
+  function ulPolyUnits(k) {
+    if (ulPolyCache[k]) return ulPolyCache[k];
+    const u = [], hb = [];
+    const add = (x, y, par, z, n) => { u.push([x, y, n || 0, z, par]); return u.length - 1; };
+    if (k === "kr") {
+      let prev = -1; const main = [];
+      for (let i = 0; i < 36; i++) { prev = add(26 + i * 8, 150 + 20 * Math.sin(i * .78), prev, Math.cos(i * .78)); main.push(prev); }
+      [7, 21].forEach((i) => { let [x, y] = u[main[i]], par = main[i]; for (let j = 1; j <= 11; j++) par = add(x + j * 6 + 14 * Math.sin(j * .78), y - j * 9, par, Math.cos(j * .78)); });
+    } else if (k === "gl") {
+      const br = (x, y, a, n, d, par) => { for (let j = 0; j < n; j++) { x += 12 * Math.cos(a); y += 12 * Math.sin(a); par = add(x, y, par); if (d < 4 && (j === 1 || j === n - 1)) br(x, y, a + (j === n - 1 ? .62 : -.66), Math.max(2, n - 1), d + 1, par); } };
+      br(170, 238, -Math.PI / 2, 5, 0, -1);
+    } else {
+      const rows = k === "ce" ? [72, 104, 136, 168] : [86, 126, 166];
+      rows.forEach((y, r) => { let par = -1; for (let i = 0; i < 20; i++) par = add(34 + i * 14 + (r % 2) * 7, y, par, null, k === "hi" && i % 2 === 0); });
+      rows.slice(1).forEach((y, r) => { for (let i = 1; i < 20; i += 3) hb.push([34 + i * 14 + ((r + 1) % 2) * 7, rows[r] + 7, y - 7]); });
+    }
+    const ok = u.map(([x, y]) => x > 8 && x < 332 && y > 8 && y < 232);
+    return (ulPolyCache[k] = { u: u.map((q, i) => ok[i] ? q : null), hb });
+  }
+  function ul2Svg() {
+    const d = UL_POLY[UL.poly], U = ulPolyUnits(UL.poly), A = UL.anim, e = A ? performance.now() - A.t0 : 0;
+    let tint = UL.iod ? 1 : 0;
+    if (A && A.kind === "iod") tint = ulE((e - 500) / 900);
+    let g = U.hb.map(([x, y1, y2]) => `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" class="ul-hb"/>`).join("");
+    g += U.u.map((q) => (q && q[4] >= 0 && U.u[q[4]] ? `<line x1="${q[0].toFixed(1)}" y1="${q[1].toFixed(1)}" x2="${U.u[q[4]][0].toFixed(1)}" y2="${U.u[q[4]][1].toFixed(1)}" class="ul-link"/>` : "")).join("");
+    g += U.u.filter(Boolean).sort((p, q) => (p[3] || 0) - (q[3] || 0)).map(([x, y, n, z]) => { const p = ulPts(x, y, z == null ? 6.5 : 5.6 + 1.6 * z, 6, -Math.PI / 2).map((q) => q.map((v) => v.toFixed(1)).join(",")).join(" "); return `<polygon points="${p}" class="ul-unit"${z != null && z < 0 ? ` opacity="${(.55 + .45 * (1 + z)).toFixed(2)}"` : ""}/>${d.col && tint ? `<polygon points="${p}" fill="${d.col}" opacity="${(tint * .85).toFixed(2)}"/>` : ""}${n ? `<text x="${x}" y="${y - 9}" class="ul-n">N</text>` : ""}`; }).join("");
+    if (A && A.kind === "iod") { const q = ulE(e / 500); g += `<g opacity="${(1 - Math.max(0, (e - 500) / 400)).toFixed(2)}"><path d="M170,${ulL(4, 90, q) - 10} C176,${ulL(4, 90, q) - 2} 177,${ulL(4, 90, q) + 3} 170,${ulL(4, 90, q) + 8} C163,${ulL(4, 90, q) + 3} 164,${ulL(4, 90, q) - 2} 170,${ulL(4, 90, q) - 10} Z" fill="#c98a12" stroke="#7a4f00"/></g>`; }
+    g += `<text x="170" y="246" class="bk-cap">${d.n} · ${d.form}</text>`;
+    return ulWrap(256, g);
+  }
+  /* ── шаг 3: жир = глицерин + 3 жирные кислоты ── */
+  const UL_FY = [96, 138, 180];
+  function ulChain(y, unsat, dx) {
+    let pts = [], x = 112 + dx;
+    for (let i = 0; i <= 14; i++) pts.push([x + i * 13, y + (i % 2 ? 6 : -6)]);
+    if (unsat) { const [kx, ky] = pts[6], a = .42; pts = pts.map(([px, py], i) => (i <= 6 ? [px, py] : [kx + (px - kx) * Math.cos(a) - (py - ky) * Math.sin(a), ky + (px - kx) * Math.sin(a) + (py - ky) * Math.cos(a)])); }
+    let s = `<polyline points="${pts.map((q) => q.map((v) => v.toFixed(1)).join(",")).join(" ")}" class="ul-fa${unsat ? " un" : ""}"/>`;
+    if (unsat) { const [x1, y1] = pts[6], [x2, y2] = pts[7], nx = -(y2 - y1), ny = x2 - x1, l = Math.hypot(nx, ny); s += `<line x1="${(x1 + nx / l * 4).toFixed(1)}" y1="${(y1 + ny / l * 4).toFixed(1)}" x2="${(x2 + nx / l * 4).toFixed(1)}" y2="${(y2 + ny / l * 4).toFixed(1)}" class="ul-fa un"/>`; }
+    return s;
+  }
+  function ul3Svg() {
+    const A = UL.anim, e = A ? performance.now() - A.t0 : 0;
+    let g = `<rect x="34" y="72" width="52" height="132" rx="16" fill="url(#ulg-gly)" class="ul-gly" filter="url(#ul-sh)"/><text x="60" y="62" class="ul-lab b">глицерин</text>`;
+    UL_FY.forEach((y, i) => {
+      g += `<text x="60" y="${y + 5}" class="ul-c">C</text>`;
+      const f = UL.fa[i];
+      if (f == null) { g += `<text x="94" y="${y + 5}" class="ul-oh">–OH</text>`; return; }
+      const last = A && A.kind === "fa" && i === UL.fa.length - 1, p = last ? ulE(e / 500) : 1;
+      g += `<g opacity="${p.toFixed(2)}"><line x1="80" y1="${y}" x2="112" y2="${y}" class="ul-est"/><circle cx="96" cy="${y}" r="6" class="ul-o"/><text x="96" y="${y + 3}" class="ul-ot" style="font-size:8px">O</text>${ulChain(y, f, (1 - p) * 120)}</g>`;
+      if (last && e > 350) { const q = ulE((e - 350) / 800); g += ulDrop(100, ulL(y - 10, y - 40, q), 1 - q, true); }
+    });
+    const n = UL.fa.length, un = UL.fa.filter(Boolean).length;
+    g += `<text x="326" y="34" class="ul-lab" style="text-anchor:end">${n ? `жирных кислот: ${n} из 3${n === 3 ? ` · −3 H₂O` : ""}` : "добавь жирные кислоты"}</text>`;
+    if (n === 3) g += `<text x="326" y="54" class="ul-state ${un >= 2 ? "liq" : "sol"}" text-anchor="end">${un >= 2 ? "жидкое масло" : un ? "полутвёрдый жир" : "твёрдый жир"}</text>`;
+    return ulWrap(250, g);
+  }
+  /* ── шаг 4: фосфолипиды → двойной слой ── */
+  const UL_N = 16;
+  const ulRnd = (i, k) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x); };
+  function ulLip(i, p) {
+    const top = i < 8, j = i % 8, bx = 52 + j * 34, by = top ? 76 : 198, ba = top ? Math.PI / 2 : -Math.PI / 2;
+    const rx = 36 + ulRnd(i, 1) * 268, ry = 40 + ulRnd(i, 2) * 180, ra = ulRnd(i, 3) * Math.PI * 2;
+    const q = ulE(p * 1.25 - (i % 8) * .03), x = ulL(rx, bx, q), y = ulL(ry, by, q), a = ulL(ra, ba + (ra > ba + Math.PI ? Math.PI * 2 : 0), q);
+    const c = Math.cos(a), s = Math.sin(a), nx = -s * 4, ny = c * 4, L = 42;
+    return `<line x1="${(x + c * 7 + nx).toFixed(1)}" y1="${(y + s * 7 + ny).toFixed(1)}" x2="${(x + c * L + nx).toFixed(1)}" y2="${(y + s * L + ny).toFixed(1)}" class="ul-tail"/><line x1="${(x + c * 7 - nx).toFixed(1)}" y1="${(y + s * 7 - ny).toFixed(1)}" x2="${(x + c * (L - 4) - nx).toFixed(1)}" y2="${(y + s * (L - 4) - ny).toFixed(1)}" class="ul-tail"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9" fill="url(#ulg-head)" class="ul-head"/>`;
+  }
+  function ul4Svg() {
+    const A = UL.anim, e = A ? performance.now() - A.t0 : 0;
+    let p = UL.mem;
+    if (A && A.kind === "mem") p = Math.min(1, e / 1400);
+    if (A && A.kind === "mix") p = 1 - Math.min(1, e / 900);
+    let g = `<rect x="0" y="0" width="${UL_W}" height="256" fill="url(#ulg-water)" opacity=".55"/>`;
+    if (p > .95) g += `<rect x="20" y="${76 + 9}" width="300" height="${198 - 9 - 85}" class="ul-core"/><text x="170" y="140" class="ul-lab" style="fill:#b26a00">гидрофобная зона</text><text x="170" y="24" class="ul-lab b" style="fill:#2f62c9">вода</text><text x="170" y="240" class="ul-lab b" style="fill:#2f62c9">вода</text>`;
+    for (let i = 0; i < UL_N; i++) g += ulLip(i, p);
+    if (p > .95) g += `<line x1="52" y1="66" x2="40" y2="44" class="bk-lead"/><text x="14" y="40" class="fm-call" text-anchor="start">головка — к воде</text><line x1="290" y1="110" x2="300" y2="40" class="bk-lead"/><text x="326" y="34" class="fm-call" text-anchor="end">хвосты — внутрь</text>`;
+    return ulWrap(256, g);
+  }
+  /* ── шаг 5: энергия ── */
+  const ulNum = (v) => (Math.round(v * 10) / 10).toLocaleString("ru-RU");
+  function ul5Html() {
+    const g = UL.g, c = g * 17.6, f = g * 38.9, mx = 100 * 38.9;
+    const row = (cls, t, per, kj, w) => `<div class="ul-en ${cls}"><div class="ul-en-h"><b>${t}</b><span>1 г = ${per} кДж</span></div><div class="ul-en-bar"><i style="width:${(kj / mx * 100).toFixed(1)}%"></i></div><div class="ul-en-v"><b>${ulNum(kj)} кДж</b><span>💧 ≈ ${ulNum(w)} г воды</span></div></div>`;
+    return `<div class="ul-energy">${row("c", "Углеводы", "17,6", c, g * .6)}${row("f", "Жиры", "38,9", f, g * 1.1)}<p class="ul-camel">🐪 Горб верблюда — это жир. При его окислении выделяется и энергия, и вода.</p></div>`;
+  }
+  /* ── сборка ── */
+  function ulDraw() {
+    const box = vUL.querySelector(".ul-stage"); if (!box) return;
+    box.innerHTML = UL.step === 4 ? ul5Html() : [ul1Svg, ul2Svg, ul3Svg, ul4Svg][UL.step]();
+    if (UL.step === 0) box.querySelectorAll("[data-um]").forEach((el) => el.addEventListener("click", () => ul1Pick(el.dataset.um)));
+  }
+  function ulStat() {
+    const el = vUL.querySelector(".ul-stat"); if (!el) return;
+    const s = UL.step;
+    if (s === 0) { const di = UL.bond && UL_DI[ulKey()]; el.innerHTML = UL.msg || (di ? `Получилась <b>${di[0]}</b> — ${di[1]}. При образовании гликозидной связи выделилась <b>вода</b>.` : "Собери дисахарид: тапни два моносахарида сверху."); }
+    else if (s === 1) { const d = UL_POLY[UL.poly]; el.innerHTML = `<div class="ul-card"><p><span>Где</span><b>${d.where}</b></p><p><span>Мономер</span><b>${d.mono}</b></p><p><span>Функция</span><b>${d.fn}</b></p><p><span>Йод</span><b>${UL.iod ? d.iod : "—"}</b></p></div>`; }
+    else if (s === 2) { const n = UL.fa.length, un = UL.fa.filter(Boolean).length; el.innerHTML = n < 3 ? "Присоедини к глицерину три жирные кислоты — насыщенные или ненасыщенные." : un >= 2 ? "Изогнутые хвосты не дают молекулам плотно уложиться — <b>жидкое масло</b>, как подсолнечное или оливковое (растения)." : un ? "Один изгиб мало что меняет — молекулы всё ещё укладываются довольно плотно: <b>полутвёрдый жир</b>." : "Прямые хвосты плотно укладываются — <b>твёрдый жир</b>, как сливочное масло или сало (животные)."; }
+    else if (s === 3) el.innerHTML = UL.mem ? "Фосфолипиды сами собрались в <b>двойной слой</b>: гидрофильные головки смотрят в воду, гидрофобные хвосты спрятались внутрь." : "Фосфолипиды разбросаны. Брось их в воду — и смотри, что будет.";
+    else el.innerHTML = "";
+  }
+  function ulCtl() {
+    const s = UL.step;
+    if (s === 0) return `<div class="bk-btns"><button type="button" class="btn" data-uc="hyd"${UL.bond && !UL.anim ? "" : " disabled"}>Гидролиз: + H₂O</button><button type="button" class="btn" data-uc="clr">Сброс</button></div>`;
+    if (s === 1) return `<div class="fm-chips">${Object.entries(UL_POLY).map(([k, d]) => `<button type="button" class="${UL.poly === k ? "on" : ""}" data-up="${k}">${d.n}</button>`).join("")}</div><div class="bk-btns"><button type="button" class="btn primary" data-uc="iod"${UL.iod ? " disabled" : ""}>Капнуть йод 💧</button></div>`;
+    if (s === 2) return `<div class="fm-add"><button type="button" class="btn" data-uf="0"${UL.fa.length >= 3 ? " disabled" : ""}>+ насыщенная</button><button type="button" class="btn" data-uf="1"${UL.fa.length >= 3 ? " disabled" : ""}>+ ненасыщенная</button></div><div class="bk-btns"><button type="button" class="btn" data-uc="fclr">Сброс</button></div>`;
+    if (s === 3) return `<div class="bk-btns"><button type="button" class="btn primary" data-uc="mem">${UL.mem ? "Перемешать" : "Бросить в воду 🌊"}</button></div>`;
+    return `<div class="bk-ctl"><label>Окисляем: <b>${UL.g} г</b><input type="range" min="1" max="100" step="1" value="${UL.g}" data-ug></label></div>`;
+  }
+  function ulCtlRefresh() { const c = vUL.querySelector(".ul-ctl"); if (c) { c.innerHTML = ulCtl(); ulBindCtl(); } }
+  function ulBindCtl() {
+    const qa = (sel) => vUL.querySelectorAll(sel);
+    qa("[data-uc]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.uc;
+      if (UL.anim) return;
+      if (k === "hyd") { haptic("success"); ulAnim("split", 950, () => { UL.bond = 0; UL.a = UL.b = null; UL.msg = "Гидролиз: вода присоединилась, гликозидная связь разорвалась — снова два моносахарида."; }); ulCtlRefresh(); }
+      else if (k === "clr") { UL.a = UL.b = null; UL.bond = 0; UL.msg = ""; ulDraw(); ulStat(); ulCtlRefresh(); }
+      else if (k === "iod") { haptic(UL_POLY[UL.poly].col ? "success" : "error"); ulAnim("iod", 1400, () => { UL.iod = 1; }); ulCtlRefresh(); }
+      else if (k === "fclr") { UL.fa = []; ulDraw(); ulStat(); ulCtlRefresh(); }
+      else if (k === "mem") { const to = UL.mem ? 0 : 1; haptic("success"); ulAnim(to ? "mem" : "mix", to ? 1500 : 950, () => { UL.mem = to; }); }
+    }));
+    qa("[data-up]").forEach((b) => b.addEventListener("click", () => { if (UL.anim) return; UL.poly = b.dataset.up; UL.iod = 0; ulDraw(); ulStat(); ulCtlRefresh(); }));
+    qa("[data-uf]").forEach((b) => b.addEventListener("click", () => { if (UL.anim || UL.fa.length >= 3) return; UL.fa.push(+b.dataset.uf); haptic("success"); ulAnim("fa", 1150, () => {}); ulStat(); ulCtlRefresh(); }));
+    const r = vUL.querySelector("[data-ug]"); if (r) r.addEventListener("input", () => { UL.g = +r.value; r.previousElementSibling.textContent = UL.g + " г"; ulDraw(); });
+  }
+  function ulLabHtml() {
+    const s = UL.step;
+    return `<div class="l-card bk-lab-card">
+      <div class="bk-tabs">${UL_STEPS.map(([t], i) => `<button type="button" class="${i === s ? "on" : i < s ? "past" : ""}" data-us="${i}"><i>${i + 1}</i>${t}</button>`).join("")}</div>
+      <div class="bk-stage ul-stage"></div>
+      <div class="fm-stat ul-stat"></div>
+      <div class="fm-ctl ul-ctl">${ulCtl()}</div>
+      <p class="bk-info">${UL_STEPS[s][1]}</p>
+      <div class="bk-nav">${s > 0 ? `<button type="button" class="btn" data-uprev>← Назад</button>` : "<span></span>"}${s < 4 ? `<button type="button" class="btn primary" data-unext>${UL_STEPS[s + 1][0]} →</button>` : `<button type="button" class="btn primary" data-uq>Проверить себя →</button>`}</div>
+    </div>`;
+  }
+  function ulGo(s) { cancelAnimationFrame(UL.raf); UL.anim = null; UL.msg = ""; UL.step = s; ulRender(true); }
+  /* ── задания ── */
+  const UL_ST = [
+    ["Глюкоза — моносахарид", 1, "Глюкоза C₆H₁₂O₆ — моносахарид (гексоза)."],
+    ["Сахароза состоит из глюкозы и фруктозы", 1, "Сахароза = глюкоза + фруктоза."],
+    ["Гликоген — запасной углевод животных и грибов", 1, "Он запасается в печени и мышцах."],
+    ["Целлюлоза входит в состав клеточной стенки растений", 1, "Целлюлоза — структурный полисахарид."],
+    ["При окислении 1 г жира выделяется 38,9 кДж", 1, "Почти вдвое больше, чем из 1 г углеводов."],
+    ["Фосфолипиды — основа клеточных мембран", 1, "Они образуют двойной слой."],
+    ["Холестерин относится к липидам", 1, "Холестерин — стероид, а стероиды — липиды."],
+    ["Крахмал — запасной углевод животных", 0, "Неверно: крахмал запасают растения, животные — гликоген."],
+    ["Лактоза состоит из двух молекул глюкозы", 0, "Неверно: лактоза = глюкоза + галактоза; из двух глюкоз — мальтоза."],
+    ["Полисахариды хорошо растворимы в воде и сладкие", 0, "Неверно: полисахариды почти нерастворимы и не сладкие."],
+    ["Хитин — основа клеточной стенки растений", 0, "Неверно: хитин — у грибов и членистоногих, у растений — целлюлоза."],
+    ["Жир состоит из глицерина и двух жирных кислот", 0, "Неверно: из глицерина и трёх; две кислоты + фосфат — это фосфолипид."],
+    ["Гидрофобные хвосты фосфолипидов обращены к воде", 0, "Неверно: к воде обращены гидрофильные головки."],
+    ["При окислении 1 г углеводов выделяется 38,9 кДж", 0, "Неверно: 17,6 кДж; 38,9 — это жир."],
+  ];
+  const UL_CLS = [["глюкоза", "моносахарид"], ["фруктоза", "моносахарид"], ["рибоза", "моносахарид"], ["дезоксирибоза", "моносахарид"], ["сахароза", "дисахарид"], ["лактоза", "дисахарид"], ["мальтоза", "дисахарид"], ["крахмал", "полисахарид"], ["гликоген", "полисахарид"], ["целлюлоза", "полисахарид"], ["хитин", "полисахарид"], ["холестерин", "липид"], ["воск", "липид"]];
+  const ulS = (name, q, opts, ans, ex) => ({ name, q, opts, ans, ex });
+  function ulQCls() { const [x, a] = sPick(UL_CLS); return ulS("Классификация", `К какой группе веществ относится <b>${x}</b>?`, ["моносахарид", "дисахарид", "полисахарид", "липид"], a, `${x[0].toUpperCase() + x.slice(1)} — ${a}.`); }
+  function ulQDi() {
+    const [n, a] = sPick([["сахароза", "глюкоза + фруктоза"], ["лактоза", "глюкоза + галактоза"], ["мальтоза", "глюкоза + глюкоза"]]);
+    return ulS("Дисахариды", `Из каких моносахаридов состоит <b>${n}</b>?`, ["глюкоза + фруктоза", "глюкоза + галактоза", "глюкоза + глюкоза", "фруктоза + галактоза"], a, "Сахароза = глюкоза + фруктоза, лактоза = глюкоза + галактоза, мальтоза = глюкоза + глюкоза.");
+  }
+  function ulQWhere() {
+    const [q, a] = sPick([["Запасной углевод животных и грибов —", "гликоген"], ["Запасной углевод растений —", "крахмал"], ["Основа клеточной стенки растений —", "целлюлоза"], ["Основа клеточной стенки грибов и покровов членистоногих —", "хитин"], ["Клеточная стенка бактерий состоит из…", "муреин"]]);
+    const all = ["крахмал", "гликоген", "целлюлоза", "хитин", "муреин"];
+    return ulS("Полисахариды", q, [a, ...sShuf(all.filter((x) => x !== a)).slice(0, 3)], a, "Крахмал — растения, гликоген — животные и грибы, целлюлоза — стенка растений, хитин — грибы и членистоногие, муреин — бактерии.");
+  }
+  function ulQEn() {
+    return sPick([
+      ulS("Энергия", "Сколько энергии выделяется при полном окислении 1 г жира?", ["38,9 кДж", "17,6 кДж", "4,2 кДж", "76,8 кДж"], "38,9 кДж", "Жир — 38,9 кДж/г, углеводы и белки — 17,6 кДж/г."),
+      ulS("Энергия", "Сколько энергии выделяется при полном окислении 1 г углеводов?", ["17,6 кДж", "38,9 кДж", "4,2 кДж", "2,3 кДж"], "17,6 кДж", "Углеводы — 17,6 кДж/г, жир — 38,9 кДж/г."),
+      ulS("Функции липидов", "Почему горб помогает верблюду обходиться без воды?", ["при окислении жира образуется вода", "в горбе запасена вода", "жир не даёт воде испаряться через кожу", "в горбе запасён гликоген"], "при окислении жира образуется вода", "Горб — это жир; при его окислении выделяется метаболическая вода."),
+    ]);
+  }
+  function ulQLip() {
+    return sPick([
+      ulS("Жиры", "Из чего состоит молекула жира?", ["глицерин и три жирные кислоты", "глицерин, две жирные кислоты и фосфат", "глюкоза и фруктоза", "аминокислоты"], "глицерин и три жирные кислоты", "Глицерин + две кислоты + остаток фосфорной кислоты — это фосфолипид."),
+      ulS("Мембрана", "Какая часть фосфолипида обращена к воде?", ["гидрофильная головка", "гидрофобные хвосты", "жирные кислоты", "вся молекула целиком"], "гидрофильная головка", "Хвосты гидрофобны и прячутся внутрь двойного слоя."),
+      ulS("Стероиды", "Какое вещество относится к стероидам?", ["холестерин", "гликоген", "лактоза", "хитин"], "холестерин", "Стероиды (холестерин, половые гормоны, витамин D) — липиды."),
+      ulS("Жиры", "Почему растительные масла жидкие?", ["в них много ненасыщенных жирных кислот", "в них нет глицерина", "в них много насыщенных жирных кислот", "они состоят из глюкозы"], "в них много ненасыщенных жирных кислот", "Двойные связи изгибают хвосты — молекулы не укладываются плотно."),
+    ]);
+  }
+  function ulQIod() { return ulS("Проба с йодом", "Какое вещество даёт синее окрашивание с йодом?", ["крахмал", "целлюлоза", "глюкоза", "жир"], "крахмал", "Крахмал с йодом — синий, гликоген — красно-бурый."); }
+  const ulQThree = () => ({ t: "3", name: "Три верных", items: sShuf([...sShuf(UL_ST.filter((x) => x[1])).slice(0, 3), ...sShuf(UL_ST.filter((x) => !x[1])).slice(0, 3)]), pick: [], done: false });
+  const ulNew = () => [ulQCls(), ulQDi(), ulQWhere(), ulQThree(), ulQEn(), ulQLip(), ulQIod(), ulQThree()].map((q) => (q.t === "3" ? q : Object.assign({}, q, { t: "s", opts: sShuf(q.opts), pick: null })));
+  /* общий раннер заданий лабораторий */
+  function labQuiz(L) {
+    const v = L.view, r = L.R.run;
+    if (r.k >= r.qs.length) {
+      const st = L.store(); if (st.best == null || r.ok > st.best) { st.best = r.ok; L.save(); }
+      v.innerHTML = `<div class="z-head"><button type="button" class="back" data-lq="back">← ${L.title}</button></div>
+        <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p><p>${r.ok === r.qs.length ? "Всё верно 🔥" : L.tip}</p>
+        <div class="actions"><button type="button" class="btn primary" data-lq="again">Ещё ${r.qs.length} заданий</button><button type="button" class="btn" data-lq="lab">В лабораторию</button></div></div>`;
+      const back = () => { L.R.run = null; L.lab(); zScroll(v); };
+      v.querySelector('[data-lq="back"]').addEventListener("click", back);
+      v.querySelector('[data-lq="lab"]').addEventListener("click", back);
+      v.querySelector('[data-lq="again"]').addEventListener("click", () => { L.R.run = { qs: L.make(), k: 0, ok: 0 }; labQuiz(L); zScroll(v); });
+      return;
+    }
+    const q = r.qs[r.k];
+    let body, done, good;
+    const ans3 = q.t === "3" ? q.items.map((x, i) => (x[1] ? i + 1 : 0)).filter(Boolean).join("") : "";
+    if (q.t === "s") {
+      done = q.pick != null; good = done && q.opts[q.pick] === q.ans;
+      body = `<p class="vd-q">${q.q}</p><div class="z-opts s-opts">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o === q.ans ? " good" : j === q.pick ? " bad" : " fade") : ""}" data-lo="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o}</b></span></button>`).join("")}</div>`;
+    } else {
+      done = q.done; good = done && q.pick.slice().sort().join("") === ans3;
+      body = `<p class="l-ask">${L.ask3}</p><div class="kt-list">${q.items.map((x, i) => { const on = q.pick.includes(i + 1), st = done ? (x[1] ? " ok" : on ? " no" : " fade") : on ? " on" : ""; return `<button type="button" class="kt-st${st}" data-l3="${i + 1}"${done ? " disabled" : ""}><i>${i + 1}</i><span>${x[0]}</span></button>`; }).join("")}</div>
+        ${done ? `<p class="kt-ans">Ответ: <b>${ans3}</b>${good ? "" : ` · у тебя: ${q.pick.slice().sort().join("")}`}</p>` : ""}`;
+    }
+    v.innerHTML = `<div class="z-head"><button type="button" class="back" data-lq="back">← ${L.title}</button></div>
+      <div class="cd-top"><span class="num">${q.name} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card kt-card">${body}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : `Неверно.${q.t === "s" ? ` Правильно: <b>${q.ans}</b>.` : ""}`} ${q.t === "s" ? q.ex : ""}</p>${q.t === "3" ? `<div class="kt-ex">${q.items.map((x, i) => `<p class="${x[1] ? "t" : "f"}"><b>${i + 1}.</b> ${x[2]}</p>`).join("")}</div>` : ""}
+        <div class="actions"><button type="button" class="btn primary" data-lq="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
+        : q.t === "3" ? `<div class="actions l-act"><button type="button" class="btn primary" data-lq="check"${q.pick.length === 3 ? "" : " disabled"}>Проверить</button></div>` : ""}`;
+    v.querySelector('[data-lq="back"]').addEventListener("click", () => { L.R.run = null; L.lab(); zScroll(v); });
+    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); labQuiz(L); zScroll(v.querySelector(".z-ex"), 160); };
+    if (!done) {
+      v.querySelectorAll("[data-lo]").forEach((b) => b.addEventListener("click", () => { q.pick = +b.dataset.lo; fin(q.opts[q.pick] === q.ans); }));
+      v.querySelectorAll("[data-l3]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.l3, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); labQuiz(L); }));
+      const ch = v.querySelector('[data-lq="check"]');
+      if (ch) ch.addEventListener("click", () => { q.done = true; fin(q.pick.slice().sort().join("") === ans3); });
+    } else v.querySelector('[data-lq="next"]').addEventListener("click", () => { r.k++; labQuiz(L); zScroll(v); });
+  }
+  const ULR = { run: null };
+  const UL_Q = { view: vUL, R: ULR, title: "Углеводы и липиды", ask3: "Выберите три верных утверждения об углеводах и липидах.", tip: "Загляни в лабораторию ещё раз — особенно в «Полисахариды» и «Жиры».", make: ulNew, store: () => uls, save: ulsave, lab: () => ulRender(true) };
+  function ulStart() { cancelAnimationFrame(UL.raf); UL.anim = null; ULR.run = { qs: ulNew(), k: 0, ok: 0 }; labQuiz(UL_Q); zScroll(vUL); }
+  function ulRender(keep) {
+    if (ULR.run) return labQuiz(UL_Q);
+    if (!keep) { cancelAnimationFrame(UL.raf); Object.assign(UL, { step: 0, a: null, b: null, bond: 0, anim: null, msg: "", poly: "kr", iod: 0, fa: [], mem: 0, g: 10 }); }
+    vUL.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-ul="back">← к модулям</button><h2 class="mod-title">Углеводы и липиды: лаборатория</h2></div>
+      <p class="intro">Собери сахарозу, капни йодом на крахмал, построй жир и брось фосфолипиды в воду. После лаборатории — 8 заданий ЕГЭ.${uls.best != null ? ` Рекорд: <b>${uls.best}</b> из 8.` : ""}</p>
+      ${ulLabHtml()}
+      <button type="button" class="linkbtn bk-skip" data-ul="skip">Сразу к заданиям →</button>`;
+    vUL.querySelector('[data-ul="back"]').addEventListener("click", () => { cancelAnimationFrame(UL.raf); go({ tab: "learn", module: null }); });
+    vUL.querySelector('[data-ul="skip"]').addEventListener("click", ulStart);
+    vUL.querySelectorAll("[data-us]").forEach((b) => b.addEventListener("click", () => ulGo(+b.dataset.us)));
+    const n = vUL.querySelector("[data-unext]"), p = vUL.querySelector("[data-uprev]"), q = vUL.querySelector("[data-uq]");
+    if (n) n.addEventListener("click", () => ulGo(UL.step + 1));
+    if (p) p.addEventListener("click", () => ulGo(UL.step - 1));
+    if (q) q.addEventListener("click", ulStart);
+    ulDraw(); ulStat(); ulBindCtl();
+  }
+  const UL_TRAPS = [
+    ["Крахмал — растения, гликоген — животные и грибы", "Оба запасные и оба из α-глюкозы. Перепутать их — самая частая ошибка."],
+    ["Целлюлоза тоже из глюкозы", "Но из β-глюкозы, и она структурная: прямые цепи сшиты в прочные волокна клеточной стенки растений."],
+    ["Хитин — полисахарид с азотом", "Клеточная стенка грибов и покровы членистоногих. У бактерий стенка из муреина."],
+    ["Жир — вдвое больше энергии", "1 г жира — 38,9 кДж, 1 г углеводов — 17,6 кДж. И ещё метаболическая вода."],
+    ["Жир ≠ фосфолипид", "Жир: глицерин + 3 жирные кислоты. Фосфолипид: глицерин + 2 кислоты + фосфат — головка к воде, хвосты внутрь."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -3361,7 +3733,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -5002,6 +5374,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "klvoda") go({ subject: "bio", module: "kl-voda" }, { noScroll: true });
   else if (h === "belki") go({ subject: "bio", module: "kl-belki" }, { noScroll: true });
   else if (h === "ferm") go({ subject: "bio", module: "kl-ferm" }, { noScroll: true });
+  else if (h === "ugl") go({ subject: "bio", module: "kl-ugl" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
