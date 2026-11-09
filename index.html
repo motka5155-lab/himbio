@@ -1098,6 +1098,88 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 @keyframes bkJit { from { transform: translate(-1.2px, .8px); } to { transform: translate(1.2px, -.8px); } }
 .bk-svg:not(.den) .bk-jit { animation: none; }
 @media (prefers-reduced-motion: reduce) { .bk-jit { animation: none; } }
+/* ── ферменты ── */
+.fm-svg .fm-mol { stroke: rgba(0, 0, 0, .22); stroke-width: 1; filter: url(#fm-sh); }
+.fm-body { stroke: rgba(60, 20, 120, .25); stroke-width: 1.2; transition: none; }
+.fm-body.glow { stroke: #f0a43a; stroke-width: 2.5; }
+.fm-in { font: 800 15px var(--font-body); fill: #fff; text-anchor: middle; letter-spacing: .02em; paint-order: stroke; stroke: rgba(60, 20, 120, .35); stroke-width: 2; }
+.fm-in.s { font-size: 11px; font-weight: 600; }
+.fm-call { font: 700 11px var(--font-body); fill: var(--ink); }
+.fm-pick { cursor: pointer; }
+.fm-pick:not(.go):not(.miss) { animation: fmFloat 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.fm-pick:nth-of-type(2n) { animation-delay: -1.2s; }
+.fm-pick.miss .fm-mol { fill: #f19a9d; }
+@keyframes fmFloat { 50% { transform: translateY(-4px); } }
+.fm-ax { stroke: var(--ink-2); stroke-width: 1.3; opacity: .55; }
+.fm-axt { font: 600 10.5px var(--font-body); fill: var(--ink-2); } .fm-axt.b { font-weight: 800; fill: var(--ink); }
+.fm-cv { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.fm-cv.on { stroke: var(--accent); stroke-width: 3.5; } .fm-cv.on.thin { stroke-width: 2.4; }
+.fm-cv.off { stroke: var(--ink-2); stroke-width: 2; stroke-dasharray: 5 5; opacity: .45; }
+.fm-ea { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+.fm-eat { font: 800 14px var(--font-body); fill: var(--accent); }
+.fm-lvl { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 2 3; opacity: .5; }
+.fm-tag { font: 700 11px var(--font-body); fill: var(--ink-2); text-anchor: middle; opacity: .6; } .fm-tag.on { fill: var(--accent); opacity: 1; }
+.fm-ball { stroke: rgba(0, 0, 0, .25); stroke-width: .8; }
+.fm-area { fill: var(--accent); opacity: .08; }
+.fm-cur { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 3; opacity: .6; }
+.fm-dot { fill: var(--accent); stroke: #fff; stroke-width: 2.5; filter: drop-shadow(0 1px 2px rgba(0,0,0,.3)); } .fm-dot.dead { fill: var(--bad); }
+.fm-tick { font: 600 9.5px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+.fm-x { font: 900 18px var(--font-body); fill: var(--bad); text-anchor: middle; }
+.fm-stripe { stroke: #3b4157; stroke-width: 2.5; stroke-linecap: round; }
+.fm-co { font: 800 8.5px var(--font-body); fill: #5a3c00; text-anchor: middle; }
+.fm-bounce { animation: fmShake .4s; } @keyframes fmShake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.fm-stat { margin: 8px 2px 0; font-size: 14px; line-height: 1.45; min-height: 20px; }
+.fm-stat p { margin: 6px 0 0; }
+.fm-bar { height: 12px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.fm-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--bad), #f0a43a 45%, var(--ok)); transition: width .45s cubic-bezier(.2,.9,.3,1); }
+.fm-bl { display: block; margin-top: 4px; font-size: 13px; color: var(--ink-2); }
+.fm-ctl { display: grid; gap: 10px; margin-top: 10px; }
+.fm-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fm-seg button { padding: 9px 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); font: 700 13px var(--font-body); color: var(--ink-2); cursor: pointer; line-height: 1.2; }
+.fm-seg button small { display: block; font-weight: 600; font-size: 11px; opacity: .75; margin-top: 2px; }
+.fm-seg .on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.fm-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fm-chips button { padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); font: 700 13px var(--font-body); color: var(--ink-2); cursor: pointer; }
+.fm-chips .on { border-color: var(--accent); background: var(--accent); color: #fff; }
+.fm-row { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: center; }
+.fm-beaker { --ink-2: #8C98B0; position: relative; height: 128px; border: 2.5px solid var(--ink-2); border-top: none; border-radius: 0 0 22px 22px; background: linear-gradient(transparent 18%, rgba(255,255,255,.4) 18%); }
+.fm-beaker::before { content: ""; position: absolute; left: -7px; right: -7px; top: 0; height: 2.5px; background: var(--ink-2); border-radius: 2px; }
+.fm-liq { position: absolute; left: 3px; right: 3px; bottom: 3px; top: 26px; border-radius: 0 0 18px 18px; background: linear-gradient(#cfe6ff, #8fbef0); overflow: hidden; }
+.fm-beaker.foam .fm-liq { background: linear-gradient(#cfe6ff, #8fbef0); }
+.fm-liq span { position: absolute; bottom: -10px; border-radius: 50%; background: rgba(255,255,255,.85); border: 1px solid rgba(60,110,180,.35); animation: fmBub linear infinite; }
+@keyframes fmBub { from { transform: translateY(0); opacity: .9; } to { transform: translateY(-110px); opacity: 0; } }
+.fm-foam { position: absolute; left: 0; right: 0; top: 0; background: radial-gradient(circle at 20% 60%, #fff 8px, transparent 9px), radial-gradient(circle at 60% 40%, #fff 10px, transparent 11px), radial-gradient(circle at 85% 70%, #fff 7px, transparent 8px), #fdfeff; background-size: 34px 22px; box-shadow: inset 0 -2px 0 rgba(60,110,180,.25); transition: height .4s; z-index: 1; }
+.fm-read { display: grid; gap: 2px; }
+.fm-pct { font: 900 40px/1 var(--font-body); color: var(--ink); } .fm-pct small { font-size: 20px; }
+.fm-rl { font-size: 12px; color: var(--ink-2); }
+.fm-read p { margin: 4px 0 0; font-size: 13px; line-height: 1.35; }
+.fm-read .good { color: var(--ok); } .fm-read .bad { color: var(--bad); } .fm-read .cold { color: #3e7bfa; }
+.fm-rx { color: var(--ink-2); } .fm-rx small { font-size: 11.5px; }
+.fm-add { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; } .fm-add .btn { font-size: 13px; padding: 9px 8px; }
+.fm-co-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fm-co-opts button { text-align: left; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); cursor: pointer; color: var(--ink); font: 700 14px var(--font-body); }
+.fm-co-opts small { display: block; font-weight: 500; font-size: 11.5px; color: var(--ink-2); }
+.fm-co-opts .ok { border-color: var(--ok); background: var(--ok-soft); } .fm-co-opts .no { border-color: var(--bad); background: var(--bad-soft); animation: fmShake .4s; }
+.fm-vit { padding: 10px 12px; border-radius: 14px; background: var(--surface); border: 1px dashed var(--line); }
+.fm-vt { margin: 0 0 6px; font: 800 12px var(--font-body); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); }
+.fm-vit div { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; }
+.fm-vn { margin: 6px 0 0; font-size: 12px; color: var(--ink-2); }
+@media (prefers-reduced-motion: reduce) { .fm-pick, .fm-liq span { animation: none !important; } }
+
+/* сцена лаборатории всегда светлая — подписи тёмные и в тёмной теме */
+.bk-stage { --ink: #17213A; --ink-2: #56627D; --line: #D6DDEA; --accent: #C2185B; --accent-soft: #FBE4EE; --ok: #24804E; --bad: #C0392B; --surface-2: #EFF2F8; color-scheme: light; }
+/* планшет и шире: сцена слева, управление и текст справа */
+@media (min-width: 760px) {
+  .bk-lab-card { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); column-gap: 22px; align-items: start; padding: 14px 16px 16px; }
+  .bk-lab-card > * { grid-column: 2; }
+  .bk-lab-card > .bk-tabs { grid-column: 1 / -1; }
+  .bk-lab-card > .bk-stage { grid-column: 1; grid-row: 2 / span 8; position: sticky; top: 12px; margin-top: 6px; }
+  .bk-lab-card > .bk-stage .bk-svg { max-height: 72vh; }
+  .bk-lab-card > .bk-info { margin-top: 10px; }
+  .bk-lab-card > :nth-child(3) { margin-top: 6px; }
+  .bk-skip { margin-top: 12px; }
+  #v-kl-belki .kt-card, #v-kl-ferm .kt-card, #v-kl-belki .z-ex, #v-kl-ferm .z-ex, #v-kl-belki .cd-top, #v-kl-ferm .cd-top { max-width: 680px; }
+}
 </style>
 </head>
 <body class="locked">
@@ -1149,7 +1231,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.3</span>
+      <span class="ver" id="ver">v4.4</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1216,12 +1298,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-kl-teor" hidden></section>
   <section class="view" id="v-kl-voda" hidden></section>
   <section class="view" id="v-kl-belki" hidden></section>
+  <section class="view" id="v-kl-ferm" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.3. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.4. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1249,7 +1332,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Разложи элементы по группам, свяжи свойства воды с явлениями, расставь ткани по содержанию воды.", "st": "13 элементов · 10 свойств воды", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: лаборатория", "desc": "Собери белок от цепочки до гемоглобина и сломай его нагревом и кислотой. Связи, денатурация, функции.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-08"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты", "desc": "Фермент и субстрат, от чего зависит скорость реакции.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды", "desc": "Моно-, ди- и полисахариды, жиры, фосфолипиды.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ", "desc": "Строение нуклеотидов, комплементарность, правило Чаргаффа, АТФ.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: органоиды", "desc": "Животная, растительная, грибная и бактериальная клетка — с приближением.", "st": "скоро"},
@@ -1768,6 +1851,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showKT = state.subject === "bio" && state.tab === "learn" && state.module === "kl-teor";
     const showVD = state.subject === "bio" && state.tab === "learn" && state.module === "kl-voda";
     const showBK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-belki";
+    const showFM = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ferm";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1790,7 +1874,9 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vKT.hidden = !showKT;
     vVD.hidden = !showVD;
     vBK.hidden = !showBK;
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || state.tab === "traps";
+    vFM.hidden = !showFM;
+    if (!showFM) cancelAnimationFrame(FM.raf);
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1824,6 +1910,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showKT) ktRender();
       else if (showVD) vdRender();
       else if (showBK) bkRender();
+      else if (showFM) fmRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -2828,6 +2915,411 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Четвертичная — не у всех белков", "Только у белков из нескольких полипептидных цепей: гемоглобин, ДНК-полимераза. У миоглобина её нет."],
   ];
 
+  /* ══ БИОЛОГИЯ 2.4 · ФЕРМЕНТЫ: ЛАБОРАТОРИЯ ══ */
+  const vFM = document.getElementById("v-kl-ferm");
+  const FMK = "hb.bio24.v1";
+  let fms = {};
+  try { fms = JSON.parse(localStorage.getItem(FMK) || "{}") || {}; } catch (e) { fms = {}; }
+  function fmsave() { try { localStorage.setItem(FMK, JSON.stringify(fms)); } catch (e) {} }
+  const FM_STEPS = [
+    ["Ключ и замок", "Фермент связывает субстрат <b>активным центром</b> — небольшим участком своей молекулы. Подходит только субстрат нужной формы — это <b>специфичность</b>. Образуется <b>фермент-субстратный комплекс</b>, потом продукты отделяются, а <b>фермент не расходуется</b> и берёт следующую молекулу. Модель «ключ — замок» предложил <b>Э. Фишер</b>, модель индуцированного соответствия — <b>Д. Кошланд</b>: активный центр подстраивается под субстрат."],
+    ["Энергия", "Чтобы прореагировать, молекула должна «перепрыгнуть» барьер — <b>энергию активации</b>. Фермент снижает барьер, и прореагировать успевает гораздо больше молекул. <b>Тепловой эффект</b> реакции и <b>химическое равновесие</b> фермент при этом не меняет."],
+    ["t° и pH", "У каждого фермента свой <b>оптимум</b>. Ферменты человека лучше всего работают при <b>37–40 °C</b>. Холод замедляет реакцию <b>обратимо</b>, нагрев до <b>60–70 °C</b> вызывает <b>денатурацию</b> — необратимо. Оптимум pH: <b>пепсин ≈ 2</b> (желудок), <b>амилаза слюны ≈ 7</b>, <b>трипсин ≈ 8</b> (тонкая кишка)."],
+    ["Ингибиторы", "<b>Конкурентный</b> ингибитор похож на субстрат и занимает активный центр — его вытесняет избыток субстрата. <b>Неконкурентный</b> (аллостерический) садится в другой участок фермента и меняет форму активного центра — добавка субстрата уже не помогает."],
+    ["Кофермент", "Многим ферментам, кроме белковой части (<b>апофермента</b>), нужна небелковая — <b>кофермент</b> или ион металла. Вместе они — <b>холофермент</b>. Многие коферменты — производные <b>витаминов</b>, поэтому при нехватке витаминов ферменты не работают."],
+  ];
+  const FM = { step: 0, fit: false, done: 0, order: ["tri", "sq", "ci"], anim: null, raf: 0, msg: "", cat: true, mols: null, mt0: 0, enz: "amy", T: 37, pH: 7, dead: false, S: 2, cI: 0, nI: 0, co: null };
+  const FM_W = 340;
+  const fmE = (x) => (x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3));
+  const fmL = (a, b, t) => a + (b - a) * t;
+  const FM_DEFS = `<defs>
+    <radialGradient id="fmg-enz" cx="38%" cy="30%" r="85%"><stop offset="0" stop-color="#efe6ff"/><stop offset=".45" stop-color="#a98be6"/><stop offset="1" stop-color="#6b45c2"/></radialGradient>
+    <radialGradient id="fmg-dead" cx="38%" cy="30%" r="85%"><stop offset="0" stop-color="#ffe5e6"/><stop offset=".5" stop-color="#f19a9d"/><stop offset="1" stop-color="#c8383e"/></radialGradient>
+    <linearGradient id="fmg-sub" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ec8a1c"/></linearGradient>
+    <linearGradient id="fmg-prod" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9be8b4"/><stop offset="1" stop-color="#2f9e5b"/></linearGradient>
+    <linearGradient id="fmg-ci" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9ccd6"/><stop offset="1" stop-color="#6b7184"/></linearGradient>
+    <radialGradient id="fmg-ni" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffb3b6"/><stop offset="1" stop-color="#d6343b"/></radialGradient>
+    <radialGradient id="fmg-co" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff3b0"/><stop offset="1" stop-color="#e0a800"/></radialGradient>
+    <radialGradient id="fmg-ball" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#ffb84d"/><stop offset="1" stop-color="#e07a00"/></radialGradient>
+    <radialGradient id="fmg-ballok" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#6fdc95"/><stop offset="1" stop-color="#1f8a4c"/></radialGradient>
+    <filter id="fm-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1a1030" flood-opacity=".25"/></filter>
+    <filter id="fm-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+  const fmSvgWrap = (h, g, cls) => `<svg class="bk-svg fm-svg ${cls || ""}" viewBox="0 0 ${FM_W} ${h}" aria-hidden="true">${FM_DEFS}${g}</svg>`;
+  /* тело фермента: выемка активного центра сверху (w — ширина входа), по желанию — аллостерический центр справа и гнездо кофермента слева */
+  function fmBody(o) {
+    const w = o.w || 1, hw = 22 * w, top = 100, deform = o.deform;
+    const a = deform ? [146, 100, 186, 126, 182, 100] : [170 - hw, 100, 170, 132, 170 + hw, 100];
+    let d = `M70,162 C70,112 100,${top} ${a[0] - 14},${top} L${a[0]},${a[1]} L${a[2]},${a[3]} L${a[4]},${a[5]} L${a[4] + 14},${top} C240,${top} 270,112 270,${o.allo ? 140 : 162}`;
+    if (o.allo) d += " A13,13 0 0 0 270,166";
+    d += ` C270,214 232,224 170,224 C108,224 70,214 70,${o.coslot ? 176 : 162}`;
+    if (o.coslot) d += " A14,14 0 0 0 70,148";
+    d += " Z";
+    return `<path d="${d}" fill="url(#${o.dead ? "fmg-dead" : "fmg-enz"})" class="fm-body${o.glow ? " glow" : ""}" filter="url(#fm-sh)"/>
+      <ellipse cx="128" cy="140" rx="34" ry="10" fill="#fff" opacity=".28" transform="rotate(-12 128 140)"/>`;
+  }
+  const fmTri = (cx, cy, fill, extra, k) => { k = k || 1; return `<path d="M${cx - 22 * k},${cy - 16 * k} L${cx + 22 * k},${cy - 16 * k} L${cx},${cy + 16 * k} Z" fill="${fill}" class="fm-mol" stroke-linejoin="round" ${extra || ""}/>`; };
+  const fmHalf = (cx, cy, side, op) => `<path d="${side < 0 ? `M${cx - 11},${cy - 16} L${cx + 11},${cy - 16} L${cx + 11},${cy + 16} Z` : `M${cx - 11},${cy - 16} L${cx + 11},${cy - 16} L${cx - 11},${cy + 16} Z`}" fill="url(#fmg-prod)" class="fm-mol" opacity="${op}"/>`;
+  function fmShape(kind, x, y, cls) {
+    if (kind === "tri") return `<g class="${cls || ""}">${fmTri(x, y, "url(#fmg-sub)")}</g>`;
+    if (kind === "sq") return `<g class="${cls || ""}"><rect x="${x - 16}" y="${y - 16}" width="32" height="32" rx="5" fill="url(#fmg-sub)" class="fm-mol"/></g>`;
+    return `<g class="${cls || ""}"><circle cx="${x}" cy="${y}" r="17" fill="url(#fmg-sub)" class="fm-mol"/></g>`;
+  }
+  const FM_HOME = [70, 170, 270];
+  /* ── шаг 1: ключ и замок ── */
+  function fm1Svg() {
+    const A = FM.anim, idle = FM.fit ? 1.5 : 1;
+    let w = idle, g = "", glow = false, cap = FM.fit ? "индуцированное соответствие: центр «обнимает» субстрат" : "ключ — замок: форма подходит сразу";
+    const mols = FM.order.map((k, i) => ({ k, x: FM_HOME[i], y: 44, hide: false }));
+    let prods = "";
+    if (A) {
+      const e = performance.now() - A.t0, m = mols[A.i];
+      if (A.kind === "hit") {
+        if (e < 500) { const p = fmE(e / 500); m.x = fmL(FM_HOME[A.i], 170, p); m.y = fmL(44, 116, p); }
+        else if (e < 1050) { m.x = 170; m.y = 116; w = fmL(idle, 1, fmE((e - 500) / 300)); glow = true; cap = "фермент-субстратный комплекс"; }
+        else { m.hide = true; const q = fmE((e - 1050) / 650); w = fmL(1, idle, q); prods = fmHalf(170 - 11 - 70 * q, 116 - 64 * q, -1, 1 - q * .15) + fmHalf(170 + 11 + 70 * q, 116 - 64 * q, 1, 1 - q * .15); cap = "продукты отделились — фермент свободен и не изменился"; }
+      } else {
+        if (e < 420) { const p = fmE(e / 420); m.x = fmL(FM_HOME[A.i], 170, p); m.y = fmL(44, 70, p); }
+        else if (e < 820) { m.x = 170 + 7 * Math.sin((e - 420) / 26); m.y = 70; cap = "не подходит по форме — фермент специфичен"; }
+        else { const p = fmE((e - 820) / 380); m.x = fmL(170, FM_HOME[A.i], p); m.y = fmL(70, 44, p); cap = "не подходит по форме — фермент специфичен"; }
+      }
+    }
+    g += fmBody({ w, glow });
+    g += `<text x="170" y="186" class="fm-in">фермент</text>`;
+    g += `<line x1="236" y1="84" x2="${170 + 22 * w - 4}" y2="106" class="bk-lead"/><text x="240" y="80" class="fm-call">активный центр</text>`;
+    mols.forEach((m, i) => { if (!m.hide) g += fmShape(m.k, m.x, m.y, `fm-pick${A && A.i === i ? (A.kind === "miss" ? " miss" : " go") : ""}`); });
+    g += prods;
+    g += `<text x="170" y="250" class="bk-cap">${cap}</text>`;
+    return fmSvgWrap(262, g);
+  }
+  function fm1Tap(i) {
+    if (FM.anim) return;
+    const kind = FM.order[i] === "tri" ? "hit" : "miss";
+    FM.anim = { kind, i, t0: performance.now(), buzz: false };
+    const dur = kind === "hit" ? 1700 : 1200;
+    const tick = () => {
+      const e = performance.now() - FM.anim.t0;
+      if (!FM.anim.buzz && e > (kind === "hit" ? 500 : 420)) { FM.anim.buzz = true; haptic(kind === "hit" ? "success" : "error"); }
+      if (e >= dur) {
+        FM.anim = null;
+        if (kind === "hit") { FM.done++; FM.order = sShuf(["tri", "sq", "ci"]); }
+        fmDraw(); fmStat(); return;
+      }
+      fmDraw(); FM.raf = requestAnimationFrame(tick);
+    };
+    cancelAnimationFrame(FM.raf); FM.raf = requestAnimationFrame(tick);
+  }
+  /* ── шаг 2: энергия активации ── */
+  const fmCurve = (x, h) => { const s = Math.min(1, Math.max(0, (x - 120) / 100)); return 150 + 35 * s * s * (3 - 2 * s) - h * Math.exp(-Math.pow((x - 170) / 36, 2)); };
+  const FM_H = { off: 122, on: 58 };
+  const fmPath = (h) => { let d = ""; for (let x = 34; x <= 318; x += 4) d += `${d ? "L" : "M"}${x},${fmCurve(x, h).toFixed(1)} `; return d; };
+  function fm2Svg() {
+    const hA = FM.cat ? FM_H.on : FM_H.off, hB = FM.cat ? FM_H.off : FM_H.on, peak = fmCurve(170, hA);
+    let g = `<line x1="30" y1="232" x2="324" y2="232" class="fm-ax"/><line x1="30" y1="232" x2="30" y2="20" class="fm-ax"/>
+      <text x="322" y="246" class="fm-axt" text-anchor="end">ход реакции →</text><text x="36" y="22" class="fm-axt">энергия ↑</text>
+      <path d="${fmPath(hB)}" class="fm-cv off"/><path d="${fmPath(hA)}" class="fm-cv on"/>
+      <line x1="170" y1="150" x2="170" y2="${(peak + 4).toFixed(1)}" class="fm-ea"/><path d="M165,${peak + 11} L170,${peak + 3} L175,${peak + 11}" class="fm-ea"/>
+      <text x="162" y="${((150 + peak) / 2 + 4).toFixed(1)}" class="fm-eat" text-anchor="end">Eₐ</text>
+      <line x1="34" y1="150" x2="200" y2="150" class="fm-lvl"/>
+      <text x="40" y="170" class="fm-axt b">субстрат</text><text x="318" y="206" class="fm-axt b" text-anchor="end">продукты</text>
+      <text x="170" y="${(fmCurve(170, FM_H.off) - 8).toFixed(1)}" class="fm-tag ${FM.cat ? "" : "on"}">без фермента</text>
+      <text x="226" y="${(fmCurve(170, FM_H.on) + 2).toFixed(1)}" class="fm-tag ${FM.cat ? "on" : ""}" text-anchor="start">с ферментом</text>`;
+    if (FM.mols) {
+      const e = performance.now() - FM.mt0;
+      FM.mols.forEach((m) => {
+        const t = e - m.d; let x = 56;
+        if (t > 0) {
+          if (m.pass) x = fmL(56, 302, fmE(Math.min(1, t / 1500)));
+          else x = t < 750 ? fmL(56, m.xmax, fmE(t / 750)) : fmL(m.xmax, 56, Math.min(1, (t - 750) / 750) ** 2);
+        }
+        const y = fmCurve(x, hA) - 7, ok = m.pass && x > 172;
+        g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="url(#${ok ? "fmg-ballok" : "fmg-ball"})" class="fm-ball"/>`;
+      });
+    }
+    return fmSvgWrap(254, g);
+  }
+  function fm2Run() {
+    const hA = FM.cat ? FM_H.on : FM_H.off, need = 150 - fmCurve(170, hA);
+    FM.mols = Array.from({ length: 12 }, (_, i) => {
+      const H = Math.random() * 130, pass = H > need;
+      let xmax = 60; for (let x = 60; x <= 170; x++) if (150 - fmCurve(x, hA) <= H) xmax = x;
+      return { d: i * 140, pass, xmax };
+    });
+    FM.mt0 = performance.now(); FM.msg = "";
+    const tick = () => {
+      fmDraw();
+      if (performance.now() - FM.mt0 < 11 * 140 + 1600) FM.raf = requestAnimationFrame(tick);
+      else { const k = FM.mols.filter((m) => m.pass).length; FM.msg = `Прореагировало <b>${k} из 12</b> молекул ${FM.cat ? "с ферментом" : "без фермента"}. ${FM.cat ? "Барьер низкий — перепрыгивают почти все." : "Барьер высокий — перепрыгивают единицы."}`; haptic(k > 6 ? "success" : "error"); fmStat(); }
+    };
+    cancelAnimationFrame(FM.raf); FM.raf = requestAnimationFrame(tick);
+  }
+  /* ── шаг 3: температура и pH ── */
+  const FM_ENZ = {
+    amy: { n: "Амилаза слюны", pH: 7, rx: "крахмал → мальтоза", where: "ротовая полость" },
+    pep: { n: "Пепсин", pH: 2, rx: "белки → пептиды", where: "желудок" },
+    tri: { n: "Трипсин", pH: 8, rx: "белки → пептиды", where: "тонкая кишка" },
+    cat: { n: "Каталаза", pH: 7, rx: "2H₂O₂ → 2H₂O + O₂↑", where: "картофель, печень" },
+  };
+  const fmAT = (T) => (T <= 37 ? Math.pow(2, (T - 37) / 10) : Math.exp(-Math.pow((T - 37) / 14, 2)));
+  const fmAP = (p, o) => Math.exp(-Math.pow((p - o) / 1.7, 2));
+  const fmAct = () => (FM.dead ? 0 : fmAT(FM.T) * fmAP(FM.pH, FM_ENZ[FM.enz].pH));
+  function fmChart(x0, title, xs, f, cur, lab) {
+    const W = 140, H = 78, y0 = 26;
+    const px = (v) => x0 + ((v - xs[0]) / (xs[1] - xs[0])) * W, py = (a) => y0 + H - a * (H - 6);
+    let d = ""; for (let i = 0; i <= 70; i++) { const v = xs[0] + (i / 70) * (xs[1] - xs[0]); d += `${i ? "L" : "M"}${px(v).toFixed(1)},${py(f(v)).toFixed(1)} `; }
+    const a = FM.dead ? 0 : f(cur);
+    return `<text x="${x0}" y="16" class="fm-axt b">${title}</text>
+      <line x1="${x0}" y1="${y0 + H}" x2="${x0 + W}" y2="${y0 + H}" class="fm-ax"/><line x1="${x0}" y1="${y0 + H}" x2="${x0}" y2="${y0}" class="fm-ax"/>
+      <path d="${d} L${x0 + W},${y0 + H} L${x0},${y0 + H} Z" class="fm-area"/><path d="${d}" class="fm-cv on thin"/>
+      <line x1="${px(cur).toFixed(1)}" y1="${y0}" x2="${px(cur).toFixed(1)}" y2="${y0 + H}" class="fm-cur"/>
+      <circle cx="${px(cur).toFixed(1)}" cy="${py(a).toFixed(1)}" r="6" class="fm-dot${FM.dead ? " dead" : ""}"/>
+      ${lab.map(([v, t]) => `<text x="${px(v).toFixed(1)}" y="${y0 + H + 13}" class="fm-tick">${t}</text>`).join("")}`;
+  }
+  function fm3Svg() {
+    const o = FM_ENZ[FM.enz].pH;
+    const g = fmChart(14, "Температура", [0, 80], fmAT, FM.T, [[0, "0"], [37, "37"], [80, "80 °C"]]) + fmChart(186, "pH среды", [1, 13], (p) => fmAP(p, o), FM.pH, [[1, "1"], [o, String(o)], [13, "13"]]);
+    return fmSvgWrap(122, g);
+  }
+  function fmBeaker() {
+    const a = fmAct(), n = Math.round(a * 16), cat = FM.enz === "cat", e = FM_ENZ[FM.enz];
+    const bub = Array.from({ length: n }, (_, i) => `<span style="left:${8 + ((i * 37) % 84)}%;width:${5 + (i % 3) * 2}px;height:${5 + (i % 3) * 2}px;animation-duration:${(1.4 + ((i * 13) % 9) / 10).toFixed(1)}s;animation-delay:-${(((i * 29) % 17) / 10).toFixed(1)}s"></span>`).join("");
+    const state = FM.dead ? `<b class="bad">Денатурирован</b> — охлаждение уже не поможет` : FM.T < 15 ? `<b class="cold">Холодно</b> — работает медленно, но цел` : a > .8 ? `<b class="good">Оптимум</b> — работает на максимум` : `Работает слабее оптимума`;
+    return `<div class="fm-beaker${cat ? " foam" : ""}"><div class="fm-liq">${cat ? `<i class="fm-foam" style="height:${Math.round(a * 46)}px"></i>` : ""}${bub}</div></div>
+      <div class="fm-read"><span class="fm-pct">${Math.round(a * 100)}<small>%</small></span><span class="fm-rl">активность</span><p>${state}</p><p class="fm-rx">${e.rx}<br><small>${e.where}</small></p></div>`;
+  }
+  /* ── шаг 4: ингибиторы ── */
+  function fm4Rate() { return (FM.S / (FM.S + FM.cI * 1.4)) / (1 + 1.8 * FM.nI); }
+  function fm4Svg() {
+    const deform = FM.nI > 0, compIn = !deform && FM.cI > 0 && FM.cI * 1.4 >= FM.S;
+    let g = fmBody({ w: 1, allo: true, deform });
+    g += `<text x="170" y="186" class="fm-in">фермент</text>`;
+    if (deform) g += `<circle cx="270" cy="153" r="11" fill="url(#fmg-ni)" class="fm-mol"/>${fmTri(170, 70, "url(#fmg-sub)", 'opacity=".55"')}<text x="200" y="66" class="fm-x">✕</text>`;
+    else if (compIn) g += fmTri(170, 116, "url(#fmg-ci)") + `<line x1="160" y1="104" x2="180" y2="104" class="fm-stripe"/>`;
+    else g += `<g filter="url(#fm-glow)">${fmTri(170, 116, "url(#fmg-sub)")}</g>`;
+    g += `<line x1="236" y1="84" x2="${deform ? 186 : 188}" y2="104" class="bk-lead"/><text x="240" y="80" class="fm-call">активный центр</text>`;
+    g += `<line x1="302" y1="128" x2="281" y2="145" class="bk-lead"/><text x="306" y="110" class="fm-call" text-anchor="middle">другой</text><text x="306" y="123" class="fm-call" text-anchor="middle">участок</text>`;
+    const pool = [];
+    for (let i = 0; i < FM.S; i++) pool.push(fmTri(22 + i * 26, 30, "url(#fmg-sub)", "", .55));
+    for (let i = 0; i < FM.cI; i++) pool.push(fmTri(320 - i * 26, 30, "url(#fmg-ci)", "", .55));
+    for (let i = 0; i < FM.nI; i++) pool.push(`<circle cx="${318 - i * 22}" cy="${232}" r="7" fill="url(#fmg-ni)" class="fm-mol"/>`);
+    g += pool.join("");
+    g += `<text x="14" y="58" class="fm-axt">субстрат ×${FM.S}</text>${FM.cI ? `<text x="326" y="58" class="fm-axt" text-anchor="end">конкурентный ×${FM.cI}</text>` : ""}`;
+    return fmSvgWrap(256, g);
+  }
+  function fm4Txt() {
+    if (FM.nI) return "Неконкурентный ингибитор сел в <b>другой участок</b> и смял активный центр. Субстрат больше не помещается — сколько его ни добавляй.";
+    if (FM.cI && FM.cI * 1.4 >= FM.S) return "Конкурентный ингибитор <b>похож на субстрат</b> и занял активный центр. Добавь больше субстрата — он вытеснит ингибитор.";
+    if (FM.cI) return "Субстрата больше, чем ингибитора, — он чаще занимает активный центр. Конкурентное торможение <b>снято избытком субстрата</b>.";
+    return "Ингибиторов нет — субстрат свободно садится в активный центр.";
+  }
+  /* ── шаг 5: кофермент ── */
+  const FM_CO = {
+    nad: { n: "НАД⁺", s: "из витамина PP (B₃)", ok: true, t: "Подошёл! Апофермент + кофермент НАД⁺ = <b>холофермент</b>. Лактатдегидрогеназа заработала." },
+    fad: { n: "ФАД", s: "из витамина B₂", ok: false, t: "ФАД — тоже кофермент, но этому ферменту нужен именно <b>НАД⁺</b>. Ферменты специфичны и к коферментам." },
+    glu: { n: "Глюкоза", s: "углевод", ok: false, t: "Глюкоза — не кофермент: это субстрат многих реакций." },
+    aa: { n: "Аминокислота", s: "мономер белка", ok: false, t: "Из аминокислот построен сам <b>апофермент</b> — белковая часть. Кофермент небелковый." },
+  };
+  function fm5Svg() {
+    const c = FM.co && FM_CO[FM.co], ok = c && c.ok;
+    let g = fmBody({ w: 1, coslot: true, glow: ok });
+    g += `<text x="176" y="180" class="fm-in">${ok ? "холофермент" : "апофермент"}</text><text x="176" y="196" class="fm-in s">${ok ? "работает ✓" : "(белковая часть)"}</text>`;
+    if (ok) g += `<circle cx="70" cy="162" r="13" fill="url(#fmg-co)" class="fm-mol" filter="url(#fm-glow)"/><text x="70" y="166" class="fm-co">НАД</text>` + fmTri(170, 116, "url(#fmg-sub)");
+    else if (c) g += `<g class="fm-bounce"><circle cx="34" cy="120" r="13" fill="${c.n === "НАД⁺" ? "url(#fmg-co)" : "url(#fmg-ci)"}" class="fm-mol"/><text x="34" y="124" class="fm-co">${c.n.slice(0, 3)}</text></g><text x="34" y="98" class="fm-x">✕</text>`;
+    g += `<line x1="58" y1="84" x2="64" y2="148" class="bk-lead"/><text x="22" y="78" class="fm-call" text-anchor="start">место для кофермента</text>`;
+    g += `<text x="170" y="250" class="bk-cap">лактатдегидрогеназа: молочная кислота → пировиноградная</text>`;
+    return fmSvgWrap(262, g);
+  }
+  /* ── сборка лаборатории ── */
+  function fmDraw() {
+    const box = vFM.querySelector(".fm-stage"); if (!box) return;
+    box.innerHTML = [fm1Svg, fm2Svg, fm3Svg, fm4Svg, fm5Svg][FM.step]();
+    if (FM.step === 0) box.querySelectorAll(".fm-pick").forEach((el, i) => el.addEventListener("click", () => fm1Tap(i)));
+  }
+  function fmStat() {
+    const el = vFM.querySelector(".fm-stat"); if (!el) return;
+    const s = FM.step;
+    if (s === 0) el.innerHTML = FM.done ? `Фермент сработал <b>${FM.done} ${FM.done % 10 === 1 && FM.done % 100 !== 11 ? "раз" : FM.done % 10 >= 2 && FM.done % 10 <= 4 && (FM.done % 100 < 12 || FM.done % 100 > 14) ? "раза" : "раз"}</b> — и остался тем же. Он не расходуется.` : "Тапни по молекуле, которая подойдёт к активному центру.";
+    else if (s === 1) el.innerHTML = FM.msg || "Запусти молекулы с ферментом и без — сравни, сколько перепрыгнет барьер.";
+    else if (s === 3) { const r = fm4Rate(); el.innerHTML = `<div class="fm-bar"><i style="width:${Math.round(r * 100)}%"></i></div><span class="fm-bl">скорость реакции: <b>${Math.round(r * 100)}%</b></span><p>${fm4Txt()}</p>`; }
+    else if (s === 4) el.innerHTML = FM.co ? FM_CO[FM.co].t : "Апофермент без кофермента не работает. Выбери, что вставить в гнездо.";
+  }
+  function fmCtl() {
+    const s = FM.step;
+    if (s === 0) return `<div class="fm-seg"><button type="button" class="${FM.fit ? "" : "on"}" data-ffit="0">Ключ — замок<small>Фишер</small></button><button type="button" class="${FM.fit ? "on" : ""}" data-ffit="1">Индуцированное соответствие<small>Кошланд</small></button></div>`;
+    if (s === 1) return `<div class="fm-seg"><button type="button" class="${FM.cat ? "" : "on"}" data-fcat="0">Без фермента</button><button type="button" class="${FM.cat ? "on" : ""}" data-fcat="1">С ферментом</button></div><div class="bk-btns"><button type="button" class="btn primary" data-frun>Запустить 12 молекул ▶</button></div>`;
+    if (s === 2) return `<div class="fm-chips">${Object.entries(FM_ENZ).map(([k, e]) => `<button type="button" class="${FM.enz === k ? "on" : ""}" data-fenz="${k}">${e.n}</button>`).join("")}</div>
+      <div class="bk-ctl"><label>Температура: <b>${FM.T} °C</b><input type="range" min="0" max="80" step="1" value="${FM.T}" data-ft></label>
+      <label>pH среды: <b>${FM.pH}</b><input type="range" min="1" max="13" step="1" value="${FM.pH}" data-fp></label></div>
+      <div class="fm-row">${fmBeaker()}</div>
+      ${FM.dead ? `<div class="bk-btns"><button type="button" class="btn primary" data-ffresh>Взять свежий фермент</button></div>` : ""}`;
+    if (s === 3) return `<div class="fm-add"><button type="button" class="btn" data-fadd="S">+ субстрат</button><button type="button" class="btn" data-fadd="cI">+ конкурентный</button><button type="button" class="btn" data-fadd="nI">+ неконкурентный</button><button type="button" class="btn" data-fadd="0">Сброс</button></div>`;
+    return `<div class="fm-co-opts">${Object.entries(FM_CO).map(([k, c]) => `<button type="button" class="${FM.co === k ? (c.ok ? "ok" : "no") : ""}" data-fco="${k}"><b>${c.n}</b><small>${c.s}</small></button>`).join("")}</div>
+      <div class="fm-vit"><p class="fm-vt">Витамин → кофермент</p><div>${[["PP (B₃)", "НАД, НАДФ"], ["B₂", "ФАД"], ["B₅", "кофермент А"], ["B₁", "тиаминпирофосфат"], ["B₆", "пиридоксальфосфат"]].map(([v, c]) => `<span><b>${v}</b> → ${c}</span>`).join("")}</div><p class="fm-vn">Кофакторами бывают и ионы металлов: Mg²⁺, Zn²⁺, Fe²⁺, Cu²⁺.</p></div>`;
+  }
+  function fmLabHtml() {
+    const s = FM.step;
+    return `<div class="l-card bk-lab-card">
+      <div class="bk-tabs">${FM_STEPS.map(([t], i) => `<button type="button" class="${i === s ? "on" : i < s ? "past" : ""}" data-fs="${i}"><i>${i + 1}</i>${t}</button>`).join("")}</div>
+      <div class="bk-stage fm-stage"></div>
+      <div class="fm-stat"></div>
+      <div class="fm-ctl">${fmCtl()}</div>
+      <p class="bk-info">${FM_STEPS[s][1]}</p>
+      <div class="bk-nav">${s > 0 ? `<button type="button" class="btn" data-fprev>← Назад</button>` : "<span></span>"}${s < 4 ? `<button type="button" class="btn primary" data-fnext>${FM_STEPS[s + 1][0]} →</button>` : `<button type="button" class="btn primary" data-fq>Проверить себя →</button>`}</div>
+    </div>`;
+  }
+  function fmBindLab() {
+    fmDraw(); fmStat();
+    const q = (sel) => vFM.querySelector(sel), qa = (sel) => vFM.querySelectorAll(sel);
+    const go2 = (s) => { cancelAnimationFrame(FM.raf); FM.anim = null; FM.mols = null; FM.msg = ""; FM.step = s; fmRender(true); };
+    qa("[data-fs]").forEach((b) => b.addEventListener("click", () => go2(+b.dataset.fs)));
+    if (q("[data-fnext]")) q("[data-fnext]").addEventListener("click", () => go2(FM.step + 1));
+    if (q("[data-fprev]")) q("[data-fprev]").addEventListener("click", () => go2(FM.step - 1));
+    if (q("[data-fq]")) q("[data-fq]").addEventListener("click", fmStart);
+    qa("[data-ffit]").forEach((b) => b.addEventListener("click", () => { if (FM.anim) return; FM.fit = b.dataset.ffit === "1"; fmRender(true); }));
+    qa("[data-fcat]").forEach((b) => b.addEventListener("click", () => { cancelAnimationFrame(FM.raf); FM.cat = b.dataset.fcat === "1"; FM.mols = null; FM.msg = ""; fmRender(true); }));
+    if (q("[data-frun]")) q("[data-frun]").addEventListener("click", fm2Run);
+    qa("[data-fenz]").forEach((b) => b.addEventListener("click", () => { FM.enz = b.dataset.fenz; FM.dead = false; FM.T = 37; FM.pH = FM_ENZ[FM.enz].pH; fmRender(true); }));
+    const upd3 = () => {
+      const was = FM.dead; if (FM.T >= 62 || Math.abs(FM.pH - FM_ENZ[FM.enz].pH) >= 5) FM.dead = true;
+      if (FM.dead !== was) { haptic("error"); fmRender(true); return; }
+      fmDraw(); const r = vFM.querySelector(".fm-row"), n = Math.round(fmAct() * 16);
+      if (r && r.dataset.n !== String(n)) { r.innerHTML = fmBeaker(); r.dataset.n = n; } else if (r) { const p = r.querySelector(".fm-pct"); if (p) p.innerHTML = `${Math.round(fmAct() * 100)}<small>%</small>`; }
+    };
+    const t = q("[data-ft]"); if (t) t.addEventListener("input", () => { FM.T = +t.value; t.previousElementSibling.textContent = FM.T + " °C"; upd3(); });
+    const p = q("[data-fp]"); if (p) p.addEventListener("input", () => { FM.pH = +p.value; p.previousElementSibling.textContent = FM.pH; upd3(); });
+    if (q("[data-ffresh]")) q("[data-ffresh]").addEventListener("click", () => { FM.dead = false; FM.T = 37; FM.pH = FM_ENZ[FM.enz].pH; haptic("success"); fmRender(true); });
+    qa("[data-fadd]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.fadd;
+      if (k === "0") { FM.S = 2; FM.cI = 0; FM.nI = 0; } else { const max = { S: 6, cI: 4, nI: 2 }[k]; if (FM[k] < max) FM[k]++; }
+      fmDraw(); fmStat(); haptic(fm4Rate() > .6 ? "success" : "error");
+    }));
+    qa("[data-fco]").forEach((b) => b.addEventListener("click", () => { FM.co = b.dataset.fco; haptic(FM_CO[FM.co].ok ? "success" : "error"); fmRender(true); }));
+  }
+  /* ── задания ── */
+  const FM_ST = [
+    ["Большинство ферментов — белки", 1, "Ферменты — в основном белки (есть и каталитические РНК — рибозимы)."],
+    ["Фермент связывает субстрат активным центром", 1, "Активный центр — небольшой участок молекулы фермента."],
+    ["Ферменты снижают энергию активации реакции", 1, "Так ферменты ускоряют реакции."],
+    ["После реакции фермент остаётся неизменным", 1, "Фермент не расходуется и катализирует снова."],
+    ["Пепсин активен в кислой среде желудка", 1, "Оптимум pH пепсина ≈ 1,5–2."],
+    ["Многие коферменты — производные витаминов", 1, "Например, НАД — из витамина PP, ФАД — из B₂."],
+    ["Ферменты обладают специфичностью", 1, "Каждый фермент катализирует определённую реакцию."],
+    ["Фермент расходуется в ходе реакции", 0, "Неверно: фермент не расходуется."],
+    ["Ферменты смещают химическое равновесие", 0, "Неверно: равновесие не смещается, оно лишь быстрее достигается."],
+    ["Чем выше температура, тем всегда быстрее идёт ферментативная реакция", 0, "Неверно: выше оптимума фермент денатурирует."],
+    ["Амилаза слюны лучше всего работает в кислой среде", 0, "Неверно: оптимум амилазы слюны — около pH 7."],
+    ["Конкурентный ингибитор связывается вне активного центра", 0, "Неверно: конкурентный ингибитор занимает активный центр."],
+    ["При охлаждении фермент необратимо разрушается", 0, "Неверно: холод замедляет фермент обратимо."],
+    ["Ферменты повышают энергию активации", 0, "Неверно: они её снижают."],
+  ];
+  function fmQSpec() {
+    return sPick([
+      { name: "Специфичность", q: "Способность фермента катализировать только определённую реакцию — это…", opts: ["специфичность", "денатурация", "ингибирование", "ренатурация"], ans: "специфичность", ex: "Субстрат подходит к активному центру фермента по форме — как ключ к замку." },
+      { name: "Модели", q: "Кто предложил модель «ключ — замок»?", opts: ["Э. Фишер", "Д. Кошланд", "Л. Пастер", "Т. Шванн"], ans: "Э. Фишер", ex: "Фишер — «ключ — замок», Кошланд — индуцированное соответствие." },
+      { name: "Активный центр", q: "Участок молекулы фермента, который связывает субстрат, — это…", opts: ["активный центр", "аллостерический центр", "кофермент", "апофермент"], ans: "активный центр", ex: "Аллостерический центр — другой участок, к нему садятся регуляторы и неконкурентные ингибиторы." },
+    ]);
+  }
+  function fmQEa() {
+    return sPick([
+      { name: "Энергия активации", q: "Как фермент ускоряет реакцию?", opts: ["снижает энергию активации", "повышает температуру среды", "смещает равновесие в сторону продуктов", "увеличивает тепловой эффект"], ans: "снижает энергию активации", ex: "Барьер ниже — больше молекул успевают прореагировать." },
+      { name: "Энергия активации", q: "Что фермент НЕ меняет?", opts: ["тепловой эффект реакции", "энергию активации", "скорость реакции", "время достижения равновесия"], ans: "тепловой эффект реакции", ex: "Фермент меняет только барьер; энергия исходных веществ и продуктов та же." },
+    ]);
+  }
+  function fmQT() {
+    return sPick([
+      { name: "Температура", q: "Что происходит с ферментом при нагревании до 80 °C?", opts: ["денатурация — активность теряется необратимо", "активность растёт в несколько раз", "фермент расходуется в реакции", "ничего не меняется"], ans: "денатурация — активность теряется необратимо", ex: "Нагрев до 60–70 °C разрушает третичную структуру и активный центр." },
+      { name: "Температура", q: "Что происходит с активностью амилазы при охлаждении до 0 °C?", opts: ["снижается, но обратимо", "фермент необратимо денатурирует", "возрастает", "не меняется"], ans: "снижается, но обратимо", ex: "Холод замедляет молекулы, но структура фермента цела — при нагреве до 37 °C он снова работает." },
+      { name: "Температура", q: "При какой температуре лучше всего работают большинство ферментов человека?", opts: ["37–40 °C", "0–4 °C", "60–70 °C", "90–100 °C"], ans: "37–40 °C", ex: "Это температурный оптимум ферментов человека." },
+    ]);
+  }
+  function fmQpH() {
+    return sPick([
+      { name: "pH", q: "При каком pH лучше всего работает <b>пепсин</b>?", opts: ["≈ 2", "≈ 7", "≈ 8", "≈ 12"], ans: "≈ 2", ex: "Пепсин работает в кислой среде желудка." },
+      { name: "pH", q: "При каком pH лучше всего работает <b>амилаза слюны</b>?", opts: ["≈ 7", "≈ 2", "≈ 4", "≈ 12"], ans: "≈ 7", ex: "Среда ротовой полости близка к нейтральной." },
+      { name: "pH", q: "Какой фермент активен в кислой среде желудка?", opts: ["пепсин", "амилаза слюны", "трипсин", "каталаза"], ans: "пепсин", ex: "Трипсин работает в слабощелочной среде тонкой кишки, амилаза слюны — в нейтральной." },
+      { name: "pH", q: "Почему амилаза слюны перестаёт работать в желудке?", opts: ["среда в желудке кислая", "в желудке нет крахмала", "в желудке слишком холодно", "её расщепляет каталаза"], ans: "среда в желудке кислая", ex: "Оптимум амилазы слюны — около pH 7, в кислой среде желудка она теряет активность." },
+    ]);
+  }
+  function fmQInh() {
+    return sPick([
+      { name: "Ингибиторы", q: "Ингибитор похож на субстрат и связывается с активным центром. Это ингибирование…", opts: ["конкурентное", "неконкурентное (аллостерическое)", "необратимая денатурация", "активация"], ans: "конкурентное", ex: "Он конкурирует с субстратом за активный центр." },
+      { name: "Ингибиторы", q: "Ингибитор садится вне активного центра и меняет его форму. Это ингибирование…", opts: ["неконкурентное (аллостерическое)", "конкурентное", "субстратное", "активация"], ans: "неконкурентное (аллостерическое)", ex: "Он связывается с другим участком фермента." },
+      { name: "Ингибиторы", q: "Как снять действие конкурентного ингибитора?", opts: ["добавить избыток субстрата", "нагреть до 80 °C", "добавить ещё ингибитора", "охладить до 0 °C"], ans: "добавить избыток субстрата", ex: "Субстрат вытесняет ингибитор из активного центра." },
+    ]);
+  }
+  function fmQCo() {
+    return sPick([
+      { name: "Кофермент", q: "Как называется небелковая часть сложного фермента?", opts: ["кофермент", "апофермент", "субстрат", "активный центр"], ans: "кофермент", ex: "Апофермент — белковая часть, вместе с коферментом — холофермент." },
+      { name: "Витамины", q: "Производным какого витамина является кофермент <b>НАД</b>?", opts: ["PP (B₃)", "B₂", "C", "D"], ans: "PP (B₃)", ex: "НАД — из витамина PP (никотинамид), ФАД — из B₂." },
+      { name: "Витамины", q: "Производным какого витамина является кофермент <b>ФАД</b>?", opts: ["B₂", "PP (B₃)", "C", "A"], ans: "B₂", ex: "ФАД — из витамина B₂ (рибофлавин)." },
+    ]);
+  }
+  const fmQThree = () => ({ t: "3", name: "Три верных", items: sShuf([...sShuf(FM_ST.filter((x) => x[1])).slice(0, 3), ...sShuf(FM_ST.filter((x) => !x[1])).slice(0, 3)]), pick: [], done: false });
+  const fmNew = () => [fmQSpec(), fmQEa(), fmQT(), fmQpH(), fmQThree(), fmQInh(), fmQCo(), fmQThree()].map((q) => (q.t === "3" ? q : Object.assign({}, q, { t: "s", opts: sShuf(q.opts), pick: null })));
+  const FMR = { run: null };
+  function fmStart() { cancelAnimationFrame(FM.raf); FMR.run = { qs: fmNew(), k: 0, ok: 0 }; fmRun(); zScroll(vFM); }
+  function fmRender(keep) {
+    if (FMR.run) return fmRun();
+    if (!keep) { cancelAnimationFrame(FM.raf); Object.assign(FM, { step: 0, anim: null, mols: null, msg: "", done: 0, dead: false, T: 37, enz: "amy", pH: 7, S: 2, cI: 0, nI: 0, co: null }); }
+    vFM.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-fm="back">← к модулям</button><h2 class="mod-title">Ферменты: лаборатория</h2></div>
+      <p class="intro">Запусти фермент, нагрей его, отрави ингибитором и почини коферментом. После лаборатории — 8 заданий ЕГЭ.${fms.best != null ? ` Рекорд: <b>${fms.best}</b> из 8.` : ""}</p>
+      ${fmLabHtml()}
+      <button type="button" class="linkbtn bk-skip" data-fm="skip">Сразу к заданиям →</button>`;
+    vFM.querySelector('[data-fm="back"]').addEventListener("click", () => { cancelAnimationFrame(FM.raf); go({ tab: "learn", module: null }); });
+    vFM.querySelector('[data-fm="skip"]').addEventListener("click", fmStart);
+    fmBindLab();
+  }
+  function fmRun() {
+    const r = FMR.run;
+    if (r.k >= r.qs.length) return fmEnd();
+    const q = r.qs[r.k];
+    let body, done, good;
+    const ans3 = q.t === "3" ? q.items.map((x, i) => (x[1] ? i + 1 : 0)).filter(Boolean).join("") : "";
+    if (q.t === "s") {
+      done = q.pick != null; good = done && q.opts[q.pick] === q.ans;
+      body = `<p class="vd-q">${q.q}</p><div class="z-opts s-opts">${q.opts.map((o, j) => `<button type="button" class="z-opt${done ? (o === q.ans ? " good" : j === q.pick ? " bad" : " fade") : ""}" data-fo="${j}"${done ? " disabled" : ""}><span class="ft"><b>${o}</b></span></button>`).join("")}</div>`;
+    } else {
+      done = q.done; good = done && q.pick.slice().sort().join("") === ans3;
+      body = `<p class="l-ask">Выберите три верных утверждения о ферментах.</p><div class="kt-list">${q.items.map((x, i) => { const on = q.pick.includes(i + 1), st = done ? (x[1] ? " ok" : on ? " no" : " fade") : on ? " on" : ""; return `<button type="button" class="kt-st${st}" data-f3="${i + 1}"${done ? " disabled" : ""}><i>${i + 1}</i><span>${x[0]}</span></button>`; }).join("")}</div>
+        ${done ? `<p class="kt-ans">Ответ: <b>${ans3}</b>${good ? "" : ` · у тебя: ${q.pick.slice().sort().join("")}`}</p>` : ""}`;
+    }
+    vFM.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-fm="list">← Ферменты: лаборатория</button></div>
+      <div class="cd-top"><span class="num">${q.name} · ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card kt-card">${body}</div>
+      ${done ? `<div class="z-ex"><p class="fb ${good ? "good" : "wrong"}">${good ? "Верно!" : `Неверно.${q.t === "s" ? ` Правильно: <b>${q.ans}</b>.` : ""}`} ${q.t === "s" ? q.ex : ""}</p>${q.t === "3" ? `<div class="kt-ex">${q.items.map((x, i) => `<p class="${x[1] ? "t" : "f"}"><b>${i + 1}.</b> ${x[2]}</p>`).join("")}</div>` : ""}
+        <div class="actions"><button type="button" class="btn primary" data-fm="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
+        : q.t === "3" ? `<div class="actions l-act"><button type="button" class="btn primary" data-fm="check"${q.pick.length === 3 ? "" : " disabled"}>Проверить</button></div>` : ""}`;
+    vFM.querySelector('[data-fm="list"]').addEventListener("click", () => { FMR.run = null; fmRender(true); zScroll(vFM); });
+    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); fmRun(); zScroll(vFM.querySelector(".z-ex"), 160); };
+    if (!done) {
+      vFM.querySelectorAll("[data-fo]").forEach((b) => b.addEventListener("click", () => { q.pick = +b.dataset.fo; fin(q.opts[q.pick] === q.ans); }));
+      vFM.querySelectorAll("[data-f3]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.f3, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); fmRun(); }));
+      const ch = vFM.querySelector('[data-fm="check"]');
+      if (ch) ch.addEventListener("click", () => { q.done = true; fin(q.pick.slice().sort().join("") === ans3); });
+    } else vFM.querySelector('[data-fm="next"]').addEventListener("click", () => { r.k++; fmRun(); zScroll(vFM); });
+  }
+  function fmEnd() {
+    const r = FMR.run;
+    if (fms.best == null || r.ok > fms.best) { fms.best = r.ok; fmsave(); }
+    vFM.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-fm="list">← Ферменты: лаборатория</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Всё верно 🔥" : "Загляни в лабораторию ещё раз — особенно в «t° и pH» и «Ингибиторы»."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-fm="again">Ещё 8 заданий</button><button type="button" class="btn" data-fm="list2">В лабораторию</button></div></div>`;
+    const back = () => { FMR.run = null; fmRender(true); zScroll(vFM); };
+    vFM.querySelector('[data-fm="list"]').addEventListener("click", back);
+    vFM.querySelector('[data-fm="list2"]').addEventListener("click", back);
+    vFM.querySelector('[data-fm="again"]').addEventListener("click", fmStart);
+  }
+  const FM_TRAPS = [
+    ["Холод ≠ жара", "Холод замедляет фермент обратимо — нагрей, и он снова работает. Нагрев до 60–70 °C вызывает денатурацию — необратимо."],
+    ["Фермент не расходуется и не смещает равновесие", "Фермент только снижает энергию активации. Тепловой эффект и положение равновесия остаются прежними."],
+    ["У каждого фермента свой оптимум pH", "Пепсин ≈ 2 (желудок), амилаза слюны ≈ 7, трипсин ≈ 8 (тонкая кишка). «Все ферменты любят нейтральную среду» — ловушка."],
+    ["Конкурентный — в активный центр, неконкурентный — в другой участок", "Конкурентный ингибитор вытесняется избытком субстрата, неконкурентный — нет."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -2869,7 +3361,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -4509,6 +5001,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "klteor") go({ subject: "bio", module: "kl-teor" }, { noScroll: true });
   else if (h === "klvoda") go({ subject: "bio", module: "kl-voda" }, { noScroll: true });
   else if (h === "belki") go({ subject: "bio", module: "kl-belki" }, { noScroll: true });
+  else if (h === "ferm") go({ subject: "bio", module: "kl-ferm" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
