@@ -1257,6 +1257,55 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .nk-tin { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
 .nk-tin input { padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); font: 700 16px var(--font-body); min-width: 0; }
 .nk-task .fb { margin: 0; }
+/* ── строение клетки ── */
+.og-svg { touch-action: manipulation; }
+.og-bg { fill: transparent; }
+.og-o { cursor: pointer; transition: opacity .3s; }
+.og-svg.has-sel .og-o:not(.sel) { opacity: .4; } .og-svg.has-sel .sel .og-o { opacity: 1; }
+.og-o.sel { filter: drop-shadow(0 0 3px #ffb000) drop-shadow(0 0 1px #ffb000); }
+.og-hit { fill: transparent; } .og-hitl { fill: none; stroke: transparent; stroke-width: 14; }
+.og-rib { fill: #6b4bb8; } .og-rib.s { fill: #9b7fe0; }
+.og-nm { stroke: #7a5cc4; stroke-width: 1.6; } .og-nm2 { fill: none; stroke: #7a5cc4; stroke-width: 1; opacity: .7; }
+.og-pore { stroke: #f4ecff; stroke-width: 2.2; }
+.og-chr { fill: none; stroke: #9b7fe0; stroke-width: 1.4; stroke-linecap: round; opacity: .8; }
+.og-ndl { fill: #6b4bb8; stroke: #4b2a99; stroke-width: 1; }
+.og-mm { stroke: #c4532e; stroke-width: 1.4; } .og-mm2 { fill: #ffe9df; stroke: #c4532e; stroke-width: .8; }
+.og-cris { stroke: #c4532e; stroke-width: 2; stroke-linecap: round; }
+.og-dna { fill: none; stroke: #7a5cc4; stroke-width: .8; }
+.og-cm { stroke: #3c7f22; stroke-width: 1.4; } .og-cm2 { fill: #e9f8dc; stroke: #3c7f22; stroke-width: .7; }
+.og-thy { fill: #3c9a2a; stroke: #2a6a1a; stroke-width: .4; } .og-lam { stroke: #3c9a2a; stroke-width: .9; }
+.og-er { fill: none; stroke: #7fb2ff; stroke-width: 4.5; stroke-linecap: round; opacity: .85; }
+.og-gc { fill: none; stroke: #e89a3a; stroke-width: 4; stroke-linecap: round; } .og-gv { fill: #ffd08a; stroke: #e89a3a; stroke-width: 1; }
+.og-lys { stroke: #c79400; stroke-width: 1; } .og-enz { fill: #c94b1a; }
+.og-vac { stroke: #6aa2d8; stroke-width: 1.4; }
+.og-cen { fill: #b0d8c0; stroke: #2f8a5b; stroke-width: 1; } .og-cl { stroke: #2f8a5b; stroke-width: .8; }
+.og-gly { fill: #8a6a4a; }
+.og-cw { fill: none; stroke-width: 7; } .og-cw.pl { stroke: #8ab65a; fill: #f2f9e8; } .og-cw.fu { stroke: #b08a5a; fill: #faf4ea; } .og-cw.ba { stroke: #b07a3a; }
+.og-pm { stroke-width: 2.2; } .og-pm.pl { fill: #f7fcef; stroke: #4a8a2a; } .og-pm.an { fill: #fff3f5; stroke: #d8708d; stroke-width: 3; } .og-pm.fu { fill: #fffaf2; stroke: #9a7040; } .og-pm.ba { fill: #fff9ec; stroke: #c8963c; }
+.og-cap { fill: rgba(170, 210, 255, .25); stroke: #7fb2ff; stroke-width: 1.5; stroke-dasharray: 4 3; }
+.og-fla { fill: none; stroke: #b07a3a; stroke-width: 2.4; stroke-linecap: round; }
+.og-nd { fill: none; stroke: #6b4bb8; stroke-width: 2.2; stroke-linecap: round; }
+.og-pla { fill: none; stroke: #2fae66; stroke-width: 2; }
+.og-tag rect { fill: rgba(23, 33, 58, .82); } .og-tag text { font: 700 8px var(--font-body); fill: #fff; text-anchor: middle; pointer-events: none; } .og-tag { pointer-events: none; }
+.og-card { display: grid; gap: 6px; padding: 10px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.og-ch { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .og-ch b { font-size: 17px; }
+.og-mb { font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.og-mb.m2 { background: #efe6ff; color: #6b45c2; } .og-mb.m1 { background: #e3f0ff; color: #2f62c9; } .og-mb.m0 { background: #e2f7e9; color: #24804e; }
+.og-card p { margin: 0; font-size: 13.5px; line-height: 1.4; } .og-card p span { display: block; font-size: 11px; color: var(--ink-2); text-transform: uppercase; letter-spacing: .05em; }
+.og-hint { margin: 0; color: var(--ink-2); }
+.og-sort { padding: 14px 12px; display: grid; gap: 12px; }
+.og-cur { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: #fff; border: 1.5px dashed #C2185B; animation: fmFloat 2.4s ease-in-out infinite; }
+.og-cur .og-ico { width: 48px; height: 48px; } .og-cur b { font-size: 17px; color: #17213A; } .og-cur small { margin-left: auto; color: #56627D; } .og-cur.done { border-style: solid; border-color: #24804E; animation: none; }
+.og-bins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.og-bin { min-height: 118px; padding: 8px 6px; border-radius: 14px; border: 1.5px solid #D6DDEA; background: #fff; cursor: pointer; display: grid; align-content: start; gap: 6px; text-align: center; }
+.og-bin b { font-size: 12.5px; color: #17213A; } .og-bin div { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; }
+.og-bin .og-ico { width: 30px; height: 30px; } .og-bin:active { background: #FBE4EE; } .og-bin.bad { animation: fmShake .4s; border-color: #C0392B; }
+.og-ico { pointer-events: none; }
+.og-q { display: grid; gap: 4px; padding: 10px 12px; border-radius: 14px; background: var(--accent-soft); } .og-q span { font-size: 12px; color: var(--ink-2); } .og-q b { font-size: 15px; line-height: 1.35; }
+.og-cmp { padding: 8px 6px; } .og-cmp table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 10.5px; line-height: 1.2; color: #17213A; } .og-cmp th:first-child { width: 24%; }
+.og-cmp th { font-size: 11px; padding: 6px 3px; color: #56627D; } .og-cmp td { padding: 5px 2px; overflow-wrap: anywhere; hyphens: auto; border-top: 1px solid #E4E8F0; text-align: center; }
+.og-cmp td:first-child { text-align: left; font-weight: 700; } .og-cmp td.no { color: #B23B3B; } .og-cmp tr { cursor: pointer; } .og-cmp tr.on td { background: #FBE4EE; }
+.og-cx { margin: 10px 4px 2px; font-size: 13px; line-height: 1.4; color: #17213A; } .og-cx.muted { color: #56627D; }
 </style>
 </head>
 <body class="locked">
@@ -1308,7 +1357,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.6</span>
+      <span class="ver" id="ver">v4.7</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1378,12 +1427,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-kl-ferm" hidden></section>
   <section class="view" id="v-kl-ugl" hidden></section>
   <section class="view" id="v-kl-nk" hidden></section>
+  <section class="view" id="v-kl-org" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.6. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.7. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1414,7 +1464,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ: лаборатория", "desc": "Собери нуклеотид, дострой цепь, покрути спираль, реши задачу на Чаргаффа и разряди АТФ.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: органоиды", "desc": "Животная, растительная, грибная и бактериальная клетка — с приближением.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: лаборатория", "desc": "Четыре клетки с приближением, сортировка по мембранам, поиск органоида по функции, сравнение клеток.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-mem", "title": "Мембрана и транспорт веществ", "desc": "Диффузия, активный транспорт, эндо- и экзоцитоз.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-osm", "title": "Осмос, тургор, плазмолиз", "desc": "Клетка в растворах разной концентрации.", "st": "скоро"},
@@ -1933,6 +1983,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showFM = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ferm";
     const showUL = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ugl";
     const showNK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-nk";
+    const showOG = state.subject === "bio" && state.tab === "learn" && state.module === "kl-org";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1961,7 +2012,9 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (!showUL) cancelAnimationFrame(UL.raf);
     vNK.hidden = !showNK;
     if (!showNK) cancelAnimationFrame(DNL.raf);
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || showUL || showNK || state.tab === "traps";
+    vOG.hidden = !showOG;
+    if (!showOG) cancelAnimationFrame(OGL.raf);
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || showUL || showNK || showOG || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1998,6 +2051,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showFM) fmRender();
       else if (showUL) ulRender();
       else if (showNK) nkRender();
+      else if (showOG) ogRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -4026,6 +4080,320 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Чаргафф: делим остаток пополам", "Если A = 20%, то T = 20%, а G и C делят оставшиеся 60% поровну — по 30%."],
   ];
 
+  /* ══ БИОЛОГИЯ 2.7 · СТРОЕНИЕ КЛЕТКИ: ЛАБОРАТОРИЯ ══ */
+  const vOG = document.getElementById("v-kl-org");
+  const OGK = "hb.bio27.v1";
+  let ogs = {};
+  try { ogs = JSON.parse(localStorage.getItem(OGK) || "{}") || {}; } catch (e) { ogs = {}; }
+  function ogsave() { try { localStorage.setItem(OGK, JSON.stringify(ogs)); } catch (e) {} }
+  const OG_STEPS = [
+    ["Клетка", "Тапни по любой структуре — клетка приблизится, и ты увидишь, как она устроена внутри. Переключай клетки: <b>растительная, животная, грибная, бактериальная</b>. У бактерий (прокариот) нет ядра и мембранных органоидов — ДНК лежит прямо в цитоплазме (нуклеоид)."],
+    ["Мембраны", "Органоиды делят по числу мембран. <b>Двумембранные</b>: ядро, митохондрии, пластиды — у митохондрий и пластид есть своя ДНК и рибосомы. <b>Одномембранные</b>: ЭПС, аппарат Гольджи, лизосомы, вакуоли. <b>Немембранные</b>: рибосомы, клеточный центр, микротрубочки."],
+    ["Найди", "Читай функцию и тапни по органоиду, который её выполняет. Это главный навык для заданий ЕГЭ на соответствие «органоид — функция»."],
+    ["Сравни", "Растения, животные и грибы — <b>эукариоты</b>: у них есть ядро и мембранные органоиды. Бактерии — <b>прокариоты</b>: ядра нет, ДНК кольцевая, из органоидов — только мелкие рибосомы. Тапни по строке, чтобы увидеть пояснение."],
+  ];
+  const OG = {
+    nuc: { n: "Ядро", m: 2, s: "Ядерная оболочка из двух мембран с порами; внутри хроматин (ДНК + белки) и ядрышко.", f: "Хранит наследственную информацию и управляет жизнедеятельностью клетки.", w: "растения, животные, грибы; у бактерий нет" },
+    ndl: { n: "Ядрышко", m: 0, s: "Плотный участок внутри ядра, мембраной не окружён.", f: "Синтез рРНК и сборка субъединиц рибосом.", w: "в ядре эукариот" },
+    mit: { n: "Митохондрия", m: 2, s: "Наружная мембрана гладкая, внутренняя образует складки — кристы. Внутри матрикс, своя кольцевая ДНК и рибосомы.", f: "Клеточное дыхание и синтез АТФ — «энергетическая станция» клетки.", w: "растения, животные, грибы" },
+    chl: { n: "Хлоропласт", m: 2, s: "Две мембраны; внутри строма и граны — стопки тилакоидов с хлорофиллом. Своя ДНК и рибосомы.", f: "Фотосинтез.", w: "растения" },
+    er: { n: "ЭПС", m: 1, s: "Сеть каналов и полостей. Шероховатая ЭПС покрыта рибосомами, гладкая — без них.", f: "Шероховатая — синтез белков, гладкая — синтез липидов и углеводов; транспорт веществ по клетке.", w: "все эукариоты" },
+    gol: { n: "Аппарат Гольджи", m: 1, s: "Стопка плоских цистерн и отшнуровывающихся пузырьков.", f: "Накопление, «упаковка» и сортировка веществ, выведение секретов, образование лизосом.", w: "все эукариоты" },
+    lys: { n: "Лизосома", m: 1, s: "Пузырёк с гидролитическими ферментами.", f: "Внутриклеточное переваривание, разрушение старых структур.", w: "главным образом животные клетки" },
+    vac: { n: "Вакуоль", m: 1, s: "Полость с клеточным соком, окружённая мембраной (тонопластом).", f: "Поддерживает тургор, запасает воду и вещества, накапливает отходы.", w: "крупная центральная — у растений, мелкие — у грибов" },
+    rib: { n: "Рибосомы", m: 0, s: "Две субъединицы (большая и малая) из рРНК и белков.", f: "Синтез белка.", w: "все клетки, в том числе бактерии (у них мельче)" },
+    cen: { n: "Клеточный центр", m: 0, s: "Две центриоли из микротрубочек, расположенные под прямым углом.", f: "Участвует в делении клетки — образует веретено деления.", w: "животные; у высших растений нет" },
+    pm: { n: "Клеточная мембрана", m: -1, s: "Двойной слой липидов с белками; у животных снаружи гликокаликс.", f: "Барьер, избирательный транспорт веществ, связь с окружением.", w: "все клетки" },
+    cw: { n: "Клеточная стенка", m: -1, s: "Жёсткая оболочка поверх мембраны: у растений — из целлюлозы, у грибов — из хитина, у бактерий — из муреина.", f: "Опора, форма и защита клетки.", w: "растения, грибы, бактерии; у животных нет" },
+    nd: { n: "Нуклеоид", m: 0, s: "Участок цитоплазмы с одной кольцевой молекулой ДНК, мембраной не отделён.", f: "Хранит наследственную информацию бактерии.", w: "прокариоты" },
+    pla: { n: "Плазмиды", m: 0, s: "Небольшие кольцевые молекулы ДНК вне нуклеоида.", f: "Дополнительные гены, например устойчивости к антибиотикам.", w: "бактерии" },
+    fla: { n: "Жгутик", m: 0, s: "Белковая нить, вращается как пропеллер.", f: "Движение.", w: "многие бактерии" },
+    cap: { n: "Капсула", m: 0, s: "Слизистый слой поверх клеточной стенки.", f: "Защита от высыхания и от иммунитета хозяина.", w: "некоторые бактерии" },
+    gly: { n: "Включения гликогена", m: 0, s: "Гранулы запасного вещества — это не органоид, а включение.", f: "Запас углеводов.", w: "грибы, животные" },
+  };
+  const OGL = { step: 0, cell: "an", sel: null, vb: [0, 0, 340, 260], raf: 0, labels: 0, sort: null, game: null, row: -1 };
+  const OG_W = 340, OG_H = 260;
+  const ogE = (x) => (x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3));
+  const ogL = (a, b, t) => a + (b - a) * t;
+  const OG_DEFS = `<defs>
+    <radialGradient id="ogg-nuc" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#f4ecff"/><stop offset="1" stop-color="#c7b2f0"/></radialGradient>
+    <radialGradient id="ogg-mit" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#ffe2d6"/><stop offset="1" stop-color="#f19473"/></radialGradient>
+    <radialGradient id="ogg-chl" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#d9f5c4"/><stop offset="1" stop-color="#5fae3c"/></radialGradient>
+    <radialGradient id="ogg-vac" cx="40%" cy="35%" r="80%"><stop offset="0" stop-color="#f3faff"/><stop offset="1" stop-color="#bfe0fb"/></radialGradient>
+    <radialGradient id="ogg-lys" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff5c8"/><stop offset="1" stop-color="#e8b830"/></radialGradient>
+    <filter id="og-sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#1a1030" flood-opacity=".2"/></filter></defs>`;
+  /* ── рисовальщики органоидов ── */
+  const ogRib = (x, y) => `<circle cx="${x}" cy="${y}" r="2.1" class="og-rib"/><circle cx="${(x + 1.6).toFixed(1)}" cy="${(y - 1.2).toFixed(1)}" r="1.4" class="og-rib s"/>`;
+  function ogNuc(x, y, r) {
+    let pores = "";
+    for (let k = 0; k < 10; k++) { const a = k * .628 + .2; pores += `<line x1="${(x + (r - 5) * Math.cos(a)).toFixed(1)}" y1="${(y + (r - 5) * Math.sin(a)).toFixed(1)}" x2="${(x + (r + 1) * Math.cos(a)).toFixed(1)}" y2="${(y + (r + 1) * Math.sin(a)).toFixed(1)}" class="og-pore"/>`; }
+    const chr = [[-.5, -.3], [.2, .45], [.45, -.35], [-.35, .4]].map(([a, b]) => `<path d="M${(x + a * r).toFixed(1)},${(y + b * r).toFixed(1)} q${(r * .12).toFixed(1)},${(-r * .14).toFixed(1)} ${(r * .24).toFixed(1)},0 t${(r * .24).toFixed(1)},0" class="og-chr"/>`).join("");
+    return `<g data-o="nuc" class="og-o"><circle cx="${x}" cy="${y}" r="${r}" fill="url(#ogg-nuc)" class="og-nm" filter="url(#og-sh)"/><circle cx="${x}" cy="${y}" r="${r - 4}" class="og-nm2"/>${pores}${chr}
+      <g data-o="ndl" class="og-o"><circle cx="${(x + r * .12).toFixed(1)}" cy="${(y - r * .05).toFixed(1)}" r="${(r * .3).toFixed(1)}" class="og-ndl"/></g></g>`;
+  }
+  function ogMit(x, y, L, rot) {
+    const rx = L / 2, ry = L * .27; let cr = "";
+    for (let i = 0; i < 6; i++) { const cx = -rx * .7 + i * rx * .28, up = i % 2 === 0; cr += `<path d="M${cx.toFixed(1)},${(up ? -ry + 2.5 : ry - 2.5).toFixed(1)} L${cx.toFixed(1)},${(up ? ry * .25 : -ry * .25).toFixed(1)}" class="og-cris"/>`; }
+    return `<g data-o="mit" class="og-o" transform="translate(${x} ${y}) rotate(${rot})"><ellipse rx="${rx}" ry="${ry}" fill="url(#ogg-mit)" class="og-mm" filter="url(#og-sh)"/><ellipse rx="${rx - 2.5}" ry="${ry - 2.5}" class="og-mm2"/>${cr}<circle cx="${(rx * .45).toFixed(1)}" cy="2" r="2" class="og-dna"/></g>`;
+  }
+  function ogChl(x, y, L, rot) {
+    const rx = L / 2, ry = L * .3; let gr = "";
+    for (let i = 0; i < 4; i++) { const gx = -rx * .62 + i * rx * .42; for (let j = 0; j < 4; j++) gr += `<rect x="${(gx - 4).toFixed(1)}" y="${(-6 + j * 3.2).toFixed(1)}" width="8" height="2.6" rx="1.2" class="og-thy"/>`; if (i < 3) gr += `<line x1="${(gx + 4).toFixed(1)}" y1="${(i % 2 ? 2 : -2).toFixed(1)}" x2="${(gx + rx * .42 - 4).toFixed(1)}" y2="${(i % 2 ? -2 : 2).toFixed(1)}" class="og-lam"/>`; }
+    return `<g data-o="chl" class="og-o" transform="translate(${x} ${y}) rotate(${rot})"><ellipse rx="${rx}" ry="${ry}" fill="url(#ogg-chl)" class="og-cm" filter="url(#og-sh)"/><ellipse rx="${rx - 2.2}" ry="${ry - 2.2}" class="og-cm2"/>${gr}</g>`;
+  }
+  function ogEr(cx, cy, r0, a0, a1, n) {
+    let s = "", rb = "";
+    for (let i = 0; i < n; i++) {
+      const r = r0 + i * 8, p = (a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)], [x0, y0] = p(a0), [x1, y1] = p(a1);
+      s += `<path d="M${x0.toFixed(1)},${y0.toFixed(1)} A${r},${r} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)}" class="og-er"/>`;
+      if (i < n - 1) for (let a = a0 + .08; a < a1; a += .16) { const [rx, ry] = [cx + (r + 4) * Math.cos(a), cy + (r + 4) * Math.sin(a)]; rb += ogRib(+rx.toFixed(1), +ry.toFixed(1)); }
+    }
+    return `<g data-o="er" class="og-o">${s}${rb}</g>`;
+  }
+  function ogGol(x, y, rot, k) {
+    k = k || 1; let s = "";
+    for (let i = 0; i < 4; i++) { const w = (30 - i * 4) * k, yy = (i * 6 - 9) * k; s += `<path d="M${-w / 2},${yy} Q0,${yy - 7 * k} ${w / 2},${yy}" class="og-gc"/>`; }
+    s += [[-17, -12], [18, -10], [-14, 14], [16, 15]].map(([a, b], i) => `<circle cx="${a * k}" cy="${b * k}" r="${(i % 2 ? 2.6 : 3.2) * k}" class="og-gv"/>`).join("");
+    return `<g data-o="gol" class="og-o" transform="translate(${x} ${y}) rotate(${rot})">${s}</g>`;
+  }
+  const ogLys = (x, y, r) => `<g data-o="lys" class="og-o"><circle cx="${x}" cy="${y}" r="${r}" fill="url(#ogg-lys)" class="og-lys" filter="url(#og-sh)"/><circle cx="${x - 2}" cy="${y - 1}" r="1.2" class="og-enz"/><circle cx="${x + 2.5}" cy="${y + 1.5}" r="1.2" class="og-enz"/><circle cx="${x + .5}" cy="${y - 3}" r="1" class="og-enz"/></g>`;
+  const ogVac = (x, y, w, h, rr) => `<g data-o="vac" class="og-o"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rr}" fill="url(#ogg-vac)" class="og-vac"/></g>`;
+  function ogCen(x, y) {
+    const c = (dx, dy, vert) => { let s = `<rect x="${vert ? dx - 3 : dx - 8}" y="${vert ? dy - 8 : dy - 3}" width="${vert ? 6 : 16}" height="${vert ? 16 : 6}" rx="2" class="og-cen"/>`; for (let i = 1; i < 4; i++) s += vert ? `<line x1="${dx - 3}" y1="${dy - 8 + i * 4}" x2="${dx + 3}" y2="${dy - 8 + i * 4}" class="og-cl"/>` : `<line x1="${dx - 8 + i * 4}" y1="${dy - 3}" x2="${dx - 8 + i * 4}" y2="${dy + 3}" class="og-cl"/>`; return s; };
+    return `<g data-o="cen" class="og-o"><circle cx="${x + 4}" cy="${y + 2}" r="15" class="og-hit"/>${c(x, y, 0)}${c(x + 10, y + 7, 1)}</g>`;
+  }
+  const ogRibs = (pts) => `<g data-o="rib" class="og-o">${pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" class="og-hit"/>`).join("")}${pts.map(([x, y]) => ogRib(x, y)).join("")}</g>`;
+  const ogGly = (pts) => `<g data-o="gly" class="og-o">${pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="6" class="og-hit"/><circle cx="${x}" cy="${y}" r="2.4" class="og-gly"/><circle cx="${x + 4}" cy="${y + 2}" r="1.8" class="og-gly"/><circle cx="${x - 3}" cy="${y + 3}" r="1.6" class="og-gly"/>`).join("")}</g>`;
+  /* ── клетки: силуэт + органоиды; I — где приближать каждый органоид ── */
+  const OG_CELLS = {
+    pl: { n: "Растительная", I: { cw: [30, 40, 30], pm: [40, 120, 30], vac: [205, 130, 70], nuc: [70, 80, 34], ndl: [72, 78, 14], chl: [176, 214, 26], mit: [118, 46, 24], gol: [100, 132, 22], er: [74, 124, 26], rib: [255, 44, 18] },
+      draw: () => `<g data-o="cw" class="og-o"><rect x="16" y="18" width="308" height="224" rx="14" class="og-cw pl"/></g><g data-o="pm" class="og-o"><rect x="25" y="27" width="290" height="206" rx="10" class="og-pm pl"/></g>
+        ${ogVac(124, 60, 168, 142, 44)}${ogNuc(70, 80, 30)}${ogEr(70, 80, 40, .9, 2.1, 3)}${ogGol(100, 134, 90, .75)}
+        ${[[58, 160, 90], [100, 214, 0], [176, 214, 0], [252, 214, 0], [300, 128, 90], [200, 44, 0]].map(([x, y, r]) => ogChl(x, y, 40, r)).join("")}
+        ${ogMit(118, 46, 30, 10)}${ogMit(298, 52, 28, 60)}${ogMit(46, 212, 26, -30)}${ogRibs([[255, 44], [270, 38], [150, 40], [44, 120], [92, 186], [300, 180], [218, 225]])}` },
+    an: { n: "Животная", I: { pm: [36, 130, 30], nuc: [140, 128, 46], ndl: [145, 126, 16], er: [196, 130, 34], mit: [80, 80, 26], gol: [252, 108, 24], lys: [214, 58, 14], cen: [208, 206, 16], rib: [100, 150, 18] },
+      draw: () => `<g data-o="pm" class="og-o"><path d="M30,130 C30,50 110,18 180,22 C260,26 318,70 314,138 C310,205 250,244 168,240 C90,236 30,205 30,130 Z" class="og-pm an"/></g>
+        ${ogEr(140, 128, 50, -1.1, 1.1, 3)}${ogNuc(140, 128, 40)}${ogMit(80, 80, 44, -25)}${ogMit(268, 196, 40, 20)}${ogMit(92, 196, 40, 35)}
+        ${ogGol(252, 108, -10, 1)}${ogLys(214, 58, 9)}${ogLys(286, 150, 8)}${ogLys(60, 140, 7)}${ogCen(206, 204)}
+        ${ogRibs([[100, 150], [118, 62], [178, 52], [240, 70], [290, 100], [232, 160], [160, 196], [130, 222], [60, 110], [236, 226]])}` },
+    fu: { n: "Грибная", I: { cw: [30, 130, 30], pm: [40, 130, 30], nuc: [120, 130, 36], ndl: [122, 128, 14], vac: [252, 120, 30], mit: [62, 104, 24], er: [160, 130, 30], gol: [190, 92, 22], gly: [74, 166, 18], rib: [210, 150, 18] },
+      draw: () => `<g data-o="cw" class="og-o"><rect x="10" y="54" width="320" height="152" rx="64" class="og-cw fu"/></g><g data-o="pm" class="og-o"><rect x="18" y="62" width="304" height="136" rx="58" class="og-pm fu"/></g>
+        ${ogEr(120, 130, 40, -1, 1, 2)}${ogNuc(120, 130, 30)}${ogVac(226, 92, 52, 40, 18)}${ogVac(258, 146, 44, 32, 15)}${ogMit(62, 104, 36, 20)}${ogMit(196, 172, 36, -15)}${ogMit(296, 110, 30, 80)}
+        ${ogGol(190, 92, 0, .7)}${ogGly([[74, 166], [220, 132], [150, 180]])}${ogRibs([[210, 150], [96, 90], [160, 84], [290, 160], [50, 140]])}` },
+    ba: { n: "Бактериальная", I: { cap: [44, 130, 30], cw: [56, 130, 26], pm: [64, 130, 26], nd: [150, 128, 40], pla: [228, 128, 22], rib: [100, 150, 18], fla: [306, 126, 24] },
+      draw: () => `<g data-o="fla" class="og-o"><path d="M282,130 C292,118 300,142 310,128 S326,116 334,124" class="og-fla"/><path d="M282,130 C292,118 300,142 310,128 S326,116 334,124" class="og-hitl"/></g>
+        <g data-o="cap" class="og-o"><rect x="34" y="68" width="252" height="124" rx="62" class="og-cap"/></g><g data-o="cw" class="og-o"><rect x="46" y="80" width="228" height="100" rx="50" class="og-cw ba"/></g><g data-o="pm" class="og-o"><rect x="54" y="88" width="212" height="84" rx="42" class="og-pm ba"/></g>
+        <g data-o="nd" class="og-o"><circle cx="150" cy="128" r="30" class="og-hit"/><path d="M128,118 C120,100 160,104 156,118 C152,134 178,128 172,142 C166,158 136,152 140,138 C144,124 118,140 124,128 C128,120 140,116 150,122" class="og-nd"/></g>
+        <g data-o="pla" class="og-o"><circle cx="226" cy="114" r="10" class="og-hit"/><circle cx="226" cy="114" r="6" class="og-pla"/><circle cx="236" cy="146" r="9" class="og-hit"/><circle cx="236" cy="146" r="5" class="og-pla"/></g>
+        ${ogRibs([[100, 150], [92, 112], [196, 106], [204, 158], [116, 160], [182, 160], [78, 132], [254, 128]])}` },
+  };
+  const OG_LAB = { pl: ["cw", "vac", "nuc", "chl", "mit", "gol"], an: ["pm", "nuc", "er", "mit", "gol", "lys", "cen"], fu: ["cw", "nuc", "vac", "mit", "gly"], ba: ["cap", "cw", "nd", "pla", "rib", "fla"] };
+  function ogCellSvg(mode) {
+    const C = OG_CELLS[OGL.cell], vb = OGL.vb.map((v) => v.toFixed(1)).join(" ");
+    let lab = "";
+    if (OGL.labels && mode === "x") lab = OG_LAB[OGL.cell].map((k) => { const [x0, y] = C.I[k], w = OG[k].n.length * 5.8 + 8, x = Math.min(Math.max(x0, w / 2 + 3), OG_W - w / 2 - 3); return `<g class="og-tag"><rect x="${(x - w / 2).toFixed(1)}" y="${y - 7}" width="${w.toFixed(1)}" height="13" rx="6.5"/><text x="${x.toFixed(1)}" y="${y + 3}">${OG[k].n}</text></g>`; }).join("");
+    return `<svg class="bk-svg og-svg${OGL.sel ? " has-sel" : ""}" viewBox="${vb}" data-sel="${OGL.sel || ""}">${OG_DEFS}<rect x="-400" y="-400" width="1200" height="1200" class="og-bg"/>${C.draw()}${lab}</svg>`;
+  }
+  function ogZoom(k) {
+    const C = OG_CELLS[OGL.cell], from = OGL.vb.slice();
+    let to = [0, 0, OG_W, OG_H];
+    if (k && C.I[k]) { const [x, y, r] = C.I[k], w = Math.max(r * 3.4, 96), h = w * OG_H / OG_W; to = [x - w / 2, y - h / 2, w, h]; }
+    const t0 = performance.now();
+    cancelAnimationFrame(OGL.raf);
+    const tick = (now) => { const q = ogE((now - t0) / 550); OGL.vb = from.map((v, i) => ogL(v, to[i], q)); const s = vOG.querySelector(".og-svg"); if (s) s.setAttribute("viewBox", OGL.vb.map((v) => v.toFixed(1)).join(" ")); if (q < 1) OGL.raf = requestAnimationFrame(tick); };
+    OGL.raf = requestAnimationFrame(tick);
+  }
+  function ogCard(k) {
+    const d = OG[k], mem = d.m === 2 ? "двумембранный" : d.m === 1 ? "одномембранный" : d.m === 0 ? "немембранный" : "это сама оболочка клетки";
+    return `<div class="og-card"><div class="og-ch"><b>${d.n}</b><span class="og-mb m${d.m}">${mem}</span></div><p><span>Строение</span>${d.s}</p><p><span>Функция</span>${d.f}</p><p><span>Где есть</span>${d.w}</p></div>`;
+  }
+  /* ── шаг 2: сортировка по мембранам ── */
+  const OG_SORT = ["nuc", "mit", "chl", "er", "gol", "lys", "vac", "rib", "cen"];
+  const ogIcon = (k) => {
+    const g = { nuc: ogNuc(20, 20, 15), mit: ogMit(20, 20, 32, -20), chl: ogChl(20, 20, 32, -20), er: `<g transform="translate(-8 -6)">${ogEr(10, 20, 14, -1, 1, 2)}</g>`, gol: ogGol(20, 20, 0, .8), lys: ogLys(20, 20, 10), vac: ogVac(6, 8, 28, 24, 10), rib: `<g transform="translate(20 20) scale(3) translate(-20 -20)">${ogRib(19, 21)}</g>`, cen: ogCen(15, 17) }[k];
+    return `<svg viewBox="0 0 40 40" class="og-ico" aria-hidden="true">${OG_DEFS}${g}</svg>`;
+  };
+  function ogSortNew() { OGL.sort = { q: sShuf(OG_SORT.slice()), b: { 2: [], 1: [], 0: [] }, err: 0, msg: "" }; }
+  function ogSortHtml() {
+    const S = OGL.sort, k = S.q[0];
+    const bin = (m, t) => `<button type="button" class="og-bin" data-ob="${m}"><b>${t}</b><div>${S.b[m].map((x) => `<span title="${OG[x].n}">${ogIcon(x)}</span>`).join("")}</div></button>`;
+    return `<div class="og-sort">${k ? `<div class="og-cur">${ogIcon(k)}<b>${OG[k].n}</b><small>куда его?</small></div>` : `<div class="og-cur done"><b>Готово! Ошибок: ${S.err}</b></div>`}
+      <div class="og-bins">${bin(2, "2 мембраны")}${bin(1, "1 мембрана")}${bin(0, "без мембран")}</div></div>`;
+  }
+  /* ── шаг 3: найди по функции ── */
+  const OG_FIND = [
+    ["Здесь синтезируется АТФ при клеточном дыхании", "mit"], ["Здесь идёт фотосинтез", "chl", "pl"], ["Хранит наследственную информацию и управляет клеткой", "nuc"],
+    ["Синтезирует белки", "rib"], ["Упаковывает и сортирует вещества, образует лизосомы", "gol"], ["Переваривает частицы внутри клетки", "lys", "an"],
+    ["Поддерживает тургор, запасает клеточный сок", "vac", "pl"], ["Образует веретено деления в животной клетке", "cen", "an"], ["Система каналов: транспорт веществ и синтез липидов", "er"],
+    ["Образует субъединицы рибосом", "ndl"], ["Придаёт растительной клетке прочность — состоит из целлюлозы", "cw", "pl"], ["Избирательно пропускает вещества в клетку", "pm"],
+  ];
+  function ogGameNew() {
+    const qs = sShuf(OG_FIND.slice()).slice(0, 8).map(([t, k, c]) => ({ t, k, c: c || sPick(k === "gol" || k === "er" || k === "mit" || k === "nuc" || k === "ndl" || k === "rib" || k === "pm" ? ["an", "pl"] : ["an"]) }));
+    OGL.game = { qs, i: 0, ok: 0, msg: "", hit: null };
+  }
+  /* ── шаг 4: сравнение ── */
+  const OG_CMP = [
+    ["Ядро", ["есть", "есть", "есть", "нет — нуклеоид"], "У прокариот ДНК лежит в цитоплазме, без ядерной оболочки."],
+    ["Клеточная стенка", ["целлюлоза", "нет", "хитин", "муреин"], "Только у животных клеточной стенки нет — снаружи лишь мембрана и гликокаликс."],
+    ["Пластиды", ["есть", "нет", "нет", "нет"], "Хлоропласты, хромопласты и лейкопласты — только у растений."],
+    ["Митохондрии", ["есть", "есть", "есть", "нет"], "У бактерий дыхание идёт на внутренних складках мембраны."],
+    ["Крупная вакуоль", ["центральная", "нет", "мелкие", "нет"], "У животных бывают мелкие пищеварительные и сократительные вакуоли."],
+    ["Клеточный центр", ["нет*", "есть", "нет*", "нет"], "* У высших растений центриолей нет; у грибов — как правило, тоже. Веретено деления образуется без них."],
+    ["Запасной углевод", ["крахмал", "гликоген", "гликоген", "разные включения"], "Крахмал — растения, гликоген — животные и грибы. Частая ловушка ЕГЭ!"],
+    ["Рибосомы", ["крупные", "крупные", "крупные", "мелкие"], "У прокариот рибосомы мельче. Такие же мелкие — в митохондриях и хлоропластах."],
+    ["ДНК", ["линейная, в хромосомах", "линейная, в хромосомах", "линейная, в хромосомах", "кольцевая"], "У бактерий одна кольцевая ДНК плюс плазмиды."],
+    ["Питание", ["автотрофы", "гетеротрофы", "гетеротрофы, всасывают", "разное"], "Грибы, как животные, гетеротрофы, но не заглатывают пищу, а всасывают её."],
+  ];
+  function ogCmpHtml() {
+    const H = ["Раст.", "Жив.", "Гриб.", "Бакт."];
+    return `<div class="og-cmp"><table><tr><th></th>${H.map((h, i) => `<th class="c${i}">${h}</th>`).join("")}</tr>${OG_CMP.map(([t, v], r) => `<tr class="${OGL.row === r ? "on" : ""}" data-or="${r}"><td>${t}</td>${v.map((x, i) => `<td class="c${i}${/^нет/.test(x) ? " no" : ""}">${x}</td>`).join("")}</tr>`).join("")}</table>${OGL.row >= 0 ? `<p class="og-cx">💡 ${OG_CMP[OGL.row][2]}</p>` : `<p class="og-cx muted">Тапни по строке — появится пояснение.</p>`}</div>`;
+  }
+  /* ── сборка ── */
+  function ogDraw() {
+    const box = vOG.querySelector(".og-stage"); if (!box) return;
+    const s = OGL.step;
+    if (s === 0 || s === 2) {
+      box.innerHTML = ogCellSvg(s === 0 ? "x" : "g");
+      const svg = box.querySelector("svg");
+      if (OGL.sel) svg.querySelectorAll(`[data-o="${OGL.sel}"]`).forEach((n) => n.classList.add("sel"));
+      svg.addEventListener("click", (ev) => { const t = ev.target.closest("[data-o]"); if (!t) { if (s === 0 && OGL.sel) { OGL.sel = null; ogZoom(null); ogDraw(); ogStat(); } return; } s === 0 ? ogPick(t.dataset.o) : ogGuess(t.dataset.o); });
+    } else if (s === 1) { box.innerHTML = ogSortHtml(); box.querySelectorAll("[data-ob]").forEach((b) => b.addEventListener("click", () => ogPut(+b.dataset.ob))); }
+    else { box.innerHTML = ogCmpHtml(); box.querySelectorAll("[data-or]").forEach((r) => r.addEventListener("click", () => { OGL.row = OGL.row === +r.dataset.or ? -1 : +r.dataset.or; ogDraw(); })); }
+  }
+  function ogPick(k) {
+    if (OGL.sel === k) { OGL.sel = null; ogZoom(null); }
+    else { OGL.sel = k; ogZoom(k); haptic("success"); }
+    ogDraw(); ogStat(); ogCtlRefresh();
+  }
+  function ogPut(m) {
+    const S = OGL.sort, k = S.q[0]; if (!k) return;
+    if (OG[k].m === m) { S.b[m].push(k); S.q.shift(); S.msg = `<b>${OG[k].n}</b> — ${m === 2 ? "двумембранный" : m === 1 ? "одномембранный" : "немембранный"}. ${OG[k].s}`; haptic("success"); }
+    else { S.err++; S.msg = `Нет: у органоида «${OG[k].n}» ${OG[k].m === 2 ? "две мембраны" : OG[k].m === 1 ? "одна мембрана" : "мембраны нет"}.`; haptic("error"); const el = vOG.querySelector(`[data-ob="${m}"]`); if (el) { el.classList.remove("bad"); void el.offsetWidth; el.classList.add("bad"); } }
+    ogDraw(); ogStat();
+  }
+  function ogGuess(k) {
+    const G = OGL.game, q = G && G.qs[G.i]; if (!q || G.hit) return;
+    const ok = k === q.k || (q.k === "nuc" && k === "ndl");
+    if (ok) { G.ok++; G.hit = "ok"; G.msg = `Верно — <b>${OG[q.k].n}</b>. ${OG[q.k].f}`; haptic("success"); OGL.sel = q.k; }
+    else { G.hit = "no"; G.msg = `Это <b>${OG[k].n}</b> — ${OG[k].f.charAt(0).toLowerCase() + OG[k].f.slice(1)} А нужна <b>${OG[q.k].n.toLowerCase()}</b>.`; haptic("error"); OGL.sel = q.k; }
+    ogDraw(); ogStat(); ogCtlRefresh();
+  }
+  function ogStat() {
+    const el = vOG.querySelector(".og-stat"); if (!el) return;
+    const s = OGL.step;
+    if (s === 0) el.innerHTML = OGL.sel ? ogCard(OGL.sel) : `<p class="og-hint">👆 Тапни по органоиду, чтобы приблизить его. Тап по пустому месту — отдалить.</p>`;
+    else if (s === 1) el.innerHTML = OGL.sort.msg ? `<p>${OGL.sort.msg}</p>` : `<p class="og-hint">Отправь органоид в нужную корзину.</p>`;
+    else if (s === 2) { const G = OGL.game, q = G.qs[G.i]; el.innerHTML = q ? `<div class="og-q"><span>${G.i + 1} из ${G.qs.length} · верно: ${G.ok}</span><b>${q.t}</b></div>${G.msg ? `<p class="fb ${G.hit === "ok" ? "good" : "wrong"}">${G.msg}</p>` : ""}` : `<div class="og-q"><b>Готово: ${G.ok} из ${G.qs.length}</b></div>`; }
+    else el.innerHTML = "";
+  }
+  function ogCtl() {
+    const s = OGL.step, cells = (dis) => `<div class="fm-chips">${Object.entries(OG_CELLS).map(([k, c]) => `<button type="button" class="${OGL.cell === k ? "on" : ""}" data-oc="${k}"${dis ? " disabled" : ""}>${c.n}</button>`).join("")}</div>`;
+    if (s === 0) return `${cells(0)}<div class="bk-btns"><button type="button" class="btn" data-olab>${OGL.labels ? "Скрыть подписи" : "Показать подписи"}</button>${OGL.sel ? `<button type="button" class="btn" data-ozo>Отдалить</button>` : ""}</div>`;
+    if (s === 1) return `<div class="bk-btns"><button type="button" class="btn" data-osn>Заново</button></div>`;
+    if (s === 2) { const G = OGL.game; return G.i < G.qs.length ? `<div class="bk-btns">${G.hit ? `<button type="button" class="btn primary" data-ogn>${G.i + 1 < G.qs.length ? "Дальше →" : "Итог"}</button>` : ""}</div>` : `<div class="bk-btns"><button type="button" class="btn primary" data-ogr>Ещё раунд</button></div>`; }
+    return "";
+  }
+  function ogCtlRefresh() { const c = vOG.querySelector(".og-ctl"); if (c) { c.innerHTML = ogCtl(); ogBindCtl(); } }
+  function ogBindCtl() {
+    const qa = (sel) => vOG.querySelectorAll(sel), q1 = (sel) => vOG.querySelector(sel);
+    qa("[data-oc]").forEach((b) => b.addEventListener("click", () => { OGL.cell = b.dataset.oc; OGL.sel = null; cancelAnimationFrame(OGL.raf); OGL.vb = [0, 0, OG_W, OG_H]; ogDraw(); ogStat(); ogCtlRefresh(); }));
+    if (q1("[data-olab]")) q1("[data-olab]").addEventListener("click", () => { OGL.labels = OGL.labels ? 0 : 1; ogDraw(); ogCtlRefresh(); });
+    if (q1("[data-ozo]")) q1("[data-ozo]").addEventListener("click", () => { OGL.sel = null; ogZoom(null); ogDraw(); ogStat(); ogCtlRefresh(); });
+    if (q1("[data-osn]")) q1("[data-osn]").addEventListener("click", () => { ogSortNew(); ogDraw(); ogStat(); });
+    if (q1("[data-ogn]")) q1("[data-ogn]").addEventListener("click", () => { const G = OGL.game; G.i++; G.hit = null; G.msg = ""; OGL.sel = null; if (G.i < G.qs.length) OGL.cell = G.qs[G.i].c; else if (ogs.find == null || G.ok > ogs.find) { ogs.find = G.ok; ogsave(); } ogDraw(); ogStat(); ogCtlRefresh(); });
+    if (q1("[data-ogr]")) q1("[data-ogr]").addEventListener("click", () => { ogGameNew(); OGL.cell = OGL.game.qs[0].c; OGL.sel = null; ogDraw(); ogStat(); ogCtlRefresh(); });
+  }
+  function ogLabHtml() {
+    const s = OGL.step;
+    return `<div class="l-card bk-lab-card">
+      <div class="bk-tabs">${OG_STEPS.map(([t], i) => `<button type="button" class="${i === s ? "on" : i < s ? "past" : ""}" data-os="${i}"><i>${i + 1}</i>${t}</button>`).join("")}</div>
+      <div class="bk-stage og-stage"></div>
+      <div class="fm-stat og-stat"></div>
+      <div class="fm-ctl og-ctl">${ogCtl()}</div>
+      <p class="bk-info">${OG_STEPS[s][1]}</p>
+      <div class="bk-nav">${s > 0 ? `<button type="button" class="btn" data-oprev>← Назад</button>` : "<span></span>"}${s < 3 ? `<button type="button" class="btn primary" data-onext>${OG_STEPS[s + 1][0]} →</button>` : `<button type="button" class="btn primary" data-oq>Проверить себя →</button>`}</div>
+    </div>`;
+  }
+  function ogGo(s) {
+    cancelAnimationFrame(OGL.raf); OGL.step = s; OGL.sel = null; OGL.vb = [0, 0, OG_W, OG_H];
+    if (s === 1) ogSortNew();
+    if (s === 2) { ogGameNew(); OGL.cell = OGL.game.qs[0].c; }
+    if (s === 0 && !OG_CELLS[OGL.cell]) OGL.cell = "an";
+    ogRender(true);
+  }
+  /* ── задания ── */
+  const OG_ST = [
+    ["Митохондрии и хлоропласты — двумембранные органоиды", 1, "У них по две мембраны, а ещё своя ДНК и рибосомы."],
+    ["Рибосомы есть и у прокариот, и у эукариот", 1, "Рибосомы — во всех клетках; у бактерий мельче."],
+    ["Клеточная стенка грибов содержит хитин", 1, "У растений — целлюлоза, у бактерий — муреин."],
+    ["Аппарат Гольджи образует лизосомы", 1, "Лизосомы отшнуровываются от цистерн Гольджи."],
+    ["В ядрышке образуются субъединицы рибосом", 1, "Там синтезируется рРНК и собираются субъединицы."],
+    ["У бактерий нет митохондрий", 1, "Из органоидов у прокариот только рибосомы."],
+    ["Шероховатая ЭПС участвует в синтезе белка", 1, "На ней сидят рибосомы."],
+    ["Лизосомы — двумембранные органоиды", 0, "Неверно: у лизосом одна мембрана."],
+    ["У животных клеток есть клеточная стенка из целлюлозы", 0, "Неверно: у животных клеточной стенки нет."],
+    ["Рибосомы окружены одной мембраной", 0, "Неверно: рибосомы — немембранные органоиды."],
+    ["Запасной углевод грибов — крахмал", 0, "Неверно: у грибов, как у животных, — гликоген."],
+    ["У бактерий ДНК находится в ядре", 0, "Неверно: ядра нет, ДНК лежит в нуклеоиде."],
+    ["Клеточный центр есть у всех высших растений", 0, "Неверно: у высших растений центриолей нет."],
+    ["Хлоропласты есть в клетках грибов", 0, "Неверно: грибы — гетеротрофы, пластид у них нет."],
+  ];
+  const ogS = (name, q, opts, ans, ex) => ({ name, q, opts, ans, ex });
+  function ogQMem() {
+    const k = sPick(["nuc", "mit", "chl", "er", "gol", "lys", "vac", "rib", "cen"]), m = OG[k].m, lab = ["немембранный", "одномембранный", "двумембранный"];
+    return ogS("Мембраны", `Какое строение имеет органоид «${OG[k].n.toLowerCase()}»?`, [lab[2], lab[1], lab[0]], lab[m], `${OG[k].n}: ${OG[k].s}`);
+  }
+  function ogQFn() {
+    const [t, k] = sPick(OG_FIND.filter((x) => x[1] !== "ndl")), all = ["mit", "chl", "nuc", "rib", "gol", "lys", "vac", "cen", "er", "cw", "pm"];
+    return ogS("Функции", `${t}. Какой это органоид?`, [OG[k].n, ...sShuf(all.filter((x) => x !== k)).slice(0, 3).map((x) => OG[x].n)], OG[k].n, OG[k].f);
+  }
+  function ogQWall() { const [c, a] = sPick([["растений", "целлюлоза"], ["грибов", "хитин"], ["бактерий", "муреин"]]); return ogS("Клеточная стенка", `Из какого вещества состоит клеточная стенка ${c}?`, ["целлюлоза", "хитин", "муреин", "гликоген"], a, "Растения — целлюлоза, грибы — хитин, бактерии — муреин."); }
+  function ogQPro() {
+    return sPick([
+      ogS("Прокариоты", "Какая структура есть у бактериальной клетки?", ["рибосомы", "ядро", "митохондрии", "аппарат Гольджи"], "рибосомы", "Из органоидов у бактерий только рибосомы."),
+      ogS("Прокариоты", "Где находится ДНК бактерии?", ["в нуклеоиде", "в ядре", "в митохондриях", "в аппарате Гольджи"], "в нуклеоиде", "Нуклеоид — зона цитоплазмы с кольцевой ДНК, без мембраны."),
+      ogS("Своя ДНК", "Какие органоиды имеют собственную ДНК?", ["митохондрии и хлоропласты", "лизосомы и вакуоли", "рибосомы и ЭПС", "аппарат Гольджи и лизосомы"], "митохондрии и хлоропласты", "У них своя кольцевая ДНК и мелкие рибосомы."),
+    ]);
+  }
+  function ogQCell() {
+    return sPick([
+      ogS("Типы клеток", "Признак растительной клетки:", ["есть пластиды и крупная вакуоль", "есть клеточный центр и нет стенки", "запасает гликоген", "клеточная стенка из хитина"], "есть пластиды и крупная вакуоль", "Плюс стенка из целлюлозы и запас крахмала."),
+      ogS("Типы клеток", "Признак клетки гриба:", ["стенка из хитина и запас гликогена", "стенка из целлюлозы и запас крахмала", "есть хлоропласты", "нет ядра"], "стенка из хитина и запас гликогена", "Грибы сочетают признаки растений (стенка) и животных (гликоген, гетеротрофность)."),
+      ogS("Типы клеток", "Признак животной клетки:", ["нет клеточной стенки, есть клеточный центр", "есть хлоропласты", "клеточная стенка из муреина", "крупная центральная вакуоль"], "нет клеточной стенки, есть клеточный центр", "Снаружи только мембрана с гликокаликсом."),
+    ]);
+  }
+  const ogQThree = () => ({ t: "3", name: "Три верных", items: sShuf([...sShuf(OG_ST.filter((x) => x[1])).slice(0, 3), ...sShuf(OG_ST.filter((x) => !x[1])).slice(0, 3)]), pick: [], done: false });
+  const ogNew = () => [ogQMem(), ogQFn(), ogQWall(), ogQThree(), ogQPro(), ogQFn(), ogQCell(), ogQThree()].map((q) => (q.t === "3" ? q : Object.assign({}, q, { t: "s", opts: sShuf(q.opts), pick: null })));
+  const OGR = { run: null };
+  const OG_Q = { view: vOG, R: OGR, title: "Строение клетки", ask3: "Выберите три верных утверждения о строении клетки.", tip: "Загляни в лабораторию ещё раз — особенно в «Мембраны» и «Сравни».", make: ogNew, store: () => ogs, save: ogsave, lab: () => ogRender(true) };
+  function ogStart() { cancelAnimationFrame(OGL.raf); OGR.run = { qs: ogNew(), k: 0, ok: 0 }; labQuiz(OG_Q); zScroll(vOG); }
+  function ogRender(keep) {
+    if (OGR.run) return labQuiz(OG_Q);
+    if (!keep) { cancelAnimationFrame(OGL.raf); Object.assign(OGL, { step: 0, cell: "an", sel: null, vb: [0, 0, OG_W, OG_H], labels: 0, row: -1 }); }
+    if (!OGL.sort) ogSortNew();
+    if (!OGL.game) ogGameNew();
+    vOG.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-og="back">← к модулям</button><h2 class="mod-title">Строение клетки: лаборатория</h2></div>
+      <p class="intro">Четыре клетки, которые можно приближать: тапни по органоиду и загляни внутрь. Потом рассортируй органоиды по мембранам и найди их по функции. После лаборатории — 8 заданий ЕГЭ.${ogs.best != null ? ` Рекорд: <b>${ogs.best}</b> из 8.` : ""}</p>
+      ${ogLabHtml()}
+      <button type="button" class="linkbtn bk-skip" data-og="skip">Сразу к заданиям →</button>`;
+    vOG.querySelector('[data-og="back"]').addEventListener("click", () => { cancelAnimationFrame(OGL.raf); go({ tab: "learn", module: null }); });
+    vOG.querySelector('[data-og="skip"]').addEventListener("click", ogStart);
+    vOG.querySelectorAll("[data-os]").forEach((b) => b.addEventListener("click", () => ogGo(+b.dataset.os)));
+    const n = vOG.querySelector("[data-onext]"), p = vOG.querySelector("[data-oprev]"), q = vOG.querySelector("[data-oq]");
+    if (n) n.addEventListener("click", () => ogGo(OGL.step + 1));
+    if (p) p.addEventListener("click", () => ogGo(OGL.step - 1));
+    if (q) q.addEventListener("click", ogStart);
+    ogDraw(); ogStat(); ogBindCtl();
+  }
+  const OG_TRAPS = [
+    ["Двумембранные: ядро, митохондрии, пластиды", "Всё остальное мембранное — одномембранное (ЭПС, Гольджи, лизосомы, вакуоли). Рибосомы и клеточный центр мембран не имеют."],
+    ["Своя ДНК — у митохондрий и хлоропластов", "Кольцевая, как у бактерий, плюс мелкие рибосомы. Это доказательство их симбиотического происхождения."],
+    ["Грибы ≠ растения", "Стенка из хитина, запас — гликоген, пластид нет. По этим признакам грибы ближе к животным."],
+    ["У бактерий есть рибосомы", "Ядра и мембранных органоидов нет, но рибосомы (мелкие) — есть. ДНК кольцевая, в нуклеоиде."],
+    ["Клеточный центр — у животных", "У высших растений центриолей нет, веретено деления образуется без них."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -4067,7 +4435,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS], ["kl-nk", "ДНК, РНК и АТФ", NK_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS], ["kl-nk", "ДНК, РНК и АТФ", NK_TRAPS], ["kl-org", "Строение клетки", OG_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -5710,6 +6078,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "ferm") go({ subject: "bio", module: "kl-ferm" }, { noScroll: true });
   else if (h === "ugl") go({ subject: "bio", module: "kl-ugl" }, { noScroll: true });
   else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
+  else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
