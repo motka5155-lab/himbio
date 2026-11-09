@@ -1216,6 +1216,47 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .ul-en-v { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); } .ul-en-v b { font-size: 18px; color: var(--ink); }
 .ul-camel { margin: 0; font-size: 13px; color: var(--ink-2); }
 .ul-link { stroke: #b9a27a; stroke-width: 2.2; stroke-linecap: round; }
+/* ── ДНК, РНК, АТФ ── */
+.nk-ring { stroke: rgba(0, 0, 0, .22); stroke-width: 1.2; stroke-linejoin: round; }
+.nk-bl { font-family: var(--font-body); font-weight: 900; fill: #fff; text-anchor: middle; paint-order: stroke; stroke: rgba(0, 0, 0, .18); stroke-width: 1.5; }
+.nk-pl { font-family: var(--font-body); font-weight: 900; fill: #5a3c00; text-anchor: middle; }
+.nk-cov { stroke: #8a8fa3; stroke-width: 3; stroke-linecap: round; }
+.nk-oh { font: 600 10px var(--font-body); fill: var(--ink-2); text-anchor: middle; }
+.nk-num { font: 700 10.5px var(--font-body); fill: var(--ink-2); }
+.nk-title { font: 900 20px var(--font-body); fill: var(--ink); text-anchor: middle; }
+.nk-badb { animation: fmShake .3s 2; transform-box: fill-box; }
+.nk-badb .nk-ring { fill: #f19a9d; }
+.nk-bb { stroke: #8a8fa3; stroke-width: 4; stroke-linecap: round; } .nk-bb.rna { stroke: #d6457c; }
+.nk-hb { stroke: #3e7bfa; stroke-width: 1.6; stroke-dasharray: 2 2.5; }
+.nk-cur { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 3; }
+.nk-rung { stroke-width: 4; stroke-linecap: round; opacity: .9; }
+.nk-strand { stroke-linecap: round; } .nk-strand.a { stroke: #7c5cd6; } .nk-strand.b { stroke: #d6457c; }
+.nk-dim { stroke: var(--ink-2); stroke-width: 1.2; }
+.nk-dimt { font: 700 11px var(--font-body); fill: var(--ink); text-anchor: middle; }
+.nk-macro { fill: none; stroke: #ff8a00; stroke-width: 2.6; stroke-linejoin: round; } .nk-macro.live { cursor: pointer; animation: nkPulse 1.2s ease-in-out infinite; }
+@keyframes nkPulse { 50% { stroke: #e5484d; stroke-width: 3.6; } }
+.nk-en { font: 900 14px var(--font-body); fill: #d97a00; text-anchor: middle; }
+.nk-en2 { font: 800 12px var(--font-body); fill: #d97a00; }
+.nk-mt { font: 700 9.5px var(--font-body); fill: #d97a00; text-anchor: middle; }
+.nk-tab { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; line-height: 1.3; margin-top: 4px; }
+.nk-tab th, .nk-tab td { padding: 6px 7px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.nk-tab td:first-child { color: var(--ink-2); font-size: 11.5px; width: 22%; }
+.nk-tab th.on, .nk-tab td.on { background: var(--accent-soft); }
+.nk-msg { margin: 0 0 6px; color: var(--bad); }
+.nk-bases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; } .nk-bases.big { grid-template-columns: repeat(4, 1fr); }
+.nk-bases button { padding: 8px 2px; border-radius: 12px; border: 1.5px solid var(--c); background: var(--paper); cursor: pointer; color: var(--ink); line-height: 1.1; }
+.nk-bases button b { display: block; font: 900 18px var(--font-body); color: var(--c); } .nk-bases.big button b { font-size: 22px; }
+.nk-bases button small { font-size: 10px; color: var(--ink-2); }
+.nk-bases button.on, .nk-bases button:active { background: var(--c); } .nk-bases button.on b, .nk-bases button:active b { color: #fff; }
+.nk-ch { padding: 18px 14px 14px; font-size: 14px; color: var(--ink); }
+.nk-chbar { display: flex; height: 40px; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+.nk-chbar i { display: grid; place-items: center; font: 800 11.5px var(--font-body); font-style: normal; color: #fff; transition: width .3s cubic-bezier(.2,.9,.3,1); white-space: nowrap; overflow: hidden; }
+.nk-ch p { margin: 4px 0; } .nk-chk { color: var(--ok); }
+.nk-task { display: grid; gap: 8px; padding: 10px 12px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.nk-tq { margin: 0; font-size: 14px; line-height: 1.4; }
+.nk-tin { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+.nk-tin input { padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); font: 700 16px var(--font-body); min-width: 0; }
+.nk-task .fb { margin: 0; }
 </style>
 </head>
 <body class="locked">
@@ -1267,7 +1308,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.5</span>
+      <span class="ver" id="ver">v4.6</span>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1336,12 +1377,13 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-kl-belki" hidden></section>
   <section class="view" id="v-kl-ferm" hidden></section>
   <section class="view" id="v-kl-ugl" hidden></section>
+  <section class="view" id="v-kl-nk" hidden></section>
 
   <div class="peek" id="peek" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.5. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.6. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1371,7 +1413,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: лаборатория", "desc": "Собери белок от цепочки до гемоглобина и сломай его нагревом и кислотой. Связи, денатурация, функции.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ", "desc": "Строение нуклеотидов, комплементарность, правило Чаргаффа, АТФ.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ: лаборатория", "desc": "Собери нуклеотид, дострой цепь, покрути спираль, реши задачу на Чаргаффа и разряди АТФ.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: органоиды", "desc": "Животная, растительная, грибная и бактериальная клетка — с приближением.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-mem", "title": "Мембрана и транспорт веществ", "desc": "Диффузия, активный транспорт, эндо- и экзоцитоз.", "st": "скоро"},
@@ -1890,6 +1932,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showBK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-belki";
     const showFM = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ferm";
     const showUL = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ugl";
+    const showNK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-nk";
     const showMap = state.subject === "chem" && ((state.tab === "learn" && state.module === "organika") || chemQuiz);
     const showZ = state.subject === "chem" && state.tab === "learn" && state.module === "z32";
     const showC = state.subject === "chem" && state.tab === "learn" && state.module === "cards";
@@ -1916,7 +1959,9 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (!showFM) cancelAnimationFrame(FM.raf);
     vUL.hidden = !showUL;
     if (!showUL) cancelAnimationFrame(UL.raf);
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || showUL || state.tab === "traps";
+    vNK.hidden = !showNK;
+    if (!showNK) cancelAnimationFrame(DNL.raf);
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || showUL || showNK || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -1952,6 +1997,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showBK) bkRender();
       else if (showFM) fmRender();
       else if (showUL) ulRender();
+      else if (showNK) nkRender();
       else if (state.tab === "traps") renderTraps(); else renderList();
     }
     syncPeek();
@@ -3692,6 +3738,294 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Жир ≠ фосфолипид", "Жир: глицерин + 3 жирные кислоты. Фосфолипид: глицерин + 2 кислоты + фосфат — головка к воде, хвосты внутрь."],
   ];
 
+  /* ══ БИОЛОГИЯ 2.6 · ДНК, РНК И АТФ: ЛАБОРАТОРИЯ ══ */
+  const vNK = document.getElementById("v-kl-nk");
+  const NKK = "hb.bio26.v1";
+  let nks = {};
+  try { nks = JSON.parse(localStorage.getItem(NKK) || "{}") || {}; } catch (e) { nks = {}; }
+  function nksave() { try { localStorage.setItem(NKK, JSON.stringify(nks)); } catch (e) {} }
+  const NK_STEPS = [
+    ["Нуклеотид", "Нуклеотид = <b>азотистое основание</b> + <b>пентоза</b> + <b>остаток фосфорной кислоты</b>. В ДНК пентоза — <b>дезоксирибоза</b>, основания A, G, C и <b>T (тимин)</b>. В РНК — <b>рибоза</b>, основания A, G, C и <b>U (урацил)</b>. A и G — пурины (два кольца), C, T и U — пиримидины (одно кольцо)."],
+    ["Комплементарность", "Основания двух цепей ДНК соединяются по принципу <b>комплементарности</b>: <b>A = T</b> (2 водородные связи), <b>G ≡ C</b> (3 водородные связи). Цепи <b>антипараллельны</b>: одна идёт 5′→3′, другая 3′→5′. При синтезе иРНК (транскрипции) напротив A ставится <b>U</b>."],
+    ["Двойная спираль", "Модель двойной спирали предложили <b>Дж. Уотсон и Ф. Крик</b> в 1953 г. Диаметр спирали — <b>2 нм</b>, один виток — <b>3,4 нм</b> и <b>10 пар</b> нуклеотидов, расстояние между соседними нуклеотидами — <b>0,34 нм</b>. Нуклеотиды одной цепи связаны <b>фосфодиэфирными</b> (ковалентными) связями, цепи между собой — <b>водородными</b>. ДНК есть в ядре, митохондриях и хлоропластах."],
+    ["Чаргафф", "<b>Правило Чаргаффа</b>: в ДНК A = T и G = C, значит A + G = T + C (пуринов столько же, сколько пиримидинов). Зная долю одного нуклеотида, находят все остальные: <b>G = (100% − 2·A) / 2</b>. Длина участка ДНК = число пар × <b>0,34 нм</b>."],
+    ["АТФ", "<b>АТФ</b> — нуклеотид: <b>аденин + рибоза + 3 остатка фосфорной кислоты</b>. Между остатками фосфорной кислоты — 2 <b>макроэргические связи</b>. При отщеплении одного остатка (АТФ → АДФ) выделяется <b>40 кДж/моль</b>. АТФ — универсальный источник энергии клетки; синтезируется в митохондриях, хлоропластах и цитоплазме."],
+  ];
+  const DNL = { step: 0, sug: "d", base: null, bad: 0, top: [], bot: [], rna: false, shake: -1, rot: 1, t: 0, raf: 0, A: 20, task: null, atp: 3, en: 0, anim: null, msg: "" };
+  const NK_W = 340;
+  const nkE = (x) => (x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3));
+  const nkL = (a, b, t) => a + (b - a) * t;
+  const NK_B = { A: { n: "аденин", c: "#2fae66", pur: 1 }, G: { n: "гуанин", c: "#f2b134", pur: 1 }, C: { n: "цитозин", c: "#3e7bfa", pur: 0 }, T: { n: "тимин", c: "#e5484d", pur: 0 }, U: { n: "урацил", c: "#a35be6", pur: 0 } };
+  const NK_PAIR = { A: "T", T: "A", G: "C", C: "G" }, NK_RPAIR = { A: "U", T: "A", G: "C", C: "G" };
+  const NK_HB = { A: 2, T: 2, U: 2, G: 3, C: 3 };
+  const NK_DEFS = `<defs>
+    <radialGradient id="nkg-p" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff7d6"/><stop offset="1" stop-color="#e0a800"/></radialGradient>
+    <radialGradient id="nkg-d" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#efe6ff"/><stop offset="1" stop-color="#7c5cd6"/></radialGradient>
+    <radialGradient id="nkg-r" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffe6f0"/><stop offset="1" stop-color="#d6457c"/></radialGradient>
+    <radialGradient id="nkg-boom" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff6b0"/><stop offset=".6" stop-color="#ffc83d" stop-opacity=".8"/><stop offset="1" stop-color="#ff9a00" stop-opacity="0"/></radialGradient>
+    <filter id="nk-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#1a1030" flood-opacity=".22"/></filter></defs>`;
+  const nkWrap = (h, g) => `<svg class="bk-svg nk-svg" viewBox="0 0 ${NK_W} ${h}" aria-hidden="true">${NK_DEFS}${g}</svg>`;
+  const nkPoly = (pts) => pts.map((q) => q.map((v) => v.toFixed(1)).join(",")).join(" ");
+  const nkNgon = (cx, cy, r, n, a0) => Array.from({ length: n }, (_, k) => { const a = a0 + (k * 2 * Math.PI) / n; return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; });
+  /* азотистое основание: пурин — два кольца, пиримидин — одно */
+  function nkBase(b, x, y, r, cls) {
+    const d = NK_B[b], hex = nkNgon(x, y, r, 6, 0);
+    let s = `<polygon points="${nkPoly(hex)}" fill="${d.c}" class="nk-ring"/>`;
+    if (d.pur) { const pen = nkNgon(x + r * 1.62, y, r * .86, 5, Math.PI); s += `<polygon points="${nkPoly(pen)}" fill="${d.c}" class="nk-ring" opacity=".85"/>`; }
+    return `<g class="${cls || ""}" filter="url(#nk-sh)">${s}<text x="${x}" y="${y + r * .38}" class="nk-bl" style="font-size:${(r * 1.05).toFixed(1)}px">${b}</text></g>`;
+  }
+  const nkSugar = (x, y, r, k) => { const p = nkNgon(x, y, r, 5, -Math.PI / 2), o = p[0]; return `<g filter="url(#nk-sh)"><polygon points="${nkPoly(p)}" fill="url(#nkg-${k})" class="nk-ring"/><circle cx="${o[0].toFixed(1)}" cy="${o[1].toFixed(1)}" r="${(r * .26).toFixed(1)}" class="ul-o"/><text x="${o[0].toFixed(1)}" y="${(o[1] + r * .1).toFixed(1)}" class="ul-ot" style="font-size:${(r * .3).toFixed(1)}px">O</text></g>`; };
+  const nkP = (x, y, r) => `<g filter="url(#nk-sh)"><circle cx="${x}" cy="${y}" r="${r}" fill="url(#nkg-p)" class="nk-ring"/><text x="${x}" y="${y + r * .36}" class="nk-pl" style="font-size:${(r * 1).toFixed(1)}px">P</text></g>`;
+  /* ── шаг 1: собери нуклеотид ── */
+  function nk1Svg() {
+    const A = DNL.anim, e = A ? performance.now() - A.t0 : 1e9, k = DNL.sug;
+    let g = `<line x1="88" y1="128" x2="136" y2="128" class="nk-cov"/>`;
+    g += nkP(70, 128, 22) + `<text x="70" y="172" class="ul-lab">остаток</text><text x="70" y="185" class="ul-lab">фосфорной к-ты</text>`;
+    g += nkSugar(166, 132, 32, k) + `<text x="166" y="186" class="ul-lab b">${k === "d" ? "дезоксирибоза" : "рибоза"}</text><text x="166" y="200" class="nk-oh">2′: ${k === "d" ? "–H" : "–OH"}</text>`;
+    if (DNL.base) {
+      const miss = A && A.kind === "miss", p = miss ? 1 : nkE(e / 450);
+      let dx = (1 - p) * 140;
+      if (miss) dx = e < 400 ? 6 * Math.sin(e / 28) : (1 - nkE((e - 400) / 300)) * 0 + nkE((e - 400) / 300) * 160;
+      const pur = NK_B[DNL.base].pur, bx = 238 + dx;
+      g += `<g opacity="${miss && e > 400 ? (1 - nkE((e - 400) / 300)).toFixed(2) : 1}"><line x1="${196 + dx * .3}" y1="132" x2="${bx - 20}" y2="132" class="nk-cov"/>${nkBase(DNL.base, bx, 132, 20, miss ? "nk-badb" : "")}
+        <text x="${bx + (pur ? 16 : 0)}" y="${pur ? 186 : 176}" class="ul-lab b">${NK_B[DNL.base].n}</text><text x="${bx + (pur ? 16 : 0)}" y="${pur ? 200 : 190}" class="nk-oh">${pur ? "пурин" : "пиримидин"}</text></g>`;
+    } else g += `<rect x="214" y="104" width="100" height="56" rx="12" class="ul-slot"/><text x="264" y="137" class="ul-lab">основание?</text>`;
+    g += `<text x="128" y="118" class="nk-num">5′</text><text x="208" y="122" class="nk-num">1′</text>`;
+    const ok = DNL.base && !(A && A.kind === "miss");
+    g += `<text x="170" y="40" class="nk-title">${ok ? `нуклеотид ${k === "d" ? "ДНК" : "РНК"}` : "собери нуклеотид"}</text>`;
+    return nkWrap(226, g);
+  }
+  function nk1Html() {
+    const r = DNL.sug === "r";
+    const row = (t, d, rr) => `<tr><td>${t}</td><td class="${r ? "" : "on"}">${d}</td><td class="${r ? "on" : ""}">${rr}</td></tr>`;
+    return `<table class="nk-tab"><tr><th></th><th class="${r ? "" : "on"}">ДНК</th><th class="${r ? "on" : ""}">РНК</th></tr>${row("Пентоза", "дезоксирибоза", "рибоза")}${row("Основания", "A, G, C, <b>T</b>", "A, G, C, <b>U</b>")}${row("Цепей", "две", "одна")}${row("Где", "ядро, митохондрии, хлоропласты", "ядро, цитоплазма, рибосомы")}${row("Функция", "хранит наследственную информацию", "иРНК — копия гена, тРНК — носит аминокислоты, рРНК — основа рибосом")}</table>`;
+  }
+  /* ── шаг 2: комплементарность ── */
+  function nkNewSeq() { DNL.top = Array.from({ length: 8 }, () => sPick(["A", "T", "G", "C"])); DNL.bot = []; DNL.shake = -1; }
+  function nk2Svg() {
+    const n = DNL.top.length, xs = (i) => 30 + i * 40, done = DNL.bot.length === n;
+    let g = `<line x1="16" y1="38" x2="324" y2="38" class="nk-bb"/><text x="8" y="34" class="nk-num">5′</text><text x="326" y="34" class="nk-num">3′</text>`;
+    DNL.top.forEach((b, i) => { g += `<circle cx="${xs(i)}" cy="38" r="5" fill="url(#nkg-p)"/><rect x="${xs(i) - 14}" y="46" width="28" height="40" rx="7" fill="${NK_B[b].c}" class="nk-ring"/><text x="${xs(i)}" y="72" class="nk-bl" style="font-size:16px">${b}</text>`; });
+    DNL.bot.forEach((b, i) => {
+      const hb = NK_HB[b];
+      for (let h = 0; h < hb; h++) { const x = xs(i) - (hb - 1) * 4 + h * 8; g += `<line x1="${x}" y1="88" x2="${x}" y2="116" class="nk-hb"/>`; }
+      g += `<rect x="${xs(i) - 14}" y="118" width="28" height="40" rx="7" fill="${NK_B[b].c}" class="nk-ring"/><text x="${xs(i)}" y="144" class="nk-bl" style="font-size:16px">${b}</text>`;
+    });
+    if (!done) { const i = DNL.bot.length; g += `<rect x="${xs(i) - 16}" y="116" width="32" height="44" rx="8" class="nk-cur${DNL.shake === i ? " ul-shake" : ""}"/><text x="${xs(i)}" y="144" class="ul-plus" style="font-size:18px">?</text>`; }
+    if (DNL.bot.length) g += `<line x1="16" y1="166" x2="${xs(DNL.bot.length - 1) + 20}" y2="166" class="nk-bb${DNL.rna ? " rna" : ""}"/>` + DNL.bot.map((_, i) => `<circle cx="${xs(i)}" cy="166" r="5" fill="url(#nkg-p)"/>`).join("");
+    g += `<text x="8" y="182" class="nk-num">3′</text>${done ? `<text x="326" y="182" class="nk-num">5′</text>` : ""}`;
+    g += `<text x="170" y="206" class="bk-cap">${DNL.rna ? "матричная цепь ДНК → иРНК" : "цепь ДНК → комплементарная цепь"}</text>`;
+    return nkWrap(216, g);
+  }
+  function nk2Tap(b) {
+    if (DNL.bot.length >= DNL.top.length) return;
+    const i = DNL.bot.length, need = (DNL.rna ? NK_RPAIR : NK_PAIR)[DNL.top[i]];
+    if (b === need) { DNL.bot.push(b); DNL.shake = -1; haptic("success"); }
+    else { DNL.shake = i; haptic("error"); DNL.msg = `Напротив <b>${DNL.top[i]}</b> встаёт <b>${need}</b>${DNL.rna && DNL.top[i] === "A" ? " — в РНК вместо тимина урацил" : ""}.`; }
+    nkDraw(); nkStat();
+  }
+  /* ── шаг 3: двойная спираль ── */
+  const NK_HX = "ATGCGTACCGATTGCAAGTCGGATC".split("");
+  function nk3Svg() {
+    const t = DNL.t, k = (2 * Math.PI) / 200, cy = 122, R = 56, off = 2.4;
+    const s1 = (x) => cy + R * Math.sin(k * x + t), s2 = (x) => cy + R * Math.sin(k * x + t + off), z1 = (x) => Math.cos(k * x + t), z2 = (x) => Math.cos(k * x + t + off);
+    const items = [];
+    for (let i = 0; i < 15; i++) {
+      const x = 30 + i * 20, b = NK_HX[i], c = NK_PAIR[b], ym = (s1(x) + s2(x)) / 2, z = (z1(x) + z2(x)) / 2;
+      items.push([z - .05, `<line x1="${x}" y1="${s1(x).toFixed(1)}" x2="${x}" y2="${ym.toFixed(1)}" stroke="${NK_B[b].c}" class="nk-rung"/><line x1="${x}" y1="${ym.toFixed(1)}" x2="${x}" y2="${s2(x).toFixed(1)}" stroke="${NK_B[c].c}" class="nk-rung"/>`]);
+    }
+    for (let x = 20; x < 322; x += 4) {
+      [[s1, z1, "a"], [s2, z2, "b"]].forEach(([s, z, cls]) => items.push([z(x), `<line x1="${x}" y1="${s(x).toFixed(1)}" x2="${x + 4}" y2="${s(x + 4).toFixed(1)}" class="nk-strand ${cls}" stroke-width="${(5 + 3 * z(x)).toFixed(1)}" opacity="${(.55 + .45 * (z(x) + 1) / 2).toFixed(2)}"/>`]));
+    }
+    let g = items.sort((a, b) => a[0] - b[0]).map((q) => q[1]).join("");
+    g += `<line x1="70" y1="38" x2="270" y2="38" class="nk-dim"/><line x1="70" y1="32" x2="70" y2="44" class="nk-dim"/><line x1="270" y1="32" x2="270" y2="44" class="nk-dim"/><text x="170" y="30" class="nk-dimt">1 виток = 3,4 нм · 10 пар</text>`;
+    g += `<line x1="12" y1="${cy - R}" x2="12" y2="${cy + R}" class="nk-dim"/><text x="16" y="${cy + 4}" class="nk-dimt" style="text-anchor:start">2 нм</text>`;
+    g += `<text x="326" y="214" class="nk-num" style="text-anchor:end">цепи антипараллельны: 5′→3′ и 3′→5′</text>`;
+    return nkWrap(226, g);
+  }
+  function nkSpin() {
+    cancelAnimationFrame(DNL.raf);
+    if (!DNL.rot || DNL.step !== 2) return;
+    let last = performance.now();
+    const tick = (now) => { DNL.t += (now - last) / 1000 * 1.3; last = now; nkDraw(); DNL.raf = requestAnimationFrame(tick); };
+    DNL.raf = requestAnimationFrame(tick);
+  }
+  /* ── шаг 4: правило Чаргаффа ── */
+  function nk4Html() {
+    const A = DNL.A, G = (100 - 2 * A) / 2, seg = (b, v) => `<i style="width:${v}%;background:${NK_B[b].c}">${v >= 7 ? `${b} ${String(v).replace(".", ",")}%` : ""}</i>`;
+    return `<div class="nk-ch"><div class="nk-chbar">${seg("A", A)}${seg("T", A)}${seg("G", G)}${seg("C", G)}</div>
+      <p><b>A = T = ${A}%</b></p><p>G = C = (100 − 2·${A}) / 2 = <b>${String(G).replace(".", ",")}%</b></p><p class="nk-chk">A + G = T + C = <b>50%</b> ✓</p></div>`;
+  }
+  function nkTask() {
+    const t = sPick(["pct", "cnt", "len"]), bs = ["A", "T", "G", "C"], b = sPick(bs), nm = { A: "адениновых", T: "тиминовых", G: "гуаниновых", C: "цитозиновых" };
+    if (t === "pct") {
+      const x = sPick([10, 12, 15, 18, 20, 22, 24, 26, 28, 30, 32, 35, 38, 40]), o = sPick(bs.filter((q) => q !== b && q !== NK_PAIR[b]));
+      return { q: `В молекуле ДНК <b>${x}%</b> ${nm[b]} нуклеотидов. Сколько процентов ${nm[o]}?`, a: (100 - 2 * x) / 2, sol: `${b} = ${NK_PAIR[b]} = ${x}%, на ${o} и ${NK_PAIR[o]} остаётся 100 − ${2 * x} = ${100 - 2 * x}%, пополам — <b>${String((100 - 2 * x) / 2).replace(".", ",")}%</b>.` };
+    }
+    if (t === "cnt") {
+      const tot = sPick([400, 600, 800, 1000, 1200, 2000]), x = sPick([10, 15, 20, 25, 30, 35, 40]), nb = tot * x / 100, o = sPick(bs.filter((q) => q !== b && q !== NK_PAIR[b])), no = tot * (100 - 2 * x) / 200;
+      return { q: `Во фрагменте ДНК <b>${nb}</b> ${nm[b]} нуклеотидов — это <b>${x}%</b> от общего числа. Сколько ${nm[o]} нуклеотидов?`, a: no, sol: `Всего ${nb} : ${x}% · 100% = ${tot}. На ${o}+${NK_PAIR[o]}: ${100 - 2 * x}% = ${tot * (100 - 2 * x) / 100}, пополам — <b>${no}</b>.` };
+    }
+    const n = sPick([10, 20, 30, 50, 100, 150, 200, 300]);
+    return { q: `Участок двуцепочечной ДНК содержит <b>${n}</b> пар нуклеотидов. Какова его длина в нанометрах?`, a: Math.round(n * 34) / 100, sol: `${n} × 0,34 нм = <b>${String(Math.round(n * 34) / 100).replace(".", ",")} нм</b>.` };
+  }
+  /* ── шаг 5: АТФ ── */
+  function nk5Svg() {
+    const A = DNL.anim, e = A ? performance.now() - A.t0 : 1e9, n = DNL.atp, y = 132, px = [190, 244, 298];
+    const nm = ["", "АМФ", "АДФ", "АТФ"];
+    let g = `<text x="18" y="40" class="nk-title" style="text-anchor:start">${nm[n]}</text><text x="18" y="58" class="ul-lab" style="text-anchor:start">${n === 3 ? "аденозинтрифосфат" : n === 2 ? "аденозиндифосфат" : "аденозинмонофосфат"}</text>`;
+    g += `<line x1="96" y1="${y}" x2="114" y2="${y}" class="nk-cov"/><line x1="160" y1="${y}" x2="172" y2="${y}" class="nk-cov"/>`;
+    g += nkBase("A", 52, y, 20) + nkSugar(138, y + 2, 26, "r");
+    g += `<text x="66" y="${y + 44}" class="ul-lab">аденин</text><text x="138" y="${y + 44}" class="ul-lab">рибоза</text>`;
+    for (let i = 0; i < 3; i++) {
+      let x = px[i], yy = y, op = 1;
+      const flying = A && A.kind === "cut" && i === n, landing = A && A.kind === "add" && i === n - 1;
+      if (i >= n && !flying) continue;
+      if (flying) { const q = nkE(e / 700); x += q * 30; yy -= q * 70; op = 1 - q * .6; }
+      if (landing) { const q = nkE(e / 600); x += (1 - q) * 30; yy -= (1 - q) * 70; }
+      if (i > 0 && !flying && !(landing && e < 500)) { const x0 = px[i - 1] + 18, x1 = px[i] - 18; let d = `M${x0},${y}`; for (let s = 1; s <= 12; s++) d += ` L${(x0 + (x1 - x0) * s / 12).toFixed(1)},${(y + (s % 2 ? -5 : 5)).toFixed(1)}`; g += `<path d="${d}" class="nk-macro${i === n - 1 && !A ? " live" : ""}"${i === n - 1 ? ` data-cut="1"` : ""}/>`; }
+      g += `<g opacity="${op.toFixed(2)}">${nkP(x, yy, 18)}</g>`;
+    }
+    if (A && A.kind === "cut" && e < 900) { const q = nkE(e / 900); g += `<circle cx="${px[n - 1] + 28}" cy="${y - 10}" r="${(10 + 40 * q).toFixed(1)}" fill="url(#nkg-boom)" opacity="${(1 - q).toFixed(2)}"/><text x="${px[n - 1] + 30}" y="${(y - 30 - 30 * q).toFixed(1)}" class="nk-en">+40 кДж</text>`; }
+    g += `<text x="246" y="${y + 44}" class="ul-lab">остатки фосфорной кислоты ×${n}</text>`;
+    if (n > 1) g += `<text x="${(px[n - 2] + px[n - 1]) / 2}" y="${y - 22}" class="nk-mt">~ макроэргическая</text>`;
+    g += `<text x="326" y="40" class="nk-en2" style="text-anchor:end">выделено: ${DNL.en} кДж</text>`;
+    return nkWrap(206, g);
+  }
+  function nkAtp(kind) {
+    if (DNL.anim) return;
+    if (kind === "cut" && DNL.atp <= 1) return;
+    if (kind === "add" && DNL.atp >= 3) return;
+    if (kind === "cut") { DNL.atp--; DNL.en += 40; haptic("success"); } else { DNL.atp++; DNL.en -= 40; haptic("success"); }
+    DNL.anim = { kind, t0: performance.now() };
+    const tick = () => { if (performance.now() - DNL.anim.t0 > 950) { DNL.anim = null; nkDraw(); nkStat(); nkCtlRefresh(); return; } nkDraw(); DNL.raf = requestAnimationFrame(tick); };
+    cancelAnimationFrame(DNL.raf); DNL.raf = requestAnimationFrame(tick); nkCtlRefresh();
+  }
+  /* ── сборка ── */
+  function nkDraw() {
+    const box = vNK.querySelector(".nk-stage"); if (!box) return;
+    box.innerHTML = DNL.step === 3 ? nk4Html() : [nk1Svg, nk2Svg, nk3Svg, null, nk5Svg][DNL.step]();
+    if (DNL.step === 4) { const c = box.querySelector("[data-cut]"); if (c) c.addEventListener("click", () => nkAtp("cut")); }
+  }
+  function nkStat() {
+    const el = vNK.querySelector(".nk-stat"); if (!el) return;
+    const s = DNL.step;
+    if (s === 0) el.innerHTML = (DNL.msg ? `<p class="nk-msg">${DNL.msg}</p>` : "") + nk1Html();
+    else if (s === 1) { const done = DNL.bot.length === DNL.top.length, hb = DNL.bot.reduce((a, b) => a + NK_HB[b], 0); el.innerHTML = done ? (DNL.rna ? `Готово: это <b>транскрипция</b>. В иРНК вместо тимина — <b>урацил</b>, а цепь одна.` : `Готово! Между цепями <b>${hb}</b> водородных связей: по 2 на каждую пару A–T и по 3 на G–C.`) : DNL.msg || `Тапни основание, комплементарное <b>${DNL.top[DNL.bot.length]}</b>.`; }
+    else if (s === 2) el.innerHTML = "Сахарофосфатный остов — снаружи, пары оснований — внутри, как ступеньки винтовой лестницы.";
+    else if (s === 3) { const T = DNL.task; el.innerHTML = `<div class="nk-task"><p class="nk-tq">🧮 ${T.q}</p><div class="nk-tin"><input type="text" inputmode="decimal" placeholder="ответ" data-nin${T.res ? " disabled" : ""} value="${T.res ? T.val : ""}"><button type="button" class="btn primary" data-ncheck${T.res ? " disabled" : ""}>Проверить</button></div>${T.res ? `<p class="fb ${T.res === 1 ? "good" : "wrong"}">${T.res === 1 ? "Верно!" : "Неверно."} ${T.sol}</p><button type="button" class="btn" data-nnew>Другая задача</button>` : ""}</div>`; nkBindTask(); }
+    else el.innerHTML = DNL.atp === 3 ? "Тапни по последней <b>макроэргической связи</b> (волнистая линия) или нажми «Гидролиз»." : DNL.atp === 2 ? "АТФ → АДФ + Ф + <b>40 кДж</b>. Можно отщепить ещё один остаток: АДФ → АМФ — ещё 40 кДж." : "Осталась АМФ — связей с запасом энергии больше нет. Чтобы снова получить АТФ, нужно затратить энергию (её дают дыхание и фотосинтез).";
+  }
+  function nkBindTask() {
+    const inp = vNK.querySelector("[data-nin]"), ch = vNK.querySelector("[data-ncheck]"), nw = vNK.querySelector("[data-nnew]");
+    const check = () => { const v = parseFloat(String(inp.value).replace(",", ".").replace(/\s/g, "")); if (isNaN(v)) return; DNL.task.val = inp.value; DNL.task.res = Math.abs(v - DNL.task.a) < 1e-6 ? 1 : 2; haptic(DNL.task.res === 1 ? "success" : "error"); nkStat(); };
+    if (ch) ch.addEventListener("click", check);
+    if (inp) inp.addEventListener("keydown", (e) => { if (e.key === "Enter") check(); });
+    if (nw) nw.addEventListener("click", () => { DNL.task = nkTask(); nkStat(); });
+  }
+  function nkCtl() {
+    const s = DNL.step;
+    if (s === 0) return `<div class="fm-seg"><button type="button" class="${DNL.sug === "d" ? "on" : ""}" data-nsug="d">Дезоксирибоза<small>ДНК</small></button><button type="button" class="${DNL.sug === "r" ? "on" : ""}" data-nsug="r">Рибоза<small>РНК</small></button></div><div class="nk-bases">${Object.keys(NK_B).map((b) => `<button type="button" data-nbase="${b}" style="--c:${NK_B[b].c}" class="${DNL.base === b ? "on" : ""}"><b>${b}</b><small>${NK_B[b].n}</small></button>`).join("")}</div>`;
+    if (s === 1) return `<div class="nk-bases big">${(DNL.rna ? ["A", "U", "G", "C"] : ["A", "T", "G", "C"]).map((b) => `<button type="button" data-npick="${b}" style="--c:${NK_B[b].c}"><b>${b}</b></button>`).join("")}</div><div class="fm-seg"><button type="button" class="${DNL.rna ? "" : "on"}" data-nrna="0">ДНК → ДНК</button><button type="button" class="${DNL.rna ? "on" : ""}" data-nrna="1">ДНК → иРНК</button></div><div class="bk-btns"><button type="button" class="btn" data-nseq>Новая цепь</button></div>`;
+    if (s === 2) return `<div class="bk-btns"><button type="button" class="btn" data-nrot>${DNL.rot ? "⏸ Пауза" : "▶ Крутить"}</button></div>`;
+    if (s === 3) return `<div class="bk-ctl"><label>Аденин (A): <b>${DNL.A}%</b><input type="range" min="5" max="45" step="1" value="${DNL.A}" data-nap></label></div>`;
+    return `<div class="bk-btns"><button type="button" class="btn primary" data-natp="cut"${DNL.atp <= 1 || DNL.anim ? " disabled" : ""}>Гидролиз: отщепить Ф</button><button type="button" class="btn" data-natp="add"${DNL.atp >= 3 || DNL.anim ? " disabled" : ""}>Синтез: присоединить Ф</button></div>`;
+  }
+  function nkCtlRefresh() { const c = vNK.querySelector(".nk-ctl"); if (c) { c.innerHTML = nkCtl(); nkBindCtl(); } }
+  function nkBindCtl() {
+    const qa = (sel) => vNK.querySelectorAll(sel);
+    qa("[data-nsug]").forEach((b) => b.addEventListener("click", () => { DNL.sug = b.dataset.nsug; DNL.msg = ""; if (DNL.base && ((DNL.sug === "r" && DNL.base === "T") || (DNL.sug === "d" && DNL.base === "U"))) DNL.base = null; nkDraw(); nkStat(); nkCtlRefresh(); }));
+    qa("[data-nbase]").forEach((b) => b.addEventListener("click", () => {
+      if (DNL.anim) return;
+      const x = b.dataset.nbase, bad = (DNL.sug === "r" && x === "T") || (DNL.sug === "d" && x === "U");
+      DNL.base = x; DNL.msg = bad ? (x === "T" ? "<b>Тимин</b> бывает только в ДНК — с рибозой он не соединяется. В РНК вместо него урацил." : "<b>Урацил</b> бывает только в РНК — с дезоксирибозой он не встречается. В ДНК вместо него тимин.") : "";
+      haptic(bad ? "error" : "success");
+      DNL.anim = { kind: bad ? "miss" : "in", t0: performance.now() };
+      const tick = () => { if (performance.now() - DNL.anim.t0 > (bad ? 750 : 500)) { DNL.anim = null; if (bad) DNL.base = null; nkDraw(); nkStat(); nkCtlRefresh(); return; } nkDraw(); DNL.raf = requestAnimationFrame(tick); };
+      cancelAnimationFrame(DNL.raf); DNL.raf = requestAnimationFrame(tick); nkStat(); nkCtlRefresh();
+    }));
+    qa("[data-npick]").forEach((b) => b.addEventListener("click", () => { DNL.msg = ""; nk2Tap(b.dataset.npick); }));
+    qa("[data-nrna]").forEach((b) => b.addEventListener("click", () => { DNL.rna = b.dataset.nrna === "1"; DNL.bot = []; DNL.msg = ""; nkDraw(); nkStat(); nkCtlRefresh(); }));
+    qa("[data-nseq]").forEach((b) => b.addEventListener("click", () => { nkNewSeq(); DNL.msg = ""; nkDraw(); nkStat(); }));
+    qa("[data-nrot]").forEach((b) => b.addEventListener("click", () => { DNL.rot = DNL.rot ? 0 : 1; nkSpin(); nkCtlRefresh(); }));
+    const r = vNK.querySelector("[data-nap]"); if (r) r.addEventListener("input", () => { DNL.A = +r.value; r.previousElementSibling.textContent = DNL.A + "%"; nkDraw(); });
+    qa("[data-natp]").forEach((b) => b.addEventListener("click", () => nkAtp(b.dataset.natp)));
+  }
+  function nkLabHtml() {
+    const s = DNL.step;
+    return `<div class="l-card bk-lab-card">
+      <div class="bk-tabs">${NK_STEPS.map(([t], i) => `<button type="button" class="${i === s ? "on" : i < s ? "past" : ""}" data-ns="${i}"><i>${i + 1}</i>${t}</button>`).join("")}</div>
+      <div class="bk-stage nk-stage"></div>
+      <div class="fm-stat nk-stat"></div>
+      <div class="fm-ctl nk-ctl">${nkCtl()}</div>
+      <p class="bk-info">${NK_STEPS[s][1]}</p>
+      <div class="bk-nav">${s > 0 ? `<button type="button" class="btn" data-nprev>← Назад</button>` : "<span></span>"}${s < 4 ? `<button type="button" class="btn primary" data-nnext>${NK_STEPS[s + 1][0]} →</button>` : `<button type="button" class="btn primary" data-nq>Проверить себя →</button>`}</div>
+    </div>`;
+  }
+  function nkGo(s) { cancelAnimationFrame(DNL.raf); DNL.anim = null; DNL.msg = ""; DNL.step = s; nkRender(true); }
+  /* ── задания ── */
+  const NK_ST = [
+    ["В состав нуклеотида ДНК входит дезоксирибоза", 1, "В ДНК — дезоксирибоза, в РНК — рибоза."],
+    ["Аденин комплементарен тимину", 1, "A = T, две водородные связи."],
+    ["Между гуанином и цитозином три водородные связи", 1, "G ≡ C — три связи, A = T — две."],
+    ["Молекула АТФ содержит две макроэргические связи", 1, "Обе — между остатками фосфорной кислоты."],
+    ["В РНК вместо тимина содержится урацил", 1, "Основания РНК: A, G, C, U."],
+    ["Цепи ДНК антипараллельны", 1, "Одна цепь идёт 5′→3′, другая — 3′→5′."],
+    ["тРНК доставляет аминокислоты к рибосомам", 1, "тРНК — транспортная РНК."],
+    ["В состав РНК входит тимин", 0, "Неверно: тимин — только в ДНК."],
+    ["Молекула РНК состоит из двух цепей", 0, "Неверно: РНК, как правило, одноцепочечная."],
+    ["В состав АТФ входит дезоксирибоза", 0, "Неверно: в АТФ — рибоза."],
+    ["Между аденином и тимином три водородные связи", 0, "Неверно: две; три — между G и C."],
+    ["Нуклеотиды одной цепи ДНК соединены водородными связями", 0, "Неверно: фосфодиэфирными (ковалентными); водородные — между цепями."],
+    ["ДНК содержится только в ядре", 0, "Неверно: ещё в митохондриях и хлоропластах."],
+    ["При гидролизе АТФ до АДФ энергия поглощается", 0, "Неверно: выделяется около 40 кДж/моль."],
+  ];
+  const nkS = (name, q, opts, ans, ex) => ({ name, q, opts, ans, ex });
+  function nkQBase() { return sPick([nkS("Основания", "Какое азотистое основание есть в РНК, но нет в ДНК?", ["урацил", "тимин", "аденин", "гуанин"], "урацил", "В РНК вместо тимина — урацил."), nkS("Основания", "Какое азотистое основание есть в ДНК, но нет в РНК?", ["тимин", "урацил", "цитозин", "гуанин"], "тимин", "Тимин — только в ДНК."), nkS("Основания", "Какие основания относятся к пуринам?", ["аденин и гуанин", "цитозин и тимин", "урацил и цитозин", "тимин и аденин"], "аденин и гуанин", "Пурины — два кольца: A и G; пиримидины — C, T, U.")]); }
+  function nkQSug() { return sPick([nkS("Пентоза", "Какой углевод входит в состав нуклеотида ДНК?", ["дезоксирибоза", "рибоза", "глюкоза", "фруктоза"], "дезоксирибоза", "В ДНК — дезоксирибоза, в РНК и АТФ — рибоза."), nkS("Пентоза", "Какой углевод входит в состав АТФ?", ["рибоза", "дезоксирибоза", "глюкоза", "сахароза"], "рибоза", "АТФ = аденин + рибоза + 3 фосфата.")]); }
+  function nkQCompl() {
+    const s = Array.from({ length: 6 }, () => sPick(["A", "T", "G", "C"])), c = s.map((b) => NK_PAIR[b]).join(""), wrongT = s.map((b) => NK_RPAIR[b]).join(""), same = s.join("");
+    let w2 = c.split(""); const j = Math.floor(Math.random() * 6); w2[j] = sPick(["A", "T", "G", "C"].filter((x) => x !== w2[j])); w2 = w2.join("");
+    const opts = Array.from(new Set([c, wrongT, same, w2])); while (opts.length < 4) { const z = c.split(""); const i = Math.floor(Math.random() * 6); z[i] = sPick(["A", "T", "G", "C"].filter((x) => x !== z[i])); if (!opts.includes(z.join(""))) opts.push(z.join("")); }
+    return nkS("Комплементарность", `Фрагмент цепи ДНК: <b>${s.join("")}</b>. Какова последовательность комплементарной цепи ДНК?`, opts, c, "A ↔ T, G ↔ C. Урацил в ДНК не бывает.");
+  }
+  function nkQChar() { const x = sPick([12, 16, 18, 22, 24, 26, 28, 32, 34]), g = (100 - 2 * x) / 2; return nkS("Чаргафф", `В молекуле ДНК <b>${x}%</b> адениновых нуклеотидов. Сколько процентов цитозиновых?`, [`${g}%`, `${x}%`, `${100 - x}%`, `${100 - 2 * x}%`], `${g}%`, `A = T = ${x}%, G + C = ${100 - 2 * x}%, C = ${g}%.`); }
+  function nkQAtp() { return sPick([nkS("АТФ", "Сколько макроэргических связей в молекуле АТФ?", ["2", "3", "1", "4"], "2", "Две — между тремя остатками фосфорной кислоты."), nkS("АТФ", "Сколько энергии выделяется при отщеплении одного остатка фосфорной кислоты от АТФ?", ["40 кДж/моль", "17,6 кДж/моль", "200 кДж/моль", "4 кДж/моль"], "40 кДж/моль", "АТФ → АДФ + Ф + 40 кДж."), nkS("АТФ", "Из чего состоит молекула АТФ?", ["аденин, рибоза, три остатка фосфорной кислоты", "аденин, дезоксирибоза, три остатка фосфорной кислоты", "аденин, рибоза, один остаток фосфорной кислоты", "аминокислота и три остатка фосфорной кислоты"], "аденин, рибоза, три остатка фосфорной кислоты", "АТФ — аденозинтрифосфат.")]); }
+  function nkQRna() { return sPick([nkS("Виды РНК", "Какая РНК переносит аминокислоты к рибосоме?", ["тРНК", "иРНК", "рРНК", "ДНК"], "тРНК", "Транспортная РНК."), nkS("Виды РНК", "Какой РНК больше всего в клетке?", ["рРНК", "иРНК", "тРНК", "все поровну"], "рРНК", "Рибосомная РНК — около 80% всей РНК клетки."), nkS("Виды РНК", "Какая РНК переносит информацию о структуре белка из ядра к рибосомам?", ["иРНК", "тРНК", "рРНК", "АТФ"], "иРНК", "Информационная (матричная) РНК — копия гена.")]); }
+  function nkQH() { return sPick([nkS("Водородные связи", "Сколько водородных связей между гуанином и цитозином?", ["3", "2", "1", "4"], "3", "G ≡ C — три, A = T — две."), nkS("Спираль", "Сколько пар нуклеотидов в одном витке спирали ДНК?", ["10", "3,4", "20", "2"], "10", "Виток — 10 пар и 3,4 нм.")]); }
+  const nkQThree = () => ({ t: "3", name: "Три верных", items: sShuf([...sShuf(NK_ST.filter((x) => x[1])).slice(0, 3), ...sShuf(NK_ST.filter((x) => !x[1])).slice(0, 3)]), pick: [], done: false });
+  const nkNew = () => [nkQBase(), nkQSug(), nkQCompl(), nkQChar(), nkQThree(), nkQAtp(), nkQRna(), nkQH()].map((q) => (q.t === "3" ? q : Object.assign({}, q, { t: "s", opts: sShuf(q.opts), pick: null })));
+  const NKR = { run: null };
+  const NK_Q = { view: vNK, R: NKR, title: "ДНК, РНК и АТФ", ask3: "Выберите три верных утверждения о нуклеиновых кислотах и АТФ.", tip: "Загляни в лабораторию ещё раз — особенно в «Комплементарность» и «АТФ».", make: nkNew, store: () => nks, save: nksave, lab: () => nkRender(true) };
+  function nkStart() { cancelAnimationFrame(DNL.raf); DNL.anim = null; NKR.run = { qs: nkNew(), k: 0, ok: 0 }; labQuiz(NK_Q); zScroll(vNK); }
+  function nkRender(keep) {
+    if (NKR.run) return labQuiz(NK_Q);
+    if (!keep) { cancelAnimationFrame(DNL.raf); Object.assign(DNL, { step: 0, sug: "d", base: null, rna: false, rot: 1, A: 20, atp: 3, en: 0, anim: null, msg: "" }); nkNewSeq(); }
+    if (!DNL.top.length) nkNewSeq();
+    if (!DNL.task) DNL.task = nkTask();
+    vNK.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-nk="back">← к модулям</button><h2 class="mod-title">ДНК, РНК и АТФ: лаборатория</h2></div>
+      <p class="intro">Собери нуклеотид, дострой вторую цепь, покрути двойную спираль, реши задачу на Чаргаффа и «разряди» АТФ. После лаборатории — 8 заданий ЕГЭ.${nks.best != null ? ` Рекорд: <b>${nks.best}</b> из 8.` : ""}</p>
+      ${nkLabHtml()}
+      <button type="button" class="linkbtn bk-skip" data-nk="skip">Сразу к заданиям →</button>`;
+    vNK.querySelector('[data-nk="back"]').addEventListener("click", () => { cancelAnimationFrame(DNL.raf); go({ tab: "learn", module: null }); });
+    vNK.querySelector('[data-nk="skip"]').addEventListener("click", nkStart);
+    vNK.querySelectorAll("[data-ns]").forEach((b) => b.addEventListener("click", () => nkGo(+b.dataset.ns)));
+    const n = vNK.querySelector("[data-nnext]"), p = vNK.querySelector("[data-nprev]"), q = vNK.querySelector("[data-nq]");
+    if (n) n.addEventListener("click", () => nkGo(DNL.step + 1));
+    if (p) p.addEventListener("click", () => nkGo(DNL.step - 1));
+    if (q) q.addEventListener("click", nkStart);
+    nkDraw(); nkStat(); nkBindCtl();
+    if (DNL.step === 2) nkSpin();
+  }
+  const NK_TRAPS = [
+    ["Тимин — только в ДНК, урацил — только в РНК", "При переписывании ДНК в иРНК напротив A ставь U, а не T."],
+    ["A = T — две связи, G ≡ C — три", "Чем больше пар G–C, тем прочнее участок ДНК."],
+    ["Внутри цепи — ковалентные, между цепями — водородные", "Нуклеотиды одной цепи соединены фосфодиэфирными связями, комплементарные основания — водородными."],
+    ["В АТФ — рибоза, а не дезоксирибоза", "АТФ — рибонуклеотид: аденин + рибоза + 3 остатка фосфорной кислоты; макроэргических связей две."],
+    ["Чаргафф: делим остаток пополам", "Если A = 20%, то T = 20%, а G и C делят оставшиеся 60% поровну — по 30%."],
+  ];
+
   function renderList() {
     if (state.subject === "bio" && state.tab === "quiz") {
       vList.innerHTML = `<div class="empty-state"><b>Общий микс по биологии появится, когда выйдет раздел «Клетка»</b><p>Пока проверь себя в разделе «Биология как наука» — задание 1 ЕГЭ.</p><button type="button" class="btn primary" id="go-bio1">Открыть раздел</button></div>`;
@@ -3733,7 +4067,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS], ["kl-nk", "ДНК, РНК и АТФ", NK_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -5375,6 +5709,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "belki") go({ subject: "bio", module: "kl-belki" }, { noScroll: true });
   else if (h === "ferm") go({ subject: "bio", module: "kl-ferm" }, { noScroll: true });
   else if (h === "ugl") go({ subject: "bio", module: "kl-ugl" }, { noScroll: true });
+  else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
