@@ -873,6 +873,26 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 .plan-txt span { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.35; color: var(--ink-2); }
 .pro { display: inline-block; padding: 2px 7px; border-radius: 6px; background: var(--ink); color: var(--paper); font: 800 10.5px/1.3 var(--font-mono); letter-spacing: .08em; }
 .plan-go { font-weight: 700; color: var(--ink-2); }
+.l3d-cta { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 14px; width: 100%; margin: 0 0 18px; padding: 14px 16px; border: 0; border-radius: 18px; cursor: pointer; text-align: left; color: #E6F0FF;
+  background: radial-gradient(120% 140% at 0% 0%, #13305E 0%, #070C18 62%); box-shadow: 0 1px 2px rgba(0,0,0,.2), 0 10px 28px rgba(13, 26, 60, .28); font: inherit; }
+.l3d-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.l3d-cta-art { position: relative; width: 64px; height: 64px; border-radius: 50%;
+  background: radial-gradient(circle at 46% 48%, #A9C8FF 0 9%, #3D7BFF 10% 24%, transparent 25%),
+              radial-gradient(circle at 72% 30%, #FF3D6E 0 7%, transparent 8%), radial-gradient(circle at 28% 74%, #FF5FD2 0 6%, transparent 7%),
+              radial-gradient(circle at 70% 72%, #FFC23D 0 6%, transparent 7%), radial-gradient(circle at 50% 50%, rgba(77,225,255,.10) 0 58%, rgba(77,225,255,.65) 64%, transparent 68%);
+  box-shadow: 0 0 22px rgba(77, 225, 255, .35); animation: l3dSpin 14s linear infinite; }
+@keyframes l3dSpin { to { transform: rotate(360deg); } }
+.l3d-cta-txt { display: grid; gap: 3px; min-width: 0; }
+.l3d-cta-txt b { font: 700 16px/1.2 var(--font-display); letter-spacing: -.01em; }
+.l3d-cta-txt small { font: 400 13px/1.35 var(--font-body); color: #9FB3D6; }
+.l3d-cta-txt i { justify-self: start; font: 500 10px/1 var(--font-mono); font-style: normal; letter-spacing: .08em; text-transform: uppercase; padding: 4px 7px; border-radius: 999px; background: rgba(77, 225, 255, .16); color: #4DE1FF; }
+.l3d-cta-go { font: 600 13px/1 var(--font-body); padding: 10px 12px; border-radius: 12px; background: #4DE1FF; color: #03121A; white-space: nowrap; }
+@media (max-width: 380px) { .l3d-cta { grid-template-columns: 52px 1fr; } .l3d-cta-art { width: 52px; height: 52px; } .l3d-cta-go { display: none; } }
+@media (prefers-reduced-motion: reduce) { .l3d-cta-art { animation: none; } }
+.l3d-load { position: fixed; inset: 0; z-index: 2990; display: grid; place-items: center; padding: 24px; background: var(--bg); }
+.l3d-load-in { display: grid; justify-items: center; gap: 10px; text-align: center; max-width: 320px; }
+.l3d-load-in b { font: 600 16px/1.3 var(--font-display); }
+.l3d-load-in span { color: var(--ink-2); font-size: 14px; }
 .plan-ov { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; background: rgba(10, 12, 20, .45); animation: planFade .2s ease-out; }
 .plan-ov[hidden] { display: none; }
 @media (min-width: 640px) { .plan-ov { align-items: center; } }
@@ -1359,7 +1379,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.7.2</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.8</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1435,7 +1455,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.7.2. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.8. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1466,7 +1486,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ: лаборатория", "desc": "Собери нуклеотид, дострой цепь, покрути спираль, реши задачу на Чаргаффа и разряди АТФ.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: лаборатория", "desc": "Четыре клетки с приближением, сортировка по мембранам, поиск органоида по функции, сравнение клеток.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: лаборатория", "desc": "Новое: клетка в 3D до ДНК и АТФ. Четыре клетки с приближением, сортировка по мембранам, поиск органоида по функции, сравнение клеток.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-mem", "title": "Мембрана и транспорт веществ", "desc": "Диффузия, активный транспорт, эндо- и экзоцитоз.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-osm", "title": "Осмос, тургор, плазмолиз", "desc": "Клетка в растворах разной концентрации.", "st": "скоро"},
@@ -2068,6 +2088,24 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <span class="plan-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="24" height="22" rx="4"/><path d="M4 12h24M10 3v6M22 3v6"/><path d="M9 23l5-5 3 3 6-6"/></svg></span>
       <span class="plan-txt"><b>Мой план 80+ <span class="pro">PRO</span></b><span>Умный планер подготовки: все темы ФИПИ, график сам подстраивается под тебя</span></span>
       <span class="plan-go">→</span></button>`;
+  /* v4.8: 3D-лаборатория грузится только по требованию: lab3d.js + three.js r160 из этого же репозитория */
+  let l3dBusy = false;
+  async function hbOpen3D(how) {
+    if (l3dBusy) return; l3dBusy = true;
+    const ld = document.createElement("div"); ld.className = "l3d-load";
+    ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Загружаю 3D-клетку…</b><span>В первый раз — пара секунд</span></div>';
+    document.body.appendChild(ld);
+    try {
+      const m = await import("./lab3d.js?v=480");
+      await m.open({ how, onClose: () => { l3dBusy = false; } });
+      ld.remove();
+    } catch (e) {
+      l3dBusy = false;
+      ld.innerHTML = '<div class="l3d-load-in"><b>Не получилось открыть 3D</b><span>Проверь интернет и попробуй ещё раз. Если не помогло — обнови Телеграм.</span><button type="button" class="btn primary">Закрыть</button></div>';
+      ld.querySelector("button").addEventListener("click", () => ld.remove());
+    }
+  }
+  window.hbOpen3D = hbOpen3D;
   function planShow(how) { hbGoalOnce("upsell_viewed", { how: typeof how === "string" ? how : "open" }); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
   function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
   document.getElementById("plan-x").addEventListener("click", planHide);
@@ -2120,6 +2158,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   }
   const hbOnce = {};
   const hbGoalOnce = (name, params) => { if (hbOnce[name]) return; hbOnce[name] = 1; hbGoal(name, params); };
+  window.hbLab = { right: hbRight, goal: hbGoalOnce };   /* v4.8: для 3D-лаборатории (lab3d.js) */
   /* a) открыл тренажёр */
   hbGoal("app_opened", { start: window.HB_START || "main", tg: !!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) });
   /* b) начал решать — кнопки старта во всех разделах (ловим до того, как раздел перерисуется) */
@@ -4409,10 +4448,12 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vOG.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-og="back">← к модулям</button><h2 class="mod-title">Строение клетки: лаборатория</h2></div>
       <p class="intro">Четыре клетки, которые можно приближать: тапни по органоиду и загляни внутрь. Потом рассортируй органоиды по мембранам и найди их по функции. После лаборатории — 8 заданий ЕГЭ.${ogs.best != null ? ` Рекорд: <b>${ogs.best}</b> из 8.` : ""}</p>
+      <button type="button" class="l3d-cta" data-og="3d"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>Клетка в 3D</b><small>Крути пальцами, приближай органоиды и загляни до ДНК и АТФ</small></span><span class="l3d-cta-go">Открыть</span></button>
       ${ogLabHtml()}
       <button type="button" class="linkbtn bk-skip" data-og="skip">Сразу к заданиям →</button>`;
     vOG.querySelector('[data-og="back"]').addEventListener("click", () => { cancelAnimationFrame(OGL.raf); go({ tab: "learn", module: null }); });
     vOG.querySelector('[data-og="skip"]').addEventListener("click", ogStart);
+    vOG.querySelector('[data-og="3d"]').addEventListener("click", () => hbOpen3D("module"));
     vOG.querySelectorAll("[data-os]").forEach((b) => b.addEventListener("click", () => ogGo(+b.dataset.os)));
     const n = vOG.querySelector("[data-onext]"), p = vOG.querySelector("[data-oprev]"), q = vOG.querySelector("[data-oq]");
     if (n) n.addEventListener("click", () => ogGo(OGL.step + 1));
@@ -6115,6 +6156,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
   else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
   else if (h === "plan") { go({}, { noScroll: true }); planShow("bot"); }
+  else if (h === "cell3d") { go({ subject: "bio", module: "kl-org" }, { noScroll: true }); hbOpen3D("start"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
