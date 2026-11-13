@@ -1359,7 +1359,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.7.1</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.7.2</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1435,7 +1435,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.7.1. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.7.2. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1908,7 +1908,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const r = R[quiz.order[quiz.i]];
     if (id === r.from) return;
     if ((r.accept || [r.to]).includes(id)) {
-      if (quiz.tries === 0) quiz.right++;
+      if (quiz.tries === 0) { quiz.right++; hbRight("map", null, "map:" + r.from + ">" + r.to); }
       nodeEls[id].classList.add("ok", "pulse");
       reveal(true);
     } else {
@@ -2068,7 +2068,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <span class="plan-ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="24" height="22" rx="4"/><path d="M4 12h24M10 3v6M22 3v6"/><path d="M9 23l5-5 3 3 6-6"/></svg></span>
       <span class="plan-txt"><b>Мой план 80+ <span class="pro">PRO</span></b><span>Умный планер подготовки: все темы ФИПИ, график сам подстраивается под тебя</span></span>
       <span class="plan-go">→</span></button>`;
-  function planShow() { hbGoalOnce("upsell_viewed", { how: "open" }); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
+  function planShow(how) { hbGoalOnce("upsell_viewed", { how: typeof how === "string" ? how : "open" }); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
   function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
   document.getElementById("plan-x").addEventListener("click", planHide);
   planOv.addEventListener("click", (e) => { if (e.target === planOv) planHide(); });
@@ -2085,6 +2085,38 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   const hbMod = () => state.module || (state.tab === "quiz" ? "mix" : state.tab) || "list";
   function hbGoal(name, params) {
     try { if (window.HB_YM && window.ym) window.ym(window.HB_YM, "reachGoal", name, Object.assign({ module: hbMod() }, params || {})); } catch (e) {}
+  }
+  /* ════════ v4.7.2: общий счётчик верных ответов → допродажа планера ════════
+     Любой верный ответ в любом задании (химия и биология) вызывает hbRight(тег, задание) или hbRight(тег, null, готовый_ключ).
+     Одно и то же задание засчитывается один раз (ключ — отпечаток текста задания без «что выбрал» и без порядка вариантов).
+     На 10-м уникальном верном ответе тренажёр один раз сообщает боту (hbMilestone), бот пишет в личку.
+     Метка hb_up10: «p» — набрали 10, бот ещё не подтвердил (повторим на следующем верном ответе); «1» — готово. */
+  const HB_RIGHT_KEY = "hb.right.v1", HB_RIGHT_N = 10;
+  const HB_VOLATILE = { pick: 1, picked: 1, done: 1, user: 1, good: 1, hint: 1, place: 1, res: 1, solved: 1, val: 1, sel: 1, miss: 1, anim: 1, shake: 1 };
+  function hbQKey(q) {
+    const j = JSON.stringify(q, (k, v) => HB_VOLATILE[k] ? undefined : Array.isArray(v) ? v.slice().sort((a, b) => (JSON.stringify(a) > JSON.stringify(b) ? 1 : -1)) : v);
+    let h = 5381;
+    for (let i = 0; i < j.length; i++) h = ((h << 5) + h + j.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36) + "." + j.length;
+  }
+  function hbRight(tag, q, id) {
+    try {
+      if (localStorage.getItem("hb_up10") === "1") return;
+      let st = {};
+      try { st = JSON.parse(localStorage.getItem(HB_RIGHT_KEY) || "{}") || {}; } catch (e) { st = {}; }
+      const seen = st.seen || (st.seen = {});
+      if (Object.keys(seen).length < HB_RIGHT_N) {
+        let key;
+        try { key = id || tag + ":" + hbQKey(q); } catch (e) { key = tag + ":t" + Date.now(); }
+        if (seen[key]) return;
+        seen[key] = 1;
+        localStorage.setItem(HB_RIGHT_KEY, JSON.stringify(st));
+      }
+      if (Object.keys(seen).length >= HB_RIGHT_N) {
+        if (!localStorage.getItem("hb_up10")) localStorage.setItem("hb_up10", "p");
+        if (window.hbMilestone) window.hbMilestone("correct10");
+      }
+    } catch (e) {}
   }
   const hbOnce = {};
   const hbGoalOnce = (name, params) => { if (hbOnce[name]) return; hbOnce[name] = 1; hbGoal(name, params); };
@@ -2305,7 +2337,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
         if (!isFinite(v)) { inp.classList.add("shake"); setTimeout(() => inp.classList.remove("shake"), 400); return; }
         T.done = true; T.user = v;
         T.good = Math.round(v * 10 ** T.p + 1e-9) === Math.round(T.ans * 10 ** T.p + 1e-9);
-        if (T.good && !T.hint) r.ok++;
+        if (T.good && !T.hint) { r.ok++; hbRight("calc", T); }
         haptic(T.good ? "success" : "error"); rRun(); zScroll(vR.querySelector(".z-ex"), 160);
       };
       vR.querySelector('[data-r="check"]').addEventListener("click", check);
@@ -2424,7 +2456,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vN.querySelector('[data-n="list"]').addEventListener("click", () => { NR.run = null; nRender(); zScroll(vN); });
     vN.querySelectorAll("[data-no]").forEach(b => b.addEventListener("click", () => {
       if (r.pick != null) return;
-      r.pick = +b.dataset.no; const ok = q.opts[r.pick] === q.ask[q.side]; if (ok) r.ok++;
+      r.pick = +b.dataset.no; const ok = q.opts[r.pick] === q.ask[q.side]; if (ok) { r.ok++; hbRight("nom", q); }
       haptic(ok ? "success" : "error"); nRun(); zScroll(vN.querySelector(".nb-card"), 90);
     }));
     const nx = vN.querySelector('[data-n="next"]');
@@ -2567,7 +2599,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       vKT.querySelector('[data-kt="check"]').addEventListener("click", () => {
         q.done = true;
         const ok = q.t === "m" ? q.place.every((p, i) => p === q.set[i][0]) : q.pick.slice().sort().join("") === q.items.map((x, i) => x[1] ? i + 1 : 0).filter(Boolean).join("");
-        if (ok) r.ok++;
+        if (ok) { r.ok++; hbRight("kt", q); }
         haptic(ok ? "success" : "error"); ktRun(); zScroll(vKT.querySelector(".z-ex"), 160);
       });
     } else vKT.querySelector('[data-kt="next"]').addEventListener("click", () => { r.k++; ktRun(); zScroll(vKT); });
@@ -2735,7 +2767,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
         <div class="actions"><button type="button" class="btn primary" data-vd="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
         : single ? "" : `<div class="actions l-act"><button type="button" class="btn primary" data-vd="check"${ready ? "" : " disabled"}>Проверить</button></div>`}`;
     vVD.querySelector('[data-vd="list"]').addEventListener("click", () => { VDR.run = null; vdRender(); zScroll(vVD); });
-    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); vdRun(); zScroll(vVD.querySelector(".z-ex"), 160); };
+    const fin = (ok) => { if (ok) { r.ok++; hbRight("vd", r.qs[r.k]); } haptic(ok ? "success" : "error"); vdRun(); zScroll(vVD.querySelector(".z-ex"), 160); };
     if (!done) {
       vVD.querySelectorAll("[data-vc]").forEach(b => b.addEventListener("click", () => { q.sel = q.sel === b.dataset.vc ? null : b.dataset.vc; vdRun(); }));
       vVD.querySelectorAll("[data-vb]").forEach(b => b.addEventListener("click", (e) => {
@@ -3031,7 +3063,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
         <div class="actions"><button type="button" class="btn primary" data-bk="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
         : q.t === "3" ? `<div class="actions l-act"><button type="button" class="btn primary" data-bk="check"${q.pick.length === 3 ? "" : " disabled"}>Проверить</button></div>` : ""}`;
     vBK.querySelector('[data-bk="list"]').addEventListener("click", () => { BKR.run = null; bkRender(true); zScroll(vBK); });
-    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); bkRun(); zScroll(vBK.querySelector(".z-ex"), 160); };
+    const fin = (ok) => { if (ok) { r.ok++; hbRight("bk", r.qs[r.k]); } haptic(ok ? "success" : "error"); bkRun(); zScroll(vBK.querySelector(".z-ex"), 160); };
     if (!done) {
       vBK.querySelectorAll("[data-bo]").forEach(b => b.addEventListener("click", () => { q.pick = +b.dataset.bo; fin(q.opts[q.pick] === q.ans); }));
       vBK.querySelectorAll("[data-bs3]").forEach(b => b.addEventListener("click", () => { const i = +b.dataset.bs3, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); bkRun(); }));
@@ -3435,7 +3467,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
         <div class="actions"><button type="button" class="btn primary" data-fm="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
         : q.t === "3" ? `<div class="actions l-act"><button type="button" class="btn primary" data-fm="check"${q.pick.length === 3 ? "" : " disabled"}>Проверить</button></div>` : ""}`;
     vFM.querySelector('[data-fm="list"]').addEventListener("click", () => { FMR.run = null; fmRender(true); zScroll(vFM); });
-    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); fmRun(); zScroll(vFM.querySelector(".z-ex"), 160); };
+    const fin = (ok) => { if (ok) { r.ok++; hbRight("fm", r.qs[r.k]); } haptic(ok ? "success" : "error"); fmRun(); zScroll(vFM.querySelector(".z-ex"), 160); };
     if (!done) {
       vFM.querySelectorAll("[data-fo]").forEach((b) => b.addEventListener("click", () => { q.pick = +b.dataset.fo; fin(q.opts[q.pick] === q.ans); }));
       vFM.querySelectorAll("[data-f3]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.f3, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); fmRun(); }));
@@ -3758,7 +3790,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
         <div class="actions"><button type="button" class="btn primary" data-lq="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>`
         : q.t === "3" ? `<div class="actions l-act"><button type="button" class="btn primary" data-lq="check"${q.pick.length === 3 ? "" : " disabled"}>Проверить</button></div>` : ""}`;
     v.querySelector('[data-lq="back"]').addEventListener("click", () => { L.R.run = null; L.lab(); zScroll(v); });
-    const fin = (ok) => { if (ok) r.ok++; haptic(ok ? "success" : "error"); labQuiz(L); zScroll(v.querySelector(".z-ex"), 160); };
+    const fin = (ok) => { if (ok) { r.ok++; hbRight("lq", r.qs[r.k]); } haptic(ok ? "success" : "error"); labQuiz(L); zScroll(v.querySelector(".z-ex"), 160); };
     if (!done) {
       v.querySelectorAll("[data-lo]").forEach((b) => b.addEventListener("click", () => { q.pick = +b.dataset.lo; fin(q.opts[q.pick] === q.ans); }));
       v.querySelectorAll("[data-l3]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.l3, j = q.pick.indexOf(i); if (j >= 0) q.pick.splice(j, 1); else if (q.pick.length < 3) q.pick.push(i); labQuiz(L); }));
@@ -4635,7 +4667,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const rv = vZ.querySelector("[data-zreveal]");
     if (rv) rv.addEventListener("click", () => { r.solved = true; zRenderRun(); zScroll(vZ.querySelector(".z-ex"), 140); });
     vZ.querySelectorAll("[data-zself]").forEach(b => b.addEventListener("click", () => {
-      r.res[r.k] = b.dataset.zself === "1"; if (!r.res[r.k]) r.miss = true;
+      r.res[r.k] = b.dataset.zself === "1"; if (!r.res[r.k]) r.miss = true; else hbRight("z", null, "z:" + r.id + ":" + r.k);
       haptic(r.res[r.k] ? "success" : "warning"); zAdvance();
     }));
     const nb = vZ.querySelector("[data-znext]");
@@ -4704,6 +4736,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (r.solved || r.picked.includes(j)) return;
     if (o.ok) {
       r.solved = true;
+      if (!r.picked.length) hbRight("z", null, "z:" + r.id + ":" + r.k);
       if (s.t === "e") r.res[r.k] = r.picked.length === 0;
       if (r.picked.length) r.miss = true;
       haptic(r.picked.length ? "warning" : "success");
@@ -4960,7 +4993,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     r.busy = true;
     const id = r.q.shift();
     if (ok) {
-      if (!r.again[id]) { r.first++; cs.k[id] = 1; }
+      if (!r.again[id]) { r.first++; cs.k[id] = 1; hbRight("c", null, "c:" + id); }
       r.done++;
       haptic("success");
     } else {
@@ -5190,7 +5223,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     track.addEventListener("pointerup", () => { drag = false; });
     const ch = vL.querySelector('[data-l="check"]');
     if (ch) ch.addEventListener("click", () => {
-      r.done = true; if (r.pick === F[1]) r.ok++;
+      r.done = true; if (r.pick === F[1]) { r.ok++; hbRight("l", r.qs[r.k]); }
       haptic(r.pick === F[1] ? "success" : "error"); lRenderRun();
     });
     const nx = vL.querySelector('[data-l="next"]');
@@ -5443,7 +5476,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     V.querySelector('[data-s="list"]').addEventListener("click", () => { SR[key] = null; sStart(key); zScroll(V); });
     V.querySelectorAll("[data-so]").forEach(b => b.addEventListener("click", () => {
       if (r.pick != null) return;
-      r.pick = +b.dataset.so; const ok = q.opts[r.pick].ok; if (ok) r.ok++;
+      r.pick = +b.dataset.so; const ok = q.opts[r.pick].ok; if (ok) { r.ok++; hbRight("s", q); }
       haptic(ok ? "success" : "error"); sQuiz(key); zScroll(V.querySelector(".z-ex"), 160);
     }));
     const nx = V.querySelector('[data-s="next"]');
@@ -5675,7 +5708,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       vG.querySelector('[data-p="check"]').addEventListener("click", () => {
         T.done = true;
         const ok = T.order.slice().reverse().every((v, i) => v === asc[i]);
-        if (ok) r.ok++;
+        if (ok) { r.ok++; hbRight("p", T); }
         haptic(ok ? "success" : "error"); pRun();
       });
     } else {
@@ -5761,7 +5794,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vH.querySelector('[data-h="list"]').addEventListener("click", () => { HR.run = null; hRender(); zScroll(vH); });
     vH.querySelectorAll("[data-ho]").forEach(b => b.addEventListener("click", () => {
       if (r.pick != null) return;
-      r.pick = +b.dataset.ho; if (r.pick === 0) r.ok++;
+      r.pick = +b.dataset.ho; if (r.pick === 0) { r.ok++; hbRight("h", r.qs[r.k]); }
       haptic(r.pick === 0 ? "success" : "error"); hRun(); zScroll(vH.querySelector(".h-card"), 90);
     }));
     const nx = vH.querySelector('[data-h="next"]');
@@ -5859,7 +5892,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vI.querySelector('[data-i="list"]').addEventListener("click", () => { IR.run = null; iRender(); zScroll(vI); });
     vI.querySelectorAll("[data-io]").forEach(b => b.addEventListener("click", () => {
       if (r.pick != null) return;
-      r.pick = +b.dataset.io; const ok = opts[r.pick].ok; if (ok) r.ok++;
+      r.pick = +b.dataset.io; const ok = opts[r.pick].ok; if (ok) { r.ok++; hbRight("i", r.qs[r.k]); }
       haptic(ok ? "success" : "error"); iRun(); zScroll(vI.querySelector(".i-card"), 90);
     }));
     const nx = vI.querySelector('[data-i="next"]');
@@ -5982,7 +6015,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vK.querySelectorAll("[data-ko]").forEach(b => b.addEventListener("click", () => {
       if (r.pick != null) return;
       r.pick = +b.dataset.ko; const ok = q.opts[r.pick].ok;
-      if (ok) r.ok++;
+      if (ok) { r.ok++; hbRight("k", q); }
       const p = r.per[q.t] || (r.per[q.t] = { ok: 0, n: 0 }); p.n++; if (ok) p.ok++;
       haptic(ok ? "success" : "error"); kRun(); zScroll(vK.querySelector(".z-ex"), 160);
     }));
@@ -6081,6 +6114,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "ugl") go({ subject: "bio", module: "kl-ugl" }, { noScroll: true });
   else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
   else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
+  else if (h === "plan") { go({}, { noScroll: true }); planShow("bot"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
 })();
@@ -6132,6 +6166,16 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   const hp = new URLSearchParams(location.hash.slice(1));
   const initData = (tg() && tg().initData) || hp.get("tgWebAppData") || "";
   const api = (new URLSearchParams(location.search).get("api") || "").replace(/\/$/, "");
+  /* события тренажёра → бот. Сейчас одно: correct10. Бот сам решает, писать ли человеку; метка hb_up10=1 ставится, когда он ответил */
+  let msBusy = false;
+  window.hbMilestone = async function (ev) {
+    if (!api || !initData || msBusy) return;
+    msBusy = true;
+    try {
+      const res = await fetch(api + "/milestone?e=" + encodeURIComponent(ev), { method: "POST", headers: { "content-type": "text/plain" }, body: initData });
+      if (res.ok && ev === "correct10") localStorage.setItem("hb_up10", "1");
+    } catch (e) {} finally { msBusy = false; }
+  };
 
   function show(which) {
     state = which;
