@@ -1379,7 +1379,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.8</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.9</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1455,7 +1455,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.8. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.9. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1486,7 +1486,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ: лаборатория", "desc": "Собери нуклеотид, дострой цепь, покрути спираль, реши задачу на Чаргаффа и разряди АТФ.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: лаборатория", "desc": "Новое: клетка в 3D до ДНК и АТФ. Четыре клетки с приближением, сортировка по мембранам, поиск органоида по функции, сравнение клеток.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: лаборатория", "desc": "Новое: четыре клетки в 3D (животная, растительная, гриб, бактерия) до ДНК и АТФ. Четыре клетки с приближением, сортировка по мембранам, поиск органоида по функции, сравнение клеток.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-mem", "title": "Мембрана и транспорт веществ", "desc": "Диффузия, активный транспорт, эндо- и экзоцитоз.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-osm", "title": "Осмос, тургор, плазмолиз", "desc": "Клетка в растворах разной концентрации.", "st": "скоро"},
@@ -2096,7 +2096,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Загружаю 3D-клетку…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./lab3d.js?v=480");
+      const m = await import("./lab3d.js?v=490");
       await m.open({ how, onClose: () => { l3dBusy = false; } });
       ld.remove();
     } catch (e) {
@@ -4448,7 +4448,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vOG.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-og="back">← к модулям</button><h2 class="mod-title">Строение клетки: лаборатория</h2></div>
       <p class="intro">Четыре клетки, которые можно приближать: тапни по органоиду и загляни внутрь. Потом рассортируй органоиды по мембранам и найди их по функции. После лаборатории — 8 заданий ЕГЭ.${ogs.best != null ? ` Рекорд: <b>${ogs.best}</b> из 8.` : ""}</p>
-      <button type="button" class="l3d-cta" data-og="3d"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>Клетка в 3D</b><small>Крути пальцами, приближай органоиды и загляни до ДНК и АТФ</small></span><span class="l3d-cta-go">Открыть</span></button>
+      <button type="button" class="l3d-cta" data-og="3d"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>Клетка в 3D</b><small>Животная, растительная, гриб и бактерия. Крути пальцами и приближай до ДНК и АТФ</small></span><span class="l3d-cta-go">Открыть</span></button>
       ${ogLabHtml()}
       <button type="button" class="linkbtn bk-skip" data-og="skip">Сразу к заданиям →</button>`;
     vOG.querySelector('[data-og="back"]').addEventListener("click", () => { cancelAnimationFrame(OGL.raf); go({ tab: "learn", module: null }); });
