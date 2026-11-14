@@ -6,8 +6,8 @@ import { RoomEnvironment } from "./vendor/three-r160/RoomEnvironment.js";
 import { mergeGeometries } from "./vendor/three-r160/BufferGeometryUtils.js";
 
 const MOLS = {"atp":{"atoms":[["N",-6.556,-0.762,2.495],["C",-5.734,-1.162,1.451],["N",-6.264,-1.94,0.48],["C",-5.464,-2.339,-0.532],["N",-4.164,-2.042,-0.739],["C",-3.691,-1.261,0.245],["C",-4.386,-0.782,1.344],["N",-3.573,0.014,2.124],["C",-2.399,-0.016,1.528],["N",-2.427,-0.753,0.374],["C",-1.336,-0.992,-0.556],["O",-0.134,-0.359,-0.037],["C",0.321,0.602,-1.015],["C",0.94,1.818,-0.332],["O",2.121,1.415,0.347],["P",3.087,2.557,0.91],["O",2.398,3.744,1.494],["O",3.94,2.983,-0.386],["O",4.161,1.841,1.823],["P",5.188,0.727,1.35],["O",5.955,0.08,2.461],["O",6.098,1.502,0.286],["O",4.356,-0.302,0.475],["P",4.909,-1.76,0.19],["O",6.21,-1.876,-0.521],["O",4.874,-2.491,1.609],["O",3.681,-2.485,-0.531],["C",-0.911,0.957,-1.838],["O",-0.584,1.501,-3.108],["C",-1.581,-0.401,-1.953],["O",-0.913,-1.184,-2.956],["H",-6.221,0.052,2.997],["H",-7.538,-0.811,2.261],["H",-5.929,-2.979,-1.277],["H",-1.504,0.477,1.89],["H",-1.16,-2.073,-0.58],["H",1.087,0.108,-1.627],["H",1.191,2.588,-1.069],["H",0.252,2.236,0.409],["H",3.739,3.919,-0.6],["H",5.574,1.971,-0.397],["H",5.649,-2.233,2.155],["H",2.945,-2.633,0.09],["H",-1.553,1.66,-1.294],["H",-1.416,1.775,-3.538],["H",-2.63,-0.325,-2.253],["H",-0.607,-0.565,-3.648]],"bonds":[[0,1,1],[1,2,1],[2,3,2],[3,4,1],[4,5,2],[5,6,1],[6,7,1],[7,8,2],[8,9,1],[9,10,1],[10,11,1],[11,12,1],[12,13,1],[13,14,1],[14,15,1],[15,16,2],[15,17,1],[15,18,1],[18,19,1],[19,20,2],[19,21,1],[19,22,1],[22,23,1],[23,24,2],[23,25,1],[23,26,1],[12,27,1],[27,28,1],[27,29,1],[29,30,1],[6,1,2],[29,10,1],[9,5,1],[0,31,1],[0,32,1],[3,33,1],[8,34,1],[10,35,1],[12,36,1],[13,37,1],[13,38,1],[17,39,1],[21,40,1],[25,41,1],[26,42,1],[27,43,1],[28,44,1],[29,45,1],[30,46,1]],"groups":["aden","aden","aden","aden","aden","aden","aden","aden","aden","aden","rib","rib","rib","rib","pa","pa","pa","pa","pb","pb","pb","pb","pg","pg","pg","pg","pg","rib","rib","rib","rib","aden","aden","aden","aden","rib","rib","rib","rib","pa","pb","pg","pg","rib","rib","rib","rib"],"hiBonds":[[18,15],[18,19],[22,19],[22,23]]},"glucose":{"atoms":[["O",1.916,-2.849,0.135],["C",1.709,-1.533,0.653],["C",0.897,-0.688,-0.342],["O",-0.401,-1.273,-0.593],["C",-1.469,-0.715,0.156],["O",-1.229,-0.887,1.542],["C",-1.671,0.778,-0.191],["O",-2.588,0.946,-1.29],["C",-0.35,1.45,-0.591],["O",-0.372,2.85,-0.265],["C",0.827,0.782,0.111],["O",2.04,1.469,-0.214],["H",2.477,-3.318,0.775],["H",1.19,-1.636,1.609],["H",2.691,-1.082,0.829],["H",1.42,-0.743,-1.306],["H",-2.379,-1.269,-0.099],["H",-1.414,-1.828,1.713],["H",-2.125,1.299,0.66],["H",-2.297,0.348,-2.005],["H",-0.2,1.41,-1.677],["H",-1.193,3.204,-0.659],["H",0.708,0.865,1.198],["H",1.814,2.421,-0.15]],"bonds":[[0,1,1],[1,2,1],[2,3,1],[3,4,1],[4,5,1],[4,6,1],[6,7,1],[6,8,1],[8,9,1],[8,10,1],[10,11,1],[10,2,1],[0,12,1],[1,13,1],[1,14,1],[2,15,1],[4,16,1],[5,17,1],[6,18,1],[7,19,1],[8,20,1],[9,21,1],[10,22,1],[11,23,1]]},"water":{"atoms":[["O",0.007,0.398,0.0],["H",-0.767,-0.185,0.0],["H",0.76,-0.213,0.0]],"bonds":[[0,1,1],[0,2,1]]}};
-const CSS = "\n/* Layout: one-screen 3D lab — full-bleed stage, thin top bar over it, glass bottom sheet. Tokens follow the «Химбио без зубрёжки» trainer. */\n:host {\n  --bg: #F5F7FB;\n  --ink: #17213A;\n  --ink-2: #56627D;\n  --line: #D6DDEA;\n  --glass: rgba(255, 255, 255, .84);\n  --glass-line: rgba(23, 33, 58, .09);\n  --accent: #C2185B;\n  --accent-soft: #FBE4EE;\n  --on-accent: #FFFFFF;\n  --ok: #24804E;\n  --ok-soft: #E1F3E8;\n  --bad: #C0392B;\n  --bad-soft: #FBE6E3;\n  --trap: #8A5A00;\n  --trap-soft: #FFF3D6;\n  --stage-1: #FFFFFF;\n  --stage-2: #E9EEF8;\n  --stage-grid: rgba(120, 140, 190, .11);\n  --shadow: 0 1px 2px rgba(23, 33, 58, .08), 0 8px 24px rgba(23, 33, 58, .10);\n  --font-display: \"Unbounded\", \"Onest\", system-ui, sans-serif;\n  --font-body: \"Onest\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;\n  --font-mono: \"IBM Plex Mono\", ui-monospace, Menlo, Consolas, monospace;\n}\n@media (prefers-color-scheme: dark) {\n  :host(:not([data-theme=\"light\"])) {\n    --bg: #0E1322; --ink: #E8ECF6; --ink-2: #9AA6C2; --line: #2A3452;\n    --glass: rgba(17, 23, 40, .84); --glass-line: rgba(255, 255, 255, .09);\n    --accent: #F06292; --accent-soft: #3A1A2A; --on-accent: #1A0B12;\n    --ok: #4CC28A; --ok-soft: #14301F; --bad: #FF7A6B; --bad-soft: #3A1A17; --trap: #FFCB6B; --trap-soft: #33280F;\n    --stage-1: #1A2440; --stage-2: #0E1322; --stage-grid: rgba(140, 160, 210, .07);\n    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);\n    color-scheme: dark;\n  }\n}\n:host([data-theme=\"dark\"]) {\n  --bg: #0E1322; --ink: #E8ECF6; --ink-2: #9AA6C2; --line: #2A3452;\n  --glass: rgba(17, 23, 40, .84); --glass-line: rgba(255, 255, 255, .09);\n  --accent: #F06292; --accent-soft: #3A1A2A; --on-accent: #1A0B12;\n  --ok: #4CC28A; --ok-soft: #14301F; --bad: #FF7A6B; --bad-soft: #3A1A17; --trap: #FFCB6B; --trap-soft: #33280F;\n  --stage-1: #1A2440; --stage-2: #0E1322; --stage-grid: rgba(140, 160, 210, .07);\n  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);\n  color-scheme: dark;\n}\n/* стиль «Микроскоп»: тёмное поле, флуоресценция */\n.app[data-look=\"scope\"] {\n  --ink: #E6F0FF; --ink-2: #8FA3C7; --line: #22314F;\n  --glass: rgba(6, 10, 20, .80); --glass-line: rgba(120, 190, 255, .16);\n  --accent: #4DE1FF; --accent-soft: rgba(77, 225, 255, .14); --on-accent: #03121A;\n  --ok: #3DDC97; --ok-soft: rgba(61, 220, 151, .14); --bad: #FF6B8B; --bad-soft: rgba(255, 107, 139, .14);\n  --trap: #FFD166; --trap-soft: rgba(255, 209, 102, .12);\n  --stage-1: #0D1A33; --stage-2: #020409; --stage-grid: transparent;\n  color-scheme: dark;\n}\n:host { all: initial; position: fixed; inset: 0; z-index: 3000; display: block; }\n[hidden] { display: none !important; }\n*, *::before, *::after { box-sizing: border-box; }\n.app { position: relative; height: 100%; overflow: hidden; background: var(--stage-2); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }\n.stage {\n  position: absolute; inset: 0;\n  background:\n    linear-gradient(var(--stage-grid) 1px, transparent 1px) 0 0 / 22px 22px,\n    linear-gradient(90deg, var(--stage-grid) 1px, transparent 1px) 0 0 / 22px 22px,\n    radial-gradient(120% 75% at 50% 38%, var(--stage-1), var(--stage-2));\n  transition: background .4s;\n}\n.stage canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; touch-action: none; outline: none; }\n.fade { position: absolute; inset: 0; background: var(--stage-2); opacity: 0; pointer-events: none; transition: opacity .22s ease; z-index: 4; }\n.fade.on { opacity: 1; }\n\n/* подписи органоидов */\n.labels { position: absolute; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }\n.lbl { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; white-space: nowrap; will-change: transform; transition: opacity .25s; }\n.lbl i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px var(--stage-1); flex: none; }\n.lbl span { font: 600 11px/1 var(--font-body); padding: 5px 8px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-line); color: var(--ink); box-shadow: var(--shadow); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }\n.lbl.flip { flex-direction: row-reverse; }\n.lbl.hi span { background: var(--accent); color: var(--on-accent); border-color: transparent; }\n.lbl.off { opacity: 0; }\n.labels.hidden .lbl:not(.keep) { opacity: 0; }\n\n/* верхняя панель */\n.top { position: absolute; z-index: 5; top: 0; left: 0; right: 0; padding-top: calc(var(--tg-top, env(safe-area-inset-top, 0px)) + 12px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 10px; pointer-events: none; }\n.top > * { pointer-events: auto; }\n.row { display: flex; align-items: center; gap: 10px; min-width: 0; }\n.iconbtn { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--glass-line); background: var(--glass); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow); cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }\n.iconbtn svg { width: 18px; height: 18px; }\n.ttl { min-width: 0; flex: 1; }\n.eyebrow { font: 500 10px/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }\nh1 { margin: 2px 0 0; font: 600 18px/1.15 var(--font-display); letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; }\n.pill { flex: none; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--glass-line); background: var(--glass); color: var(--ink); font: 600 12px/1 var(--font-body); box-shadow: var(--shadow); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }\n.pill[aria-pressed=\"true\"] { background: var(--ink); color: var(--bg); border-color: transparent; }\n.app[data-look=\"scope\"] .pill[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); }\n.crumbs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font: 500 11px/1 var(--font-mono); letter-spacing: .04em; color: var(--ink-2); text-transform: uppercase; }\n.crumbs button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--ink-2); background: none; border: 0; padding: 4px 2px; cursor: pointer; }\n.crumbs button:last-child { color: var(--ink); cursor: default; }\n.crumbs .sep { opacity: .5; }\n.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); max-width: 100%; overflow-x: auto; scrollbar-width: none; }\n.seg::-webkit-scrollbar { display: none; }\n.seg button { flex: none; border: 0; background: none; color: var(--ink-2); font: 600 12px/1 var(--font-body); padding: 8px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }\n.seg button[aria-pressed=\"true\"] { background: var(--ink); color: var(--bg); }\n.app[data-look=\"scope\"] .seg button[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); }\n.looks { display: flex; align-items: center; gap: 8px; min-width: 0; }\n.looks .seg { min-width: 0; }\n.iconbtn[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); border-color: transparent; }\n.looks .tag { font: 500 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }\n\n/* нижняя шторка */\n.bottom { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding-bottom: calc(var(--tg-bottom, env(safe-area-inset-bottom, 0px)) + 12px); padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); display: grid; gap: 8px; pointer-events: none; }\n.bottom > * { pointer-events: auto; }\n.modes { justify-self: center; }\n.sheet { background: var(--glass); border: 1px solid var(--glass-line); border-radius: 22px; box-shadow: var(--shadow); padding: 14px 16px 14px; max-height: min(46vh, 380px); overflow-y: auto; backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); max-width: 560px; width: 100%; justify-self: center; box-sizing: border-box; }\n.hint { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px; font: 500 12px/1.3 var(--font-body); color: var(--ink-2); }\n.hint b { color: var(--ink); font-weight: 600; }\n.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 10px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }\n.chip i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }\n.shead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }\n.fold { flex: none; width: 30px; height: 30px; margin: -4px -6px -4px 0; border-radius: 50%; border: 0; background: transparent; color: var(--ink-2); display: grid; place-items: center; cursor: pointer; }\n.fold svg { width: 18px; height: 18px; transition: transform .2s; }\n.sheet.min .fold svg { transform: rotate(180deg); }\n.sheet.min .body, .sheet.min .chips { display: none; }\n.sheet h2 { margin: 8px 0 6px; font: 600 17px/1.2 var(--font-display); letter-spacing: -.01em; text-wrap: balance; }\n.sheet p { margin: 0; font: 400 14px/1.45 var(--font-body); color: var(--ink); }\n.trap { margin-top: 10px; padding: 9px 11px; border-radius: 12px; background: var(--trap-soft); color: var(--ink); font: 400 13px/1.4 var(--font-body); }\n.trap b { display: block; font: 500 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--trap); margin-bottom: 5px; }\n.part { margin-top: 10px; padding: 9px 11px; border-radius: 12px; border: 1px dashed var(--line); font: 400 13px/1.4 var(--font-body); }\n.part b { font-weight: 600; }\n.acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }\n.btn { border: 0; border-radius: 12px; padding: 11px 14px; font: 600 13px/1 var(--font-body); cursor: pointer; background: var(--accent); color: var(--on-accent); }\n.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }\n.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }\n.chips button { border: 1px solid var(--line); background: transparent; color: var(--ink); font: 600 12px/1 var(--font-body); padding: 8px 10px; border-radius: 999px; cursor: pointer; }\n.chips button[aria-pressed=\"true\"] { background: var(--ink); color: var(--bg); border-color: transparent; }\n.app[data-look=\"scope\"] .chips button[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); }\n.qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }\n.qcount { font: 500 11px/1 var(--font-mono); color: var(--ink-2); letter-spacing: .06em; }\n.verdict { margin-top: 10px; padding: 9px 11px; border-radius: 12px; font: 500 13px/1.4 var(--font-body); }\n.verdict.ok { background: var(--ok-soft); color: var(--ok); }\n.verdict.bad { background: var(--bad-soft); color: var(--bad); }\n.shake { animation: shake .35s; }\n@keyframes shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-6px) } 75% { transform: translateX(6px) } }\nbutton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }\n.nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; font: 500 14px/1.5 var(--font-body); color: var(--ink-2); }\n@media (min-width: 900px) {\n  .bottom { left: auto; width: 420px; right: 16px; bottom: 16px; }\n  h1 { font-size: 22px; }\n}\n@media (prefers-reduced-motion: reduce) { .lbl, .fade, .stage { transition: none; } .shake { animation: none; } }\n";
-const HTML = "<div class=\"app\" id=\"app\" data-look=\"notebook\">\n  <div class=\"stage\" id=\"stage\"></div>\n  <div class=\"labels\" id=\"labels\"></div>\n  <div class=\"fade\" id=\"fade\"></div>\n\n  <header class=\"top\">\n    <div class=\"row\">\n      <button class=\"iconbtn\" id=\"back\" aria-label=\"Назад\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></button>\n      <div class=\"ttl\">\n        <div class=\"eyebrow\" id=\"eyebrow\">Биология · 3D-лаборатория</div>\n        <h1 id=\"title\">Животная клетка</h1>\n      </div>\n      <button class=\"pill\" id=\"labelsBtn\" type=\"button\" aria-pressed=\"true\">Подписи</button>\n    </div>\n    <nav class=\"crumbs\" id=\"crumbs\" aria-label=\"Уровень\"></nav>\n    <div class=\"looks\">\n      <div class=\"seg\" id=\"types\" role=\"group\" aria-label=\"Какая клетка\">\n        <button type=\"button\" data-cell=\"cell\" aria-pressed=\"true\">Животная</button>\n        <button type=\"button\" data-cell=\"plant\" aria-pressed=\"false\">Растение</button>\n        <button type=\"button\" data-cell=\"fungus\" aria-pressed=\"false\">Гриб</button>\n        <button type=\"button\" data-cell=\"bact\" aria-pressed=\"false\">Бактерия</button>\n      </div>\n      <button class=\"iconbtn\" id=\"lookBtn\" type=\"button\" aria-pressed=\"false\" aria-label=\"Стиль «Микроскоп»\" title=\"Тетрадь / Микроскоп\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M12 4a8 8 0 0 1 0 16z\" fill=\"currentColor\"/></svg></button>\n    </div>\n  </header>\n\n  <section class=\"bottom\">\n    <div class=\"seg modes\" id=\"modes\" role=\"group\" aria-label=\"Режим\">\n      <button type=\"button\" data-mode=\"learn\" aria-pressed=\"true\">Изучать</button>\n      <button type=\"button\" data-mode=\"quiz\" aria-pressed=\"false\">Найди органоид</button>\n    </div>\n    <div class=\"sheet\" id=\"sheet\" aria-live=\"polite\"></div>\n  </section>\n</div>";
+const CSS = "\n/* Layout: one-screen 3D lab — full-bleed stage, thin top bar over it, glass bottom sheet. Tokens follow the «Химбио без зубрёжки» trainer. */\n:host {\n  --bg: #F5F7FB;\n  --ink: #17213A;\n  --ink-2: #56627D;\n  --line: #D6DDEA;\n  --glass: rgba(255, 255, 255, .84);\n  --glass-line: rgba(23, 33, 58, .09);\n  --accent: #C2185B;\n  --accent-soft: #FBE4EE;\n  --on-accent: #FFFFFF;\n  --ok: #24804E;\n  --ok-soft: #E1F3E8;\n  --bad: #C0392B;\n  --bad-soft: #FBE6E3;\n  --trap: #8A5A00;\n  --trap-soft: #FFF3D6;\n  --stage-1: #FFFFFF;\n  --stage-2: #E9EEF8;\n  --stage-grid: rgba(120, 140, 190, .11);\n  --shadow: 0 1px 2px rgba(23, 33, 58, .08), 0 8px 24px rgba(23, 33, 58, .10);\n  --font-display: \"Unbounded\", \"Onest\", system-ui, sans-serif;\n  --font-body: \"Onest\", system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif;\n  --font-mono: \"IBM Plex Mono\", ui-monospace, Menlo, Consolas, monospace;\n}\n@media (prefers-color-scheme: dark) {\n  :host(:not([data-theme=\"light\"])) {\n    --bg: #0E1322; --ink: #E8ECF6; --ink-2: #9AA6C2; --line: #2A3452;\n    --glass: rgba(17, 23, 40, .84); --glass-line: rgba(255, 255, 255, .09);\n    --accent: #F06292; --accent-soft: #3A1A2A; --on-accent: #1A0B12;\n    --ok: #4CC28A; --ok-soft: #14301F; --bad: #FF7A6B; --bad-soft: #3A1A17; --trap: #FFCB6B; --trap-soft: #33280F;\n    --stage-1: #1A2440; --stage-2: #0E1322; --stage-grid: rgba(140, 160, 210, .07);\n    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);\n    color-scheme: dark;\n  }\n}\n:host([data-theme=\"dark\"]) {\n  --bg: #0E1322; --ink: #E8ECF6; --ink-2: #9AA6C2; --line: #2A3452;\n  --glass: rgba(17, 23, 40, .84); --glass-line: rgba(255, 255, 255, .09);\n  --accent: #F06292; --accent-soft: #3A1A2A; --on-accent: #1A0B12;\n  --ok: #4CC28A; --ok-soft: #14301F; --bad: #FF7A6B; --bad-soft: #3A1A17; --trap: #FFCB6B; --trap-soft: #33280F;\n  --stage-1: #1A2440; --stage-2: #0E1322; --stage-grid: rgba(140, 160, 210, .07);\n  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);\n  color-scheme: dark;\n}\n/* стиль «Микроскоп»: тёмное поле, флуоресценция */\n.app[data-look=\"scope\"] {\n  --ink: #E6F0FF; --ink-2: #8FA3C7; --line: #22314F;\n  --glass: rgba(6, 10, 20, .80); --glass-line: rgba(120, 190, 255, .16);\n  --accent: #4DE1FF; --accent-soft: rgba(77, 225, 255, .14); --on-accent: #03121A;\n  --ok: #3DDC97; --ok-soft: rgba(61, 220, 151, .14); --bad: #FF6B8B; --bad-soft: rgba(255, 107, 139, .14);\n  --trap: #FFD166; --trap-soft: rgba(255, 209, 102, .12);\n  --stage-1: #0D1A33; --stage-2: #020409; --stage-grid: transparent;\n  color-scheme: dark;\n}\n:host { all: initial; position: fixed; inset: 0; z-index: 3000; display: block; }\n[hidden] { display: none !important; }\n*, *::before, *::after { box-sizing: border-box; }\n.app { position: relative; height: 100%; overflow: hidden; background: var(--stage-2); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }\n.stage {\n  position: absolute; inset: 0;\n  background:\n    linear-gradient(var(--stage-grid) 1px, transparent 1px) 0 0 / 22px 22px,\n    linear-gradient(90deg, var(--stage-grid) 1px, transparent 1px) 0 0 / 22px 22px,\n    radial-gradient(120% 75% at 50% 38%, var(--stage-1), var(--stage-2));\n  transition: background .4s;\n}\n.stage canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; display: block; touch-action: none; outline: none; }\n.fade { position: absolute; inset: 0; background: var(--stage-2); opacity: 0; pointer-events: none; transition: opacity .22s ease; z-index: 4; }\n.fade.on { opacity: 1; }\n\n/* подписи органоидов */\n.labels { position: absolute; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }\n.lbl { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; white-space: nowrap; will-change: transform; transition: opacity .25s; }\n.lbl i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 2px var(--stage-1); flex: none; }\n.lbl span { font: 600 11px/1 var(--font-body); padding: 5px 8px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-line); color: var(--ink); box-shadow: var(--shadow); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }\n.lbl.flip { flex-direction: row-reverse; }\n.lbl.hi span { background: var(--accent); color: var(--on-accent); border-color: transparent; }\n.lbl.off { opacity: 0; }\n.labels.hidden .lbl:not(.keep) { opacity: 0; }\n\n/* верхняя панель */\n.top { position: absolute; z-index: 5; top: 0; left: 0; right: 0; padding-top: calc(var(--tg-top, env(safe-area-inset-top, 0px)) + 12px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 10px; pointer-events: none; }\n.top > * { pointer-events: auto; }\n.row { display: flex; align-items: center; gap: 10px; min-width: 0; }\n.iconbtn { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--glass-line); background: var(--glass); color: var(--ink); display: grid; place-items: center; box-shadow: var(--shadow); cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }\n.iconbtn svg { width: 18px; height: 18px; }\n.ttl { min-width: 0; flex: 1; }\n.eyebrow { font: 500 10px/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }\nh1 { margin: 2px 0 0; font: 600 18px/1.15 var(--font-display); letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; }\n.pill { flex: none; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--glass-line); background: var(--glass); color: var(--ink); font: 600 12px/1 var(--font-body); box-shadow: var(--shadow); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }\n.pill[aria-pressed=\"true\"] { background: var(--ink); color: var(--bg); border-color: transparent; }\n.app[data-look=\"scope\"] .pill[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); }\n.crumbs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font: 500 11px/1 var(--font-mono); letter-spacing: .04em; color: var(--ink-2); text-transform: uppercase; }\n.crumbs button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--ink-2); background: none; border: 0; padding: 4px 2px; cursor: pointer; }\n.crumbs button:last-child { color: var(--ink); cursor: default; }\n.crumbs .sep { opacity: .5; }\n.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); max-width: 100%; overflow-x: auto; scrollbar-width: none; }\n.seg::-webkit-scrollbar { display: none; }\n.seg button { flex: none; border: 0; background: none; color: var(--ink-2); font: 600 12px/1 var(--font-body); padding: 8px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }\n.seg button[aria-pressed=\"true\"] { background: var(--ink); color: var(--bg); }\n.app[data-look=\"scope\"] .seg button[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); }\n.looks { display: flex; align-items: center; gap: 8px; min-width: 0; }\n.looks .seg { min-width: 0; }\n#topicSel { flex: none; max-width: 42%; height: 34px; border-radius: 999px; border: 1px solid var(--glass-line); background: var(--glass); color: var(--ink); font: 600 12px/1 var(--font-body); padding: 0 8px; }\n.iconbtn[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); border-color: transparent; }\n.looks .tag { font: 500 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }\n\n/* нижняя шторка */\n.bottom { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding-bottom: calc(var(--tg-bottom, env(safe-area-inset-bottom, 0px)) + 12px); padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); display: grid; gap: 8px; pointer-events: none; }\n.bottom > * { pointer-events: auto; }\n.modes { justify-self: center; }\n.sheet { background: var(--glass); border: 1px solid var(--glass-line); border-radius: 22px; box-shadow: var(--shadow); padding: 14px 16px 14px; max-height: min(46vh, 380px); overflow-y: auto; backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); max-width: 560px; width: 100%; justify-self: center; box-sizing: border-box; }\n.hint { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px; font: 500 12px/1.3 var(--font-body); color: var(--ink-2); }\n.hint b { color: var(--ink); font-weight: 600; }\n.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 10px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }\n.chip i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }\n.shead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }\n.fold { flex: none; width: 30px; height: 30px; margin: -4px -6px -4px 0; border-radius: 50%; border: 0; background: transparent; color: var(--ink-2); display: grid; place-items: center; cursor: pointer; }\n.fold svg { width: 18px; height: 18px; transition: transform .2s; }\n.sheet.min .fold svg { transform: rotate(180deg); }\n.sheet.min .body, .sheet.min .chips { display: none; }\n.sheet h2 { margin: 8px 0 6px; font: 600 17px/1.2 var(--font-display); letter-spacing: -.01em; text-wrap: balance; }\n.sheet p { margin: 0; font: 400 14px/1.45 var(--font-body); color: var(--ink); }\n.trap { margin-top: 10px; padding: 9px 11px; border-radius: 12px; background: var(--trap-soft); color: var(--ink); font: 400 13px/1.4 var(--font-body); }\n.trap b { display: block; font: 500 10px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--trap); margin-bottom: 5px; }\n.part { margin-top: 10px; padding: 9px 11px; border-radius: 12px; border: 1px dashed var(--line); font: 400 13px/1.4 var(--font-body); }\n.part b { font-weight: 600; }\n.acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }\n.btn { border: 0; border-radius: 12px; padding: 11px 14px; font: 600 13px/1 var(--font-body); cursor: pointer; background: var(--accent); color: var(--on-accent); }\n.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }\n.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }\n.chips button { border: 1px solid var(--line); background: transparent; color: var(--ink); font: 600 12px/1 var(--font-body); padding: 8px 10px; border-radius: 999px; cursor: pointer; }\n.chips button[aria-pressed=\"true\"] { background: var(--ink); color: var(--bg); border-color: transparent; }\n.app[data-look=\"scope\"] .chips button[aria-pressed=\"true\"] { background: var(--accent); color: var(--on-accent); }\n.qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; }\n.qcount { font: 500 11px/1 var(--font-mono); color: var(--ink-2); letter-spacing: .06em; }\n.verdict { margin-top: 10px; padding: 9px 11px; border-radius: 12px; font: 500 13px/1.4 var(--font-body); }\n.verdict.ok { background: var(--ok-soft); color: var(--ok); }\n.verdict.bad { background: var(--bad-soft); color: var(--bad); }\n.shake { animation: shake .35s; }\n@keyframes shake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-6px) } 75% { transform: translateX(6px) } }\nbutton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }\n.nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; font: 500 14px/1.5 var(--font-body); color: var(--ink-2); }\n@media (min-width: 900px) {\n  .bottom { left: auto; width: 420px; right: 16px; bottom: 16px; }\n  h1 { font-size: 22px; }\n}\n@media (prefers-reduced-motion: reduce) { .lbl, .fade, .stage { transition: none; } .shake { animation: none; } }\n";
+const HTML = "<div class=\"app\" id=\"app\" data-look=\"notebook\">\n  <div class=\"stage\" id=\"stage\"></div>\n  <div class=\"labels\" id=\"labels\"></div>\n  <div class=\"fade\" id=\"fade\"></div>\n\n  <header class=\"top\">\n    <div class=\"row\">\n      <button class=\"iconbtn\" id=\"back\" aria-label=\"Назад\" type=\"button\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></button>\n      <div class=\"ttl\">\n        <div class=\"eyebrow\" id=\"eyebrow\">Биология · 3D-лаборатория</div>\n        <h1 id=\"title\">Животная клетка</h1>\n      </div>\n      <button class=\"pill\" id=\"labelsBtn\" type=\"button\" aria-pressed=\"true\">Подписи</button>\n    </div>\n    <nav class=\"crumbs\" id=\"crumbs\" aria-label=\"Уровень\"></nav>\n    <div class=\"looks\">\n      <div class=\"seg\" id=\"types\" role=\"group\" aria-label=\"Какая клетка\"></div>\n      <button class=\"iconbtn\" id=\"lookBtn\" type=\"button\" aria-pressed=\"false\" aria-label=\"Стиль «Микроскоп»\" title=\"Тетрадь / Микроскоп\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M12 4a8 8 0 0 1 0 16z\" fill=\"currentColor\"/></svg></button>\n    </div>\n  </header>\n\n  <section class=\"bottom\">\n    <div class=\"seg modes\" id=\"modes\" role=\"group\" aria-label=\"Режим\">\n      <button type=\"button\" data-mode=\"learn\" aria-pressed=\"true\">Изучать</button>\n      <button type=\"button\" data-mode=\"quiz\" aria-pressed=\"false\">Найди органоид</button>\n    </div>\n    <div class=\"sheet\" id=\"sheet\" aria-live=\"polite\"></div>\n  </section>\n</div>";
 
 let active = null;
 export async function open(opts = {}) {
@@ -44,6 +44,7 @@ export async function open(opts = {}) {
     if (opts.onClose) try { opts.onClose(); } catch (e) {}
   }
   const onTgBack = () => goBack();
+  const LAB_OPTS = opts;
   const $ = (s) => sh.querySelector(s);
   const app = $("#app"), stage = $("#stage"), labelsEl = $("#labels"), sheet = $("#sheet");
   const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -452,9 +453,6 @@ export async function open(opts = {}) {
   }
 
   /* ───────── ЕЩЁ ТРИ КЛЕТКИ: растительная, грибная, бактериальная ───────── */
-  const CELL_TITLE = { cell: "Животная клетка", plant: "Растительная клетка", fungus: "Клетка гриба", bact: "Бактериальная клетка" };
-  const CELL_SHORT = { cell: "Животная", plant: "Растение", fungus: "Гриб", bact: "Бактерия" };
-  const isCell = (k) => k in CELL_TITLE;
   const FRES = { memOuter: ["memIn", "memEdge", 0.06, 0.62], vacuole: ["vacIn", "vacEdge", 0.08, 0.7], slime: ["slimeIn", "slimeEdge", 0.03, 0.45] };
   Object.assign(LOOKS.notebook.c, {
     wallP: "#A8D08D", wallPRim: "#5E9E43", wallF: "#D3B08C", wallFRim: "#9C6B3E", wallB: "#B9A6E0", wallBRim: "#7A62C2",
@@ -487,7 +485,7 @@ export async function open(opts = {}) {
     bact: [["Где у бактерии хранится основная ДНК?", ["nucleoid"]], ["Что несёт гены устойчивости к антибиотикам?", ["plasmid"]], ["Чем бактерия двигается?", ["flag"]],
            ["Что защищает от высыхания и от иммунитета?", ["capsule"]], ["Где синтезируется белок?", ["riboB"]], ["Найди оболочку из муреина.", ["wallB"]], ["Чем бактерия передаёт ДНК другой?", ["pili"]]],
   };
-  const QZ = () => (cellKey === "cell" ? QUIZ_ANIMAL : QUIZ_MORE[cellKey]);
+  const QZ = () => (cellKey === "cell" ? QUIZ_ANIMAL : QUIZ_MORE[cellKey]) || [];
 
   const ellDisp = (a, b, c, amp = 0.02) => (x, y, z) => (1 + amp * nz(x * 2, y * 2, z * 2)) / Math.sqrt((x / a) ** 2 + (y / b) ** 2 + (z / c) ** 2);
   const boxDisp = (a, b, c, p) => (x, y, z) => (1 + 0.015 * nz(x * 2, y * 2, z * 2)) / Math.pow(Math.abs(x / a) ** p + Math.abs(y / b) ** p + Math.abs(z / c) ** p, 1 / p);
@@ -875,6 +873,275 @@ export async function open(opts = {}) {
     return s;
   }
 
+  /* ───────── ТЕМЫ: молекулярные виды (белки, вода, нуклеиновые кислоты) ───────── */
+  const MOLS2 = {"ala":{"atoms":[["C",-0.485,1.338,-0.054],["C",-0.324,-0.164,-0.248],["C",1.103,-0.649,0.044],["O",1.413,-1.731,0.523],["O",2.066,0.199,-0.369],["N",-1.279,-0.858,0.64],["H",-1.521,1.651,-0.226],["H",-0.197,1.645,0.958],["H",0.145,1.894,-0.758],["H",-0.545,-0.435,-1.286],["H",2.897,-0.262,-0.128],["H",-2.22,-0.772,0.26],["H",-1.052,-1.855,0.644]],"bonds":[[0,1,1],[1,2,1],[2,3,2],[2,4,1],[1,5,1],[0,6,1],[0,7,1],[0,8,1],[1,9,1],[4,10,1],[5,11,1],[5,12,1]],"groups":["rad","alpha","carb","carb","carb","amino","rad","rad","rad","alpha","carb","amino","amino"]},"dipep":{"atoms":[["C",-2.005,0.853,0.443],["C",-1.745,-0.318,-0.495],["C",-0.266,-0.378,-0.93],["O",0.082,-0.207,-2.095],["N",0.627,-0.659,0.089],["C",2.059,-0.556,-0.156],["C",2.605,0.837,0.133],["O",3.746,1.216,-0.08],["O",1.724,1.66,0.744],["N",-2.131,-1.587,0.156],["H",-1.663,1.791,-0.008],["H",-3.076,0.951,0.654],["H",-1.486,0.744,1.401],["H",-2.353,-0.195,-1.398],["H",0.325,-0.427,1.026],["H",2.285,-0.816,-1.194],["H",2.548,-1.258,0.525],["H",2.223,2.499,0.842],["H",-2.046,-2.334,-0.537],["H",-1.453,-1.817,0.88]],"bonds":[[0,1,1],[1,2,1],[2,3,2],[2,4,1],[4,5,1],[5,6,1],[6,7,2],[6,8,1],[1,9,1],[0,10,1],[0,11,1],[0,12,1],[1,13,1],[4,14,1],[5,15,1],[5,16,1],[8,17,1],[9,18,1],[9,19,1]],"groups":["res","res","pep","pep","pep","res","carb","carb","carb","amino","res","res","res","res","pep","res","res","carb","amino","amino"]},"damp":{"atoms":[["N",-3.632,1.536,-2.772],["C",-3.279,1.139,-1.489],["N",-4.239,0.617,-0.693],["C",-3.895,0.218,0.552],["N",-2.685,0.275,1.145],["C",-1.775,0.817,0.32],["C",-1.978,1.265,-0.975],["N",-0.802,1.752,-1.515],["C",0.07,1.679,-0.528],["N",-0.441,1.016,0.557],["C",0.281,0.541,1.723],["C",0.161,-0.965,1.95],["C",1.564,-1.381,2.315],["O",1.723,-1.249,3.732],["C",2.448,-0.378,1.589],["C",2.825,-0.771,0.153],["O",1.672,-0.969,-0.652],["P",1.829,-0.716,-2.227],["O",2.611,0.474,-2.657],["O",2.317,-2.123,-2.795],["O",0.323,-0.708,-2.753],["O",1.689,0.854,1.585],["H",-4.628,1.695,-2.856],["H",-3.015,2.237,-3.166],["H",-4.699,-0.203,1.15],["H",1.095,2.033,-0.568],["H",-0.094,1.109,2.582],["H",-0.573,-1.188,2.732],["H",-0.162,-1.485,1.041],["H",1.783,-2.422,2.061],["H",1.799,-0.303,3.954],["H",3.37,-0.186,2.15],["H",3.436,0.03,-0.276],["H",3.412,-1.695,0.15],["H",1.56,-2.733,-2.856],["H",-0.075,0.189,-2.663]],"bonds":[[0,1,1],[1,2,1],[2,3,2],[3,4,1],[4,5,2],[5,6,1],[6,7,1],[7,8,2],[8,9,1],[9,10,1],[10,11,1],[11,12,1],[12,13,1],[12,14,1],[14,15,1],[15,16,1],[16,17,1],[17,18,2],[17,19,1],[17,20,1],[14,21,1],[6,1,2],[21,10,1],[9,5,1],[0,22,1],[0,23,1],[3,24,1],[8,25,1],[10,26,1],[11,27,1],[11,28,1],[12,29,1],[13,30,1],[14,31,1],[15,32,1],[15,33,1],[19,34,1],[20,35,1]],"groups":["base","base","base","base","base","base","base","base","base","base","sugar","sugar","sugar","sugar","sugar","sugar","phos","phos","phos","phos","phos","sugar","base","base","base","base","sugar","sugar","sugar","sugar","sugar","sugar","sugar","sugar","phos","phos"]}};
+  Object.assign(LOOKS.notebook.c, { aNa: "#8E63D6", aCl: "#36B25A", baseU: "#9C6ADE", hel: "#E4572E", str: "#F2B93B", loop: "#9AA6C2", heme: "#C0392B", fe: "#F08A24", ssb: "#E8C21A", subA1: "#E4572E", subA2: "#F28C6B", subB1: "#3B7FD0", subB2: "#6FA8DC", dash: "#3B7FD0" });
+  Object.assign(LOOKS.scope.c, { aNa: "#B48CFF", aCl: "#3DDC97", baseU: "#B48CFF", hel: "#FF4D6D", str: "#FFD166", loop: "#7F93B8", heme: "#FF3D6E", fe: "#FFB23D", ssb: "#FFE14D", subA1: "#FF4D6D", subA2: "#FF8FA8", subB1: "#4D8DFF", subB2: "#8FB8FF", dash: "#4DE1FF" });
+  Object.assign(VDW, { Na: 2.27, Cl: 1.75 }); Object.assign(BALL, { Na: 0.95, Cl: 1.2 });
+  const AA_PAL = ["#E4572E", "#F2B93B", "#2FA36B", "#3B7FD0", "#8C7BEA", "#36B5A4"];
+  const INFO = {
+    ala: { name: "Аминокислота", tag: "Молекулярный уровень", hint: "Тапни группу атомов — подсвечу и объясню.",
+      text: "Мономер белка. У всех аминокислот общая часть — аминогруппа и карбоксильная группа у одного атома углерода, а различаются они радикалом (R). Здесь аланин: его радикал — CH₃.",
+      trap: "Аминокислоты амфотерны: аминогруппа придаёт основные свойства, карбоксильная — кислотные. Белковых аминокислот 20." },
+    dipep: { name: "Пептидная связь", tag: "Молекулярный уровень", hint: "Тапни подсвеченную связь –CO–NH–.",
+      text: "Две аминокислоты соединились: карбоксильная группа одной реагирует с аминогруппой другой, выделяется вода. Получился дипептид аланил-глицин.",
+      trap: "Пептидная связь –CO–NH– образуется в реакции поликонденсации (с выделением воды) на рибосоме." },
+    levels: { name: "Уровни структуры белка", tag: "Молекулярный уровень", hint: "Нажимай уровни — цепь перестроится.",
+      text: "Белок — цепь из аминокислот. Нажимай уровни по порядку и смотри, как цепь сворачивается в рабочую форму.",
+      trap: "При денатурации пептидные связи не рвутся: первичная структура сохраняется. В мягких условиях белок может восстановиться — ренатурация." },
+    h2o: { name: "Молекула воды", tag: "Молекулярный уровень", hint: "Тапни атом кислорода или водорода.",
+      text: "Два атома водорода связаны с кислородом ковалентными полярными связями под углом 104,5°. Кислород тянет электроны к себе, поэтому молекула — диполь.",
+      trap: "Связи O–H ковалентные полярные, а водородные связи — между разными молекулами воды. Не путай." },
+    hb: { name: "Водородные связи", tag: "Молекулярный уровень", hint: "Тапни пунктир — это водородная связь.",
+      text: "Водород одной молекулы (δ+) притягивается к кислороду соседней (δ−). Связи постоянно рвутся и возникают снова — смотри, как мигает пунктир.",
+      trap: "Водородные связи объясняют высокую теплоёмкость воды, теплоту испарения и поверхностное натяжение. Они в 15–20 раз слабее ковалентных." },
+    ice: { name: "Лёд", tag: "Молекулярный уровень", hint: "Покрути решётку — видны шестигранные пустоты.",
+      text: "Во льду каждая молекула связана водородными связями с четырьмя соседями. Получается рыхлая решётка с пустотами.",
+      trap: "Поэтому лёд легче жидкой воды и плавает: водоёмы промерзают сверху, а жизнь подо льдом сохраняется." },
+    salt: { name: "Растворение соли", tag: "Молекулярный уровень", hint: "Тапни ион или воду рядом с ним.",
+      text: "Вода — полярный растворитель. Вокруг ионов собирается гидратная оболочка: к Na⁺ молекулы повёрнуты кислородом (δ−), к Cl⁻ — водородом (δ+).",
+      trap: "Гидрофильные вещества (соли, сахара) растворяются в воде, гидрофобные (жиры, масла) — нет." },
+    rna: { name: "РНК", tag: "Молекулярный уровень", hint: "Тапни основание — назову его.",
+      text: "Одна цепь нуклеотидов. Сахар — рибоза, вместо тимина — урацил. Бывает иРНК (матрица для белка), тРНК (несёт аминокислоты) и рРНК (основа рибосом).",
+      trap: "В ДНК — А, Т, Г, Ц и дезоксирибоза; в РНК — А, У, Г, Ц и рибоза. ДНК двуцепочечная, РНК обычно одноцепочечная." },
+    damp: { name: "Нуклеотид ДНК", tag: "Молекулярный уровень", hint: "Тапни основание, сахар или фосфат.",
+      text: "Мономер ДНК: азотистое основание (здесь аденин), сахар дезоксирибоза и остаток фосфорной кислоты. Нуклеотиды соединяются через фосфат и сахар в цепь.",
+      trap: "В нуклеотиде ДНК сахар — дезоксирибоза (без одного атома кислорода), в РНК — рибоза." },
+  };
+  // карточки частей
+  const MSG = {
+    ala: { amino: "<b>Аминогруппа –NH₂</b> — основные свойства.", carb: "<b>Карбоксильная группа –COOH</b> — кислотные свойства.", rad: "<b>Радикал (R)</b> — у аланина CH₃. Именно радикалы отличают 20 аминокислот друг от друга.", alpha: "<b>α-атом углерода</b> — к нему присоединены все группы." },
+    dipep: { pep: "<b>Пептидная связь –CO–NH–</b> соединяет остатки аминокислот. При её образовании выделяется вода.", carb: "<b>Свободная карбоксильная группа</b> — С-конец пептида.", amino: "<b>Свободная аминогруппа</b> — N-конец пептида.", res: "<b>Остатки аминокислот</b>: аланин и глицин." },
+    h2o: { o: "<b>Кислород, δ−</b>: электроотрицательнее водорода и оттягивает общие электроны.", h: "<b>Водород, δ+</b>: электроны смещены от него к кислороду." },
+    hb: { mol: "<b>Молекула воды</b>: в жидкой воде каждая связана с соседями водородными связями.", dash: "<b>Водородная связь</b>: H (δ+) одной молекулы притягивается к O (δ−) другой." },
+    ice: { ice: "<b>Молекулы воды во льду</b>: у каждой четыре соседа, решётка рыхлая.", dash: "<b>Водородная связь</b> держит решётку льда." },
+    salt: { na: "<b>Ион Na⁺</b>: молекулы воды повёрнуты к нему кислородом (δ−).", cl: "<b>Ион Cl⁻</b>: молекулы воды повёрнуты к нему водородом (δ+).", wna: "<b>Гидратная оболочка Na⁺</b>: кислород смотрит на ион.", wcl: "<b>Гидратная оболочка Cl⁻</b>: водород смотрит на ион.", dash: "<b>Притяжение ион — диполь</b> удерживает оболочку." },
+    damp: { base: "<b>Азотистое основание</b> — аденин (пурин).", sugar: "<b>Дезоксирибоза</b> — пятиуглеродный сахар ДНК.", phos: "<b>Остаток фосфорной кислоты</b> — через него нуклеотиды соединяются в цепь." },
+  };
+  const CHIPS = {
+    ala: [["amino", "–NH₂"], ["carb", "–COOH"], ["rad", "Радикал"]], dipep: [["pep", "Пептидная связь"]],
+    h2o: [], hb: [["dash", "Водородные связи"]], ice: [["dash", "Водородные связи"]], salt: [["na", "Na⁺"], ["cl", "Cl⁻"]], damp: [["base", "Основание"], ["sugar", "Сахар"], ["phos", "Фосфат"]],
+  };
+  const TOPICS = {
+    cell: { name: "Строение клетки", views: { cell: ["Животная", "Животная клетка"], plant: ["Растение", "Растительная клетка"], fungus: ["Гриб", "Клетка гриба"], bact: ["Бактерия", "Бактериальная клетка"] } },
+    protein: { name: "Белки", views: { levels: ["Структуры", "Уровни структуры белка"], ala: ["Аминокислота", "Аминокислота"], dipep: ["Пептидная связь", "Пептидная связь"] } },
+    water: { name: "Вода", views: { hb: ["Водородные связи", "Водородные связи"], h2o: ["Молекула", "Молекула воды"], ice: ["Лёд", "Лёд"], salt: ["Растворение", "Растворение соли"] } },
+    nk: { name: "ДНК, РНК и АТФ", views: { dna: ["ДНК", "Двойная спираль ДНК"], rna: ["РНК", "РНК"], damp: ["Нуклеотид", "Нуклеотид ДНК"], atp: ["АТФ", "АТФ"] } },
+  };
+  let TOPIC_KEY = (typeof LAB_OPTS !== "undefined" && LAB_OPTS && LAB_OPTS.topic) || location.hash.slice(1) || new URLSearchParams(location.search).get("topic") || "cell";
+  if (!TOPICS[TOPIC_KEY]) TOPIC_KEY = "cell";
+  const TOPIC = TOPICS[TOPIC_KEY], FIRST_VIEW = Object.keys(TOPIC.views)[0];
+
+  /* данные «на лету»: вода, кластер, лёд, ионы */
+  function waterAt(atoms, bonds, groups, O, b, n, tag) {
+    const io = atoms.length, A = D2R(52.25);
+    atoms.push(["O", O.x, O.y, O.z]); groups.push(tag);
+    for (const sg of [1, -1]) { const h = O.clone().add(b.clone().multiplyScalar(0.96 * Math.cos(A)).add(n.clone().multiplyScalar(sg * 0.96 * Math.sin(A)))); atoms.push(["H", h.x, h.y, h.z]); groups.push(tag); bonds.push([io, atoms.length - 1, 1]); }
+    return io;
+  }
+  const perp = (v) => new V3().crossVectors(v, Math.abs(v.y) < 0.9 ? new V3(0, 1, 0) : new V3(1, 0, 0)).normalize();
+  function genWater() {
+    const one = { atoms: [], bonds: [], groups: [] }; waterAt(one.atoms, one.bonds, one.groups, new V3(0, -0.2, 0), new V3(0, 1, 0), new V3(1, 0, 0), "o");
+    one.groups[1] = one.groups[2] = "h";
+    // кластер: каждая молекула смотрит водородами на двух ближайших соседей
+    const R = rng(71), Os = [];
+    for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = 0; z <= 1; z++) Os.push(new V3(x * 2.85 + (R() - 0.5) * 0.5, y * 2.85 + (R() - 0.5) * 0.5, (z - 0.5) * 2.85 + (R() - 0.5) * 0.5));
+    const hb = { atoms: [], bonds: [], groups: [], dashes: [] }, oIdx = [];
+    Os.forEach((O, i) => {
+      const nb = Os.map((P, j) => [P.distanceTo(O), j]).filter(([d, j]) => j !== i).sort((a, b) => a[0] - b[0]);
+      const d1 = Os[nb[0][1]].clone().sub(O).normalize(), d2 = Os[nb[1][1]].clone().sub(O).normalize(), b = d1.clone().add(d2).normalize();
+      const n = d1.clone().sub(b.clone().multiplyScalar(d1.dot(b))).normalize();
+      oIdx.push(waterAt(hb.atoms, hb.bonds, hb.groups, O, b, n.lengthSq() > 0.1 ? n : perp(b), "mol"));
+    });
+    oIdx.forEach((io) => { for (const ih of [io + 1, io + 2]) { const H = new V3(...hb.atoms[ih].slice(1)); let best = null, bd = 9; oIdx.forEach((jo) => { if (jo === io) return; const d = H.distanceTo(new V3(...hb.atoms[jo].slice(1))); if (d < bd) { bd = d; best = jo; } }); if (bd < 2.6) hb.dashes.push([ih, best]); } });
+    // лёд Ih: кислород в узлах гексагональной решётки, водород — на связях (правило: два водорода у каждого O)
+    const a = 4.52, c = 7.36, F = [[1 / 3, 2 / 3, 1 / 16], [2 / 3, 1 / 3, 9 / 16], [1 / 3, 2 / 3, 7 / 16], [2 / 3, 1 / 3, 15 / 16]], Oi = [];
+    for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) for (let k = 0; k < 2; k++) for (const [f1, f2, f3] of F) { const u = i + f1, v = j + f2, w = k + f3; Oi.push(new V3(a * (u - v / 2), c * w - c, a * v * Math.sqrt(3) / 2)); }
+    const cen = Oi.reduce((s, p) => s.add(p), new V3()).multiplyScalar(1 / Oi.length); Oi.forEach((p) => p.sub(cen));
+    const keep = Oi.filter((p) => Math.hypot(p.x, p.z) < 6.6);
+    const ice = { atoms: [], bonds: [], groups: [], dashes: [] }, hc = keep.map(() => 0);
+    keep.forEach((p) => { ice.atoms.push(["O", p.x, p.y, p.z]); ice.groups.push("ice"); });
+    for (let i = 0; i < keep.length; i++) for (let j = i + 1; j < keep.length; j++) {
+      if (keep[i].distanceTo(keep[j]) > 3.0) continue;
+      const [o, t] = hc[i] <= hc[j] ? [i, j] : [j, i]; if (hc[o] >= 2) { if (hc[t] >= 2) continue; }
+      const from = hc[o] < 2 ? o : t, to = from === o ? t : o; hc[from]++;
+      const h = keep[from].clone().lerp(keep[to], 0.98 / keep[from].distanceTo(keep[to]));
+      ice.atoms.push(["H", h.x, h.y, h.z]); ice.groups.push("ice"); ice.bonds.push([from, ice.atoms.length - 1, 1]); ice.dashes.push([ice.atoms.length - 1, to]);
+    }
+    // ионы в гидратных оболочках
+    const salt = { atoms: [["Na", -4.6, 0, 0], ["Cl", 4.6, 0, 0]], bonds: [], groups: ["na", "cl"], dashes: [] };
+    const oct = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]].map((v) => new V3(...v));
+    oct.forEach((d) => { const O = new V3(-4.6, 0, 0).add(d.clone().multiplyScalar(2.4)); const io = waterAt(salt.atoms, salt.bonds, salt.groups, O, d, perp(d), "wna"); salt.dashes.push([0, io]); });
+    oct.forEach((d) => {
+      const O = new V3(4.6, 0, 0).add(d.clone().multiplyScalar(3.15)), io = salt.atoms.length, n = perp(d), A = D2R(104.5);
+      salt.atoms.push(["O", O.x, O.y, O.z]); salt.groups.push("wcl");
+      const h1 = O.clone().sub(d.clone().multiplyScalar(0.96)), h2 = O.clone().add(d.clone().multiplyScalar(-0.96 * Math.cos(A))).add(n.clone().multiplyScalar(0.96 * Math.sin(A)));
+      for (const h of [h1, h2]) { salt.atoms.push(["H", h.x, h.y, h.z]); salt.groups.push("wcl"); salt.bonds.push([io, salt.atoms.length - 1, 1]); }
+      salt.dashes.push([io + 1, 1]);
+    });
+    return { h2o: one, hb, ice, salt };
+  }
+  let MOLX = null;
+  // универсальный вид-молекула: атомы и связи, подсветка частей, пунктир (водородные связи)
+  function buildMolView(key) {
+    if (!MOLX) MOLX = Object.assign({}, MOLS2, genWater());
+    const M = MOLX[key], s = makeScene(), g = new THREE.Group(); s.add(g);
+    const at = M.atoms.map((a) => ({ el: a[0], p: new V3(a[1], a[2], a[3]) })), grp = M.groups, msgs = MSG[key] || {};
+    const atoms = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 24, 16), null, at.length), halves = [];
+    for (const [a, b, ord] of M.bonds) {
+      const pa = at[a].p, pb = at[b].p, mid = pa.clone().lerp(pb, 0.5), pp = perp(pb.clone().sub(pa).normalize());
+      for (const o of ord === 2 ? [-0.075, 0.075] : [0]) for (const [f, t, ai] of [[pa, mid, a], [mid, pb, b]]) halves.push({ f: f.clone().add(pp.clone().multiplyScalar(o)), t: t.clone().add(pp.clone().multiplyScalar(o)), ai, r: ord > 1 ? 0.06 : 0.085 });
+    }
+    const bonds = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, 1, 1, 12), null, Math.max(1, halves.length));
+    const dsh = [], DN = 4;
+    for (const [a, b] of M.dashes || []) { const pa = at[a].p, pb = at[b].p; for (let k = 0; k < DN; k++) dsh.push({ f: pa.clone().lerp(pb, (k + 0.15) / DN), t: pa.clone().lerp(pb, (k + 0.65) / DN), bond: dsh.length / DN | 0 }); }
+    const dashes = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.045, 0.045, 1, 6), null, Math.max(1, dsh.length));
+    add(s, g, atoms, "atom", "atom", { tint: true, rough: 0.3 }); add(s, g, bonds, "atom", "atom", { tint: true, rough: 0.35 });
+    if (dsh.length) add(s, g, dashes, "dash", "dash", { basic: true }); else dashes.visible = false;
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), Y = new V3(0, 1, 0), on = dsh.map(() => 1);
+    const placeD = () => { dsh.forEach((d, i) => { const v = d.t.clone().sub(d.f), L = v.length() * on[i]; q.setFromUnitVectors(Y, v.normalize()); m4.compose(d.f.clone().lerp(d.t, 0.5), q, new V3(1, Math.max(L, 1e-4), 1)); dashes.setMatrixAt(i, m4); }); dashes.instanceMatrix.needsUpdate = true; };
+    at.forEach((a, i) => { const r = BALL[a.el]; m4.compose(a.p, q.identity(), new V3(r, r, r)); atoms.setMatrixAt(i, m4); });
+    halves.forEach((h, i) => { const v = h.t.clone().sub(h.f), L = v.length(); q.setFromUnitVectors(Y, v.normalize()); m4.compose(h.f.clone().lerp(h.t, 0.5), q, new V3(h.r, L, h.r)); bonds.setMatrixAt(i, m4); });
+    placeD();
+    s.userData.recolor = () => {
+      const sel = s.userData.hiGroup, dimC = new THREE.Color(LOOK === "scope" ? "#0A1020" : "#DADFE8");
+      const ok = (i) => !sel || sel === "dash" || grp[i] === sel;
+      at.forEach((a, i) => { const c = col("a" + a.el); if (!ok(i)) c.lerp(dimC, 0.75); atoms.setColorAt(i, c); });
+      halves.forEach((h, i) => { const c = col("a" + at[h.ai].el); if (!ok(h.ai)) c.lerp(dimC, 0.75); bonds.setColorAt(i, c); });
+      atoms.instanceColor.needsUpdate = true; if (bonds.instanceColor) bonds.instanceColor.needsUpdate = true;
+      if (s.userData.items.includes(dashes)) setMatState(dashes.material, !!sel && sel !== "dash", sel === "dash");
+    };
+    const groupsSeen = [...new Set(grp)], cen = (t) => { const v = new V3(); let n = 0; at.forEach((a, i) => { if (grp[i] === t) { v.add(a.p); n++; } }); return v.multiplyScalar(1 / n); };
+    const LBL = { h2o: [["δ−", at[0].p.clone().add(new V3(0, -1.1, 0))], ["δ+", at[1].p.clone().add(new V3(0.5, 0.5, 0))], ["δ+", at[2].p.clone().add(new V3(-0.5, 0.5, 0))], ["104,5°", new V3(0, 0.9, 0)]],
+      salt: [["Na⁺", at[0].p.clone().add(new V3(0, 1.5, 0))], ["Cl⁻", at[1].p.clone().add(new V3(0, 1.9, 0))]] };
+    s.userData.labels = (LBL[key] || []).map(([text, pos]) => ({ text, pos, keep: true }));
+    if (key === "ala" || key === "dipep" || key === "damp") s.userData.labels = groupsSeen.filter((t) => msgs[t]).map((t) => ({ text: msgs[t].replace(/<[^>]+>/g, "").split(/[:—–(]/)[0].trim().slice(0, 30), pos: cen(t).add(new V3(0, 1.2, 0)), keep: true }));
+    const rad = Math.max(...at.map((a) => a.p.length())) + 1;
+    s.userData.home = { dir: new V3(0.35, 0.45, 1), target: new V3(0, 0, 0), fitW: rad, fitH: rad, min: 2.5, max: 80 };
+    s.userData.spin = g; s.userData.name = key; s.userData.info = INFO[key];
+    let tFlick = 0;
+    s.userData.tick = (dt) => { if (!dsh.length || REDUCE || key === "salt") return; tFlick += dt; if (tFlick > 0.45) { tFlick = 0; const nb = dsh.length / DN | 0, R = Math.random; for (let b = 0; b < nb; b++) if (R() < 0.18) { const v = on[b * DN] ? 0 : 1; for (let k = 0; k < DN; k++) on[b * DN + k] = v; } placeD(); } };
+    const pick = (t) => { s.userData.hiGroup = t; s.userData.recolor(); setPart(msgs[t] || ""); syncViewChips(); };
+    s.userData.onPick = (hit) => {
+      if (hit.object === atoms) { pick(grp[hit.instanceId]); return true; }
+      if (hit.object === bonds) { pick(grp[halves[hit.instanceId].ai]); return true; }
+      if (hit.object === dashes) { pick("dash"); return true; }
+      return false;
+    };
+    s.userData.onClear = () => { s.userData.hiGroup = null; s.userData.recolor(); syncViewChips(); };
+    s.userData.onChip = (t) => { if (s.userData.hiGroup === t) s.userData.onClear(); else pick(t); };
+    s.userData.chips = CHIPS[key] || [];
+    return s;
+  }
+  function syncViewChips() { const s = scenes[cur]; if (!s) return; sh.querySelectorAll("#vchips button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === (s.userData.hiGroup || s.userData.level)))); }
+
+  // РНК: одна цепь, основания внутрь спирали
+  function buildRNA() {
+    const s = makeScene(), g = new THREE.Group(); s.add(g);
+    const seq = "AUGGCUACGUAGCUUCAAGUCG".split(""), N = seq.length, B = [];
+    for (let i = 0; i < N; i++) { const t = i * D2R(32.7); B.push(new V3(Math.cos(t) * 1.1, (N / 2 - i - 0.5) * 0.36, Math.sin(t) * 1.1)); }
+    add(s, g, new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(B), N * 10, 0.06, 8), null), "bbB", "bb");
+    const sph = new THREE.SphereGeometry(1, 16, 12), m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
+    const sug = new THREE.InstancedMesh(sph, null, N); B.forEach((p, i) => { m4.compose(p, q, new V3(0.15, 0.15, 0.15)); sug.setMatrixAt(i, m4); }); add(s, g, sug, "sugar", "bb");
+    const bases = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.085, 0.3), null, N);
+    B.forEach((p, i) => { const d = new V3(-p.x, 0, -p.z).normalize(); q.setFromUnitVectors(new V3(1, 0, 0), d); m4.compose(p.clone().add(d.clone().multiplyScalar(0.55)), q, new V3(0.8, 1, 1)); bases.setMatrixAt(i, m4); });
+    add(s, g, bases, "base", "base", { tint: true });
+    s.userData.recolor = () => { const hi = s.userData.hiPair; seq.forEach((l, i) => { const c = col("base" + l); if (hi != null && i !== hi) c.lerp(new THREE.Color(LOOK === "scope" ? "#0A1020" : "#D9DEE8"), 0.72); bases.setColorAt(i, c); }); bases.instanceColor.needsUpdate = true; };
+    s.userData.labels = [{ text: "5′", pos: B[0].clone().add(new V3(0, 0.45, 0)), keep: true }, { text: "3′", pos: B[N - 1].clone().add(new V3(0, -0.45, 0)), keep: true }];
+    s.userData.home = { dir: new V3(8.5, 1.2, 9.5), target: new V3(0, 0, 0), fitW: 1.9, fitH: 4.2, depth: 1, min: 3, max: 30 };
+    s.userData.spin = g; s.userData.name = "rna"; s.userData.info = INFO.rna;
+    const NAME = { A: "Аденин (А)", U: "Урацил (У) — есть только в РНК, в ДНК вместо него тимин", G: "Гуанин (Г)", C: "Цитозин (Ц)" };
+    s.userData.onPick = (hit) => { if (hit.object !== bases) return false; s.userData.hiPair = hit.instanceId; s.userData.recolor(); setPart(`<b>${NAME[seq[hit.instanceId]]}</b>. Комплементарность в РНК: А–У, Г–Ц.`); return true; };
+    s.userData.onClear = () => { s.userData.hiPair = null; s.userData.recolor(); };
+    return s;
+  }
+
+  // белок: одна цепь из 72 остатков перестраивается по уровням
+  function buildLevels() {
+    const s = makeScene(), g = new THREE.Group(); s.add(g);
+    const N = 72, segOf = (i) => ((i >= 2 && i <= 19) || (i >= 50 && i <= 67) ? "hel" : (i >= 24 && i <= 31) || (i >= 36 && i <= 43) ? "str" : "loop");
+    const fill = (P) => {
+      const lin = (a, b, i0, i1, bul) => { for (let i = i0; i <= i1; i++) { const t = (i - a + 0) / (b - a); P[i] = P[a].clone().lerp(P[b], t).add(new V3(0, 0, bul * Math.sin(Math.PI * t))); } };
+      lin(19, 24, 20, 23, 0.9); lin(31, 36, 32, 35, 0.7); lin(43, 50, 44, 49, -0.9);
+      P[1] = P[2].clone().add(new V3(-0.3, 0.45, 0.2)); P[0] = P[2].clone().add(new V3(-0.6, 0.9, 0.3));
+      for (let i = 68; i < N; i++) P[i] = P[67].clone().add(new V3(0.3 * (i - 67), 0.4 * (i - 67), 0.2));
+      return P;
+    };
+    const layout = (packed) => {
+      const P = new Array(N), hx = packed ? 1.55 : 3.0, sx = packed ? 0.5 : 0.7, sz = packed ? -1.0 : 0, hz = packed ? 0.55 : 0;
+      for (let k = 0; k < 18; k++) { const a = k * D2R(100); P[2 + k] = new V3(-hx + 0.75 * Math.cos(a), 3.3 - k * 0.38, hz + 0.75 * Math.sin(a)); P[50 + k] = new V3(hx + 0.75 * Math.cos(a), -3.3 + k * 0.38, hz + 0.75 * Math.sin(a)); }
+      for (let k = 0; k < 8; k++) { P[24 + k] = new V3(-sx, -2.6 + k * 0.75, sz + (k % 2) * 0.18); P[36 + k] = new V3(sx, 2.65 - k * 0.75, sz + (k % 2) * 0.18); }
+      fill(P);
+      if (packed) { const r = new THREE.Matrix4().makeRotationY(D2R(28)); P.forEach((p) => p.applyMatrix4(r)); }
+      return P;
+    };
+    const L1 = [...Array(N)].map((_, i) => { const row = Math.floor(i / 18), col = i % 18; return new V3((row % 2 ? 17 - col : col) * 0.55 - 4.7, 1.65 - row * 1.1 + (col % 2) * 0.12, 0); });
+    const L2 = layout(false), L3 = layout(true);
+    const SUB = [new V3(-1.75, 1.5, 0), new V3(1.75, 1.5, 0.3), new V3(-1.75, -1.6, 0.3), new V3(1.75, -1.6, 0)], SUBC = ["subA1", "subA2", "subB1", "subB2"];
+    const L4 = L3.map((p) => p.clone().multiplyScalar(0.5).add(SUB[0]));
+    const R = rng(83), DEN = []; let v = L3[0].clone(), dir = new V3(1, 0, 0);
+    for (let i = 0; i < N; i++) { dir.add(new V3(R() - 0.5, R() - 0.5, R() - 0.5).multiplyScalar(0.9)).normalize(); v = v.clone().add(dir.clone().multiplyScalar(0.55)); if (v.length() > 6.5) { dir.negate(); v.setLength(6.4); } DEN.push(v.clone()); }
+    const LV = { 1: L1, 2: L2, 3: L3, 4: L4, den: DEN };
+    const beadG = new THREE.SphereGeometry(0.2, 16, 12), bondG = new THREE.CylinderGeometry(0.07, 0.07, 1, 8);
+    const beads = new THREE.InstancedMesh(beadG, null, N), links = new THREE.InstancedMesh(bondG, null, N - 1);
+    add(s, g, beads, "bead", "bead", { tint: true, rough: 0.35 }); add(s, g, links, "bead", "bead", { tint: true, rough: 0.4 });
+    // три остальные субъединицы и гемы — только на четвертичном уровне
+    const copies = [1, 2, 3].map((k) => { const b = new THREE.InstancedMesh(beadG, null, N), l = new THREE.InstancedMesh(bondG, null, N - 1), grp = new THREE.Group(); grp.add(b, l); g.add(grp); add(s, grp, b, "bead", "quat", { tint: true, rough: 0.35 }); add(s, grp, l, "bead", "quat", { tint: true, rough: 0.4 }); return { grp, b, l, k }; });
+    const hemes = new THREE.Group(); g.add(hemes);
+    SUB.forEach((c) => { const d = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.09, 24), null); d.position.copy(c).add(new V3(0, 0.1, 0.9)); d.rotation.x = Math.PI / 2; add(s, hemes, d, "heme", "heme"); const fe = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 10), null); fe.position.copy(d.position).add(new V3(0, 0, 0.05)); add(s, hemes, fe, "fe", "heme"); });
+    const ss = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.07, 0.07, 1, 8), null, 2); add(s, g, ss, "ssb", "ssb");
+    const SS = [[6, 58], [27, 41]], m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), Y = new V3(0, 1, 0);
+    const writeChain = (bm, lm, P) => { P.forEach((p, i) => { m4.makeTranslation(p.x, p.y, p.z); bm.setMatrixAt(i, m4); }); for (let i = 0; i < N - 1; i++) { const d = P[i + 1].clone().sub(P[i]), L = d.length(); q.setFromUnitVectors(Y, d.normalize()); m4.compose(P[i].clone().lerp(P[i + 1], 0.5), q, new V3(1, L, 1)); lm.setMatrixAt(i, m4); } bm.instanceMatrix.needsUpdate = true; lm.instanceMatrix.needsUpdate = true; };
+    copies.forEach((c) => { const P = L3.map((p) => p.clone().multiplyScalar(0.5)); const rot = new THREE.Matrix4().makeRotationY(Math.PI * c.k * 0.5 + 0.4); P.forEach((p) => p.applyMatrix4(rot).add(SUB[c.k])); writeChain(c.b, c.l, P); c.grp.scale.setScalar(0.001); });
+    let level = 1, from = L1, to = L1, t = 1, quatT = 0, quatTo = 0;
+    const cur3 = L1.map((p) => p.clone());
+    const setColors = () => {
+      const quat = level === 4;
+      for (let i = 0; i < N; i++) { const c = level === 1 ? new THREE.Color(AA_PAL[(i * 7) % 6]) : quat ? col(SUBC[0]) : col(level === "den" ? "loop" : segOf(i)); beads.setColorAt(i, c); if (i < N - 1) links.setColorAt(i, c.clone().lerp(new THREE.Color("#ffffff"), 0.25)); }
+      copies.forEach((cp) => { const c = col(SUBC[cp.k]); for (let i = 0; i < N; i++) { cp.b.setColorAt(i, c); if (i < N - 1) cp.l.setColorAt(i, c.clone().lerp(new THREE.Color("#ffffff"), 0.25)); } cp.b.instanceColor.needsUpdate = true; cp.l.instanceColor.needsUpdate = true; });
+      beads.instanceColor.needsUpdate = true; links.instanceColor.needsUpdate = true;
+    };
+    s.userData.recolor = setColors;
+    const showSS = () => { const vis = level === 3 || level === 4; SS.forEach(([a, b], i) => { const pa = cur3[a], pb = cur3[b], d = pb.clone().sub(pa), L = d.length(); q.setFromUnitVectors(Y, d.normalize()); m4.compose(pa.clone().lerp(pb, 0.5), q, new V3(1, vis ? L : 1e-4, 1)); ss.setMatrixAt(i, m4); }); ss.instanceMatrix.needsUpdate = true; };
+    writeChain(beads, links, cur3); showSS(); hemes.scale.setScalar(0.001);
+    const LMSG = {
+      1: "<b>Первичная структура</b> — последовательность аминокислот, соединённых пептидными связями. Её задаёт ген.",
+      2: "<b>Вторичная структура</b> — α-спирали (красные) и β-слои (жёлтые). Держится на водородных связях между группами C=O и N–H.",
+      3: "<b>Третичная структура</b> — укладка цепи в глобулу. Держится на дисульфидных мостиках S–S (жёлтые палочки), ионных, водородных связях и гидрофобных взаимодействиях.",
+      4: "<b>Четвертичная структура</b> — несколько глобул вместе. Гемоглобин: 4 субъединицы (2 α и 2 β) и 4 гема с железом, которые связывают кислород.",
+      den: "<b>Денатурация</b> — нагрев, кислоты, щёлочи, соли тяжёлых металлов разрушают вторичную, третичную и четвертичную структуры. Пептидные связи остаются.",
+    };
+    s.userData.onChip = (lv) => {
+      const L = lv === "den" ? "den" : +lv; if (L === level) return;
+      from = cur3.map((p) => p.clone()); to = LV[L]; t = 0; level = L; s.userData.level = String(lv); quatTo = L === 4 ? 1 : 0;
+      setColors(); setPart(LMSG[L]); syncViewChips();
+    };
+    s.userData.tick = (dt) => {
+      if (t < 1) { t = Math.min(1, t + dt / (REDUCE ? 0.01 : 1.3)); const e = ease(t); for (let i = 0; i < N; i++) cur3[i].lerpVectors(from[i], to[i], e); writeChain(beads, links, cur3); showSS(); }
+      if (Math.abs(quatT - quatTo) > 1e-3) { quatT += (quatTo - quatT) * Math.min(1, dt * 4); const sc = Math.max(0.001, quatT); copies.forEach((c) => c.grp.scale.setScalar(sc)); hemes.scale.setScalar(sc); }
+    };
+    s.userData.onPick = (hit) => {
+      const o = hit.object.userData.org;
+      if (o === "heme") { setPart("<b>Гем</b> с ионом железа Fe²⁺ — здесь гемоглобин связывает кислород."); return true; }
+      if (o === "ssb") { setPart("<b>Дисульфидный мостик S–S</b> между остатками цистеина — держит третичную структуру."); return true; }
+      if (o === "quat") { setPart("<b>Ещё одна субъединица</b> гемоглобина: всего 2 α-цепи и 2 β-цепи."); return true; }
+      if (hit.object === beads || hit.object === links) { const i = hit.instanceId; const w = level === 1 || level === "den" ? `<b>Остаток аминокислоты №${i + 1}</b> — звено цепи.` : { hel: "<b>α-спираль</b> — виток цепи, закреплённый водородными связями.", str: "<b>β-слой</b> — участки цепи лежат рядом и сшиты водородными связями.", loop: "<b>Петля</b> — гибкий участок между спиралями и слоями." }[segOf(i)]; setPart(w); return true; }
+      return false;
+    };
+    s.userData.onClear = () => setPart(LMSG[level]);
+    s.userData.chips = [["1", "1 · Первичная"], ["2", "2 · Вторичная"], ["3", "3 · Третичная"], ["4", "4 · Четвертичная"], ["den", "Денатурация"]];
+    s.userData.level = "1";
+    s.userData.labels = [];
+    s.userData.home = { dir: new V3(0.25, 0.3, 1), target: new V3(0, 0, 0), fitW: 5.4, fitH: 4.4, min: 3, max: 40 };
+    s.userData.spin = g; s.userData.name = "levels"; s.userData.info = INFO.levels;
+    return s;
+  }
+
+  const CELL_TITLE = {}, CELL_SHORT = {};
+  for (const [k, [sh, ti]] of Object.entries(TOPIC.views)) { CELL_SHORT[k] = sh; CELL_TITLE[k] = ti; }
+  const isCell = (k) => k in CELL_TITLE;
+  const ATP_EXTRA = `<div class="chips" id="atpMode"><button type="button" data-mix="0" aria-pressed="true">Шарики-палочки</button><button type="button" data-mix="1" aria-pressed="false">Объёмная</button></div><div class="chips" id="atpGroups"><button type="button" data-g="aden">Аденин</button><button type="button" data-g="rib">Рибоза</button><button type="button" data-g="phos">Фосфаты</button><button type="button" data-g="macro">Макроэргические связи</button></div>`;
+
   /* ───────── подписи ───────── */
   let labelNodes = [];
   function mountLabels(scene) {
@@ -907,9 +1174,12 @@ export async function open(opts = {}) {
   }
 
   /* ───────── состояние и интерфейс ───────── */
-  const scenes = { cell: buildCell() };
-  const builders = { dna: buildDNA, atp: buildATP, bilayer: buildBilayer, plant: buildPlant, fungus: buildFungus, bact: buildBact };
-  let cur = "cell", cellKey = "cell", mode = "learn", tween = null, lastTouch = performance.now();
+  const withInfo = (fn, key) => () => { const sc = fn(); if (TOPIC.views[key]) sc.userData.info = PARTS[key]; return sc; };
+  const scenes = {};
+  const builders = { cell: buildCell, dna: withInfo(buildDNA, "dna"), atp: withInfo(buildATP, "atp"), bilayer: buildBilayer, plant: buildPlant, fungus: buildFungus, bact: buildBact, levels: buildLevels, rna: buildRNA };
+  for (const k of ["ala", "dipep", "damp", "h2o", "hb", "ice", "salt"]) builders[k] = () => buildMolView(k);
+  let cur = FIRST_VIEW, cellKey = FIRST_VIEW, mode = "learn", tween = null, lastTouch = performance.now();
+  scenes[cellKey] = builders[cellKey]();
   const state = { org: null };
 
   // Видимая зона: между верхней панелью и шторкой. Сцена плавно сдвигается в её центр (смещение кадра камеры).
@@ -982,7 +1252,7 @@ export async function open(opts = {}) {
     crumbs.innerHTML = items.map(([k, t], i) => `${i ? '<span class="sep">›</span>' : ""}<button type="button" data-k="${k}">${t}</button>`).join("");
     crumbs.hidden = items.length < 2;
     $("#title").textContent = !isCell(cur) ? (PARTS[cur].head || PARTS[cur].name) : state.org ? ORG[state.org].name : CELL_TITLE[cellKey];
-    $("#eyebrow").textContent = !isCell(cur) ? "Молекулярный уровень" : state.org ? "Органоид · " + ORG[state.org].tag.toLowerCase() : "Биология · 3D-лаборатория";
+    $("#eyebrow").textContent = !isCell(cur) ? "Молекулярный уровень" : state.org ? "Органоид · " + ORG[state.org].tag.toLowerCase() : "Биология · " + TOPIC.name;
   }
   crumbs.addEventListener("click", (e) => {
     const k = e.target.closest("button")?.dataset.k; if (!k) return;
@@ -1022,6 +1292,7 @@ export async function open(opts = {}) {
     else if (b.dataset.act === "up") leaveMolecule();
     else if (b.dataset.act === "next") nextQ();
     else if (b.dataset.mix != null) { scenes.atp.userData.setMix(+b.dataset.mix); sh.querySelectorAll("#atpMode button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); }
+    else if (b.dataset.v) { const s = scenes[cur]; if (s && s.userData.onChip) s.userData.onChip(b.dataset.v); }
     else if (b.dataset.g) { const s = scenes.atp; if (s.userData.hiGroup === b.dataset.g) s.userData.onClear(); else { s.userData.pickGroup(b.dataset.g); syncAtpChips(); } }
   });
 
@@ -1040,13 +1311,19 @@ export async function open(opts = {}) {
     if (!isCell(cur)) { switchScene(cellKey, () => { clearOrg(); jump(scenes[cellKey]); afterHome(); }); return; }
     clearOrg(); const h = homeOf(scenes[cellKey]); flyTo(h.pos, h.target); afterHome();
   }
-  function afterHome() { if (mode === "quiz") renderQ(); else sheetIdle(); }
+  function afterHome() { const s = scenes[cellKey]; if (mode === "quiz" && QZ().length) renderQ(); else if (s && s.userData.info) sheetView(s); else sheetIdle(); }
+  function sheetView(s) {
+    const m = s.userData.info; sheet.classList.remove("min");
+    const extra = s.userData.name === "atp" ? ATP_EXTRA : (s.userData.chips && s.userData.chips.length ? `<div class="chips" id="vchips">${s.userData.chips.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="false">${l}</button>`).join("")}</div>` : "");
+    sheet.innerHTML = `<div class="shead"><span class="chip"><i></i>${m.tag}</span>${FOLD}</div><h2>${m.name}</h2>${extra}<div class="part" id="part">${m.hint}</div><div class="body"><p>${m.text}</p><div class="trap"><b>Ловушка ЕГЭ</b>${m.trap}</div></div>`;
+    syncAtpChips(); syncViewChips(); if (s.userData.name === "levels") s.userData.onClear();
+  }
   function switchScene(key, then) {
     const fade = $("#fade"); fade.classList.add("on");
     setTimeout(() => {
       if (!scenes[key]) { scenes[key] = builders[key](); applyLook(scenes[key]); }
       cur = key; tween = null; mountLabels(scenes[key]);
-      $("#modes").hidden = !isCell(key);
+      $("#modes").hidden = !isCell(key) || !QZ().length;
       if (then) then();          // сначала шторка, потом камера: кадр считается по её высоте
       renderCrumbs(); measure(); view.shift = view.shiftTo; applyOffset();
       if (!scenes[key].userData.keepCam) jump(scenes[key]);
@@ -1076,9 +1353,9 @@ export async function open(opts = {}) {
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
     const s = scenes[cur], hits = ray.intersectObjects(s.userData.pick, false);
-    if (!isCell(cur)) {
+    if (!isCell(cur) || s.userData.onPick) {
       const h = hits[0];
-      if (!h || !s.userData.onPick(h)) { if (s.userData.onClear) s.userData.onClear(); setPart(PARTS[cur].hint); }
+      if (!h || !s.userData.onPick(h)) { if (s.userData.onClear) s.userData.onClear(); if (s.userData.name !== "levels") setPart((s.userData.info || PARTS[cur]).hint); }
       return;
     }
     const hit = hits.find((h) => h.object.userData.org !== "membrane") || hits[0];
@@ -1113,7 +1390,7 @@ export async function open(opts = {}) {
     if (qDone || qi >= QZ().length) { selectOrg(k, obj); return; }
     const ok = QZ()[qi][1].includes(k);
     if (ok) {
-      if (qTries === 0) { qScore++; try { window.hbLab && window.hbLab.right("l3d", null, "l3d:" + qi); } catch (e) {} }
+      if (qTries === 0) { qScore++; try { window.hbLab && window.hbLab.right("l3d", null, "l3d:" + cellKey + ":" + qi); } catch (e) {} }
       buzz("success");
       qDone = true; selectOrg(k, obj);
       renderQ(`<div class="verdict ok">Верно: ${ORG[k].name}. ${ORG[k].text.split(". ")[0]}.</div>`);
@@ -1132,6 +1409,14 @@ export async function open(opts = {}) {
   });
 
   /* кнопки сверху */
+  $("#types").innerHTML = Object.entries(CELL_SHORT).map(([k, l]) => `<button type="button" data-cell="${k}" aria-pressed="${k === cellKey}">${l}</button>`).join("");
+  $("#types").hidden = Object.keys(CELL_SHORT).length < 2;
+  if (typeof LAB_OPTS === "undefined") {   // страница-концепт: выбор темы (в тренажёре тема приходит из модуля)
+    const sel = document.createElement("select"); sel.id = "topicSel"; sel.setAttribute("aria-label", "Тема");
+    sel.innerHTML = Object.entries(TOPICS).map(([k, t]) => `<option value="${k}"${k === TOPIC_KEY ? " selected" : ""}>${t.name}</option>`).join("");
+    sel.addEventListener("change", () => { location.hash = sel.value; location.reload(); });
+    $(".looks").prepend(sel);
+  }
   $("#lookBtn").addEventListener("click", () => setLook(LOOK === "scope" ? "notebook" : "scope"));
   $("#types").addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b || b.dataset.cell === cellKey) return;
@@ -1170,12 +1455,12 @@ export async function open(opts = {}) {
   }
 
   { let q = null; try { q = localStorage.getItem("hb.l3d.look"); } catch (e) {} setLook(LOOKS[q] ? q : "notebook"); }
-  jump(scenes[cellKey]); mountLabels(scenes[cellKey]); renderCrumbs(); sheetIdle();
+  jump(scenes[cellKey]); mountLabels(scenes[cellKey]); renderCrumbs(); $("#modes").hidden = !QZ().length; afterHome();
   let raf = requestAnimationFrame(frame);
   window.__lab3d = { scenes, selectOrg: (k) => { const o = scenes[cellKey].userData.pick.find((m) => m.userData.org === k); selectOrg(k, o); sheetOrg(k); }, enterMolecule, goCell, setLook, camera, controls, get cur() { return cur; } };
 
   try { if (tgw && tgw.BackButton) { tgw.BackButton.onClick(onTgBack); tgw.BackButton.show(); } } catch (e) {}
-  try { window.hbLab && window.hbLab.goal("lab3d_opened", { how: opts.how || "module" }); } catch (e) {}
+  try { window.hbLab && window.hbLab.goal("lab3d_opened", { how: opts.how || "module", topic: opts.topic || "cell" }); } catch (e) {}
   active = { close };
   return active;
 }

@@ -1379,7 +1379,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.9</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.10</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1455,7 +1455,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.9. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.10. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -2090,14 +2090,14 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <span class="plan-go">→</span></button>`;
   /* v4.8: 3D-лаборатория грузится только по требованию: lab3d.js + three.js r160 из этого же репозитория */
   let l3dBusy = false;
-  async function hbOpen3D(how) {
+  async function hbOpen3D(how, topic) {
     if (l3dBusy) return; l3dBusy = true;
     const ld = document.createElement("div"); ld.className = "l3d-load";
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Загружаю 3D-клетку…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./lab3d.js?v=490");
-      await m.open({ how, onClose: () => { l3dBusy = false; } });
+      const m = await import("./lab3d.js?v=4100");
+      await m.open({ how, topic: topic || "cell", onClose: () => { l3dBusy = false; } });
       ld.remove();
     } catch (e) {
       l3dBusy = false;
@@ -2106,6 +2106,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     }
   }
   window.hbOpen3D = hbOpen3D;
+  const l3dCard = (topic, title, sub) => `<button type="button" class="l3d-cta" data-l3d="${topic}"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>${title}</b><small>${sub}</small></span><span class="l3d-cta-go">Открыть</span></button>`;
+  document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-l3d]"); if (b) hbOpen3D("module", b.dataset.l3d); });
   function planShow(how) { hbGoalOnce("upsell_viewed", { how: typeof how === "string" ? how : "open" }); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
   function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
   document.getElementById("plan-x").addEventListener("click", planHide);
@@ -2748,6 +2750,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vVD.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-vd="back">← к модулям</button><h2 class="mod-title">Вода и минеральные вещества</h2></div>
       <p class="intro">Элементы клетки и их роль, свойства воды и где их видно в жизни, где воды больше всего. Задания в форматах ЕГЭ: соответствие, последовательность, «три верных».</p>
+      ${l3dCard("water", "Вода в 3D", "Молекула-диполь, водородные связи, лёд и растворение соли")}
       <div class="l-card vd-hero">${VD_MOL}</div>
       <div class="l-start">${vds.best != null ? `<p class="cd-total">Лучший результат: <b>${vds.best}</b> из 8</p>` : ""}<button type="button" class="btn primary" data-vd="go">Начать: 8 заданий</button></div>
       <h3 class="cd-h">Шпаргалка</h3>
@@ -3074,6 +3077,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vBK.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-bk="back">← к модулям</button><h2 class="mod-title">Белки: лаборатория</h2></div>
       <p class="intro">Собери белок от цепочки до гемоглобина, а потом сломай его нагревом и кислотой. После лаборатории — 8 заданий ЕГЭ.${bks.best != null ? ` Рекорд: <b>${bks.best}</b> из 8.` : ""}</p>
+      ${l3dCard("protein", "Белок в 3D", "От цепочки аминокислот до гемоглобина — и денатурация")}
       ${bkLabHtml()}
       <button type="button" class="linkbtn bk-skip">Сразу к заданиям →</button>`;
     vBK.querySelector('[data-bk="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
@@ -4133,6 +4137,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vNK.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-nk="back">← к модулям</button><h2 class="mod-title">ДНК, РНК и АТФ: лаборатория</h2></div>
       <p class="intro">Собери нуклеотид, дострой вторую цепь, покрути двойную спираль, реши задачу на Чаргаффа и «разряди» АТФ. После лаборатории — 8 заданий ЕГЭ.${nks.best != null ? ` Рекорд: <b>${nks.best}</b> из 8.` : ""}</p>
+      ${l3dCard("nk", "ДНК, РНК и АТФ в 3D", "Двойная спираль, РНК, нуклеотид и АТФ — крути пальцами")}
       ${nkLabHtml()}
       <button type="button" class="linkbtn bk-skip" data-nk="skip">Сразу к заданиям →</button>`;
     vNK.querySelector('[data-nk="back"]').addEventListener("click", () => { cancelAnimationFrame(DNL.raf); go({ tab: "learn", module: null }); });
