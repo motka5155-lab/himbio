@@ -1379,7 +1379,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.12</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.13</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1456,7 +1456,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.12. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.13. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -2100,7 +2100,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Загружаю 3D-клетку…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./lab3d.js?v=4120");
+      const m = await import("./lab3d.js?v=4130");
       await m.open({ how, topic: topic || "cell", onClose: () => { l3dBusy = false; } });
       ld.remove();
     } catch (e) {

@@ -123,10 +123,10 @@ export async function open(opts = {}) {
   const LOOKS = {
     notebook: { kind: "phys", exposure: 1.0, hemi: ["#ffffff", "#c7d1ea", 1.05], key: 1.6, rim: 0.7, c: {
       wall: "#FBE4EE", memIn: "#F7C3D7", memEdge: "#C2185B", rim: "#D6417C",
-      nucleus: "#8C7BEA", nucleusIn: "#EEE9FF", nucleolus: "#4B36B4", chromatin: "#7B64E2", pore: "#4B36B4",
-      mito: "#F2865A", mitoIn: "#FBD0B0", crista: "#E8673A",
-      rer: "#5C9DEB", ribo: "#27479A", ser: "#36B5A4", golgi: "#F2B200", vesicle: "#F5C84A",
-      lyso: "#DE437A", centriole: "#2FA36B", pcm: "#BFE8D2", skeleton: "#94A3CA", particle: "#C7B4D8",
+      nucleus: "#7C5CFF", nucleusIn: "#EEE8FF", nucleolus: "#4527C4", chromatin: "#6A4CF0", pore: "#4B36B4",
+      mito: "#FF6F43", mitoIn: "#FFC9A3", crista: "#E8482A",
+      rer: "#3D8BFF", ribo: "#22388F", ser: "#14B8A6", golgi: "#FFB000", vesicle: "#FFC93C",
+      lyso: "#F0346E", centriole: "#1FA95E", pcm: "#BFE8D2", skeleton: "#94A3CA", particle: "#C7B4D8",
       bbA: "#4A5A86", bbB: "#8A4A6E", phosphate: "#F08A24", sugar: "#F3E6C8", hbond: "#2B3550", baseA: "#E4572E", baseT: "#F2B93B", baseG: "#2FA36B", baseC: "#3B7FD0",
       head: "#EE6A8C", tail: "#F4D58A", protein: "#5C9DEB", protein2: "#8C7BEA", glycan: "#2FA36B", chol: "#F2865A",
       aC: "#3D4659", aH: "#DCE2EC", aO: "#E5463B", aN: "#3C6FD9", aP: "#F08A24", macro: "#FFC400" } },
@@ -192,7 +192,7 @@ export async function open(opts = {}) {
     } else if (L.kind === "matte") {
       m = new THREE.MeshPhysicalMaterial({ color: c, roughness: o.rough ?? 0.86, metalness: 0, sheen: 0.9, sheenRoughness: 0.75, sheenColor: new THREE.Color("#fff6ea"), envMapIntensity: 0.55, side });
     } else {
-      m = new THREE.MeshPhysicalMaterial({ color: c, roughness: o.rough ?? 0.4, metalness: 0, clearcoat: 0.5, clearcoatRoughness: 0.32, sheen: 0.45, sheenRoughness: 0.6, sheenColor: new THREE.Color("#ffffff"), envMapIntensity: 0.9, side });
+      m = new THREE.MeshPhysicalMaterial({ color: c, roughness: o.rough ?? 0.34, metalness: 0, clearcoat: 0.8, clearcoatRoughness: 0.2, sheen: 0.45, sheenRoughness: 0.6, sheenColor: new THREE.Color("#ffffff"), envMapIntensity: 1.0, side });
     }
     if (!m.isShaderMaterial && o.opacity != null && o.opacity < 1) { m.transparent = true; m.opacity = o.opacity; m.depthWrite = false; }
     if (o.clip && !m.isShaderMaterial) m.clippingPlanes = o.clip;
@@ -366,21 +366,7 @@ export async function open(opts = {}) {
     // митохондрии (разрезаны вдоль, видны кристы)
     const camDirFrom = (p) => CAM_HOME.clone().sub(p).normalize();
     const mitoSpots = [[140, 5.6, -1.4, 0.3], [190, 6.4, 3.2, 1.2], [-42, 5.9, -2.6, 2.1], [252, 6.6, -4.4, 0.8], [-12, 5.7, 3.6, 2.7], [168, 3.1, -5.2, 1.9], [118, 3.6, 4.0, 0.4], [228, 7.2, 1.8, 1.4], [112, 6.6, -1.6, 2.4]];
-    const capO = new THREE.CapsuleGeometry(0.8, 2.25, 8, 28), capI = new THREE.CapsuleGeometry(0.7, 2.2, 8, 28), cris = new THREE.SphereGeometry(1, 16, 8);
-    const mitos = [];
-    mitoSpots.forEach(([az, r, y, tw], idx) => {
-      const pos = P(az, r, y), g = new THREE.Group(); g.position.copy(pos); root.add(g);
-      const axis = new V3(Math.cos(tw * 2.1), 0.45 * Math.sin(tw * 3), Math.sin(tw * 1.7)).normalize();
-      const cd = camDirFrom(pos), zA = cd.clone().sub(axis.clone().multiplyScalar(cd.dot(axis))).normalize(), xA = new V3().crossVectors(axis, zA);
-      g.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(xA, axis, zA));
-      const clip = [new THREE.Plane(zA.clone().negate(), zA.dot(pos) + 0.02)];
-      add(s, g, new THREE.Mesh(capO, null), "mito", "mito", { side: THREE.DoubleSide, clip });
-      add(s, g, new THREE.Mesh(capI, null), "mitoIn", "mito", { side: THREE.DoubleSide, clip, rough: 0.7 });
-      const cr = new THREE.InstancedMesh(cris, null, 8);
-      for (let k = 0; k < 8; k++) { const sd = k % 2 ? 1 : -1; mtx.compose(new V3(sd * 0.24, -1.3 + (k + 0.5) * (2.6 / 8), -0.06), new THREE.Quaternion(), new V3(0.46, 0.05, 0.62)); cr.setMatrixAt(k, mtx); }
-      add(s, g, cr, "crista", "mito", { clip });
-      g.userData.focus = true; mitos.push(g);
-    });
+    const mitos = mitoSpots.map(([az, r, y, tw]) => mitoAt(s, root, P(az, r, y), tw));
 
     // лизосомы
     const lysoSpots = [[124, 6.9, 1.2], [-62, 4.1, 4.6], [212, 7.4, -1.2], [300, 5.4, 4.8], [-72, 6.3, -2.6], [150, 4.6, 5.2], [196, 4.2, -4.6]];
@@ -432,6 +418,10 @@ export async function open(opts = {}) {
     const freeM = new THREE.InstancedMesh(riboGeo, null, free.length);
     free.forEach((p, i) => { mtx.makeTranslation(p.x, p.y, p.z); freeM.setMatrixAt(i, mtx); });
     add(s, root, freeM, "ribo", "ribo");
+    const vesP = []; while (vesP.length < 36) { const p = new V3((R() - 0.5) * 19, (R() - 0.5) * 16, (R() - 0.5) * 19); if (okSpot(p)) vesP.push(p); }
+    const vesM = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 14, 10), null, vesP.length);
+    vesP.forEach((p, i) => { const r = 0.09 + R() * 0.09; mtx.compose(p, new THREE.Quaternion(), new V3(r, r, r)); vesM.setMatrixAt(i, mtx); });
+    add(s, root, vesM, "vesicle", null, { nodim: true });
     const dustM = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.04, 0), null, dust.length);
     dust.forEach((p, i) => { mtx.makeTranslation(p.x, p.y, p.z); dustM.setMatrixAt(i, mtx); });
     add(s, root, dustM, "particle", null, { basic: true, opacity: 0.55, nodim: true });
@@ -447,7 +437,7 @@ export async function open(opts = {}) {
       ["ser", SC.clone().add(new V3(0, 1.6, 0))],
     ].map(([k, p]) => ({ key: k, text: ORG[k].name.replace("Плазматическая мембрана", "Мембрана"), pos: p }));
     s.userData.related = { nucleus: ["nucleus"], rer: ["rer"] };
-    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(0, 0, 0), fitW: 10.6, fitH: 9.4, min: 4, max: 60 };
+    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(0, 0, 0), fitW: 10.6, fitH: 9.4, min: 1.4, max: 60 };
     s.userData.name = "cell";
     return s;
   }
@@ -457,11 +447,11 @@ export async function open(opts = {}) {
   Object.assign(LOOKS.notebook.c, {
     wallP: "#A8D08D", wallPRim: "#5E9E43", wallF: "#D3B08C", wallFRim: "#9C6B3E", wallB: "#B9A6E0", wallBRim: "#7A62C2",
     inP: "#EEF7E8", inF: "#F8F0E6", inB: "#EEF4FB", vacIn: "#D9EEFC", vacEdge: "#3D8FD6", vacFill: "#CFE7FA", vacRim: "#5AA2E0",
-    chl: "#48A84C", chlIn: "#CDEBB0", granum: "#2B7A30", gly: "#7A5A3A", plasmid: "#E0457B", flag: "#7A62C2", pili: "#9F8FD0", slimeIn: "#F3EEFF", slimeEdge: "#9F8FD0" });
+    chl: "#35B637", chlIn: "#C9F0A6", granum: "#1E8A2A", synth: "#FFD23F", starch: "#FFF6E0", pglob: "#E0A21A", mDot: "#C2412A", gly: "#7A5A3A", plasmid: "#E0457B", flag: "#7A62C2", pili: "#9F8FD0", slimeIn: "#F3EEFF", slimeEdge: "#9F8FD0" });
   Object.assign(LOOKS.scope.c, {
     wallP: "#7CFF6B", wallPRim: "#B9FF9F", wallF: "#FFB46B", wallFRim: "#FFD3A3", wallB: "#B48CFF", wallBRim: "#D9C2FF",
     inP: "#0E2B1C", inF: "#2B1C0E", inB: "#16113A", vacIn: "#06223F", vacEdge: "#3DA9FF", vacFill: "#0B2E55", vacRim: "#7CC4FF",
-    chl: "#3DDC97", chlIn: "#1F6F45", granum: "#9BFFB0", gly: "#FFD166", plasmid: "#FF5FD2", flag: "#B48CFF", pili: "#B48CFF", slimeIn: "#120B33", slimeEdge: "#B48CFF" });
+    chl: "#3DDC97", chlIn: "#1F6F45", granum: "#9BFFB0", synth: "#FFF3A0", starch: "#E6F0FF", pglob: "#FFD166", mDot: "#FFB0C2", gly: "#FFD166", plasmid: "#FF5FD2", flag: "#B48CFF", pili: "#B48CFF", slimeIn: "#120B33", slimeEdge: "#B48CFF" });
   Object.assign(ORG, {
     wallP: { name: "Клеточная стенка", tag: "Поверхностный аппарат", text: "Жёсткая оболочка поверх мембраны из целлюлозы. Даёт клетке опору и форму, защищает и не даёт лопнуть, когда клетка набирает воду.", trap: "Стенка растений — из целлюлозы, грибов — из хитина, бактерий — из муреина. У животных клеточной стенки нет." },
     wallF: { name: "Клеточная стенка", tag: "Поверхностный аппарат", text: "Жёсткая оболочка из хитина поверх мембраны: опора, форма и защита клетки гриба.", trap: "Хитин — тот же полисахарид, что в покровах членистоногих. Целлюлозы у грибов нет." },
@@ -561,26 +551,49 @@ export async function open(opts = {}) {
   }
   const MITO_G = { o: null };
   function mitoAt(s, root, pos, tw, sc = 1) {
-    if (!MITO_G.o) MITO_G.o = { o: new THREE.CapsuleGeometry(0.8, 2.25, 8, 28), i: new THREE.CapsuleGeometry(0.7, 2.2, 8, 28), c: new THREE.SphereGeometry(1, 16, 8) };
+    if (!MITO_G.o) {
+      const c = new THREE.SphereGeometry(1, 30, 12), cp = c.attributes.position;
+      for (let v = 0; v < cp.count; v++) { const x = cp.getX(v), z = cp.getZ(v); cp.setY(v, cp.getY(v) + 0.75 * Math.sin(x * 4.2 + z * 1.3)); }
+      c.computeVertexNormals();
+      MITO_G.o = { o: new THREE.CapsuleGeometry(0.8, 2.25, 8, 28), i: new THREE.CapsuleGeometry(0.7, 2.2, 8, 28), c, k: new THREE.SphereGeometry(0.038, 8, 6), d: new THREE.SphereGeometry(0.028, 6, 4), r: new THREE.TorusGeometry(0.17, 0.016, 6, 28) };
+    }
     const G = MITO_G.o, g = new THREE.Group(); g.position.copy(pos); root.add(g); const clip = cutFrame(g, pos, tw); g.scale.setScalar(sc); g.userData.focus = true;
-    add(s, g, new THREE.Mesh(G.o, null), "mito", "mito", { side: THREE.DoubleSide, clip });
-    add(s, g, new THREE.Mesh(G.i, null), "mitoIn", "mito", { side: THREE.DoubleSide, clip, rough: 0.7 });
-    const cr = new THREE.InstancedMesh(G.c, null, 8), m = new THREE.Matrix4();
-    for (let k = 0; k < 8; k++) { const sd = k % 2 ? 1 : -1; m.compose(new V3(sd * 0.24, -1.3 + (k + 0.5) * (2.6 / 8), -0.06), new THREE.Quaternion(), new V3(0.46, 0.05, 0.62)); cr.setMatrixAt(k, m); }
-    add(s, g, cr, "crista", "mito", { clip }); return g;
+    add(s, g, new THREE.Mesh(G.o, null), "mito", "mito", { side: THREE.DoubleSide, clip, glowI: 0.75 });
+    add(s, g, new THREE.Mesh(G.i, null), "mitoIn", "mito", { side: THREE.DoubleSide, clip, rough: 0.7, glowI: 0.22, core: 0.1 });
+    // кристы — складки внутренней мембраны, по очереди от разных стенок; на них «шишечки» АТФ-синтазы
+    const NCR = 11, cr = new THREE.InstancedMesh(G.c, null, NCR), m = new THREE.Matrix4(), R = rng(Math.round(tw * 1000) + 7), kn = [], dots = [];
+    for (let k = 0; k < NCR; k++) {
+      const sd = k % 2 ? 1 : -1, y = -1.42 + (k + 0.5) * (2.84 / NCR), w = 0.4 + R() * 0.12, cx = sd * (0.7 - w);
+      m.compose(new V3(cx, y, -0.08), new THREE.Quaternion(), new V3(w, 0.045, 0.6)); cr.setMatrixAt(k, m);
+      for (let j = 0; j < 9; j++) { const x = cx + (R() - 0.5) * 1.3 * w, z = -0.05 - R() * 0.42, up = j % 2 ? 1 : -1; kn.push(new V3(x, y + up * 0.074 + 0.034 * Math.sin(((x - cx) / w) * 4.2 + ((z + 0.08) / 0.6) * 1.3), z)); }
+    }
+    add(s, g, cr, "crista", "mito", { clip, glowI: 0.4, core: 0.2 });
+    const knM = new THREE.InstancedMesh(G.k, null, kn.length); kn.forEach((p, i) => { m.makeTranslation(p.x, p.y, p.z); knM.setMatrixAt(i, m); }); add(s, g, knM, "synth", "mito", { clip, glowI: 0.7 });
+    for (let i = 0; i < 46; i++) { const p = new V3((R() - 0.5) * 1.1, (R() - 0.5) * 2.7, -0.04 - R() * 0.5); dots.push(p); }
+    const dM = new THREE.InstancedMesh(G.d, null, dots.length); dots.forEach((p, i) => { const sc2 = i < 20 ? 1.5 : 1; m.compose(p, new THREE.Quaternion(), new V3(sc2, sc2, sc2)); dM.setMatrixAt(i, m); });
+    add(s, g, dM, "mDot", "mito", { clip, glowI: 0.55 });
+    const ring = new THREE.Mesh(G.r, null); ring.position.set(0.08, 0.32, -0.12); ring.rotation.set(0.3, 0.2, 0); add(s, g, ring, "plasmid", "mito", { clip });
+    return g;
   }
   function chloroAt(s, root, pos, tw) {
     const g = new THREE.Group(); g.position.copy(pos); root.add(g); const clip = cutFrame(g, pos, tw); g.userData.focus = true;
     const sph = new THREE.SphereGeometry(1, 36, 24);
     const o = new THREE.Mesh(sph, null); o.scale.set(0.7, 1.75, 1.0); add(s, g, o, "chl", "chl", { side: THREE.DoubleSide, clip });
     const i = new THREE.Mesh(sph, null); i.scale.set(0.62, 1.66, 0.92); add(s, g, i, "chlIn", "chl", { side: THREE.DoubleSide, clip, rough: 0.7 });
-    const gr = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.055, 18), null, 30), m = new THREE.Matrix4(), q = new THREE.Quaternion().setFromAxisAngle(new V3(0, 0, 1), Math.PI / 2);
-    let n = 0;
-    for (let a = 0; a < 5; a++) for (let b = 0; b < 6; b++) { m.compose(new V3(-0.2 + b * 0.08, -1.05 + a * 0.52, -0.08), q, new V3(1, 1, 1)); gr.setMatrixAt(n++, m); }
-    add(s, g, gr, "granum", "chl", { clip });
-    const lam = new THREE.InstancedMesh(new THREE.BoxGeometry(0.03, 0.3, 0.42), null, 4);
-    for (let a = 0; a < 4; a++) { m.compose(new V3(0, -0.79 + a * 0.52, -0.08), new THREE.Quaternion(), new V3(1, 1, 1)); lam.setMatrixAt(a, m); }
-    add(s, g, lam, "granum", "chl", { clip }); return g;
+    // граны — стопки дисков-тилакоидов; между ними тянутся ламеллы стромы
+    const R = rng(Math.round(tw * 1000) + 3), m = new THREE.Matrix4(), q = new THREE.Quaternion().setFromAxisAngle(new V3(0, 0, 1), Math.PI / 2), disc = [], stacks = [];
+    for (let a = 0; a < 7; a++) { const y = -1.3 + a * 0.43, x0 = (a % 2 ? 0.1 : -0.1) + (R() - 0.5) * 0.06; stacks.push(new V3(x0, y, -0.1)); const nd = 6 + Math.floor(R() * 4); for (let b = 0; b < nd; b++) disc.push([new V3(x0 - (nd - 1) * 0.034 + b * 0.068, y, -0.1), 0.2 + R() * 0.05]); }
+    const gr = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, 1, 0.048, 22), null, disc.length);
+    disc.forEach(([p, r], i) => { m.compose(p, q, new V3(r, 1, r)); gr.setMatrixAt(i, m); }); add(s, g, gr, "granum", "chl", { clip });
+    const lam = new THREE.InstancedMesh(new THREE.BoxGeometry(0.022, 1, 0.3), null, stacks.length - 1);
+    for (let a = 0; a < stacks.length - 1; a++) { const A = stacks[a], B = stacks[a + 1], d = B.clone().sub(A); m.compose(A.clone().lerp(B, 0.5), new THREE.Quaternion().setFromUnitVectors(new V3(0, 1, 0), d.clone().normalize()), new V3(1, d.length(), 1)); lam.setMatrixAt(a, m); }
+    add(s, g, lam, "granum", "chl", { clip });
+    const st = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 14), null); st.scale.set(0.2, 0.13, 0.16); st.position.set(-0.32, 0.42, -0.2); add(s, g, st, "starch", "chl", { clip });
+    const st2 = st.clone(); st2.scale.set(0.16, 0.11, 0.13); st2.position.set(0.33, -0.65, -0.22); add(s, g, st2, "starch", "chl", { clip });
+    const pgM = new THREE.InstancedMesh(new THREE.SphereGeometry(0.035, 8, 6), null, 14);
+    for (let i = 0; i < 14; i++) { m.makeTranslation((R() - 0.5) * 0.85, (R() - 0.5) * 2.8, -0.05 - R() * 0.4); pgM.setMatrixAt(i, m); } add(s, g, pgM, "pglob", "chl", { clip });
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.014, 6, 24), null); ring.position.set(0.3, 0.9, -0.12); add(s, g, ring, "plasmid", "chl", { clip });
+    return g;
   }
   function vacuoleAt(s, root, C, a, b, c, org) {
     const vAz = Math.atan2(CAM_HOME.z - C.z, CAM_HOME.x - C.x), G = D2R(118), ph0 = Math.PI - vAz + G / 2, L = 2 * Math.PI - G, disp = ellDisp(a, b, c, 0.04);
@@ -614,7 +627,7 @@ export async function open(opts = {}) {
     scatter(s, root, 180, ok, new THREE.IcosahedronGeometry(0.04, 0), "particle", null, { basic: true, opacity: 0.55, nodim: true });
     s.userData.labels = [lbl("wallP", new V3(-4, 8.6, 6.2)), lbl("vacP", VC.clone().add(new V3(0, 4.2, 0))), lbl("chl", chls[0].position.clone().add(new V3(0, 1.4, 0))),
       lbl("nucleus", NC.clone().add(new V3(0, NR + 0.3, 0))), lbl("mito", mitos[0].position.clone().add(new V3(0, 1, 0))), lbl("golgi", GC.clone().add(new V3(0, 1.5, 0))), lbl("ribo", free[0])];
-    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(0, 0, 0), fitW: 13.6, fitH: 9.2, min: 4, max: 60 }; s.userData.name = "plant";
+    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(0, 0, 0), fitW: 13.6, fitH: 9.2, min: 1.4, max: 60 }; s.userData.name = "plant";
     return s;
   }
   function buildFungus() {
@@ -635,7 +648,7 @@ export async function open(opts = {}) {
     scatter(s, root, 150, ok, new THREE.IcosahedronGeometry(0.04, 0), "particle", null, { basic: true, opacity: 0.55, nodim: true });
     s.userData.labels = [lbl("wallF", new V3(-5, 6.0, 4.5)), lbl("nucleus", NC.clone().add(new V3(0, NR + 0.3, 0))), lbl("vacF", new V3(4.5, 2.6, -1.5)),
       lbl("gly", glyPts[0]), lbl("mito", mitos[0].position.clone().add(new V3(0, 0.9, 0))), lbl("golgi", GC.clone().add(new V3(0, 1.2, 0))), lbl("ribo", free[0])];
-    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(0, 0, 0), fitW: 12.6, fitH: 7.4, min: 4, max: 60 }; s.userData.name = "fungus";
+    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(0, 0, 0), fitW: 12.6, fitH: 7.4, min: 1.4, max: 60 }; s.userData.name = "fungus";
     return s;
   }
   function buildBact() {
@@ -657,14 +670,18 @@ export async function open(opts = {}) {
     const fl = []; for (let i = 0; i <= 160; i++) { const t = i / 160; fl.push(new V3(-(H + RHO * 0.95) - t * 10, Math.sin(t * 16) * 0.55 * Math.min(1, t * 6), Math.cos(t * 16) * 0.55 * Math.min(1, t * 6) - 0.4)); }
     add(s, root, new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(fl), 400, 0.075, 8), null), "flag", "flag");
     // пили: короткие нити по поверхности стенки
-    const pil = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.025, 0.025, 1, 5), null, 46), m = new THREE.Matrix4(), q = new THREE.Quaternion(), cap = capDisp(H, RHO);
+    const NP = 260, pil = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.02, 0.026, 1, 5), null, NP), m = new THREE.Matrix4(), q = new THREE.Quaternion(), cap = capDisp(H, RHO);
     let n = 0;
-    while (n < 46) { const d = new V3(R3() - 0.5, R3() - 0.5, R3() - 0.5).normalize(); const r = cap(d.x, d.y, d.z); const p = d.clone().multiplyScalar(r * 1.05); if (inGap(p, 0.05)) continue; q.setFromUnitVectors(new V3(0, 1, 0), d); m.compose(p.clone().add(d.clone().multiplyScalar(0.55)), q, new V3(1, 1.1, 1)); pil.setMatrixAt(n++, m); }
+    while (n < NP) {
+      const d = new V3(R3() - 0.5, R3() - 0.5, R3() - 0.5).normalize(); const r = cap(d.x, d.y, d.z); const p = d.clone().multiplyScalar(r * 1.04); if (inGap(p, 0.05)) continue;
+      const L = n < 40 ? 1.3 + R3() * 1.0 : 0.45 + R3() * 0.55, t = d.clone().add(new V3(R3() - 0.5, R3() - 0.5, R3() - 0.5).multiplyScalar(0.35)).normalize();
+      q.setFromUnitVectors(new V3(0, 1, 0), t); m.compose(p.clone().add(t.clone().multiplyScalar(L / 2)), q, new V3(1, L, 1)); pil.setMatrixAt(n++, m);
+    }
     add(s, root, pil, "pili", "pili");
     s.userData.labels = [lbl("capsule", new V3(-3, RHO * 1.3 + 0.2, 1.5)), lbl("wallB", new V3(3, -RHO - 0.2, 2.5)), lbl("nucleoid", pts[60].clone().add(new V3(0, 0.4, 0))),
       lbl("plasmid", plas[0].position.clone().add(new V3(0, 0.6, 0))), lbl("riboB", free[0]), lbl("flag", fl[110]), lbl("pili", new V3(5.5, 3.6, -2))];
     root.rotation.z = 0.55; s.userData.spin = root;   // по диагонали — так палочка крупнее на вертикальном экране
-    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(-0.6, -0.4, 0), fitW: 8.6, fitH: 7.4, min: 4, max: 60 }; s.userData.name = "bact";
+    s.userData.home = { dir: CAM_HOME.clone(), target: new V3(-0.6, -0.4, 0), fitW: 8.6, fitH: 7.4, min: 1.4, max: 60 }; s.userData.name = "bact";
     return s;
   }
 
@@ -1677,8 +1694,10 @@ export async function open(opts = {}) {
     tween = { t0: performance.now(), ms: REDUCE ? 1 : ms, p0: camera.position.clone(), p1: pos, q0: controls.target.clone(), q1: target };
   }
   function focusOn(obj) {
-    const box = new THREE.Box3().setFromObject(obj), sph = box.getBoundingSphere(new THREE.Sphere()), f = halfFovs();
-    const dist = Math.max(3.0, (sph.radius / Math.sin(Math.min(f.h, f.v))) * 0.95);
+    // у вскрытого органоида рамку считаем по его наружной оболочке — мелкие детали внутри не раздувают кадр
+    const box = new THREE.Box3().setFromObject(obj.userData.focus && obj.children[0] ? obj.children[0] : obj), sph = box.getBoundingSphere(new THREE.Sphere()), f = halfFovs();
+    const dist = Math.max(1.4, (sph.radius / Math.sin(Math.min(f.h, f.v))) * 0.62);
+    controls.minDistance = Math.min(controls.minDistance, dist * 0.7);
     const dir = camera.position.clone().sub(sph.center).normalize();
     if (dir.y < 0.15) dir.y = 0.25; dir.normalize();
     flyTo(sph.center.clone().add(dir.multiplyScalar(dist)), sph.center.clone());
