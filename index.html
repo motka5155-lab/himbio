@@ -1379,7 +1379,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.11</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.12</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1444,6 +1444,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-raschet" hidden></section>
   <section class="view" id="v-nauka" hidden></section>
   <section class="view" id="v-kl-teor" hidden></section>
+  <section class="view" id="v-kl-del" hidden></section>
   <section class="view" id="v-kl-voda" hidden></section>
   <section class="view" id="v-kl-belki" hidden></section>
   <section class="view" id="v-kl-ferm" hidden></section>
@@ -1455,7 +1456,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.11. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.12. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1480,7 +1481,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ],
     bio: [
       {"group": "1 · Биология как наука", "id": "nauka", "title": "Биология как наука", "desc": "Уровни организации, методы, науки и свойства живого — задание 1 ЕГЭ.", "st": "4 таблицы · задание 1 ЕГЭ", "ready": true, "rel": "2026-11-08"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Новое: пробка Гука и деление клеток в 3D. Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Разложи элементы по группам, свяжи свойства воды с явлениями, расставь ткани по содержанию воды.", "st": "13 элементов · 10 свойств воды", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: лаборатория", "desc": "Собери белок от цепочки до гемоглобина и сломай его нагревом и кислотой. Связи, денатурация, функции.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Новое: фермент в 3D. Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
@@ -1494,7 +1495,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-energ", "title": "Энергетический обмен", "desc": "Гликолиз, брожение, клеточное дыхание, выход АТФ.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-foto", "title": "Фотосинтез и хемосинтез", "desc": "Световая и темновая фазы, хемосинтезирующие бактерии.", "st": "скоро"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-bios", "title": "Биосинтез белка", "desc": "Репликация, транскрипция, трансляция, генетический код.", "st": "скоро"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-del", "title": "Митоз и мейоз", "desc": "Фазы деления, наборы n и c на каждом этапе.", "st": "скоро"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-del", "title": "Митоз и мейоз", "desc": "Новое: деление клетки в 3D — хромосомы, веретено, кроссинговер. И задания на наборы n и c, как в линии 27.", "st": "3D-лаборатория · 10 заданий", "ready": true, "rel": "2026-11-14"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-vir", "title": "Вирусы", "desc": "Строение, размножение, бактериофаги.", "st": "скоро"},
       {"group": "3 · Организм как биологическая система", "id": "org-razm", "title": "Размножение и гаметогенез", "desc": "Бесполое и половое размножение, сперматогенез, овогенез.", "st": "скоро"},
       {"group": "3 · Организм как биологическая система", "id": "org-ontog", "title": "Оплодотворение и онтогенез", "desc": "Путь сперматозоида, дробление, гаструляция, органогенез.", "st": "скоро"},
@@ -2000,6 +2001,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const showR = state.subject === "chem" && state.tab === "learn" && state.module === "raschet";
     const showN = state.subject === "bio" && state.tab === "learn" && state.module === "nauka";
     const showKT = state.subject === "bio" && state.tab === "learn" && state.module === "kl-teor";
+    const showDL = state.subject === "bio" && state.tab === "learn" && state.module === "kl-del";
     const showVD = state.subject === "bio" && state.tab === "learn" && state.module === "kl-voda";
     const showBK = state.subject === "bio" && state.tab === "learn" && state.module === "kl-belki";
     const showFM = state.subject === "bio" && state.tab === "learn" && state.module === "kl-ferm";
@@ -2026,6 +2028,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vR.hidden = !showR;
     vN.hidden = !showN;
     vKT.hidden = !showKT;
+    vDL.hidden = !showDL;
     vVD.hidden = !showVD;
     vBK.hidden = !showBK;
     vFM.hidden = !showFM;
@@ -2036,7 +2039,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (!showNK) cancelAnimationFrame(DNL.raf);
     vOG.hidden = !showOG;
     if (!showOG) cancelAnimationFrame(OGL.raf);
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showVD || showBK || showFM || showUL || showNK || showOG || state.tab === "traps";
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showDL || showVD || showBK || showFM || showUL || showNK || showOG || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -2068,6 +2071,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showR) rRender();
       else if (showN) nRender();
       else if (showKT) ktRender();
+      else if (showDL) dlRender();
       else if (showVD) vdRender();
       else if (showBK) bkRender();
       else if (showFM) fmRender();
@@ -2096,7 +2100,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Загружаю 3D-клетку…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./lab3d.js?v=4110");
+      const m = await import("./lab3d.js?v=4120");
       await m.open({ how, topic: topic || "cell", onClose: () => { l3dBusy = false; } });
       ld.remove();
     } catch (e) {
@@ -2577,6 +2581,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vKT.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-kt="back">← к модулям</button><h2 class="mod-title">Клеточная теория</h2></div>
       <p class="intro">Два вида заданий: расставь учёных на ленте открытий и выбери три верных утверждения о клеточной теории — как в ЕГЭ.</p>
+      ${l3dCard("teor", "Клеточная теория в 3D", "Пробка Гука, клетки в ткани и «клетка от клетки»")}
       <div class="l-start">${kts.best != null ? `<p class="cd-total">Лучший результат: <b>${kts.best}</b> из 6</p>` : ""}<button type="button" class="btn primary" data-kt="go">Начать: 6 заданий</button></div>
       <h3 class="cd-h">Лента открытий</h3>
       <div class="kt-line">${KT_SCI.map(([p, d, y]) => `<div class="kt-ev"><i>${y}</i><b>${p}</b><span>${d}</span></div>`).join("")}</div>
@@ -2662,6 +2667,104 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ["Гук ≠ автор клеточной теории", "Роберт Гук увидел ячейки пробки и придумал слово «клетка». Теорию создали Шлейден и Шванн (1838–1839), Вирхов дополнил её."],
     ["Ядро открыл Броун, а не Левенгук", "Левенгук первым увидел одноклеточных и бактерий. Ядро описал Роберт Броун в 1831 году."],
     ["Вирусы — вне клеточной теории", "Вирусы не имеют клеточного строения. Их открыл Д. И. Ивановский (1892)."],
+  ];
+
+  /* ════════ v4.12: БИОЛОГИЯ «Митоз и мейоз» — 3D-деление и наборы n и c ════════ */
+  const vDL = document.getElementById("v-kl-del");
+  const DLK = "hb.bio2del.v1";
+  let dls = {};
+  try { dls = JSON.parse(localStorage.getItem(DLK) || "{}") || {}; } catch (e) { dls = {}; }
+  function dlsave() { try { localStorage.setItem(DLK, JSON.stringify(dls)); } catch (e) {} }
+  const DLR = { run: null };
+  /* [где, набор, [хромосомы в n, ДНК в c], почему] */
+  const DL_PH = [
+    ["в интерфазе до S-периода (G1)", "2n2c", [2, 2], "До репликации каждая хромосома состоит из одной хроматиды — 2n2c."],
+    ["в конце интерфазы (после S-периода)", "2n4c", [2, 4], "В S-периоде ДНК удвоилась, а число хромосом не изменилось — 2n4c."],
+    ["в профазе митоза", "2n4c", [2, 4], "Хромосомы спирализуются, каждая из двух хроматид — 2n4c."],
+    ["в метафазе митоза", "2n4c", [2, 4], "Двухроматидные хромосомы стоят на экваторе — 2n4c."],
+    ["в анафазе митоза", "4n4c", [4, 4], "Хроматиды разошлись и стали самостоятельными хромосомами, а клетка ещё одна — 4n4c."],
+    ["в телофазе митоза (в каждой дочерней клетке)", "2n2c", [2, 2], "Каждая дочерняя клетка получила полный набор однохроматидных хромосом — 2n2c."],
+    ["в профазе мейоза I", "2n4c", [2, 4], "Гомологи конъюгируют и обмениваются участками, ДНК удвоена — 2n4c."],
+    ["в метафазе мейоза I", "2n4c", [2, 4], "Биваленты на экваторе, клетка ещё не делилась — 2n4c."],
+    ["в анафазе мейоза I", "2n4c", [2, 4], "К полюсам идут гомологичные двухроматидные хромосомы, клетка ещё одна — 2n4c."],
+    ["в телофазе мейоза I (в каждой клетке)", "n2c", [1, 2], "Хромосом вдвое меньше, но каждая из двух хроматид — n2c."],
+    ["в профазе мейоза II", "n2c", [1, 2], "Перед мейозом II ДНК не удваивается — n2c."],
+    ["в метафазе мейоза II", "n2c", [1, 2], "Двухроматидные хромосомы на экваторе — n2c."],
+    ["в анафазе мейоза II", "2n2c", [2, 2], "Сестринские хроматиды разошлись и стали хромосомами, клетка ещё одна — 2n2c."],
+    ["в телофазе мейоза II (в каждой клетке)", "nc", [1, 1], "Четыре гаплоидные клетки с однохроматидными хромосомами — nc."],
+  ];
+  const DL_SETS = [["2n2c", [2, 2]], ["2n4c", [2, 4]], ["4n4c", [4, 4]], ["n2c", [1, 2]], ["nc", [1, 1]]];
+  const DL_ORG = [["человека", 46], ["дрозофилы", 8], ["гороха", 14], ["кошки", 38], ["мягкой пшеницы", 42], ["собаки", 78]];
+  const dlPl = (n, a, b, c) => { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c; };
+  const dlNum = (d, [a, b]) => { const n = d / 2, x = a * n, y = b * n; return `${x} ${dlPl(x, "хромосома", "хромосомы", "хромосом")} и ${y} ${dlPl(y, "молекула", "молекулы", "молекул")} ДНК`; };
+  function dlNew() {
+    const ph = sShuf(DL_PH).slice(0, 10), org = sShuf(DL_ORG);
+    return ph.map((p, i) => {
+      if (i % 2 === 0) {
+        const opts = sShuf([p[1], ...sShuf(DL_SETS.map(x => x[0]).filter(x => x !== p[1])).slice(0, 3)]);
+        return { ask: `Какой набор хромосом и ДНК у клетки ${p[0]}?`, opts, ans: p[1], ex: p[3], pick: null, done: false };
+      }
+      const [o, d] = org[i % org.length], ans = dlNum(d, p[2]);
+      const opts = sShuf([ans, ...sShuf(DL_SETS.filter(x => dlNum(d, x[1]) !== ans)).slice(0, 3).map(x => dlNum(d, x[1]))]);
+      return { ask: `В соматических клетках ${o} ${d} ${dlPl(d, "хромосома", "хромосомы", "хромосом")}. Сколько хромосом и молекул ДНК у клетки ${p[0]}?`, opts, ans,
+        ex: `${p[3]} Здесь n = ${d / 2}: ${p[1]} → ${ans}.`, pick: null, done: false };
+    });
+  }
+  function dlRender() {
+    if (DLR.run) return dlRun();
+    vDL.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-dl="back">← к модулям</button><h2 class="mod-title">Митоз и мейоз</h2></div>
+      <p class="intro">Покрути деление клетки в 3D — фаза за фазой. Потом 10 заданий на наборы хромосом и ДНК, как в линии 27 ЕГЭ.</p>
+      ${l3dCard("del", "Митоз и мейоз в 3D", "Хромосомы, веретено деления и кроссинговер — фаза за фазой")}
+      <div class="l-start">${dls.best != null ? `<p class="cd-total">Лучший результат: <b>${dls.best}</b> из 10</p>` : ""}<button type="button" class="btn primary" data-dl="go">Начать: 10 заданий</button></div>
+      <h3 class="cd-h">Как считать</h3>
+      <div class="l-rules">
+        <div><b>n — хромосомы, c — молекулы ДНК</b><span>c удваивается в S-периоде интерфазы. Хромосом становится больше, когда к полюсам расходятся хроматиды, — пока клетка не разделилась.</span></div>
+        <div><b>Пример: человек, 2n = 46</b><span>Метафаза митоза 2n4c → 46 хромосом и 92 молекулы ДНК. Телофаза мейоза II nc → 23 и 23.</span></div>
+      </div>
+      <h3 class="cd-h">Наборы по фазам</h3>
+      <div class="l-rules">${DL_PH.map(([w, f]) => `<div><b>${f}</b><span>${w[0].toUpperCase() + w.slice(1)}</span></div>`).join("")}</div>`;
+    vDL.querySelector('[data-dl="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vDL.querySelector('[data-dl="go"]').addEventListener("click", () => { DLR.run = { qs: dlNew(), k: 0, ok: 0 }; dlRun(); zScroll(vDL); });
+  }
+  function dlRun() {
+    const r = DLR.run;
+    if (r.k >= r.qs.length) return dlEnd();
+    const q = r.qs[r.k];
+    vDL.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-dl="list">← Митоз и мейоз</button></div>
+      <div class="cd-top"><span class="num">Задание ${r.k + 1} из ${r.qs.length}</span><span class="score">верно: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card kt-card"><p class="l-ask">${q.ask}</p>
+        <div class="kt-list">${q.opts.map((o, i) => { const st = q.done ? (o === q.ans ? " ok" : q.pick === i ? " no" : " fade") : ""; return `<button type="button" class="kt-st${st}" data-do="${i}"${q.done ? " disabled" : ""}><i>${i + 1}</i><span>${o}</span></button>`; }).join("")}</div></div>
+      ${q.done ? `<div class="z-ex"><p class="fb ${q.good ? "good" : "wrong"}">${q.good ? "Верно!" : "Неверно. Ответ: " + q.ans}</p><div class="kt-ex"><p class="t">${q.ex}</p></div>
+        <div class="actions"><button type="button" class="btn primary" data-dl="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button></div></div>` : ""}`;
+    vDL.querySelector('[data-dl="list"]').addEventListener("click", () => { DLR.run = null; dlRender(); zScroll(vDL); });
+    if (!q.done) vDL.querySelectorAll("[data-do]").forEach(b => b.addEventListener("click", () => {
+      q.pick = +b.dataset.do; q.done = true; q.good = q.opts[q.pick] === q.ans;
+      if (q.good) { r.ok++; hbRight("dl", q); }
+      haptic(q.good ? "success" : "error"); dlRun(); zScroll(vDL.querySelector(".z-ex"), 160);
+    }));
+    else vDL.querySelector('[data-dl="next"]').addEventListener("click", () => { r.k++; dlRun(); zScroll(vDL); });
+  }
+  function dlEnd() {
+    const r = DLR.run;
+    if (dls.best == null || r.ok > dls.best) { dls.best = r.ok; dlsave(); }
+    vDL.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-dl="list">← Митоз и мейоз</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все наборы верно 🔥" : "Загляни в таблицу наборов по фазам — и ещё раз."}</p>
+        <div class="actions"><button type="button" class="btn primary" data-dl="again">Ещё 10 заданий</button><button type="button" class="btn" data-dl="list2">Таблица наборов</button></div></div>`;
+    const back = () => { DLR.run = null; dlRender(); zScroll(vDL); };
+    vDL.querySelector('[data-dl="list"]').addEventListener("click", back);
+    vDL.querySelector('[data-dl="list2"]').addEventListener("click", back);
+    vDL.querySelector('[data-dl="again"]').addEventListener("click", () => { DLR.run = { qs: dlNew(), k: 0, ok: 0 }; dlRun(); zScroll(vDL); });
+  }
+  const DL_TRAPS = [
+    ["Анафаза митоза — 4n4c", "Пока клетка не разделилась, разошедшиеся хроматиды считаются отдельными хромосомами: их вдвое больше — 4n4c."],
+    ["Анафаза I ≠ анафаза II", "В анафазе I к полюсам идут гомологичные хромосомы из двух хроматид, в анафазе II — сестринские хроматиды."],
+    ["Перед мейозом II нет S-периода", "ДНК удваивается один раз — в интерфазе перед мейозом I. Поэтому после мейоза I n2c, а после мейоза II nc."],
+    ["Кроссинговер — только в профазе I", "Гомологичные хромосомы обмениваются участками в профазе мейоза I. В митозе конъюгации и кроссинговера нет."],
   ];
 
   /* ════════ v4.2: БИОЛОГИЯ 2.2 «Вода и минеральные вещества клетки» ════════ */
@@ -4517,7 +4620,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function renderTraps() {
     if (state.subject === "bio") {
       vTraps.innerHTML = `<p class="intro">Ловушки ЕГЭ по биологии — пополняются с каждым новым разделом.</p>
-      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS], ["kl-nk", "ДНК, РНК и АТФ", NK_TRAPS], ["kl-org", "Строение клетки", OG_TRAPS]].map(([id, t, list]) => `
+      ${[["nauka", "Биология как наука", BIO_TRAPS], ["kl-teor", "Клеточная теория", KT_TRAPS], ["kl-voda", "Вода и минеральные вещества", VD_TRAPS], ["kl-belki", "Белки", BK_TRAPS], ["kl-ferm", "Ферменты", FM_TRAPS], ["kl-ugl", "Углеводы и липиды", UL_TRAPS], ["kl-nk", "ДНК, РНК и АТФ", NK_TRAPS], ["kl-org", "Строение клетки", OG_TRAPS], ["kl-del", "Митоз и мейоз", DL_TRAPS]].map(([id, t, list]) => `
       <h3 class="cd-h k-th">${t} <button type="button" class="linkbtn" data-bmod="${id}">потренировать →</button></h3>
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("")}`;
       vTraps.querySelectorAll("[data-bmod]").forEach(b => b.addEventListener("click", () => go({ tab: "learn", module: b.dataset.bmod })));
@@ -6156,6 +6259,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "raschet") go({ module: "raschet" }, { noScroll: true });
   else if (h === "nauka") go({ subject: "bio", module: "nauka" }, { noScroll: true });
   else if (h === "klteor") go({ subject: "bio", module: "kl-teor" }, { noScroll: true });
+  else if (h === "del") go({ subject: "bio", module: "kl-del" }, { noScroll: true });
   else if (h === "klvoda") go({ subject: "bio", module: "kl-voda" }, { noScroll: true });
   else if (h === "belki") go({ subject: "bio", module: "kl-belki" }, { noScroll: true });
   else if (h === "ferm") go({ subject: "bio", module: "kl-ferm" }, { noScroll: true });

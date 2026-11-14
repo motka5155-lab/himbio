@@ -1079,6 +1079,301 @@ export async function open(opts = {}) {
     return s;
   }
 
+  /* ───────── ТЕМЫ v4.12: клеточная теория, митоз и мейоз ───────── */
+  Object.assign(LOOKS.notebook.c, { dChrM: "#E4572E", dChrP: "#3B7FD0", dCen: "#2B3550", dFib: "#8C98B8", dCtr: "#2FA36B", dCork: "#B98250", dWall: "#6FB35C", dNuc: "#8C7BEA", dChl: "#2FA36B", dBlast: "#F6B8C9" });
+  Object.assign(LOOKS.scope.c, { dChrM: "#FF4D6D", dChrP: "#4D8DFF", dCen: "#E6F0FF", dFib: "#7F93B8", dCtr: "#3DDC97", dCork: "#FFB23D", dWall: "#3DDC97", dNuc: "#7B6BFF", dChl: "#3DDC97", dBlast: "#FF7C9C" });
+  Object.assign(FRES, { divNuc: ["nucleusIn", "nucleus", 0.04, 0.42], divMem: ["memIn", "memEdge", 0.04, 0.5] });
+  Object.assign(INFO, {
+    cork: { name: "Пробка Гука", tag: "Клеточная теория · 1665", hint: "Тапни стенку ячейки.",
+      text: "В 1665 году Роберт Гук рассмотрел в микроскоп тонкий срез пробки и увидел ячейки, похожие на пчелиные соты. Он назвал их клетками (cells).",
+      trap: "Гук видел не живые клетки, а пустые клеточные стенки мёртвой ткани. Клеточную теорию он не создавал: её сформулировали Шлейден и Шванн в 1838–1839 годах." },
+    tissue: { name: "Клетки в ткани", tag: "Клеточная теория", hint: "Тапни клетку, ядро или хлоропласт.",
+      text: "Многоклеточный организм построен из клеток, объединённых в ткани. В каждой клетке есть ядро, цитоплазма и органоиды: план строения у клеток эукариот общий.",
+      trap: "Положения теории: клетка — единица строения, жизнедеятельности, роста и развития; клетки сходны по строению и химическому составу; новая клетка — только от клетки; клетки многоклеточных специализированы и образуют ткани." },
+    split: { name: "Клетка от клетки", tag: "Клеточная теория · 1855", hint: "Нажимай «Разделить»: 1 → 2 → 4 → 8 → 16.",
+      text: "В 1855 году Рудольф Вирхов дополнил клеточную теорию: «всякая клетка — от клетки». Новые клетки появляются только делением материнской.",
+      trap: "Самозарождения клеток из неклеточного вещества не бывает. При дроблении зиготы клетки делятся митозом, а зародыш почти не растёт — каждая следующая клетка мельче." },
+    mit: { name: "Митоз", tag: "Деление клетки", hint: "Нажимай фазы по порядку или «▶ Подряд».",
+      text: "Митоз — деление соматических клеток: из одной клетки 2n получаются две такие же. Здесь 2n = 4 — две пары гомологичных хромосом: красные от матери, синие от отца.",
+      trap: "В анафазе митоза в клетке 4n4c: хроматиды стали самостоятельными хромосомами, а клетка ещё не разделилась. Набор всегда считают для всей клетки." },
+    mei: { name: "Мейоз", tag: "Деление клетки", hint: "Нажимай фазы по порядку или «▶ Подряд».",
+      text: "Мейоз — два деления подряд без удвоения ДНК между ними. Из одной клетки 2n получаются четыре клетки n: так образуются гаметы у животных и споры у растений.",
+      trap: "В анафазе I расходятся гомологичные хромосомы из двух хроматид, в анафазе II — сестринские хроматиды. Кроссинговер происходит в профазе I." },
+  });
+  Object.assign(TOPICS, {
+    teor: { name: "Клеточная теория", views: { cork: ["Пробка", "Пробка Гука"], tissue: ["Ткань", "Клетки в ткани"], split: ["Деление", "Клетка от клетки"] } },
+    del: { name: "Митоз и мейоз", views: { mit: ["Митоз", "Митоз"], mei: ["Мейоз", "Мейоз"] } },
+  });
+  const HIDE_LBL = (v) => { const d = new V3(); camera.getWorldDirection(d); return v.copy(camera.position).addScaledVector(d, -5); };
+
+  // пробка Гука: соты из пустых ячеек
+  function buildCork() {
+    const s = makeScene(), g = new THREE.Group(); s.add(g);
+    const R = rng(41), A = 0.62, geos = [], S3 = Math.sqrt(3);
+    for (let i = -5; i <= 5; i++) for (let j = -4; j <= 4; j++) {
+      const cx = i * A * 1.5, cy = j * A * S3 + (i & 1) * A * S3 / 2;
+      if (Math.hypot(cx / 1.3, cy) > 3.9) continue;
+      const vs = []; for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3, f = 1 + (R() - 0.5) * 0.07; vs.push([Math.cos(a) * A * f, Math.sin(a) * A * f]); }
+      const w = 0.07 + R() * 0.03, sh = new THREE.Shape(), hole = new THREE.Path();
+      vs.forEach(([x, y], k) => (k ? sh.lineTo(x, y) : sh.moveTo(x, y)));
+      vs.forEach(([x, y], k) => { const q = 1 - w / A; k ? hole.lineTo(x * q, y * q) : hole.moveTo(x * q, y * q); });
+      sh.holes.push(hole);
+      const dep = 1.0 + R() * 0.35, ge = new THREE.ExtrudeGeometry(sh, { depth: dep, bevelEnabled: false, curveSegments: 1 });
+      ge.translate(cx, cy, -dep / 2); geos.push(ge.toNonIndexed());
+    }
+    const walls = new THREE.Mesh(mergeGeometries(geos), null); add(s, g, walls, "dCork", "wall", { rough: 0.8 });
+    g.rotation.set(-0.75, 0.15, 0);
+    s.userData.labels = [{ text: "Клеточная стенка", pos: new V3(-1.55, 1.2, 0.7), keep: true }, { text: "Пустая ячейка", pos: new V3(0.95, -0.55, 0.6), keep: true }];
+    s.userData.onPick = (hit) => { if (hit.object !== walls) return false; setPart("<b>Клеточная стенка</b> мёртвой клетки пробки. Содержимое клетки погибло, осталась только оболочка — поэтому ячейки пустые."); return true; };
+    s.userData.onClear = () => {};
+    s.userData.home = { dir: new V3(0.2, 0.5, 1), target: new V3(0, 0, 0), fitW: 5.0, fitH: 3.8, min: 2.5, max: 30 };
+    s.userData.spin = g; s.userData.name = "cork"; s.userData.info = INFO.cork;
+    return s;
+  }
+  // «скруглённый ящик» из сферы — для клеток растения
+  function roundBox(sx, sy, sz, e = 0.24) {
+    const geo = new THREE.SphereGeometry(1, 28, 20), p = geo.attributes.position, v = new V3(), f = (t) => Math.sign(t) * Math.pow(Math.abs(t), e);
+    for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i); p.setXYZ(i, f(v.x) * sx, f(v.y) * sy, f(v.z) * sz); }
+    geo.computeVertexNormals(); return geo;
+  }
+  // ткань: живые клетки растения в два ряда
+  function buildTissue() {
+    const s = makeScene(), g = new THREE.Group(); s.add(g);
+    const R = rng(9), cells = [];
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) cells.push(new V3((c - 1.5) * 1.62 + (r % 2 ? 0.4 : -0.4), (1 - r) * 1.16, 0));
+    const N = cells.length, CH = 7, m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
+    const wall = new THREE.InstancedMesh(roundBox(0.78, 0.56, 0.62), null, N); add(s, g, wall, "dWall", "cell", { opacity: 0.32, rough: 0.5 });
+    const nuc = new THREE.InstancedMesh(new THREE.SphereGeometry(0.19, 20, 14), null, N); add(s, g, nuc, "dNuc", "nuc", { rough: 0.35 });
+    const chl = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 14, 10), null, N * CH); add(s, g, chl, "dChl", "chl", { rough: 0.4 });
+    const e = new THREE.Euler();
+    cells.forEach((p, i) => {
+      m4.makeTranslation(p.x, p.y, p.z); wall.setMatrixAt(i, m4);
+      const np = p.clone().add(new V3((R() - 0.5) * 0.5, (R() - 0.5) * 0.25, 0.25)); m4.makeTranslation(np.x, np.y, np.z); nuc.setMatrixAt(i, m4);
+      for (let k = 0; k < CH; k++) { const a = (k / CH) * Math.PI * 2 + R() * 0.5, cp = p.clone().add(new V3(Math.cos(a) * 0.6, Math.sin(a) * 0.4, (R() - 0.5) * 0.7)); e.set(R() * 3, R() * 3, R() * 3); q.setFromEuler(e); m4.compose(cp, q, new V3(0.13, 0.065, 0.085)); chl.setMatrixAt(i * CH + k, m4); }
+    });
+    const MS = { cell: "<b>Клетка</b> — элементарная единица строения и жизнедеятельности. Клетки растения окружены клеточной стенкой и плотно прилегают друг к другу.",
+      nuc: "<b>Ядро</b>: план строения у клеток всех эукариот общий — это одно из доказательств единства происхождения живого.",
+      chl: "<b>Хлоропласты</b> есть только у фотосинтезирующих клеток: клетки многоклеточного организма специализируются под свою работу." };
+    s.userData.labels = [{ text: "Клетка", pos: cells[0].clone().add(new V3(-0.3, 0.62, 0)), keep: true }, { text: "Ядро", pos: new V3(0, 0, 0.5), keep: true }, { text: "Хлоропласты", pos: cells[10].clone().add(new V3(0.2, -0.45, 0.35)), keep: true }];
+    s.userData.labels[1].pos = (() => { const t = new THREE.Matrix4(); nuc.getMatrixAt(5, t); return new V3().setFromMatrixPosition(t).add(new V3(0, 0.25, 0)); })();
+    s.userData.onPick = (hit) => { const k = hit.object.userData.org; if (!MS[k]) return false; setPart(MS[k]); return true; };
+    s.userData.onClear = () => {};
+    s.userData.home = { dir: new V3(0.15, 0.35, 1), target: new V3(0, 0, 0), fitW: 4.2, fitH: 2.5, min: 2.5, max: 30 };
+    s.userData.spin = g; s.userData.name = "tissue"; s.userData.info = INFO.tissue;
+    return s;
+  }
+  // «клетка от клетки»: дробление 1 → 16
+  function buildSplit() {
+    const s = makeScene(), g = new THREE.Group(); s.add(g);
+    const AX = [new V3(1, 0, 0), new V3(0, 1, 0), new V3(0, 0, 1), new V3(1, 0, 0)], OFF = [0.95, 0.85, 0.75, 0.48], RAD = [1.55, 1.22, 1.0, 0.82, 0.64];
+    const P = [[new V3()]]; for (let k = 0; k < 4; k++) P.push(P[k].flatMap((p) => [p.clone().addScaledVector(AX[k], -OFF[k]), p.clone().addScaledVector(AX[k], OFF[k])]));
+    const cellM = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 32, 24), null, 16), nucM = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 18, 12), null, 16);
+    add(s, g, cellM, "dBlast", "cell", { opacity: 0.55, rough: 0.45 }); add(s, g, nucM, "dNuc", "nuc", { rough: 0.35 });
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
+    let gen = 0, t = 1;
+    const place = () => {
+      const e = ease(t), n = 1 << gen;
+      for (let i = 0; i < 16; i++) {
+        if (i >= n) { m4.makeScale(1e-4, 1e-4, 1e-4); cellM.setMatrixAt(i, m4); nucM.setMatrixAt(i, m4); continue; }
+        const from = gen ? P[gen - 1][i >> 1] : P[0][0], to = P[gen][i], r = gen ? RAD[gen - 1] + (RAD[gen] - RAD[gen - 1]) * e : RAD[0];
+        const p = from.clone().lerp(to, e), sq = gen ? 1 - 0.18 * Math.sin(Math.PI * e) : 1;
+        m4.compose(p, q, new V3(r * sq, r, r)); cellM.setMatrixAt(i, m4);
+        const nr = r * 0.3; m4.compose(p, q, new V3(nr, nr, nr)); nucM.setMatrixAt(i, m4);
+      }
+      cellM.instanceMatrix.needsUpdate = true; nucM.instanceMatrix.needsUpdate = true;
+    };
+    place();
+    const say = () => setPart(gen === 0 ? INFO.split.hint : `<b>${1 << (gen - 1)} → ${1 << gen}.</b> Каждая клетка разделилась надвое${gen === 4 ? ". Дальше так же — пока не получится многоклеточный организм. Нажми «Сначала»." : ". Новые клетки появляются только так — делением."}`);
+    s.userData.onChip = (v) => {
+      lastTouch = performance.now();
+      if (v === "reset") { gen = 0; t = 1; place(); say(); return; }
+      if (t < 1) return;
+      if (gen >= 4) { setPart("Хватит для примера: 16 клеток. Нажми «Сначала»."); return; }
+      gen++; t = 0; say();
+    };
+    s.userData.tick = (dt) => { if (t < 1) { t = Math.min(1, t + dt / (REDUCE ? 0.01 : 1.3)); place(); lastTouch = performance.now(); } };
+    s.userData.onPick = (hit) => { const k = hit.object.userData.org; if (k === "cell") { setPart("<b>Клетка-бластомер</b>. Все клетки здесь — потомки одной исходной клетки."); return true; } if (k === "nuc") { setPart("<b>Ядро</b>: перед каждым делением ДНК удваивается, и обе дочерние клетки получают одинаковый набор хромосом."); return true; } return false; };
+    s.userData.onClear = () => {};
+    s.userData.chips = [["div", "Разделить"], ["reset", "Сначала"]];
+    s.userData.labels = [];
+    s.userData.home = { dir: new V3(0.35, 0.4, 1), target: new V3(0, 0, 0), fitW: 2.6, fitH: 2.6, min: 2.5, max: 30 };
+    s.userData.spin = g; s.userData.name = "split"; s.userData.info = INFO.split;
+    return s;
+  }
+
+  // митоз и мейоз: 2n = 4, две пары гомологов (красные — от матери, синие — от отца)
+  function buildDivision(kind) {
+    const s = makeScene(), g = new THREE.Group(); s.add(g);
+    const MEI = kind === "mei", X = new V3(1, 0, 0), Y = new V3(0, 1, 0), Z = new V3(0, 0, 1), O = new V3();
+    const LEN = [1.15, 1.15, 0.72, 0.72];                 // A мат., A отц., B мат., B отц.
+    const R1 = 2.75, DD = 1.75, DQ = 1.1;                     // клетка, центры дочерних, центры «четвертинок»
+    const PL = new V3(-2.35, 0, 0), PR = new V3(2.35, 0, 0);
+    const DL = new V3(-DD, 0, 0), DR = new V3(DD, 0, 0);
+    const QS = [new V3(-DD, DQ, 0), new V3(-DD, -DQ, 0), new V3(DD, DQ, 0), new V3(DD, -DQ, 0)];
+    const ENV = [[O, 1.5], [DL, 0.88], [DR, 0.88], [QS[0], 0.5], [QS[1], 0.5], [QS[2], 0.5], [QS[3], 0.5]];
+    const PINT = [new V3(-0.5, 0.45, 0.25), new V3(0.5, -0.3, 0.15), new V3(0.2, 0.62, -0.4), new V3(-0.3, -0.6, -0.25)];
+    const AINT = [new V3(1, 0.6, 0.2), new V3(0.3, 1, -0.4), new V3(-0.8, 0.3, 0.6), new V3(0.6, -0.2, 1)].map((v) => v.normalize());
+    const NF = 12, NC = 4;
+    const cr = (p, a, L = 1, th = 1) => ({ p: p.clone(), a: a.clone().normalize(), L, th });
+    const side = (a) => { const u = new V3().crossVectors(a, Z); if (u.lengthSq() < 1e-3) u.crossVectors(a, Y); return u.normalize(); };
+    const pair = (C, j, c, a, sep, L, th, dir) => { const u = dir || side(a); C[j * 2] = cr(c.clone().addScaledVector(u, -sep / 2), a, L, th); C[j * 2 + 1] = cr(c.clone().addScaledVector(u, sep / 2), a, L, th); };
+    const pose = (o) => Object.assign({ c: [], f: [], ct: [], env: [0, 0, 0, 0, 0, 0, 0], mem: [1, 0, 0, 0, 0, 0], swap: 0 }, o);
+    const fibs = (list) => { const f = list.map(([a, b]) => [a.clone(), b.clone()]); while (f.length < NF) f.push([PL.clone(), PL.clone()]); return f; };
+    const cts = (list) => { const c = list.map(([p, k]) => ({ p: p.clone(), k })); while (c.length < NC) c.push({ p: c[c.length - 1].p.clone(), k: 0 }); return c; };
+    const polar = (A, B, ax, s = 1.6) => { const u = ax === "y" ? X : Y; return [[A, A.clone().lerp(B, 0.6).addScaledVector(u, s * 0.5)], [B, B.clone().lerp(A, 0.6).addScaledVector(u, s * 0.5)], [A, A.clone().lerp(B, 0.6).addScaledVector(u, -s * 0.5)], [B, B.clone().lerp(A, 0.6).addScaledVector(u, -s * 0.5)]]; };
+    const P = {};
+    // интерфаза (после S-периода): тонкие длинные нити, хроматиды рядом
+    { const C = []; for (let j = 0; j < 4; j++) pair(C, j, PINT[j], AINT[j], 0.1, 1.25, 0.36); P.inter = pose({ c: C, f: fibs([]), ct: cts([[new V3(-0.15, 1.85, 0.2), 1], [new V3(0.15, 1.85, 0.2), 1]]), env: [1, 0, 0, 0, 0, 0, 0] }); }
+    const META_Y = (() => { const order = [0, 2, 1, 3], gap = 0.22; let tot = order.reduce((a, j) => a + LEN[j], 0) + gap * 3, y = tot / 2, out = []; order.forEach((j) => { out[j] = y - LEN[j] / 2; y -= LEN[j] + gap; }); return out; })();
+    if (!MEI) {
+      { const C = []; for (let j = 0; j < 4; j++) pair(C, j, PINT[j].clone().multiplyScalar(0.7), AINT[j], 0.3, 1, 1);
+        P.pro = pose({ c: C, f: fibs(polar(PL, PR).map(([a, b]) => [a, a.clone().lerp(b, 0.55)])), ct: cts([[PL, 1], [PR, 1]]), env: [0.45, 0, 0, 0, 0, 0, 0] }); }
+      { const C = []; for (let j = 0; j < 4; j++) pair(C, j, new V3(0, META_Y[j], 0), Y, 0.3, 1, 1, X);
+        P.meta = pose({ c: C, f: fibs([...C.map((h, i) => [i % 2 ? PR : PL, h.p]), ...polar(PL, PR)]), ct: cts([[PL, 1], [PR, 1]]) }); }
+      { const C = []; for (let j = 0; j < 4; j++) for (const sd of [0, 1]) { const x = sd ? 1.45 : -1.45, y = META_Y[j] * 0.62; C[j * 2 + sd] = cr(new V3(x, y, 0), new V3(sd ? 0.9 : -0.9, y >= 0 ? 0.55 : -0.55, 0).multiplyScalar(-1), 1, 1); }
+        P.ana = pose({ c: C, f: fibs([...C.map((h, i) => [i % 2 ? PR : PL, h.p]), ...polar(PL.clone().multiplyScalar(1.1), PR.clone().multiplyScalar(1.1))]), ct: cts([[PL.clone().multiplyScalar(1.1), 1], [PR.clone().multiplyScalar(1.1), 1]]), mem: [1, 0.18, 0, 0, 0, 0] }); }
+      { const C = []; for (let j = 0; j < 4; j++) for (const sd of [0, 1]) C[j * 2 + sd] = cr((sd ? DR : DL).clone().addScaledVector(PINT[j], 0.5), AINT[j], 0.95, 0.45);
+        P.telo = pose({ c: C, f: fibs([]), ct: cts([[DL.clone().add(new V3(0, 1.15, 0)), 1], [DR.clone().add(new V3(0, 1.15, 0)), 1]]), env: [0, 1, 1, 0, 0, 0, 0], mem: [1, 1, 0, 0, 0, 0] }); }
+    } else {
+      // профаза I: биваленты, кроссинговер между внутренними хроматидами
+      { const C = [], BIV = [[new V3(-0.15, 0.5, 0.2), new V3(0.35, 1, 0.15)], [new V3(0.25, -0.55, -0.2), new V3(1, 0.25, 0.3)]];
+        BIV.forEach(([c, a], b) => { const u = side(a.clone().normalize()); [-0.33, -0.11, 0.11, 0.33].forEach((o, k) => { const j = b * 2 + (k >> 1), sd = k & 1; C[j * 2 + sd] = cr(c.clone().addScaledVector(u, o), a, 1, 1); }); });
+        P.pro1 = pose({ c: C, f: fibs(polar(PL, PR).map(([a, b]) => [a, a.clone().lerp(b, 0.5)])), ct: cts([[PL, 1], [PR, 1]]), env: [0.45, 0, 0, 0, 0, 0, 0], swap: 1 }); }
+      // левый полюс получает A мат. и B отц., правый — A отц. и B мат. (случайный выбор)
+      const LEFT = [true, false, false, true];
+      { const C = [], YB = [0.75, 0.75, -0.65, -0.65];
+        for (let j = 0; j < 4; j++) { const x0 = LEFT[j] ? -0.31 : 0.31; pair(C, j, new V3(x0, YB[j], 0), Y, 0.22, 1, 1, X); }
+        P.meta1 = pose({ c: C, f: fibs([...C.map((h, i) => [LEFT[i >> 1] ? PL : PR, h.p]), ...polar(PL, PR)]), ct: cts([[PL, 1], [PR, 1]]), swap: 1 }); }
+      { const C = [];
+        for (let j = 0; j < 4; j++) { const l = LEFT[j], y = j < 2 ? 0.55 : -0.55; pair(C, j, new V3(l ? -1.45 : 1.45, y, 0), new V3(l ? 0.9 : -0.9, y > 0 ? -0.55 : 0.55, 0), 0.22, 1, 1); }
+        P.ana1 = pose({ c: C, f: fibs([...C.map((h, i) => [LEFT[i >> 1] ? PL : PR, h.p]), ...polar(PL.clone().multiplyScalar(1.1), PR.clone().multiplyScalar(1.1))]), ct: cts([[PL.clone().multiplyScalar(1.1), 1], [PR.clone().multiplyScalar(1.1), 1]]), mem: [1, 0.18, 0, 0, 0, 0], swap: 1 }); }
+      const CT_T1 = [[DL.clone().add(new V3(0, 1.15, 0)), 1], [DR.clone().add(new V3(0, 1.15, 0)), 1]];
+      { const C = [];
+        for (let j = 0; j < 4; j++) { const l = LEFT[j], y = j < 2 ? 0.42 : -0.55; pair(C, j, (l ? DL : DR).clone().add(new V3(0, y, 0)), new V3(0.4, 1, 0), 0.22, 1, 1); }
+        P.telo1 = pose({ c: C, f: fibs([]), ct: cts([...CT_T1, [CT_T1[0][0], 0], [CT_T1[1][0], 0]]), env: [0, 0.45, 0.45, 0, 0, 0, 0], mem: [1, 1, 0, 0, 0, 0], swap: 1 }); }
+      // второе деление: веретёна поперёк, в каждой клетке свои полюса
+      const PT = [new V3(-DD, 1.42, 0), new V3(-DD, -1.42, 0), new V3(DD, 1.42, 0), new V3(DD, -1.42, 0)];
+      const XII = [-2.3, 1.2, 2.3, -1.15];   // A мат. и B отц. — в левой клетке, A отц. и B мат. — в правой
+      { const C = []; for (let j = 0; j < 4; j++) pair(C, j, new V3(XII[j], 0, 0), X, 0.26, 1, 1, Y);
+        const top = (i) => PT[LEFT[i >> 1] ? 0 : 2], bot = (i) => PT[LEFT[i >> 1] ? 1 : 3];
+        P.meta2 = pose({ c: C, f: fibs([...C.map((h, i) => [i % 2 ? bot(i) : top(i), h.p]), [PT[0], PT[0].clone().lerp(PT[1], 0.6).add(new V3(0.9, 0, 0))], [PT[1], PT[1].clone().lerp(PT[0], 0.6).add(new V3(0.9, 0, 0))], [PT[2], PT[2].clone().lerp(PT[3], 0.6).add(new V3(-0.9, 0, 0))], [PT[3], PT[3].clone().lerp(PT[2], 0.6).add(new V3(-0.9, 0, 0))]]),
+          ct: cts(PT.map((p) => [p, 1])), mem: [0, 1, 1, 0, 1, 0], swap: 1 });
+        const C2 = []; for (let j = 0; j < 4; j++) for (const sd of [0, 1]) C2[j * 2 + sd] = cr(new V3(XII[j], sd ? -0.95 : 0.95, 0), new V3(1, sd ? 0.45 : -0.45, 0), 1, 1);
+        P.ana2 = pose({ c: C2, f: fibs(C2.map((h, i) => [i % 2 ? bot(i) : top(i), h.p])), ct: cts(PT.map((p) => [p, 1])), mem: [0, 1, 1, 0.2, 1, 0.2], swap: 1 });
+        const C3 = []; for (let j = 0; j < 4; j++) for (const sd of [0, 1]) { const qi = (LEFT[j] ? 0 : 2) + sd, dx = j < 2 ? -0.18 : 0.2; C3[j * 2 + sd] = cr(QS[qi].clone().add(new V3(dx, j < 2 ? 0.1 : -0.12, 0.05)), AINT[j], 0.8, 0.42); }
+        P.telo2 = pose({ c: C3, f: fibs([]), ct: cts(PT.map((p) => [p, 0])), env: [0, 0, 0, 1, 1, 1, 1], mem: [0, 1, 1, 1, 1, 1], swap: 1 }); }
+    }
+    const ORDER = MEI ? ["inter", "pro1", "meta1", "ana1", "telo1", "meta2", "ana2", "telo2"] : ["inter", "pro", "meta", "ana", "telo"];
+    const TXT = MEI ? {
+      inter: "<b>Интерфаза · 2n4c перед делением.</b> ДНК удвоилась в S-периоде: каждая хромосома из двух хроматид. Красные хромосомы — от матери, синие — от отца.",
+      pro1: "<b>Профаза I · 2n4c.</b> Гомологичные хромосомы сближаются попарно (конъюгация) и обмениваются участками — кроссинговер. Смотри: у соседних хроматид поменялись кончики.",
+      meta1: "<b>Метафаза I · 2n4c.</b> Пары гомологов (биваленты) выстраиваются на экваторе. Какая хромосома пары уйдёт к какому полюсу — дело случая.",
+      ana1: "<b>Анафаза I · 2n4c.</b> К полюсам расходятся целые гомологичные хромосомы из двух хроматид — у каждого полюса n2c. Число хромосом уменьшается вдвое.",
+      telo1: "<b>Телофаза I · n2c в каждой клетке.</b> Две клетки с половинным набором хромосом. Перед вторым делением ДНК не удваивается.",
+      meta2: "<b>Метафаза II · n2c.</b> В каждой клетке хромосомы выстраиваются на экваторе, веретено теперь поперёк.",
+      ana2: "<b>Анафаза II · 2n2c.</b> Центромеры делятся, к полюсам расходятся сестринские хроматиды — у каждого полюса nc.",
+      telo2: "<b>Телофаза II · nc в каждой клетке.</b> Четыре гаплоидные клетки, и все они генетически разные: сработали кроссинговер и случайное расхождение хромосом.",
+    } : {
+      inter: "<b>Интерфаза · 2n2c → 2n4c.</b> Клетка растёт и готовится к делению. В S-периоде ДНК удваивается: каждая хромосома теперь из двух сестринских хроматид. Центриоли тоже удваиваются.",
+      pro: "<b>Профаза · 2n4c.</b> Хромосомы спирализуются и становятся видны. Ядерная оболочка распадается, ядрышко исчезает, центриоли расходятся к полюсам, образуется веретено деления.",
+      meta: "<b>Метафаза · 2n4c.</b> Хромосомы выстроились на экваторе, нити веретена прикреплены к центромерам. Хромосомы спирализованы сильнее всего — их удобно считать.",
+      ana: "<b>Анафаза · 4n4c.</b> Центромеры делятся, сестринские хроматиды расходятся к полюсам и становятся самостоятельными хромосомами.",
+      telo: "<b>Телофаза · 2n2c в каждой клетке.</b> Хромосомы деспирализуются, вокруг них формируются ядерные оболочки, цитоплазма делится. Дочерние клетки генетически одинаковы с материнской.",
+    };
+    const CHIPL = MEI ? { inter: "Интерфаза", pro1: "Профаза I", meta1: "Метафаза I", ana1: "Анафаза I", telo1: "Телофаза I", meta2: "Метафаза II", ana2: "Анафаза II", telo2: "Телофаза II" } : { inter: "Интерфаза", pro: "Профаза", meta: "Метафаза", ana: "Анафаза", telo: "Телофаза" };
+    // меши
+    const capG = new THREE.CapsuleGeometry(0.17, 1, 6, 14);
+    const body = new THREE.InstancedMesh(capG, null, 8), tip = new THREE.InstancedMesh(capG, null, 8), cen = new THREE.InstancedMesh(new THREE.SphereGeometry(0.13, 14, 10), null, 8);
+    add(s, g, body, "dChrM", "chr", { tint: true, rough: 0.35 }); add(s, g, tip, "dChrM", "chr", { tint: true, rough: 0.35 }); add(s, g, cen, "dCen", "cen", { rough: 0.3 });
+    const fib = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.022, 0.022, 1, 6), null, NF); add(s, g, fib, "dFib", "fib", { rough: 0.6 });
+    const ctr = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.07, 0.07, 0.26, 10), null, NC * 2); add(s, g, ctr, "dCtr", "ctr", { rough: 0.4 });
+    const envs = ENV.map(([c, r]) => { const m = new THREE.Mesh(new THREE.SphereGeometry(1, 40, 28), null); m.position.copy(c); m.scale.setScalar(r); add(s, g, m, "divNuc", null); return m; });
+    const MEMC = [[O, X, R1, DD, 1.68], [DL, Y, 1.68, DQ, 1.0], [DR, Y, 1.68, DQ, 1.0]];
+    const mems = MEMC.map(([c]) => { const geo = new THREE.SphereGeometry(1, 56, 40), m = new THREE.Mesh(geo, null); m.position.copy(c); m.userData.base = Float32Array.from(geo.attributes.position.array); m.userData.lastP = -1; add(s, g, m, "divMem", null); return m; });
+    const morph = (k, p) => {
+      const m = mems[k]; if (Math.abs(m.userData.lastP - p) < 1e-4) return; m.userData.lastP = p;
+      const [, ax, r1, D, r2] = MEMC[k], b = m.userData.base, a = m.geometry.attributes.position.array, u = new V3(), pp = new V3();
+      for (let i = 0; i < b.length; i += 3) {
+        u.set(b[i], b[i + 1], b[i + 2]); const al = u.dot(ax); pp.copy(u).addScaledVector(ax, -al);
+        const tA = al * r2 + D * Math.tanh(al / 0.12), tP = r2 * (1 - Math.exp(-((al / 0.1) ** 2))), sA = al * r1, cA = sA + (tA - sA) * p, cP = r1 + (tP - r1) * p;
+        a[i] = ax.x * cA + pp.x * cP; a[i + 1] = ax.y * cA + pp.y * cP; a[i + 2] = ax.z * cA + pp.z * cP;
+      }
+      m.geometry.attributes.position.needsUpdate = true; m.geometry.computeVertexNormals();
+    };
+    // применение позы
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), tmp = new V3();
+    const seg = (mesh, i, a, b, rad) => { const d = b.clone().sub(a), L = d.length(); if (L < 1e-4) { m4.makeScale(1e-4, 1e-4, 1e-4); mesh.setMatrixAt(i, m4); return; } q.setFromUnitVectors(Y, d.normalize()); m4.compose(a.clone().lerp(b, 0.5), q, new V3(rad, Math.max(1e-4, L / 1.34), rad)); mesh.setMatrixAt(i, m4); };
+    let cur = null, lastSw = -1;
+    const setUI = (m, v) => { if (m.material && m.material.uniforms) m.material.uniforms.uI.value = v * (m.material.userData.baseI || 1); m.visible = v > 0.01; };
+    const apply = (P0) => {
+      cur = P0;
+      P0.c.forEach((h, i) => {
+        const L = LEN[i >> 1] * h.L, A = h.p.clone().addScaledVector(h.a, -L / 2), B = h.p.clone().addScaledVector(h.a, L / 2);
+        seg(body, i, A, B, h.th); seg(tip, i, h.p.clone().addScaledVector(h.a, L * 0.2), B.clone().addScaledVector(h.a, 0.01), h.th * 1.06);
+        const cr2 = Math.max(0.3, h.th); m4.compose(h.p, q.identity(), new V3(cr2, cr2, cr2)); cen.setMatrixAt(i, m4);
+      });
+      body.instanceMatrix.needsUpdate = tip.instanceMatrix.needsUpdate = cen.instanceMatrix.needsUpdate = true;
+      P0.f.forEach(([a, b], i) => { const d = b.clone().sub(a), L = d.length(); if (L < 0.05) { m4.makeScale(1e-4, 1e-4, 1e-4); } else { q.setFromUnitVectors(Y, d.normalize()); m4.compose(a.clone().lerp(b, 0.5), q, new V3(1, L, 1)); } fib.setMatrixAt(i, m4); });
+      fib.instanceMatrix.needsUpdate = true;
+      P0.ct.forEach((c, i) => { const k = Math.max(1e-4, c.k); q.identity(); m4.compose(c.p, q, new V3(k, k, k)); ctr.setMatrixAt(i * 2, m4); q.setFromAxisAngle(X, Math.PI / 2); m4.compose(c.p.clone().add(new V3(0.12, 0, 0)), q, new V3(k, k, k)); ctr.setMatrixAt(i * 2 + 1, m4); });
+      ctr.instanceMatrix.needsUpdate = true;
+      envs.forEach((m, i) => setUI(m, P0.env[i]));
+      mems.forEach((m, k) => { setUI(m, P0.mem[k * 2]); if (m.visible) morph(k, P0.mem[k * 2 + 1]); });
+      const sw = P0.swap > 0.5 ? 1 : 0; if (sw !== lastSw) { lastSw = sw; colors(); }
+    };
+    const colors = () => {
+      const sw = cur && cur.swap > 0.5, cM = col("dChrM"), cP = col("dChrP");
+      for (let i = 0; i < 8; i++) {
+        const j = i >> 1, sd = i & 1, mat = j % 2 === 0; body.setColorAt(i, mat ? cM : cP);
+        const crossed = sw && ((j % 2 === 0 && sd === 1) || (j % 2 === 1 && sd === 0));
+        tip.setColorAt(i, (crossed ? !mat : mat) ? cM : cP);
+      }
+      body.instanceColor.needsUpdate = tip.instanceColor.needsUpdate = true;
+    };
+    const lerpPose = (A, B, e) => ({
+      c: A.c.map((h, i) => { const k = B.c[i]; return { p: h.p.clone().lerp(k.p, e), a: (() => { const v = h.a.clone().lerp(k.a, e); return v.lengthSq() < 1e-4 ? k.a.clone() : v.normalize(); })(), L: h.L + (k.L - h.L) * e, th: h.th + (k.th - h.th) * e }; }),
+      f: A.f.map(([a, b], i) => [a.clone().lerp(B.f[i][0], e), b.clone().lerp(B.f[i][1], e)]),
+      ct: A.ct.map((c, i) => ({ p: c.p.clone().lerp(B.ct[i].p, e), k: c.k + (B.ct[i].k - c.k) * e })),
+      env: A.env.map((v, i) => v + (B.env[i] - v) * e), mem: A.mem.map((v, i) => v + (B.mem[i] - v) * e), swap: A.swap + (B.swap - A.swap) * e,
+    });
+    let phase = "inter", from = P.inter, to = P.inter, t = 1, auto = false, wait = 0;
+    apply(P.inter);
+    const go = (ph) => { if (ph === phase && t >= 1) { setPart(TXT[ph]); return; } from = t < 1 ? lerpPose(from, to, ease(t)) : to; to = P[ph]; t = 0; phase = ph; s.userData.level = ph; syncViewChips(); setPart(TXT[ph]); };
+    s.userData.recolor = () => { if (cur) { lastSw = -1; apply(cur); } };
+    s.userData.onChip = (v) => {
+      lastTouch = performance.now();
+      if (v === "auto") { auto = true; go(ORDER[0]); wait = 0; t = Math.min(t, 1); return; }
+      auto = false; go(v);
+    };
+    // подписи по ходу деления
+    const L1 = new V3(), L2 = new V3(), L3 = new V3(), L4 = new V3(), L5 = new V3();
+    const labels = () => {
+      const P0 = cur;
+      if (P0.env[0] > 0.6) L1.set(0, 1.55, 0.3); else HIDE_LBL(L1);
+      const h = P0.c[0]; if (h.th > 0.8) L2.copy(h.p).add(new V3(0, LEN[0] / 2 + 0.25, 0)); else HIDE_LBL(L2);
+      const f0 = P0.f[0], fl = f0[0].distanceTo(f0[1]); if (fl > 1) L3.copy(f0[0]).lerp(f0[1], 0.45).add(new V3(0, 0.12, 0)); else HIDE_LBL(L3);
+      if (P0.ct[1].k > 0.6 && P0.ct[1].p.distanceTo(P0.ct[0].p) > 1) L4.copy(P0.ct[1].p).add(new V3(0, -0.4, 0)); else HIDE_LBL(L4);
+      if (MEI && P0.swap > 0.5 && (phase === "pro1")) L5.copy(P0.c[1].p).addScaledVector(P0.c[1].a, LEN[0] * 0.45).add(new V3(0.2, 0.2, 0)); else HIDE_LBL(L5);
+    };
+    s.userData.labels = [{ text: "Ядро", pos: L1, keep: true }, { text: "Хромосома", pos: L2, keep: true }, { text: "Веретено деления", pos: L3, keep: true }, { text: "Центриоли", pos: L4, keep: true }, { text: "Кроссинговер", pos: L5, keep: true }];
+    s.userData.tick = (dt) => {
+      if (t < 1) { t = Math.min(1, t + dt / (REDUCE ? 0.01 : 1.5)); apply(lerpPose(from, to, ease(t))); lastTouch = performance.now(); }
+      else if (auto) { wait += dt; lastTouch = performance.now(); if (wait > 2.2) { wait = 0; const k = ORDER.indexOf(phase); if (k < ORDER.length - 1) go(ORDER[k + 1]); else auto = false; } }
+      if (cur) labels();
+    };
+    const MS = { chr: "<b>Хромосома</b>: ДНК, упакованная с белками. После удвоения ДНК она состоит из двух сестринских хроматид, соединённых в центромере.",
+      cen: "<b>Центромера</b> — место, где соединены сестринские хроматиды. К ней прикрепляются нити веретена деления.",
+      fib: "<b>Нити веретена деления</b> — микротрубочки. Они растаскивают хромосомы (или хроматиды) к полюсам клетки.",
+      ctr: "<b>Центриоли</b> на полюсах организуют веретено деления. У высших растений центриолей нет — веретено строится без них." };
+    s.userData.onPick = (hit) => { const k = hit.object.userData.org; if (!MS[k]) return false; setPart(MS[k]); return true; };
+    s.userData.onClear = () => {};
+    s.userData.chips = [...ORDER.map((k) => [k, CHIPL[k]]), ["auto", "▶ Подряд"]];
+    s.userData.level = "inter";
+    s.userData.home = { dir: new V3(0.1, 0.32, 1), target: new V3(0, 0, 0), fitW: 3.95, fitH: 3.1, min: 3, max: 40 };
+    s.userData.spin = null; s.userData.name = kind; s.userData.info = INFO[kind]; s.userData.div = { get phase() { return phase; }, get t() { return t; }, get auto() { return auto; } };
+    return s;
+  }
+
   let TOPIC_KEY = (typeof LAB_OPTS !== "undefined" && LAB_OPTS && LAB_OPTS.topic) || location.hash.slice(1) || new URLSearchParams(location.search).get("topic") || "cell";
   if (!TOPICS[TOPIC_KEY]) TOPIC_KEY = "cell";
   const TOPIC = TOPICS[TOPIC_KEY], FIRST_VIEW = Object.keys(TOPIC.views)[0];
@@ -1328,7 +1623,7 @@ export async function open(opts = {}) {
   /* ───────── состояние и интерфейс ───────── */
   const withInfo = (fn, key) => () => { const sc = fn(); if (TOPIC.views[key]) sc.userData.info = PARTS[key]; return sc; };
   const scenes = {};
-  const builders = { cell: buildCell, dna: withInfo(buildDNA, "dna"), atp: withInfo(buildATP, "atp"), bilayer: withInfo(buildBilayer, "bilayer"), lock: buildEnzyme, plant: buildPlant, fungus: buildFungus, bact: buildBact, levels: buildLevels, rna: buildRNA };
+  const builders = { cell: buildCell, dna: withInfo(buildDNA, "dna"), atp: withInfo(buildATP, "atp"), bilayer: withInfo(buildBilayer, "bilayer"), lock: buildEnzyme, cork: buildCork, tissue: buildTissue, split: buildSplit, mit: () => buildDivision("mit"), mei: () => buildDivision("mei"), plant: buildPlant, fungus: buildFungus, bact: buildBact, levels: buildLevels, rna: buildRNA };
   for (const k of ["ala", "dipep", "damp", "h2o", "hb", "ice", "salt", "ab", "tg", "pl"]) builders[k] = () => buildMolView(k);
   let cur = FIRST_VIEW, cellKey = FIRST_VIEW, mode = "learn", tween = null, lastTouch = performance.now();
   scenes[cellKey] = builders[cellKey]();
