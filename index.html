@@ -1379,7 +1379,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.10</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.11</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1455,7 +1455,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.10. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.11. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1483,8 +1483,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "2 · Клетка как биологическая система", "id": "kl-teor", "title": "Клеточная теория", "desc": "Лента открытий от Гука до Гольджи и положения теории — «выберите три верных».", "st": "10 учёных · 14 утверждений", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-voda", "title": "Вода и минеральные вещества клетки", "desc": "Разложи элементы по группам, свяжи свойства воды с явлениями, расставь ткани по содержанию воды.", "st": "13 элементов · 10 свойств воды", "ready": true, "rel": "2026-11-08"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-belki", "title": "Белки: лаборатория", "desc": "Собери белок от цепочки до гемоглобина и сломай его нагревом и кислотой. Связи, денатурация, функции.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-08"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
-      {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-ferm", "title": "Ферменты: лаборатория", "desc": "Новое: фермент в 3D. Ключ и замок, энергия активации, температура и pH, ингибиторы и коферменты — всё руками.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
+      {"group": "2 · Клетка как биологическая система", "id": "kl-ugl", "title": "Углеводы и липиды: лаборатория", "desc": "Новое: глюкоза и жиры в 3D. Собери сахарозу, проверь крахмал йодом, построй жир и брось фосфолипиды в воду.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-nk", "title": "ДНК, РНК и АТФ: лаборатория", "desc": "Собери нуклеотид, дострой цепь, покрути спираль, реши задачу на Чаргаффа и разряди АТФ.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-org", "title": "Строение клетки: лаборатория", "desc": "Новое: четыре клетки в 3D (животная, растительная, гриб, бактерия) до ДНК и АТФ. Четыре клетки с приближением, сортировка по мембранам, поиск органоида по функции, сравнение клеток.", "st": "лаборатория · 8 заданий ЕГЭ", "ready": true, "rel": "2026-11-09"},
       {"group": "2 · Клетка как биологическая система", "id": "kl-endo", "title": "Эндосимбиоз", "desc": "Откуда в клетке митохондрии и хлоропласты.", "st": "скоро"},
@@ -2096,7 +2096,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Загружаю 3D-клетку…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./lab3d.js?v=4100");
+      const m = await import("./lab3d.js?v=4110");
       await m.open({ how, topic: topic || "cell", onClose: () => { l3dBusy = false; } });
       ld.remove();
     } catch (e) {
@@ -3481,6 +3481,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vFM.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-fm="back">← к модулям</button><h2 class="mod-title">Ферменты: лаборатория</h2></div>
       <p class="intro">Запусти фермент, нагрей его, отрави ингибитором и почини коферментом. После лаборатории — 8 заданий ЕГЭ.${fms.best != null ? ` Рекорд: <b>${fms.best}</b> из 8.` : ""}</p>
+      ${l3dCard("enzyme", "Фермент в 3D", "Ключ и замок вживую: субстрат, ингибитор, холод и нагрев")}
       ${fmLabHtml()}
       <button type="button" class="linkbtn bk-skip" data-fm="skip">Сразу к заданиям →</button>`;
     vFM.querySelector('[data-fm="back"]').addEventListener("click", () => { cancelAnimationFrame(FM.raf); go({ tab: "learn", module: null }); });
@@ -3850,6 +3851,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vUL.innerHTML = `
       <div class="z-head"><button type="button" class="back" data-ul="back">← к модулям</button><h2 class="mod-title">Углеводы и липиды: лаборатория</h2></div>
       <p class="intro">Собери сахарозу, капни йодом на крахмал, построй жир и брось фосфолипиды в воду. После лаборатории — 8 заданий ЕГЭ.${uls.best != null ? ` Рекорд: <b>${uls.best}</b> из 8.` : ""}</p>
+      ${l3dCard("carb", "Углеводы и липиды в 3D", "α- и β-глюкоза, жир, фосфолипид и мембрана — крути пальцами")}
       ${ulLabHtml()}
       <button type="button" class="linkbtn bk-skip" data-ul="skip">Сразу к заданиям →</button>`;
     vUL.querySelector('[data-ul="back"]').addEventListener("click", () => { cancelAnimationFrame(UL.raf); go({ tab: "learn", module: null }); });
