@@ -2180,13 +2180,16 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   document.getElementById("plan-lb-prev").addEventListener("click", () => planLbSet(planLbI - 1));
   document.getElementById("plan-lb-next").addEventListener("click", () => planLbSet(planLbI + 1));
   planLbImg.addEventListener("click", () => planLb.classList.toggle("zoom"));
-  function planShow(how) { hbGoalOnce("upsell_viewed", { how: typeof how === "string" ? how : "open" }); planGal(); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
+  /* v4.16.1: откуда открыт планер — для воронки в боте */
+  let planSrc = "open";
+  const PLAN_EV = { push: "push", bot: "link", toast: "tclick" };
+  function planShow(how) { planSrc = typeof how === "string" ? how : "open"; if (PLAN_EV[planSrc]) { if (window.hbEv) window.hbEv(PLAN_EV[planSrc]); else (window.__hbEvQ = window.__hbEvQ || []).push([PLAN_EV[planSrc]]); } hbGoalOnce("upsell_viewed", { how: planSrc }); planGal(); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
   function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
   document.getElementById("plan-x").addEventListener("click", planHide);
   planOv.addEventListener("click", (e) => { if (e.target === planOv) planHide(); });
   document.addEventListener("keydown", (e) => { if (e.key !== "Escape") return; if (!planLb.hidden) planLb.hidden = true; else if (!planOv.hidden) planHide(); });
   document.getElementById("plan-buy").addEventListener("click", () => {
-    hbGoal("buy_button_clicked", { price: 490 });
+    hbGoal("buy_button_clicked", { price: 490 }); if (window.hbEv) window.hbEv("buy", planSrc);
     const w = window.Telegram && window.Telegram.WebApp;
     if (w && w.openLink) { try { w.openLink(PLAN_URL); return; } catch (er) {} }
     window.open(PLAN_URL, "_blank", "noopener");
@@ -2273,7 +2276,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else { t.style.transition = "transform .2s ease-out, opacity .2s"; t.style.transform = "translate(-50%, 0)"; t.style.opacity = "1"; timer = setTimeout(() => away(0, -1), 15000); }
     };
     t.addEventListener("pointerup", up); t.addEventListener("pointercancel", up);
-    haptic("success"); hbGoal("upsell_viewed", { how: kind === "explore" ? "toast3d" : "toast" });
+    haptic("success"); hbGoal("upsell_viewed", { how: kind === "explore" ? "toast3d" : "toast" }); if (window.hbEv) window.hbEv("toast");
   }
   const hbOnce = {};
   const hbGoalOnce = (name, params) => { if (hbOnce[name]) return; hbOnce[name] = 1; hbGoal(name, params); };
@@ -6379,7 +6382,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "ugl") go({ subject: "bio", module: "kl-ugl" }, { noScroll: true });
   else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
   else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
-  else if (h === "plan") { go({}, { noScroll: true }); planShow("bot"); }
+  else if (h === "plan" || h === "planp") { go({}, { noScroll: true }); planShow(h === "planp" ? "push" : "bot"); }   /* planp — кнопка «Забрать планер» в сообщении бота */
   else if (h === "cell3d") { go({ subject: "bio", module: "kl-org" }, { noScroll: true }); hbOpen3D("start"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
@@ -6434,6 +6437,12 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   const api = (new URLSearchParams(location.search).get("api") || "").replace(/\/$/, "");
   /* события тренажёра → бот. Сейчас одно: correct10. Бот сам решает, писать ли человеку; метка hb_up10=1 ставится, когда он ответил */
   let msBusy = false;
+  /* v4.16.1: шаг воронки планера → бот (считает /funnel). Без Телеграма молчим. */
+  window.hbEv = function (ev, src) {
+    if (!api || !initData) return;
+    try { fetch(api + "/ev?e=" + encodeURIComponent(ev) + (src ? "&s=" + encodeURIComponent(src) : ""), { method: "POST", headers: { "content-type": "text/plain" }, body: initData, keepalive: true }).catch(() => {}); } catch (e) {}
+  };
+  (window.__hbEvQ || []).splice(0).forEach((a) => window.hbEv.apply(null, a));   /* планер открыли по ссылке раньше, чем всё загрузилось */
   window.hbMilestone = async function (ev) {
     if (!api || !initData || msBusy) return;
     msBusy = true;
