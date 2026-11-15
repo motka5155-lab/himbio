@@ -1419,7 +1419,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.14</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.15</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1496,7 +1496,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.14. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.15. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -2203,7 +2203,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
      Одно и то же задание засчитывается один раз (ключ — отпечаток текста задания без «что выбрал» и без порядка вариантов).
      На 10-м уникальном верном ответе тренажёр один раз сообщает боту (hbMilestone), бот пишет в личку.
      Метка hb_up10: «p» — набрали 10, бот ещё не подтвердил (повторим на следующем верном ответе); «1» — готово. */
-  const HB_RIGHT_KEY = "hb.right.v1", HB_RIGHT_N = 10;
+  const HB_RIGHT_KEY = "hb.right.v1", HB_RIGHT_N = 5;   /* v4.15: было 10 — до 10 доходили единицы */
   const HB_VOLATILE = { pick: 1, picked: 1, done: 1, user: 1, good: 1, hint: 1, place: 1, res: 1, solved: 1, val: 1, sel: 1, miss: 1, anim: 1, shake: 1 };
   function hbQKey(q) {
     const j = JSON.stringify(q, (k, v) => HB_VOLATILE[k] ? undefined : Array.isArray(v) ? v.slice().sort((a, b) => (JSON.stringify(a) > JSON.stringify(b) ? 1 : -1)) : v);
@@ -2235,7 +2235,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function up10Show() {
     try { if (localStorage.getItem("hb_up10_toast")) return; localStorage.setItem("hb_up10_toast", "1"); } catch (e) {}
     const t = document.createElement("div"); t.className = "up10 has-th"; t.setAttribute("role", "status");
-    t.innerHTML = '<img class="up10-th" src="plan/th.jpg?v=1" alt="" aria-hidden="true"><div><b>🔥 10 верных ответов. Ты в ритме!</b><p>Осталось его не потерять. Мой планер сам раскладывает темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p></div>' +
+    t.innerHTML = '<img class="up10-th" src="plan/th.jpg?v=1" alt="" aria-hidden="true"><div><b>🔥 5 верных ответов. Ты в ритме!</b><p>Осталось его не потерять. Мой планер сам раскладывает темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p></div>' +
       '<button type="button" class="up10-x" aria-label="Закрыть">✕</button><button type="button" class="up10-go">Посмотреть планер <em>· 490 ₽</em></button><span class="up10-grip" aria-hidden="true"></span>';
     document.body.appendChild(t);
     let gone = false, timer = setTimeout(() => away(0, -1), 15000);
