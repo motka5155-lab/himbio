@@ -1758,10 +1758,12 @@ export async function open(opts = {}) {
     else if (b.dataset.act === "up") leaveMolecule();
     else if (b.dataset.act === "next") nextQ();
     else if (b.dataset.mix != null) { scenes.atp.userData.setMix(+b.dataset.mix); sh.querySelectorAll("#atpMode button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); }
-    else if (b.dataset.v) { const s = scenes[cur]; if (s && s.userData.onChip) s.userData.onChip(b.dataset.v); }
-    else if (b.dataset.g) { const s = scenes.atp; if (s.userData.hiGroup === b.dataset.g) s.userData.onClear(); else { s.userData.pickGroup(b.dataset.g); syncAtpChips(); } }
+    else if (b.dataset.v) { const s = scenes[cur]; if (s && s.userData.onChip) { s.userData.onChip(b.dataset.v); explore("c:" + cur + ":" + b.dataset.v); } }
+    else if (b.dataset.g) { explore("g:atp:" + b.dataset.g); const s = scenes.atp; if (s.userData.hiGroup === b.dataset.g) s.userData.onClear(); else { s.userData.pickGroup(b.dataset.g); syncAtpChips(); } }
   });
 
+  /* изучение в 3D: каждая новая деталь, вид или кнопка — шаг; тренажёр считает разные шаги (для предложения планера) */
+  const explore = (k) => { try { if (window.hbLab && window.hbLab.explore) window.hbLab.explore(k); } catch (e) {} };
   /* навигация */
   function selectOrg(k, obj) {
     const s = scenes[cellKey]; state.org = k; s.userData.sel = k; refreshSel(s);
@@ -1788,7 +1790,7 @@ export async function open(opts = {}) {
     const fade = $("#fade"); fade.classList.add("on");
     setTimeout(() => {
       if (!scenes[key]) { scenes[key] = builders[key](); applyLook(scenes[key]); }
-      cur = key; tween = null; mountLabels(scenes[key]);
+      cur = key; tween = null; mountLabels(scenes[key]); explore("v:" + key);
       $("#modes").hidden = !isCell(key) || !QZ().length;
       if (then) then();          // сначала шторка, потом камера: кадр считается по её высоте
       renderCrumbs(); measure(); view.shift = view.shiftTo; applyOffset();
@@ -1821,13 +1823,15 @@ export async function open(opts = {}) {
     const s = scenes[cur], hits = ray.intersectObjects(s.userData.pick, false);
     if (!isCell(cur) || s.userData.onPick) {
       const h = hits[0];
-      if (!h || !s.userData.onPick(h)) { if (s.userData.onClear) s.userData.onClear(); if (s.userData.name !== "levels") setPart((s.userData.info || PARTS[cur]).hint); }
+      if (h && s.userData.onPick(h)) explore("p:" + cur + ":" + (h.object.userData.org || h.object.userData.role || ""));
+      else { if (s.userData.onClear) s.userData.onClear(); if (s.userData.name !== "levels") setPart((s.userData.info || PARTS[cur]).hint); }
       return;
     }
     const hit = hits.find((h) => h.object.userData.org !== "membrane") || hits[0];
     if (!hit) { if (mode === "learn" && state.org) { clearOrg(); sheetIdle(); } return; }
     const k = hit.object.userData.org;
     if (mode === "quiz") return answerQ(k, hit.object);
+    explore("o:" + cur + ":" + k);
     buzz("select"); selectOrg(k, hit.object); sheetOrg(k);
   });
   controls.addEventListener("start", () => { lastTouch = performance.now(); tween = null; });
