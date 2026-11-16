@@ -6395,7 +6395,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     <div id="gate-need" hidden>
       <p class="gate-kicker">тренажёр от Матвея</p>
       <h2 id="gate-h1">Открывается для тех, кто со мной в канале</h2>
-      <p>Сделал его, потому что органика бесила меня самого. Пользуйся бесплатно. В канале matvéri выходят новые темы и я рассказываю, как сам готовлюсь к ЕГЭ.</p>
+      <p>Сделал его к ЕГЭ по химии и биологии, потому что зубрёжка бесила меня самого. Пользуйся бесплатно. В канале matvéri выходят новые темы и я рассказываю, как сам готовлюсь к ЕГЭ.</p>
       <button type="button" class="btn primary" id="gate-sub">Перейти в канал</button>
       <button type="button" class="btn" id="gate-check">Я в канале, открыть</button>
       <p class="gate-note" id="gate-note" role="status"></p>
@@ -6433,8 +6433,16 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 
   const tg = () => (window.Telegram && window.Telegram.WebApp) || null;
   const hp = new URLSearchParams(location.hash.slice(1));
-  const initData = (tg() && tg().initData) || hp.get("tgWebAppData") || "";
-  const api = (new URLSearchParams(location.search).get("api") || "").replace(/\/$/, "");
+  /* v4.16.2: запасной вход — в браузере по личной ссылке из бота (bu, be, bk). Запоминаем её, чтобы тренажёр открывался и с закладки */
+  const qs = new URLSearchParams(location.search);
+  let browserKey = "";
+  try {
+    if (qs.get("bu") && qs.get("be") && qs.get("bk")) { browserKey = "bu=" + qs.get("bu") + "&be=" + qs.get("be") + "&bk=" + qs.get("bk"); localStorage.setItem("hb.bkey", browserKey); if (qs.get("api")) localStorage.setItem("hb.bapi", qs.get("api")); }
+    else if (!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData)) { browserKey = localStorage.getItem("hb.bkey") || ""; }
+  } catch (e) {}
+  const initData = (tg() && tg().initData) || hp.get("tgWebAppData") || browserKey;
+  let api = (new URLSearchParams(location.search).get("api") || "").replace(/\/$/, "");
+  if (!api && browserKey) { try { api = (localStorage.getItem("hb.bapi") || "").replace(/\/$/, ""); } catch (e) {} }
   /* события тренажёра → бот. Сейчас одно: correct10. Бот сам решает, писать ли человеку; метка hb_up10=1 ставится, когда он ответил */
   let msBusy = false;
   /* v4.16.1: шаг воронки планера → бот (считает /funnel). Без Телеграма молчим. */
@@ -6510,6 +6518,14 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     try {
       const res = await fetch(api + "/check", { method: "POST", headers: { "content-type": "text/plain" }, body: initData, signal: ctrl.signal });
       const data = await res.json().catch(() => ({}));
+      if (data.bkey) { try { localStorage.setItem("hb.bkey", data.bkey); } catch (e) {} }
+      if (res.status === 401 && browserKey && !(tg() && tg().initData)) {
+        try { localStorage.removeItem("hb.bkey"); } catch (e) {}
+        $("gate-h2").textContent = "Ссылка устарела";
+        out.querySelector("p").textContent = "Открой моего бота и нажми /start — пришлю новую ссылку. Или открой тренажёр прямо в Телеграме.";
+        $("gate-open").href = BOT_URL; $("gate-open").textContent = "Открыть бота";
+        show("out"); return;
+      }
       if (res.ok && data.member === false) {
         show("need");
         if (manual) { note.textContent = "Пока не вижу тебя в канале. Загляни в matvéri и нажми ещё раз."; note.className = "gate-note bad"; }
