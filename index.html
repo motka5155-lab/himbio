@@ -1419,7 +1419,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.16</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.17</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1509,6 +1509,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   /* ════════ МОДУЛИ ПРИЛОЖЕНИЯ ════════ */
   const MODULES = {
     chem: [
+      { group: "3D-лаборатория", id: "probirki", lab: "chem", title: "Пробирки: химия в 3D", desc: "Капаешь реактивы сам и смотришь, что будет: задание 24 «различи вещества», ОВР в трёх средах (KMnO₄, K₂Cr₂O₇) и свободные опыты. Каждая новая реакция — в твою коллекцию.", st: "85 реакций · 3 режима", ready: true, rel: "2026-11-17" },
       { group: "ЕГЭ · вторая часть", id: "z32", title: "Задание 32: цепочки", desc: "Цепочки превращений органики как на ЕГЭ. Решаешь по шагам, тренажёр проверяет и объясняет ошибки.", st: "74 цепочки · готово", ready: true, rel: "2026-10-21" },
       { group: "ЕГЭ · первая часть", id: "lechat", title: "Задание 22: химическое равновесие", desc: "Принцип Ле Шателье на ползунке: куда сместится равновесие при нагреве, давлении, концентрации, катализаторе.", st: "25 равновесий · бесконечные задания", ready: true, rel: "2026-10-31" },
       { group: "ЕГЭ · первая часть", id: "raschet", title: "Задания 26–28: расчётные задачи", desc: "Растворы, термохимия, расчёт по уравнению с выходом и примесями. Вводишь ответ числом — потом пошаговое решение.", st: "бесконечные задачи · числа каждый раз новые", ready: true, rel: "2026-11-08" },
@@ -2150,6 +2151,24 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     }
   }
   window.hbOpen3D = hbOpen3D;
+  /* v4.17: «Пробирки» — 3D-лаборатория по химии, chemlab.js грузится только по требованию */
+  let chlBusy = false;
+  async function hbOpenChem(how, mode) {
+    if (chlBusy) return; chlBusy = true;
+    const ld = document.createElement("div"); ld.className = "l3d-load";
+    ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Расставляю пробирки…</b><span>В первый раз — пара секунд</span></div>';
+    document.body.appendChild(ld);
+    try {
+      const m = await import("./chemlab.js?v=4170");
+      await m.open({ mode, onClose: () => { chlBusy = false; } });
+      ld.remove(); hbGoalOnce("chemlab_open", { how });
+    } catch (e) {
+      chlBusy = false;
+      ld.innerHTML = '<div class="l3d-load-in"><b>Не получилось открыть лабораторию</b><span>Проверь интернет и попробуй ещё раз. Если не помогло — обнови Телеграм.</span><button type="button" class="btn primary">Закрыть</button></div>';
+      ld.querySelector("button").addEventListener("click", () => ld.remove());
+    }
+  }
+  window.hbOpenChem = hbOpenChem;
   const l3dCard = (topic, title, sub) => `<button type="button" class="l3d-cta" data-l3d="${topic}"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>${title}</b><small>${sub}</small></span><span class="l3d-cta-go">Открыть</span></button>`;
   document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-l3d]"); if (b) hbOpen3D("module", b.dataset.l3d); });
   /* v4.14: настоящие скриншоты планера — галерея в окне, по тапу во весь экран с увеличением */
@@ -4728,7 +4747,8 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (v3b) v3b.addEventListener("click", () => go({ tab: "quiz", module: null }));
     vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
       const m = mods.find(x => x.id === b.dataset.mod);
-      if (m.ready) go({ tab: "learn", module: m.id });
+      if (m.lab === "chem") hbOpenChem("list");
+      else if (m.ready) go({ tab: "learn", module: m.id });
       else toast(state.subject === "bio" ? `«${m.title}» в работе — выйдет по порядку кодификатора. Новинки — в канале matvéri.` : `«${m.title}» в работе. Голосуй за эту тему в канале matvéri, если хочешь её раньше.`);
     }));
   }
@@ -6358,7 +6378,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("");
   }
 
-  /* старт: #organika, #quiz, #lovushki, #bio, #r8, #z32, #cards, #lechat, #gidroliz, #elektroliz, #uglevodorody, #izomeriya */
+  /* старт: #probirki (#probovr, #problab, #prob24), #organika, #quiz, #lovushki, #bio, #r8, #z32, #cards, #lechat, #gidroliz, #elektroliz, #uglevodorody, #izomeriya */
   const h = window.HB_START || location.hash.slice(1);
   const mh = /^r(\d{1,2})$/.exec(h);
   if (h === "quiz") go({ tab: "quiz" }, { noScroll: true });
@@ -6383,6 +6403,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
   else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
   else if (h === "plan" || h === "planp") { go({}, { noScroll: true }); planShow(h === "planp" ? "push" : "bot"); }   /* planp — кнопка «Забрать планер» в сообщении бота */
+  else if (h === "probirki" || h === "probovr" || h === "problab" || h === "prob24") { go({ subject: "chem" }, { noScroll: true }); hbOpenChem("start", { probovr: "ovr", problab: "lab", prob24: "task" }[h]); }
   else if (h === "cell3d") { go({ subject: "bio", module: "kl-org" }, { noScroll: true }); hbOpen3D("start"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });
