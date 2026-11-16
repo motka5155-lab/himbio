@@ -867,6 +867,24 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 /* ── v3.1: «Мой план 80+» (PRO) ── */
 .plan-card { position: relative; display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 14px; width: 100%; margin: 0 0 16px; padding: 14px 14px 14px 12px; border-radius: 18px; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: var(--shadow); color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
 .plan-card:active { transform: scale(.99); }
+/* v4.17.1: закреплённая плашка 3D-лаборатории по химии */
+.chl-pin { position: relative; display: block; width: 100%; margin: 0 0 16px; padding: 0; border: 0; border-radius: 20px; overflow: hidden; cursor: pointer; text-align: left; font: inherit;
+  background: linear-gradient(160deg, #13224A, #070C18 70%); color: #E6F0FF; box-shadow: 0 0 0 1.5px rgba(77, 225, 255, .45), 0 12px 32px rgba(10, 25, 60, .32); }
+.chl-pin:active { transform: scale(.99); }
+.chl-pin:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.chl-pin-img { position: relative; display: block; height: 150px; overflow: hidden; }
+.chl-pin-img img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 88%; }
+.chl-pin-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 12, 24, 0) 45%, #0A1222 100%); }
+.chl-pin-tag { position: absolute; left: 12px; top: 12px; z-index: 1; font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px;
+  background: rgba(7, 12, 24, .72); color: #4DE1FF; border: 1px solid rgba(77, 225, 255, .5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.chl-pin-new { position: absolute; right: 12px; top: 12px; z-index: 1; font: 700 11px/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; background: #C2185B; color: #fff; }
+.chl-pin-in { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 12px; padding: 4px 16px 16px; margin-top: -26px; position: relative; z-index: 1; }
+.chl-pin-in b { display: block; font: 700 22px/1.1 var(--font-display); letter-spacing: -.01em; }
+.chl-pin-in small { display: block; margin-top: 5px; font: 400 13.5px/1.35 var(--font-body); color: #A9BCDD; }
+.chl-pin-in em { display: inline-block; margin-top: 8px; font: 600 12px/1.2 var(--font-body); font-style: normal; color: #3DDC97; }
+.chl-pin-go { font: 700 14px/1 var(--font-body); padding: 12px 14px; border-radius: 12px; background: #4DE1FF; color: #03121A; white-space: nowrap; box-shadow: 0 0 0 0 rgba(77, 225, 255, .6); animation: chlPulse 2.4s ease-out infinite; }
+@keyframes chlPulse { 0% { box-shadow: 0 0 0 0 rgba(77, 225, 255, .55); } 70%, 100% { box-shadow: 0 0 0 12px rgba(77, 225, 255, 0); } }
+@media (prefers-reduced-motion: reduce) { .chl-pin-go { animation: none; } }
 .plan-ico { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); }
 .plan-ico svg { width: 30px; height: 30px; }
 .plan-txt b { display: flex; align-items: center; gap: 8px; font: 700 17px/1.2 var(--font-display); }
@@ -1419,7 +1437,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.17</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.17.1</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -2159,7 +2177,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Расставляю пробирки…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./chemlab.js?v=4170");
+      const m = await import("./chemlab.js?v=4171");
       await m.open({ mode, onClose: () => { chlBusy = false; } });
       ld.remove(); hbGoalOnce("chemlab_open", { how });
     } catch (e) {
@@ -4732,7 +4750,17 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       ? "Выбери модуль. Готовые открываются сразу, остальные в работе."
       : "Биология идёт по кодификатору ФИПИ — раздел за разделом. Готовые модули открываются сразу, остальные выходят по порядку.";
     const v3 = state.subject === "chem" && newestRel === "2026-10-31" ? `<div class="v3-banner"><b>🎉 Вышла версия 3.0 — 5 новых разделов</b><span>Равновесие №22 · гидролиз · электролиз · углеводороды · изомерия. Новые разделы отмечены значком «НОВОЕ». А в «Проверь себя» — микс по всем темам.</span><button type="button" id="v3-mix">Пройти микс →</button></div>` : "";
-    vList.innerHTML = planCard() + v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
+    /* v4.17.1: закреп — 3D-лаборатория по химии; если уже начинал, показываем прогресс */
+    let chlProg = "";
+    try {
+      const ov = Object.keys(JSON.parse(localStorage.getItem("hb.chl.ovr") || "{}") || {}).length, col = Object.keys(JSON.parse(localStorage.getItem("hb.chl.col") || "{}") || {}).length;
+      if (ov || col) chlProg = `ОВР ${ov} из 7 · коллекция ${col} из 85 — продолжить`;
+    } catch (e) {}
+    const chlPin = state.subject !== "chem" ? "" : `<button type="button" class="chl-pin" id="chl-pin">
+      <span class="chl-pin-img"><img src="img/probirki.jpg?v=1" alt="Три пробирки: KMnO₄ в кислой, нейтральной и щелочной среде" decoding="async"><span class="chl-pin-tag">📌 3D-лаборатория · химия</span><span class="chl-pin-new">новое</span></span>
+      <span class="chl-pin-in"><span><b>Пробирки</b><small>Капаешь реактивы сам: задание 24 и ОВР в трёх средах — KMnO₄, K₂Cr₂O₇, H₂O₂</small>${chlProg ? `<em>${chlProg}</em>` : ""}</span><span class="chl-pin-go">Открыть →</span></span>
+    </button>`;
+    vList.innerHTML = planCard() + chlPin + v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
       <div class="group">
         <h2>${g}</h2>
         <div class="mods">${mods.filter(m => m.group === g).map(m => `
@@ -4742,6 +4770,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       </div>`).join("") +
       `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
     document.getElementById("plan-open").addEventListener("click", planShow);
+    const cp = document.getElementById("chl-pin"); if (cp) cp.addEventListener("click", () => hbOpenChem("pin"));
     hbWatchUpsell();
     const v3b = document.getElementById("v3-mix");
     if (v3b) v3b.addEventListener("click", () => go({ tab: "quiz", module: null }));

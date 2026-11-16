@@ -3,7 +3,7 @@
 import * as THREE from "./vendor/three-r160/three.module.min.js";
 import { OrbitControls } from "./vendor/three-r160/OrbitControls.js";
 import { RoomEnvironment } from "./vendor/three-r160/RoomEnvironment.js";
-import { SUBS, REAGS, react, PAIRS, makeTask, canTell, OVR, ovTruth, collection, colKey } from "./chemdata.js?v=4170";
+import { SUBS, REAGS, react, PAIRS, makeTask, canTell, OVR, ovTruth, collection, colKey } from "./chemdata.js?v=4171";
 
 const CSS = `
 :host { all: initial; position: fixed; inset: 0; z-index: 3000; display: block;
@@ -103,6 +103,12 @@ select { appearance: none; -webkit-appearance: none; border: 1.5px solid var(--l
 .two label { font: 600 12px var(--font-body); color: var(--ink-2); display: grid; gap: 5px; min-width: 0; }
 .two select { width: 100%; }
 @media (max-width: 390px) { .ttl b { font-size: 14px; } .modes button { padding: 8px 8px; font-size: 12.5px; } .ibtn.col { padding: 0 8px; } }
+@media (min-width: 900px) and (orientation: landscape) {
+  .top { padding-right: 424px; }
+  .modes { left: auto; right: 16px; transform: none; width: 392px; justify-content: center; top: calc(var(--tg-top, env(safe-area-inset-top, 0px)) + 12px); }
+  .sheet, .sheet.full { left: auto; right: 16px; transform: none; width: 392px; top: calc(var(--tg-top, env(safe-area-inset-top, 0px)) + 66px); bottom: 16px; max-height: none; border-radius: 20px; border-bottom: 1px solid var(--glass-line); padding-bottom: 14px; }
+  .grip { display: none; }
+}
 .nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 30px; text-align: center; color: var(--ink-2); }
 `;
 
@@ -361,7 +367,7 @@ export async function open(opts = {}) {
   function placeBottles(list) {
     bottles.forEach((b) => scene.remove(b)); bottles = list.map(makeBottle);
     // по бокам от штатива: слева и справа, ближние чуть впереди — так их не загораживают пробирки
-    const SLOTS = { 1: [[-3.45, -0.5]], 2: [[-3.45, -0.5], [3.45, -0.5]], 3: [[-3.45, -0.5], [3.45, -0.5], [-4.55, -2.0]], 4: [[-3.35, -0.4], [-4.5, -2.1], [3.35, -0.4], [4.5, -2.1]] };
+    const SLOTS = { 1: [[-4.0, -0.3]], 2: [[-4.0, -0.3], [4.0, -0.3]], 3: [[-4.0, -0.3], [4.0, -0.3], [-4.75, -2.1]], 4: [[-3.35, -0.4], [-4.5, -2.1], [3.35, -0.4], [4.5, -2.1]] };
     const sl = SLOTS[bottles.length] || SLOTS[4];
     bottles.forEach((b, i) => { const [x, z] = sl[i % sl.length]; b.position.set(x, 0, z); b.rotation.y = Math.atan2(camera.position.x - x, camera.position.z - z) * 0.6 - Math.PI / 2; });
   }
@@ -606,10 +612,13 @@ export async function open(opts = {}) {
   const SCENE_W = 10.2, SCENE_H = 8.9;
   function size() {
     const w = stage.clientWidth || 1, h = stage.clientHeight || 1; renderer.setSize(w, h, false); camera.aspect = w / h;
-    const topPx = $("#modes").getBoundingClientRect().bottom - stage.getBoundingClientRect().top + 8, sheetPx = sheet.getBoundingClientRect().height;
-    const avail = Math.max(h * 0.3, h - topPx - sheetPx - 6), tanH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    const d = Math.max((SCENE_H * h / avail) / 2 / tanH, (SCENE_W / 2) / (tanH * camera.aspect));
-    camera.setViewOffset(w, h, 0, h / 2 - (topPx + avail / 2), w, h);
+    // на широком экране карточка стоит панелью справа: сцена — всё, что слева от неё, под шапкой
+    const wide = matchMedia("(min-width: 900px) and (orientation: landscape)").matches, sr = stage.getBoundingClientRect();
+    const panelPx = wide ? sr.right - sheet.getBoundingClientRect().left + 8 : 0;
+    const topPx = (wide ? sh.querySelector(".top").getBoundingClientRect().bottom : $("#modes").getBoundingClientRect().bottom) - sr.top + 8, sheetPx = wide ? 0 : sheet.getBoundingClientRect().height;
+    const avail = Math.max(h * 0.3, h - topPx - sheetPx - 6), availW = Math.max(w * 0.4, w - panelPx), tanH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const d = Math.max((SCENE_H * h / avail) / 2 / tanH, (SCENE_W / 2) / (tanH * camera.aspect * availW / w)) * (wide ? 1.22 : 1);
+    camera.setViewOffset(w, h, panelPx / 2, h / 2 - (topPx + avail / 2) + (wide ? h * 0.05 : 0), w, h);
     const dir = size.done ? camera.position.clone().sub(controls.target).normalize() : new V3(0, 0.27, 0.96).normalize();
     if (!size.done || Math.abs(size.d - d) > 0.05) { camera.position.copy(controls.target).addScaledVector(dir, d); size.d = d; size.done = true; }
     controls.minDistance = d * 0.55; controls.maxDistance = d * 1.35;
