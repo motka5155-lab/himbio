@@ -1437,7 +1437,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.17.1</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.17.2</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -2219,7 +2219,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   planLbImg.addEventListener("click", () => planLb.classList.toggle("zoom"));
   /* v4.16.1: откуда открыт планер — для воронки в боте */
   let planSrc = "open";
-  const PLAN_EV = { push: "push", bot: "link", toast: "tclick" };
+  const PLAN_EV = { push: "push", bot: "link", toast: "tclick", toast7: "wclick" };
   function planShow(how) { planSrc = typeof how === "string" ? how : "open"; if (PLAN_EV[planSrc]) { if (window.hbEv) window.hbEv(PLAN_EV[planSrc]); else (window.__hbEvQ = window.__hbEvQ || []).push([PLAN_EV[planSrc]]); } hbGoalOnce("upsell_viewed", { how: planSrc }); planGal(); planOv.hidden = false; document.body.style.overflow = "hidden"; haptic("success"); }
   function planHide() { planOv.hidden = true; document.body.style.overflow = ""; }
   document.getElementById("plan-x").addEventListener("click", planHide);
@@ -2251,7 +2251,19 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     for (let i = 0; i < j.length; i++) h = ((h << 5) + h + j.charCodeAt(i)) | 0;
     return (h >>> 0).toString(36) + "." + j.length;
   }
+  /* v4.17.2: дни занятий (хоть один верный ответ или шаг в 3D). На 7-й день — второе и последнее касание планера */
+  const HB_DAYS_KEY = "hb.days.v1";
+  function hbDay() {
+    try {
+      const d = new Date(), k = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      let days = []; try { days = JSON.parse(localStorage.getItem(HB_DAYS_KEY) || "[]") || []; } catch (e) { days = []; }
+      if (!days.includes(k)) { days.push(k); if (days.length > 60) days = days.slice(-60); localStorage.setItem(HB_DAYS_KEY, JSON.stringify(days)); }
+      const t0 = +localStorage.getItem("hb_up10_at") || 0;   /* когда показали первую плашку (у старых пользователей нет — тогда не ждём) */
+      if (days.length >= 7 && localStorage.getItem("hb_up10_toast") && !localStorage.getItem("hb_up7") && Date.now() - t0 > 3 * 864e5) setTimeout(() => up10Show("week", days.length), 1400);
+    } catch (e) {}
+  }
   function hbRight(tag, q, id) {
+    hbDay();
     try {
       if (localStorage.getItem("hb_up10") === "1") return;
       let st = {};
@@ -2275,6 +2287,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   /* v4.16: шаги изучения в 3D — новая деталь по тапу, новый вид, новый органоид, кнопка (фаза, действие). 12 разных шагов = то же предложение планера */
   const HB_X_KEY = "hb.l3dx.v1", HB_X_N = 12;
   function hbExplore(k) {
+    if (k) hbDay();
     try {
       if (!k || localStorage.getItem("hb_up10") === "1") return;
       let st = {};
@@ -2287,10 +2300,16 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       }
     } catch (e) {}
   }
-  function up10Show(kind) {
-    try { if (localStorage.getItem("hb_up10_toast")) return; localStorage.setItem("hb_up10_toast", "1"); } catch (e) {}
+  function up10Show(kind, nDays) {
+    const week = kind === "week";
+    try {
+      if (week) { if (localStorage.getItem("hb_up7") || document.querySelector(".up10")) return; localStorage.setItem("hb_up7", "1"); }
+      else { if (localStorage.getItem("hb_up10_toast")) return; localStorage.setItem("hb_up10_toast", "1"); localStorage.setItem("hb_up10_at", String(Date.now())); }
+    } catch (e) { return; }
     const t = document.createElement("div"); t.className = "up10 has-th"; t.setAttribute("role", "status");
-    t.innerHTML = '<img class="up10-th" src="plan/th.jpg?v=1" alt="" aria-hidden="true"><div>' + (kind === "explore"
+    t.innerHTML = '<img class="up10-th" src="plan/th.jpg?v=1" alt="" aria-hidden="true"><div>' + (week
+        ? '<b>🔥 ' + (nDays || 7) + ' дней с тренажёром!</b><p>Это уже привычка. Чтобы не потерять её до самого экзамена, мой планер ведёт график по всем темам ФИПИ и сам подстраивает его, если пропустил день.</p>'
+        : kind === "explore"
         ? '<b>🔥 Ты уже разобрался в 3D до молекул!</b><p>Чтобы так же пройти все темы ЕГЭ, а не только эту, — мой планер: раскладывает темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p>'
         : '<b>🔥 5 верных ответов. Ты в ритме!</b><p>Осталось его не потерять. Мой планер сам раскладывает темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p>') + '</div>' +
       '<button type="button" class="up10-x" aria-label="Закрыть">✕</button><button type="button" class="up10-go">Посмотреть планер <em>· 490 ₽</em></button><span class="up10-grip" aria-hidden="true"></span>';
@@ -2302,7 +2321,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       setTimeout(() => t.remove(), 300);
     };
     t.querySelector(".up10-x").addEventListener("click", () => away(0, -1));
-    t.querySelector(".up10-go").addEventListener("click", () => { away(0, -1); planShow("toast"); });
+    t.querySelector(".up10-go").addEventListener("click", () => { away(0, -1); planShow(week ? "toast7" : "toast"); });
     // смахивание пальцем
     let x0 = 0, y0 = 0, on = false;
     t.addEventListener("pointerdown", (e) => { if (e.target.closest("button")) return; on = true; x0 = e.clientX; y0 = e.clientY; t.style.animation = "none"; try { t.setPointerCapture(e.pointerId); } catch (er) {} clearTimeout(timer); });
@@ -2313,7 +2332,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else { t.style.transition = "transform .2s ease-out, opacity .2s"; t.style.transform = "translate(-50%, 0)"; t.style.opacity = "1"; timer = setTimeout(() => away(0, -1), 15000); }
     };
     t.addEventListener("pointerup", up); t.addEventListener("pointercancel", up);
-    haptic("success"); hbGoal("upsell_viewed", { how: kind === "explore" ? "toast3d" : "toast" }); if (window.hbEv) window.hbEv("toast");
+    haptic("success"); hbGoal("upsell_viewed", { how: week ? "toast7" : kind === "explore" ? "toast3d" : "toast" }); if (window.hbEv) window.hbEv(week ? "week" : "toast");
   }
   const hbOnce = {};
   const hbGoalOnce = (name, params) => { if (hbOnce[name]) return; hbOnce[name] = 1; hbGoal(name, params); };
