@@ -919,6 +919,12 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   background: linear-gradient(160deg, #13224A, #070C18 70%); color: #E6F0FF; box-shadow: 0 0 0 1.5px rgba(77, 225, 255, .45), 0 12px 32px rgba(10, 25, 60, .32); }
 .chl-pin:active { transform: scale(.99); }
 .chl-pin:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.an-pin .chl-pin-img img { object-position: 70% 30%; }
+.an-pin .chl-pin-tag { background: rgba(79, 214, 255, .16); color: #8fe3ff; }
+.mod.a3d .st { color: #4fd6ff; }
+.anat-ov { position: fixed; inset: 0; z-index: 3000; background: #04060c; }
+.anat-ov .l3d-load { background: #04060c; color: #eaf1ff; }
+.anat-ov iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .chl-pin-img { position: relative; display: block; height: 150px; overflow: hidden; }
 .chl-pin-img img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 88%; }
 .chl-pin-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 12, 24, 0) 45%, #0A1222 100%); }
@@ -1484,7 +1490,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.18</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.19</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1562,7 +1568,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.18. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.19. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1615,11 +1621,12 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       {"group": "4 · Многообразие органического мира", "id": "mn-rast", "title": "Растения: ткани и органы", "desc": "Корень, стебель, лист, цветок, плод.", "st": "скоро"},
       {"group": "4 · Многообразие органического мира", "id": "cikly", "title": "Жизненные циклы растений", "desc": "Где n, а где 2n: мхи, папоротники, голосеменные, цветковые.", "st": "скоро"},
       {"group": "4 · Многообразие органического мира", "id": "mn-zhiv", "title": "Животные", "desc": "От простейших до млекопитающих.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "anat", "lab": "anat", "title": "Анатомия 3D: тело человека", "desc": "Новое: 15 органов в разрезе. Разбери тело по полочкам, запусти сердце, нефрон и рефлекс — всё, что спрашивают в ЕГЭ.", "st": "3D · 263 структуры", "ready": true, "rel": "2026-11-22"},
       {"group": "5 · Организм человека", "id": "ch-tkani", "title": "Ткани и органы человека", "desc": "Строение и функции тканей.", "st": "скоро"},
-      {"group": "5 · Организм человека", "id": "ch-reg", "title": "Нервная и эндокринная регуляция", "desc": "Рефлекторная дуга, гормоны.", "st": "скоро"},
-      {"group": "5 · Организм человека", "id": "ch-krov", "title": "Кровь и кровообращение", "desc": "Сердце, круги кровообращения, иммунитет.", "st": "скоро"},
-      {"group": "5 · Организм человека", "id": "ch-obmen", "title": "Дыхание, пищеварение, выделение", "desc": "Как работают системы органов.", "st": "скоро"},
-      {"group": "5 · Организм человека", "id": "ch-analiz", "title": "Анализаторы", "desc": "Зрение, слух, равновесие.", "st": "скоро"},
+      {"group": "5 · Организм человека", "id": "ch-reg", "title": "Нервная и эндокринная регуляция", "desc": "Рефлекторная дуга, гормоны.", "st": "3D уже готово · тесты скоро", "a3d": "brain"},
+      {"group": "5 · Организм человека", "id": "ch-krov", "title": "Кровь и кровообращение", "desc": "Сердце, круги кровообращения, иммунитет.", "st": "3D уже готово · тесты скоро", "a3d": "heart"},
+      {"group": "5 · Организм человека", "id": "ch-obmen", "title": "Дыхание, пищеварение, выделение", "desc": "Как работают системы органов.", "st": "3D уже готово · тесты скоро", "a3d": "nephron"},
+      {"group": "5 · Организм человека", "id": "ch-analiz", "title": "Анализаторы", "desc": "Зрение, слух, равновесие.", "st": "3D уже готово · тесты скоро", "a3d": "eye"},
       {"group": "6 · Эволюция живой природы", "id": "ev-uch", "title": "Эволюционное учение", "desc": "Движущие силы, видообразование, доказательства эволюции.", "st": "скоро"},
       {"group": "6 · Эволюция живой природы", "id": "ev-chel", "title": "Происхождение человека", "desc": "Антропогенез, предки человека.", "st": "скоро"},
       {"group": "7 · Экосистемы", "id": "eko-sist", "title": "Экосистемы и цепи питания", "desc": "Продуценты, консументы, редуценты, правило 10%.", "st": "скоро"},
@@ -2239,6 +2246,23 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     }
   }
   window.hbOpenChem = hbOpenChem;
+  /* v4.19: «Анатомия 3D» — отдельное приложение в anat/, открывается поверх тренажёра. Новые детали тела засчитываются как шаги изучения (→ плашка планера на 12-м) */
+  let anOv = null;
+  function hbOpenAnat(how, scn) {
+    if (anOv) return; hbDay();
+    anOv = document.createElement("div"); anOv.className = "anat-ov";
+    anOv.innerHTML = '<div class="l3d-load"><div class="l3d-load-in"><div class="spin"></div><b>Загружаю тело человека…</b><span>В первый раз — несколько секунд</span></div></div><iframe title="Анатомия 3D" allow="fullscreen" src="anat/index.html?embed=1&v=419' + (scn ? "&scn=" + scn : "") + '"></iframe>';
+    document.body.appendChild(anOv); document.body.style.overflow = "hidden";
+    try { if (window.hbPE) window.hbPE("anat", how); } catch (e) {}
+  }
+  function hbCloseAnat() { if (!anOv) return; anOv.remove(); anOv = null; document.body.style.overflow = ""; if (typeof renderList === "function" && !state.module) renderList(); }
+  window.addEventListener("message", (e) => {
+    const d = e.data || {}; if (!d.hb) return;
+    if (d.hb === "anat-ready") { const ld = anOv && anOv.querySelector(".l3d-load"); if (ld) ld.remove(); }
+    else if (d.hb === "anat-close") hbCloseAnat();
+    else if (d.hb === "anat-seen" && d.k) hbExplore("anat:" + d.k, "anat");
+  });
+  window.hbOpenAnat = hbOpenAnat;
   const l3dCard = (topic, title, sub) => `<button type="button" class="l3d-cta" data-l3d="${topic}"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>${title}</b><small>${sub}</small></span><span class="l3d-cta-go">Открыть</span></button>`;
   document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-l3d]"); if (b) hbOpen3D("module", b.dataset.l3d); });
   /* v4.14: настоящие скриншоты планера — галерея в окне, по тапу во весь экран с увеличением */
@@ -2338,7 +2362,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
      Смахнуть вверх или вбок, крестик, или сама уйдёт через 15 с. Кнопка открывает окно планера (оно выше 3D-лаборатории). */
   /* v4.16: шаги изучения в 3D — новая деталь по тапу, новый вид, новый органоид, кнопка (фаза, действие). 12 разных шагов = то же предложение планера */
   const HB_X_KEY = "hb.l3dx.v1", HB_X_N = 12;
-  function hbExplore(k) {
+  function hbExplore(k, kind) {
     if (k) hbDay();
     try {
       if (!k || localStorage.getItem("hb_up10") === "1") return;
@@ -2347,7 +2371,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       const seen = st.seen || (st.seen = {});
       if (!seen[k] && Object.keys(seen).length < HB_X_N) { seen[k] = 1; localStorage.setItem(HB_X_KEY, JSON.stringify(st)); }
       if (Object.keys(seen).length >= HB_X_N) {
-        if (!localStorage.getItem("hb_up10")) { localStorage.setItem("hb_up10", "p"); setTimeout(() => up10Show("explore"), 1400); }
+        if (!localStorage.getItem("hb_up10")) { localStorage.setItem("hb_up10", "p"); setTimeout(() => up10Show(kind || "explore"), 1400); }
         if (window.hbMilestone) window.hbMilestone("explore12");
       }
     } catch (e) {}
@@ -2359,8 +2383,10 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else { if (localStorage.getItem("hb_up10_toast")) return; localStorage.setItem("hb_up10_toast", "1"); localStorage.setItem("hb_up10_at", String(Date.now())); }
     } catch (e) { return; }
     const t = document.createElement("div"); t.className = "up10 has-th"; t.setAttribute("role", "status");
-    t.innerHTML = '<img class="up10-th" src="plan/th.jpg?v=1" alt="" aria-hidden="true"><div>' + (week
+    t.innerHTML = '<img class="up10-th" src="plan/th.jpg?v=1" alt="" aria-hidden="true" onerror="this.parentNode.className=&quot;up10&quot;;this.remove()"><div>' + (week
         ? '<b>🔥 ' + (nDays || 7) + ' дней с тренажёром!</b><p>Это уже привычка. Чтобы не потерять её до самого экзамена, мой планер ведёт график по всем темам ФИПИ и сам подстраивает его, если пропустил день.</p>'
+        : kind === "anat"
+        ? '<b>🔥 12 деталей тела уже изучено в 3D!</b><p>Человек — один из самых больших разделов ЕГЭ по биологии. Мой планер раскладывает все темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p>'
         : kind === "explore"
         ? '<b>🔥 Ты уже разобрался в 3D до молекул!</b><p>Чтобы так же пройти все темы ЕГЭ, а не только эту, — мой планер: раскладывает темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p>'
         : '<b>🔥 5 верных ответов. Ты в ритме!</b><p>Осталось его не потерять. Мой планер сам раскладывает темы ФИПИ до экзамена и пересчитывает график, если пропустил день.</p>') + '</div>' +
@@ -5172,23 +5198,32 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <span class="chl-pin-img"><img src="img/probirki.jpg?v=1" alt="Три пробирки: KMnO₄ в кислой, нейтральной и щелочной среде" decoding="async"><span class="chl-pin-tag">📌 3D-лаборатория · химия</span><span class="chl-pin-new">новое</span></span>
       <span class="chl-pin-in"><span><b>Пробирки</b><small>Капаешь реактивы сам: задание 24 и ОВР в трёх средах — KMnO₄, K₂Cr₂O₇, H₂O₂</small>${chlProg ? `<em>${chlProg}</em>` : ""}</span><span class="chl-pin-go">Открыть →</span></span>
     </button>`;
-    vList.innerHTML = planCard() + chlPin + v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
+    let anProg = "";
+    try { const n = (JSON.parse(localStorage.getItem("hb.anat.seen") || "[]") || []).length, t = +localStorage.getItem("hb.anat.total") || 263; if (n) anProg = `изучено ${n} из ${t} — продолжить`; } catch (e) {}
+    const anPin = state.subject !== "bio" ? "" : `<button type="button" class="chl-pin an-pin" id="an-pin">
+      <span class="chl-pin-img"><img src="img/anat.jpg?v=1" alt="Тело человека в 3D: скелет и органы" decoding="async"><span class="chl-pin-tag">📌 3D-анатомия · биология</span><span class="chl-pin-new">новое</span></span>
+      <span class="chl-pin-in"><span><b>Тело человека в 3D</b><small>Органы в разрезе, сердце бьётся, нефрон делает мочу — с ловушками ЕГЭ на каждой детали</small>${anProg ? `<em>${anProg}</em>` : ""}</span><span class="chl-pin-go">Открыть →</span></span>
+    </button>`;
+    vList.innerHTML = planCard() + chlPin + anPin + v3 + `<p class="intro">${intro}</p>` + groups.map(g => `
       <div class="group">
         <h2>${g}</h2>
         <div class="mods">${mods.filter(m => m.group === g).map(m => `
-          <button type="button" class="mod${m.ready ? "" : " soon"}${isNew(m) ? " hot" : ""}" data-mod="${m.id}">
+          <button type="button" class="mod${m.ready || m.a3d ? "" : " soon"}${isNew(m) ? " hot" : ""}${m.a3d ? " a3d" : ""}" data-mod="${m.id}">
             <b>${m.title}</b><p>${m.desc}</p><span class="st">${isNew(m) ? "новое · " : ""}${m.st}</span>
           </button>`).join("")}</div>
       </div>`).join("") +
       `<p class="ask-topic"><b>Темы выбираешь ты.</b> Новые модули выходят в моём канале <a href="https://t.me/matveri_md" data-tglink>matvéri</a>, там же голосуем за следующий.</p>`;
     document.getElementById("plan-open").addEventListener("click", planShow);
     const cp = document.getElementById("chl-pin"); if (cp) cp.addEventListener("click", () => hbOpenChem("pin"));
+    const ap = document.getElementById("an-pin"); if (ap) ap.addEventListener("click", () => hbOpenAnat("pin"));
     hbWatchUpsell();
     const v3b = document.getElementById("v3-mix");
     if (v3b) v3b.addEventListener("click", () => go({ tab: "quiz", module: null }));
     vList.querySelectorAll("[data-mod]").forEach(b => b.addEventListener("click", () => {
       const m = mods.find(x => x.id === b.dataset.mod);
       if (m.lab === "chem") hbOpenChem("list");
+      else if (m.lab === "anat") hbOpenAnat("list");
+      else if (m.a3d) hbOpenAnat("topic", m.a3d);
       else if (m.ready) go({ tab: "learn", module: m.id });
       else toast(state.subject === "bio" ? `«${m.title}» в работе — выйдет по порядку кодификатора. Новинки — в канале matvéri.` : `«${m.title}» в работе. Голосуй за эту тему в канале matvéri, если хочешь её раньше.`);
     }));
@@ -6845,6 +6880,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
   else if (h === "plan" || h === "planp") { go({}, { noScroll: true }); planShow(h === "planp" ? "push" : "bot"); }   /* planp — кнопка «Забрать планер» в сообщении бота */
   else if (h === "ovr") go({ subject: "chem", module: "ovr" }, { noScroll: true });
+  else if (h === "anat" || String(h || "").startsWith("anat-")) { go({ subject: "bio" }, { noScroll: true }); hbOpenAnat("start", h.split("-")[1]); }
   else if (h === "probirki" || h === "probovr" || h === "problab" || h === "prob24") { go({ subject: "chem" }, { noScroll: true }); hbOpenChem("start", { probovr: "ovr", problab: "lab", prob24: "task" }[h]); }
   else if (h === "cell3d") { go({ subject: "bio", module: "kl-org" }, { noScroll: true }); hbOpen3D("start"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }

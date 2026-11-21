@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>Анатомия 3D — прототип</title>
+<style>
+:root{--bg:#04060c;--panel:rgba(14,20,34,.82);--line:rgba(120,170,255,.16);--txt:#eaf1ff;--mut:#8b9bb8;--acc:#4fd6ff;--hot:#ff8a3d;--good:#3ee08f;--bad:#ff5a6a}
+[hidden]{display:none!important}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:15px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+#bg{position:fixed;inset:0;background:radial-gradient(120% 70% at 50% 38%,#11233f 0%,#071022 45%,#03050a 100%)}
+#bg:after{content:"";position:absolute;left:-20%;right:-20%;bottom:0;height:42%;background:repeating-linear-gradient(90deg,rgba(79,214,255,.07) 0 1px,transparent 1px 46px),repeating-linear-gradient(0deg,rgba(79,214,255,.07) 0 1px,transparent 1px 46px);transform:perspective(420px) rotateX(62deg);transform-origin:bottom;mask:linear-gradient(transparent,#000 70%)}
+canvas{position:fixed;inset:0;display:block;touch-action:none}
+.top{position:fixed;top:0;left:0;right:0;padding:calc(env(safe-area-inset-top) + 10px) 14px 0;display:flex;align-items:center;gap:10px;z-index:5}
+.back{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--txt);font-size:22px;backdrop-filter:blur(10px)}
+.ttl{flex:1}.ttl b{display:block;font-size:17px;letter-spacing:.2px}.ttl span{font-size:12px;color:var(--mut)}
+.pill{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:12px;color:var(--mut)}
+.tabs{position:fixed;top:calc(env(safe-area-inset-top) + 58px);left:12px;right:12px;display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(10px);z-index:5}
+.tabs button{flex:1;border:0;background:none;color:var(--mut);padding:8px 2px;border-radius:10px;font:600 13px/1 inherit}
+.tabs button.on{background:linear-gradient(180deg,#1d3d66,#13294a);color:#fff;box-shadow:inset 0 0 0 1px rgba(79,214,255,.35)}
+.chips{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 12px);display:flex;gap:6px;overflow-x:auto;padding:0 12px;z-index:5;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:6px;padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font-size:13px;backdrop-filter:blur(10px)}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--c);opacity:.35}
+.chip.on{color:#fff;border-color:rgba(255,255,255,.22)}.chip.on i{opacity:1;box-shadow:0 0 8px var(--c)}
+.sheet{position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 58px);padding:14px 14px 12px;border-radius:18px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(14px);z-index:6;transform:translateY(0);transition:transform .25s,opacity .25s}
+.sheet.off{opacity:0;pointer-events:none;transform:translateY(20px)}
+.sheet{max-height:48vh;overflow-y:auto}
+.stepbox{max-height:31vh;overflow-y:auto}.sbh{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px}.chev{font-size:14px;color:var(--mut);transition:transform .2s}.stepbox.fold p,.stepbox.fold .trap{display:none}.stepbox.fold .chev{transform:rotate(180deg)}
+.grab{width:44px;height:5px;border-radius:3px;background:rgba(255,255,255,.35);margin:-4px auto 8px;cursor:pointer;position:relative}.grab:after{content:'';position:absolute;inset:-12px -30px}
+.sheet #sh{cursor:pointer}
+@media (max-height:720px){.sheet h3{font-size:17px}.sheet li{font-size:13.5px;margin:2px 0}.sheet .trap,.stepbox{font-size:12.5px}.sheet .btn{padding:9px 6px;font-size:13px}.tag{margin-bottom:4px}.stepbox b{font-size:14px}}
+.sheet.mini ul,.sheet.mini .trap,.sheet.mini .tag{display:none}.sheet.mini{padding:10px 12px}.sheet.mini h3{font-size:16px;padding-right:36px}.sheet.mini .row{margin-top:8px}
+.sheet h3{margin:0 0 2px;font-size:19px}.tag{display:inline-block;font-size:11px;padding:3px 8px;border-radius:999px;background:rgba(79,214,255,.12);color:var(--acc);margin-bottom:8px}
+.sheet ul{margin:0 0 8px;padding-left:18px}.sheet li{margin:3px 0}
+.trap{display:flex;gap:8px;padding:9px 10px;border-radius:12px;background:rgba(255,138,61,.1);border:1px solid rgba(255,138,61,.3);font-size:13.5px}
+.trap b{color:var(--hot)}
+.x{position:absolute;right:10px;top:10px;width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:none;color:var(--mut);font-size:16px}
+.row{display:flex;gap:8px;margin-top:10px}.btn{flex:1;padding:11px;border-radius:12px;border:1px solid var(--line);background:#132643;color:#fff;font:600 14px/1 inherit}
+.btn.hot{background:linear-gradient(180deg,#ff9a4d,#ff6a2a);border:0}
+.slider{position:fixed;left:14px;right:14px;bottom:calc(env(safe-area-inset-bottom) + 14px);z-index:6;padding:12px 14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(10px)}
+.shrow{display:flex;gap:6px}.shrow .btn{padding:11px 4px;font-size:13px;white-space:nowrap}.shrow #shSnd{flex:0 0 46px}.slider{padding:8px!important}
+.shl{position:fixed;z-index:4;transform:translateX(-50%);font-size:11.5px;font-weight:600;color:#e8f0ff;text-align:center;line-height:1.15;max-width:31vw;pointer-events:none;opacity:0;transition:opacity .25s}.shl.on{opacity:1}.shl:after{content:'';display:block;margin:4px auto 0;width:80%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#4fd6ff,transparent)}
+.slider label{display:flex;justify-content:space-between;font-size:13px;color:var(--mut);margin-bottom:8px}
+input[type=range]{width:100%;accent-color:var(--acc)}
+.q{position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 12px);z-index:6;padding:14px;border-radius:18px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(14px)}
+.q .h{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);margin-bottom:6px}
+.q h4{margin:0 0 10px;font-size:17px}.q h4 em{color:var(--hot);font-style:normal}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.opts button{padding:12px 8px;border-radius:12px;border:1px solid var(--line);background:#0f1e36;color:#fff;font:600 13.5px/1.2 inherit;min-height:48px}
+.opts button.good{background:rgba(62,224,143,.18);border-color:var(--good)}.opts button.bad{background:rgba(255,90,106,.16);border-color:var(--bad)}
+.legend{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 14px);left:10px;right:10px;z-index:5;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.legend .pill{display:flex;align-items:center;gap:6px;color:#dfe8ff}.legend i{width:9px;height:9px;border-radius:50%}
+.orgs{position:fixed;top:calc(env(safe-area-inset-top) + 112px);left:0;right:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:0 12px;scrollbar-width:none}.orgs::-webkit-scrollbar{display:none}
+.orgs button{flex:none;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:#dfe8ff;font:600 12.5px/1 inherit;backdrop-filter:blur(10px)}
+.orgs button.on{background:#ffd23f;color:#1a1300;border-color:#ffd23f}.orgs button.soon{opacity:.45}
+.stepbox{padding:11px 12px;border-radius:14px;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(12px);font-size:13px}.stepbox b{font-size:15px}.stepbox p{margin:5px 0 8px;color:#dfe8ff}
+#steps .btn{font-size:12px;padding:9px 2px}#steps .btn.on{background:#ffd23f;color:#1a1300}
+.hbar{position:fixed;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 12px);z-index:6;display:flex;flex-direction:column;gap:8px}
+.hbar .row{margin:0;gap:6px}.hbar .btn{padding:10px 4px;font-size:13px}.hbar .btn.on{background:linear-gradient(180deg,#1d3d66,#13294a);box-shadow:inset 0 0 0 1px rgba(79,214,255,.5)}
+.leg{display:flex;justify-content:center;gap:14px;font-size:12px;color:var(--mut)}.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.cut{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;background:var(--panel);border:1px solid var(--line);font-size:12px;color:var(--mut)}.cut input{flex:1}
+#co{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:4;pointer-events:none}
+.co{position:fixed;z-index:5;transform:translateY(-50%);font-size:11.5px;font-weight:600;padding:4px 8px;border-radius:8px;background:rgba(6,12,24,.82);border:1px solid rgba(255,255,255,.16);white-space:nowrap;color:#e6eeff;pointer-events:auto}
+.co i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px;box-shadow:0 0 0 1.5px rgba(255,255,255,.75)}
+.co.sel{background:#ffd23f;color:#1a1300;border-color:#ffd23f}
+.lbl{position:fixed;z-index:4;pointer-events:none;transform:translate(-50%,-50%);font-size:11.5px;font-weight:600;padding:3px 7px;border-radius:8px;background:rgba(4,8,16,.72);border:1px solid rgba(255,255,255,.14);white-space:nowrap}
+.load{position:fixed;inset:0;display:grid;place-items:center;z-index:9;color:var(--mut)}
+.credit{position:fixed;right:8px;top:calc(env(safe-area-inset-top) + 160px);z-index:4;font-size:9.5px;color:rgba(139,155,184,.6);writing-mode:vertical-rl}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 112px);transform:translateX(-50%);z-index:7;padding:8px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-size:13px}
+@media (min-width:700px){.tabs{left:50%;right:auto;width:560px;transform:translateX(-50%)}
+ .hbar,.slider,.q,.chips,.legend{left:50%!important;right:auto!important;width:min(600px,calc(100% - 20px));transform:translateX(-50%)}
+ .chips>*:first-child,.orgs>*:first-child{margin-left:auto}.chips>*:last-child,.orgs>*:last-child{margin-right:auto}.top{max-width:900px;margin:0 auto}}
+@media (min-width:900px){.sheet{left:auto;right:16px;width:380px;bottom:16px;top:auto;max-height:calc(100vh - 140px)}.sheet.off{transform:translateX(20px)}
+ .stepbox{max-height:none}.sheet.mini{width:340px}}
+</style></head><body>
+<div id="bg"></div>
+<div class="load" id="load">Загружаю тело… <span id="lp"></span></div>
+<div class="top"><button class="back">‹</button><div class="ttl"><b>Анатомия 3D</b><span id="sub">тапни на любой орган</span></div><span class="pill" id="cnt">0 / 92 изучено</span></div>
+<div class="tabs" id="tabs"><button data-m="atlas" class="on">Атлас</button><button data-m="explode">Разбери</button><button data-m="heart">Органы</button><button data-m="quiz">Угадай</button></div>
+<div class="orgs" id="orgs" hidden><button data-s="heart" class="on">❤️ Сердце</button><button data-s="brain">🧠 Мозг</button><button data-s="kidney">🫘 Почка</button><button data-s="nephron">🔬 Нефрон</button><button data-s="lungs">🫁 Лёгкие</button><button data-s="stomach">🍽 Желудок</button><button data-s="gland">🧫 Железа желудка</button><button data-s="villus">🌿 Ворсинки</button><button data-s="eye">👁 Глаз</button><button data-s="spine">⚡ Рефлекс</button><button data-s="neuron">🧬 Нейрон и нерв</button><button data-s="skin">🧴 Кожа</button><button data-s="bone">🦴 Кость</button><button data-s="joints">🦵 Суставы</button><button data-s="muscle">💪 Мышца</button></div>
+<div class="credit">3D-модели: BodyParts3D, © DBCLS</div>
+<div class="legend" id="legend" hidden></div>
+<div class="chips" id="chips"></div>
+<div class="sheet" id="sheet" hidden><div class="grab" id="sgrab"></div><button class="x" id="sx">✕</button><span class="tag" id="stag"></span><h3 id="sh"></h3><ul id="sf"></ul><div class="trap"><span>⚠️</span><div><b>Ловушка ЕГЭ:</b> <span id="st"></span></div></div><div class="row"><button class="btn hot" id="sinn" hidden>🔍 Строение внутри</button><button class="btn" id="siso">Показать отдельно</button><button class="btn" id="sinfo" hidden>ⓘ Факты</button><button class="btn" id="shide">Скрыть</button></div></div>
+<div class="slider" id="slider" hidden><div class="shrow"><button class="btn hot" id="shOrg">💥 Органы</button><button class="btn" id="shSk">🦴 Скелет</button><button class="btn" id="shBack" disabled>↺ Собрать</button><button class="btn on" id="shSnd">🔊</button></div></div><div id="shl"></div>
+<div class="q" id="q" hidden><div class="h"><span id="qn">Вопрос 1 / 10</span><span id="qs">🔥 0 подряд · ✅ 0</span></div><h4>Что подсвечено <em>оранжевым</em>?</h4><div class="opts" id="qo"></div></div>
+<div id="lbls"></div><svg id="co"></svg><div id="cos"></div>
+<div class="hbar" id="hbar" hidden><div class="cut" id="cutrow" hidden><span>глубина</span><input type="range" id="cutd" min="0" max="100" value="55"><span>✂️</span></div>
+<div class="stepbox" id="stepbox" hidden><div class="sbh" id="sbh"><b id="stt"></b><span class="chev">▾</span></div><p id="stx"></p><div class="trap"><span>⚠️</span><div><b>Ловушка ЕГЭ:</b> <span id="stw"></span></div></div></div>
+<div class="row" id="steps" hidden></div><div class="leg" id="nleg" hidden><span><i style="background:#46b4ff"></i>вода</span><span><i style="background:#ffd23f"></i>глюкоза</span><span><i style="background:#4fe08a"></i>аминокисл.</span><span><i style="background:#c38bff"></i>мочевина</span><span><i style="background:#e0242a"></i>эритроциты</span></div>
+<div class="leg" id="hleg"><span><i style="background:#ff3030"></i>артериальная кровь</span><span><i style="background:#3f7bff"></i>венозная кровь</span></div>
+<div class="row" id="hrow"><button class="btn" id="bcut">✂️ Разрез</button><button class="btn on" id="bflow">🩸 Кровоток</button><button class="btn" id="bcirc">⟳ Оба круга</button><button class="btn on" id="bcol" hidden>🎨 Доли цветом</button><button class="btn hot" id="bneph" hidden>🔬 Как образуется моча →</button><button class="btn hot" id="bfire" hidden>⚡ Запустить рефлекс</button><button class="btn" id="bexp" hidden>🧩 По слоям</button><button class="btn" id="brays" hidden>💡 Лучи</button><button class="btn on" id="bbreath" hidden>🫁 Дыхание</button><button class="btn on" id="blbl" style="flex:0 0 48px">🏷</button></div></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from './vendor/OrbitControls.js';
+import {RoomEnvironment} from './vendor/RoomEnvironment.js';
+import {FACTS,SYS_LABEL} from './facts.js';
+import {buildKidney,buildNephron,STEPS,REFLEX,buildLungs,BREATH} from './organs.js';
+import {buildSkin,buildBone,buildJoints,buildMuscle,buildStomach,buildGland,buildVillus,buildEye,buildSpinal,buildNeuron} from './organs2.js';
+const $=id=>document.getElementById(id);
+const COL={skel:'#e9dfc8',musc:'#b9544b',heart:'#d8463f',nerv:'#e8b2a4',dig:'#dc9a68',resp:'#ee9aa6',uro:'#c0704f',endo:'#f2c14e',sens:'#cfe3ea',skin:'#5fd3ff'};
+const GCOL={vein:'#3c6fd1',cava:'#3c6fd1',pulmart:'#3c6fd1',portal:'#3c6fd1',pulmv:'#e0443a',aorta:'#e0443a',art:'#d23c34',liver:'#8e3a2c',spleen:'#7c3046',kidney:'#9b4636',teeth:'#f4f0e4',discs:'#9fc4cf',costal:'#b8d6d8',larynx:'#b8d6d8',bronchi:'#e9c4c8',rlung:'#f19aa8',llung:'#f19aa8',gallb:'#4f9a5a',pancr:'#e8c07a',smint:'#e6a882',colon:'#c98a63',stomach:'#e39a77',eye:'#f5f7fa',hemi:'#f0b8ab',cbl:'#e39c8f',ventr:'#b8443c',latr:'#b8443c',ratr:'#b8443c',cLV:'#ff3030',cLA:'#ff4a3d',cRV:'#3f7bff',cRA:'#4d86ff',aortv:'#ffe7b0',pulmvalve:'#ffe7b0',mitral:'#ffe0a8',tricusp:'#ffe0a8',semilun:'#ffe0a8',thymus:'#d9b7a0',diaphr:'#a8473f'};
+const SYSN={skin:'Кожа',skel:'Скелет',musc:'Мышцы',heart:'Сердце и сосуды',nerv:'Нервная',dig:'Пищеварение',resp:'Дыхание',uro:'Выделение',endo:'Эндокринная',sens:'Органы чувств'};
+// renderer
+const R=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;R.outputColorSpace=THREE.SRGBColorSpace;
+document.body.appendChild(R.domElement);R.localClippingEnabled=true;const cutPlane=new THREE.Plane(new THREE.Vector3(0,0,-1),1);let cut=false,flowOn=true;
+const S=new THREE.Scene();S.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),.04).texture;
+const hemi=new THREE.HemisphereLight(0xdfeaff,0x4a3a40,.6);S.add(hemi);
+const key=new THREE.DirectionalLight(0xfff1e0,1.6);key.position.set(1.5,3,2.5);S.add(key);
+const rim=new THREE.DirectionalLight(0x4fb3ff,2.2);rim.position.set(-2,1.5,-2.5);S.add(rim);
+const cam=new THREE.PerspectiveCamera(30,innerWidth/innerHeight,.01,30);
+const camL=new THREE.DirectionalLight(0xffffff,.5);camL.position.set(.3,.5,1);cam.add(camL);S.add(cam);
+const ctl=new OrbitControls(cam,R.domElement);ctl.enableDamping=true;ctl.minDistance=.15;ctl.maxDistance=30;ctl.autoRotateSpeed=.8;
+const BODY=new THREE.Vector3(0,.9,0);
+// load
+const man=await (await fetch('anat.json')).json();
+async function getBin(name){const np=man.parts&&man.parts[name];const t=np?(await Promise.all([...Array(np).keys()].map(async i=>(await fetch(name+'.'+i+'.b64.txt')).text()))).map(x=>x.trim()).join(''):await (await fetch(name+'.b64.txt')).text();const b=Uint8Array.from(atob(t.trim()),c=>c.charCodeAt(0));
+  return await new Response(new Blob([b]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();}
+const buf=await getBin('anat');
+$('load').remove();
+const [lo,hi]=man.bbox;const G={};const root=new THREE.Group();S.add(root);
+const fres=()=>new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{c:{value:new THREE.Color('#5fd3ff')},o:{value:1}},
+ vertexShader:'varying vec3 n;varying vec3 v;void main(){vec4 p=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);v=normalize(-p.xyz);gl_Position=projectionMatrix*p;}',
+ fragmentShader:'uniform vec3 c;uniform float o;varying vec3 n;varying vec3 v;void main(){float f=pow(1.-abs(dot(n,v)),2.6);gl_FragColor=vec4(c*(f*1.15+.025),1.)*o;}'});
+const NOISE=`float h3(vec3 p){p=fract(p*.3183099+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float n3(vec3 x){vec3 i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){return .5*n3(p)+.25*n3(p*2.03)+.125*n3(p*4.01);}`;
+const DBL=['ventr','latr','ratr','aorta','pulmart','cava','pulmv','bfront','bpar','btemp','bocc','prec','postc','insula','limbic','basal','bwhite','hemi','cc','thal','hypoth','midbr','pons','medulla','cbl'];
+function mkMat(g){const musc=g.sys==='musc',skel=g.sys==='skel',dbl=DBL.includes(g.k),org=!musc&&!skel;
+  const m=new THREE.MeshPhysicalMaterial({color:GCOL[g.k]||COL[g.sys],roughness:skel?.8:musc?.55:.45,metalness:0,clearcoat:skel?0:musc?.12:.3,clearcoatRoughness:.4,sheen:musc?.9:0,sheenColor:new THREE.Color('#ffb0a0'),sheenRoughness:.45,envMapIntensity:.55,transparent:true});
+  if(dbl)m.side=THREE.DoubleSide;
+  m.onBeforeCompile=sh=>{sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vOP;'+(musc?'attribute vec3 fdir;varying vec3 vFD;':'')).replace('#include <begin_vertex>','#include <begin_vertex>\nvOP=position;'+(musc?'vFD=fdir;':''));
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vOP;'+(musc?'varying vec3 vFD;':'')+NOISE).replace('#include <color_fragment>','#include <color_fragment>\n'+
+     (skel?'float nn=fbm(vOP*55.);diffuseColor.rgb*=.88+.2*nn;':'float nn=fbm(vOP*34.);diffuseColor.rgb*=.84+.3*nn;')+
+     (musc?'vec3 fd=normalize(vFD+1e-4);vec3 q=vOP-fd*dot(vOP,fd);float b1=n3(q*170.);float fb=n3(q*700.+3.1)*.6+n3(q*1500.)*.4;float aa=clamp(1.-length(fwidth(q*700.))*1.2,0.,1.);diffuseColor.rgb*=(.8+.34*b1)*mix(1.,.74+.42*fb,aa);':'')+
+     (dbl?'if(!gl_FrontFacing) diffuseColor.rgb=diffuseColor.rgb*0.55+vec3(0.08,0.0,0.0);':''));};
+  m.customProgramCacheKey=()=>'h'+(musc?1:0)+(skel?1:0)+(dbl?1:0);return m;}
+function addGroups(list,bf){for(const g of list){
+  const q=new Uint16Array(bf,g.po,g.nv*3),p=new Float32Array(g.nv*3);
+  for(let i=0;i<p.length;i++){const a=i%3;p[i]=lo[a]+q[i]/65535*(hi[a]-lo[a])-g.c[a];}
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(p,3));
+  geo.setIndex(new THREE.BufferAttribute(g.big?new Uint32Array(bf,g.io,g.ni):new Uint16Array(bf,g.io,g.ni),1));geo.computeVertexNormals();geo.computeBoundingBox();
+  if(g.fo!==undefined)geo.setAttribute('fdir',new THREE.BufferAttribute(new Int8Array(bf,g.fo,g.nv*3),3,true));
+  const mat=g.sys==='skin'?fres():mkMat(g);
+  const m=new THREE.Mesh(geo,mat);m.position.fromArray(g.c);m.userData=g;g.mesh=m;g.home=new THREE.Vector3().fromArray(g.c);g.size=geo.boundingBox.getSize(new THREE.Vector3()).length();
+  if(g.sys==='skin')m.renderOrder=10;root.add(m);G[g.k]=g;}}
+addGroups(man.groups.filter(g=>!g.b),buf);
+let muscReady=false;const muscP=(async()=>{await new Promise(r=>setTimeout(r,1200));const mb=await getBin('musc');addGroups(man.groups.filter(g=>g.b===1),mb);muscReady=true;
+  const t=Object.keys(FACTS).filter(k=>G[k]).length;TOTAL=t;$('cnt').textContent=`${seen.size} / ${TOTAL} изучено`;applyVis();})();
+const WALLS=['ventr','latr','ratr'],CAV=['cLV','cRV','cLA','cRA'],CLIP=['ventr','latr','ratr','aorta','pulmart','cava','pulmv'];
+const HEART=[...WALLS,...CAV,'mitral','tricusp','aortv','pulmvalve','aorta','pulmart','pulmv','cava','rlung','llung','trachea','bronchi'];
+const glowMat=new THREE.ShaderMaterial({transparent:true,depthTest:false,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{c:{value:new THREE.Color('#ffd23f')},o:{value:1}},
+ vertexShader:'varying vec3 n;varying vec3 v;void main(){vec4 p=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);v=normalize(-p.xyz);gl_Position=projectionMatrix*p;}',
+ fragmentShader:'uniform vec3 c;uniform float o;varying vec3 n;varying vec3 v;void main(){float f=pow(1.-abs(dot(n,v)),2.2);gl_FragColor=vec4(c*(f*1.5+.22),1.)*o;}'});
+let glowM=null;
+function glow(k){if(glowM){glowM.parent&&glowM.parent.remove(glowM);glowM=null;}if(!k)return;const cpl=G[k].mesh.material.clippingPlanes;if(cpl&&cpl.length)return;glowM=new THREE.Mesh(G[k].mesh.geometry,glowMat);glowM.renderOrder=50;G[k].mesh.add(glowM);}
+function baseCol(g){return g.col||GCOL[g.k]||COL[g.sys];}
+const P0=k=>new THREE.Vector3(4+k*6,1,0);
+const KID=buildKidney(G,P0(0)),NEPH=buildNephron(G,P0(1)),SPN=buildSpinal(G,P0(2)),EYE=buildEye(G,P0(3)),SKN=buildSkin(G,P0(4)),LNG=buildLungs(G,P0(5)),BON=buildBone(G,P0(6)),JNT=buildJoints(G,P0(7)),MUS=buildMuscle(G,P0(8)),STM=buildStomach(G,P0(9)),GLD=buildGland(G,P0(10)),VIL=buildVillus(G,P0(11)),NEU=buildNeuron(G,P0(12));
+const PROC={kidney:KID,nephron:NEPH,spine:SPN,eye:EYE,skin:SKN,lungs:LNG,bone:BON,joints:JNT,muscle:MUS,stomach:STM,gland:GLD,villus:VIL,neuron:NEU};for(const k in PROC){PROC[k].root.visible=false;S.add(PROC[k].root);}
+const off=(o,[t,p])=>[[t[0]+o.x,t[1]+o.y,t[2]+o.z],[p[0]+o.x,p[1]+o.y,p[2]+o.z]];
+const BRAIN=['bfront','bpar','btemp','bocc','prec','postc','insula','limbic','basal','bwhite','hemi','cc','thal','hypoth','midbr','pons','medulla','cbl','pituit','pineal','optic'];
+const BCOL={bfront:'#5aa2ff',prec:'#ff8a3d',postc:'#b98cff',bpar:'#ffd34d',btemp:'#4fd18b',bocc:'#ff6fae',insula:'#3fd6c8',cbl:'#e8a090',pons:'#c9a0ff',medulla:'#a58cff',midbr:'#e0b8ff',thal:'#7fe0ff',hypoth:'#ffb36b',cc:'#f4f4f4',pituit:'#ffd84a',pineal:'#ffe08a',basal:'#9fb6ff',limbic:'#ff9f9f',bwhite:'#efe6da',hemi:'#d8c8c0',optic:'#ffe08a'};
+let scn='heart',colOn=true;
+let stepK=null,stepI=0;
+const SC={kidney:{show:KID.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(KID.root.position,[[.12,-.2,0],[.9,.1,5.3]]),sub:'разрез почки',op:g=>g.op||1,nocut:1},
+ nephron:{show:NEPH.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(NEPH.root.position,[[-.15,-.25,0],[1.6,.3,8.6]]),sub:'как образуется моча',op:g=>g.op||1,nocut:1,pad:40},
+ spine:{show:SPN.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(SPN.root.position,[[-.9,0,0],[-.3,.45,3]]),sub:'спинной мозг и рефлекторная дуга',op:g=>g.op||1,nocut:1},
+ eye:{show:EYE.keys,clip:EYE.keys,cutHide:[],n:[0,0,-1],rng:[0,0],def:100,cam:off(EYE.root.position,[[.05,0,0],[.6,.35,3]]),sub:'глаз: разрез и слои',op:g=>g.op||1,nocut:1},
+ skin:{show:SKN.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(SKN.root.position,[[0,.35,0],[1.1,1.1,3]]),sub:'кожа в разрезе',op:g=>g.op||1,nocut:1},
+ bone:{show:BON.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(BON.root.position,[[.05,0,0],[1.4,.5,3]]),sub:'трубчатая кость в разрезе',op:g=>g.op||1,nocut:1},
+ joints:{show:JNT.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(JNT.root.position,[[0,.05,0],[.6,.4,3]]),sub:'типы соединения костей',op:g=>g.op||1,nocut:1},
+ muscle:{show:MUS.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(MUS.root.position,[[.25,.35,0],[2.0,1.0,3]]),sub:'строение скелетной мышцы',op:g=>g.op||1,nocut:1},
+ stomach:{show:STM.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(STM.root.position,[[.45,.25,0],[.15,.3,3]]),sub:'желудок в разрезе',op:g=>g.op||1,nocut:1},
+ gland:{show:GLD.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(GLD.root.position,[[0,0,0],[.5,.3,3]]),sub:'железа желудка: клетки и сок',op:g=>g.op||1,nocut:1},
+ villus:{show:VIL.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(VIL.root.position,[[0,.35,0],[.9,.7,3]]),sub:'ворсинки тонкой кишки',op:g=>g.op||1,nocut:1},
+ neuron:{show:NEU.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(NEU.root.position,[[.15,.4,0],[.5,.6,3]]),sub:'нейрон и строение нерва',op:g=>g.op||1,nocut:1},
+ lungs:{show:LNG.keys,clip:[],cutHide:[],n:[0,0,-1],rng:[1,1],def:0,cam:off(LNG.root.position,[[1.0,-.45,0],[1.15,-.2,3]]),sub:'вдох, выдох и газообмен',op:g=>g.op||1,nocut:1},
+ heart:{show:HEART,clip:CLIP,cutHide:CAV,n:[0,0,-1],rng:[.06,-.01],def:55,cam:[[.022,1.312,.02],[.16,1.35,.78]],sub:'кровь по двум кругам',
+   op:g=>['rlung','llung','trachea','bronchi'].includes(g.k)?.13:WALLS.includes(g.k)?(cut?1:.42):CAV.includes(g.k)?.55:1},
+ brain:{show:BRAIN,clip:BRAIN.filter(k=>!['pituit','pineal','optic'].includes(k)),cutHide:[],hideUncut:['bwhite','basal','limbic','hemi'],n:[-1,0,0],rng:[.09,0],def:100,cam:[[0,1.59,-.005],[.8,1.66,.2]],sub:'доли коры и отделы мозга',col:BCOL,op:g=>1}};
+let TOTAL=Object.keys(FACTS).filter(k=>G[k]).length;
+const SKULL=['frontal','parietal','temporal','occipital','sphenoid','ethmoid','maxilla','mandible','zygomatic','nasal','skull_s','teeth'];
+// ---------- state
+const QS=new URLSearchParams(location.search),EMB=QS.get('embed')==='1';let _seen=[];try{_seen=JSON.parse(localStorage.getItem('hb.anat.seen')||'[]')||[];}catch(e){}
+let mode='atlas',vis=new Set(['skin','skel','heart','nerv','dig','resp','uro','endo','sens']),sel=null,iso=null,seen=new Set(_seen),ex=0,exT=0,beat=false;
+const isOrgSys=s=>['dig','resp','uro','endo'].includes(s);
+function applyVis(){
+  for(const g of Object.values(G)){
+    let on=vis.has(g.sys);
+    if(mode==='heart')on=SC[scn].show.includes(g.k)&&!(SC[scn].hideUncut&&!cut&&SC[scn].hideUncut.includes(g.k));
+    if(mode==='quiz')on=quizVis(g);if(mode==='explode'&&shelf)on=shelf.keys.has(g.k)||shelf.bg.includes(g.sys);
+    if(CAV.includes(g.k)&&mode!=='heart')on=false;if(g.proc&&mode!=='heart')on=false;if(iso)on=g.k===iso;
+    g.mesh.visible=on;
+    const m=g.mesh.material;if(m.isShaderMaterial)continue;
+    let op=1;
+    if(mode==='atlas'&&!iso&&vis.has('musc')&&g.sys!=='musc'&&!['skel'].includes(g.sys))op=.9;
+    if((g.k==='art'||g.k==='vein')&&mode==='atlas')op=.85;
+    if(mode==='heart'){const sc=SC[scn];op=sc.op(g);if(cut&&sc.cutHide.includes(g.k)&&g.k!==sel)on=false;g.mesh.visible=on;m.clippingPlanes=cut&&sc.clip.includes(g.k)?[cutPlane]:null;m.color.set(sc.col&&colOn&&sc.col[g.k]||baseCol(g));}
+    if(mode==='explode'&&shelf&&!shelf.keys.has(g.k))op=.1;
+    if(sel&&g.k!==sel&&mode!=='quiz')op=Math.min(op,mode==='heart'?(WALLS.includes(g.k)&&cut?.55:.2):.14);if(mode==='heart'&&g.k===sel&&CAV.includes(g.k))op=.9;
+    m.opacity=op;m.depthWrite=op>.5;m.emissive.set(g.k===sel?(g.hl||GCOL[g.k]||COL[g.sys]):'#000');m.emissiveIntensity=g.k===sel?.35:0;m.needsUpdate=true;
+  }
+  const gk=sel||(mode==='heart'?stepK:null);glow(gk&&G[gk]&&G[gk].mesh.visible?gk:null);for(const k in PROC)PROC[k].root.visible=mode==='heart'&&scn===k;{
+  }
+}
+// ---------- chips
+function toast(x){const t=document.createElement('div');t.className='toast';t.textContent=x;document.body.appendChild(t);setTimeout(()=>t.remove(),1600);}
+function chips(){
+  const c=$('chips');c.innerHTML='';
+  for(const s of ['skin','skel','musc','heart','nerv','dig','resp','uro','endo','sens']){
+    const b=document.createElement('button');b.className='chip'+(vis.has(s)?' on':'');b.style.setProperty('--c',COL[s]);b.innerHTML=`<i></i>${SYSN[s]}`;
+    b.onclick=()=>{vis.has(s)?vis.delete(s):vis.add(s);if(s==='musc'&&!muscReady)toast('Мышцы загружаются…');chips();applyVis();};c.appendChild(b);
+  }
+}
+// ---------- pick
+const ray=new THREE.Raycaster(),ptr=new THREE.Vector2();let down=null;
+R.domElement.addEventListener('pointerdown',e=>{if(shelf)shelf.user=true;down=[e.clientX,e.clientY];ctl.autoRotate=false;});
+R.domElement.addEventListener('pointerup',e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>6)return;
+  if(mode!=='atlas'&&mode!=='explode'&&mode!=='heart')return;
+  ptr.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);ray.setFromCamera(ptr,cam);
+  const extra=[];if(mode==='heart'&&PROC[scn])PROC[scn].root.traverse(o=>{if(o.isMesh&&o.userData&&o.userData.k&&o.visible&&o.parent.visible&&!G[o.userData.k]?.mesh?.isSameAs)extra.push(o);});
+  const hits=ray.intersectObjects([...new Set([...Object.values(G).map(g=>g.mesh).filter(m=>m.visible&&m.parent.visible&&!m.material.isShaderMaterial&&m.material.opacity>.3),...extra.filter(o=>o.material.opacity>.3||o.material.transparent===false)])],false);
+  for(let i=hits.length-1;i>=0;i--){const cp=hits[i].object.material.clippingPlanes;if(cp&&cp.length&&cp[0].distanceToPoint(hits[i].point)<0)hits.splice(i,1);}
+  if(!hits.length)return closeSheet();let h=hits[0],k=h.object.userData.k;if(k==='ncaps'&&hits.find(x=>x.object.userData.k==='nglom'))k='nglom';
+  if(mode==='heart'&&scn==='heart'){if(['rlung','llung','trachea','bronchi'].includes(k)&&hits[1])h=hits.find(x=>!['rlung','llung','trachea','bronchi'].includes(x.object.userData.k))||h,k=h.object.userData.k;
+    if(WALLS.includes(k)){let best=1e9;for(const c of CAV){const d=G[c].home.distanceTo(h.point);if(d<best){best=d;k=c;}}}}
+  select(k);});
+function select(k){sel=k;const g=G[k],f=FACTS[k]||FACTS.muscle;const fresh=!seen.has(k);seen.add(k);try{localStorage.setItem('hb.anat.seen',JSON.stringify([...seen]));localStorage.setItem('hb.anat.total',String(TOTAL));}catch(e){}
+  if(EMB&&fresh)try{parent.postMessage({hb:'anat-seen',k,n:seen.size,total:TOTAL},'*');}catch(e){}$('cnt').textContent=`${seen.size} / ${TOTAL} изучено`;
+  $('sh').textContent=g.ru;$('stag').textContent=SYS_LABEL[k]||SYSN[g.sys];$('sf').innerHTML=f.f.map(x=>`<li>${x}</li>`).join('');$('st').textContent=f.t;
+  const IN={skin:'skin',rlung:'lungs',llung:'lungs',trachea:'lungs',bronchi:'lungs',diaphr:'lungs',femur:'bone',humerus:'bone',tibia:'bone',hip:'joints',stomach:'stomach',smint:'villus',duoden:'villus',esoph:'stomach',eye:'eye',spleen:null,nerves:'spine',kidney:'kidney',ureter:'kidney',ventr:'heart',latr:'heart',ratr:'heart',aorta:'heart',bfront:'brain',bpar:'brain',btemp:'brain',bocc:'brain',prec:'brain',postc:'brain',cbl:'brain',pons:'brain',medulla:'brain',midbr:'brain'};const IK=IN[k]||(g.sys==='musc'?'muscle':null);$('sinn').hidden=mode==='heart'||!IK;$('sinn').onclick=()=>{const t=IK;closeSheet();scn=t;setMode('heart');};
+  $('sheet').hidden=false;$('chips').style.visibility='hidden';$('hbar').hidden=true;$('siso').hidden=mode==='heart';$('shide').hidden=mode==='heart';setMini(false);applyVis();if(mode!=='heart'&&!(mode==='explode'&&shelf))focusSel(g);}
+function focusFit(g,topPx,botPx,dirV){const H=innerHeight,vf=THREE.MathUtils.degToRad(cam.fov),tv=Math.tan(vf/2),r=g.size*g.mesh.scale.x/2,avail=Math.max(120,botPx-topPx);
+  const wide=innerWidth>=900,W=innerWidth,aw=wide?W-410:W,k=wide?1.55:1.25;const d=Math.max(r/(tv*(avail/H))*k,r/(tv*cam.aspect*(aw/W))*k,.12);const t=g.mesh.getWorldPosition(new THREE.Vector3());const yc=(topPx+botPx)/2;t.y-=(H/2-yc)/H*2*d*tv;
+  const dir=(dirV||cam.position.clone().sub(ctl.target)).normalize();if(wide){const rt=new THREE.Vector3().crossVectors(V(0,1,0),dir).normalize();t.addScaledVector(rt,-(W/2-aw/2)/W*2*d*tv*cam.aspect);}fl={t0:ctl.target.clone(),p0:cam.position.clone(),t1:t,p1:t.clone().add(dir.multiplyScalar(d)),s:performance.now()};}
+function focusSel(g){ctl.autoRotate=false;requestAnimationFrame(()=>focusFit(g,$('tabs').getBoundingClientRect().bottom+8,innerWidth>=900?innerHeight-16:$('sheet').getBoundingClientRect().top-8));}
+function closeSheet(){const wasIso=iso;sel=null;iso=null;setMini(false);ctl.autoRotateSpeed=.8;if(wasIso){ctl.autoRotate=false;if(mode==='explode'&&shelf)shelfCam(true);else if(mode!=='heart')fly(null);}$('sheet').hidden=true;$('chips').style.visibility=mode==='atlas'?'visible':'hidden';$('hbar').hidden=mode!=='heart';$('siso').textContent='Показать отдельно';applyVis();}
+$('sx').onclick=()=>{if(iso&&!$('sheet').classList.contains('mini'))return setMini(true);closeSheet();};
+function setMini(on){$('sheet').classList.toggle('mini',on);$('sinfo').hidden=!on;$('shide').hidden=on||mode==='heart';$('siso').hidden=mode==='heart'&&!on?true:$('siso').hidden;}
+$('sinfo').onclick=()=>setMini(false);
+$('sgrab').onclick=()=>setMini(!$('sheet').classList.contains('mini'));$('sh').onclick=()=>setMini(!$('sheet').classList.contains('mini'));
+$('sbh').onclick=()=>$('stepbox').classList.toggle('fold');
+$('siso').onclick=()=>{iso=iso?null:sel;$('siso').textContent=iso?'Вернуть тело':'Показать отдельно';applyVis();
+  if(iso){setMini(true);if(shelf){ctl.enableRotate=true;ctl.enableZoom=true;ctl.touches.ONE=THREE.TOUCH.ROTATE;ctl.mouseButtons.LEFT=THREE.MOUSE.ROTATE;}const g=G[iso];requestAnimationFrame(()=>focusFit(g,$('tabs').getBoundingClientRect().bottom+8,innerWidth>=900?innerHeight-16:$('sheet').getBoundingClientRect().top-8,V(.25,.12,1)));ctl.autoRotate=true;ctl.autoRotateSpeed=2.2;}
+  else{setMini(false);ctl.autoRotate=false;ctl.autoRotateSpeed=.8;if(mode==='explode'&&shelf)shelfCam(true);else fly(null);}};
+$('shide').onclick=()=>{const k=sel;closeSheet();G[k].mesh.visible=false;};
+// ---------- camera fly
+let fl=null;
+function fly(g,dist){const t=g?g.mesh.getWorldPosition(new THREE.Vector3()):BODY.clone();const d=dist||(g?THREE.MathUtils.clamp(g.size*2.6,.28,2.2):3.55);
+  const dir=cam.position.clone().sub(ctl.target).normalize();fl={t0:ctl.target.clone(),p0:cam.position.clone(),t1:t,p1:t.clone().add(dir.multiplyScalar(d)),s:performance.now()};}
+function setView(t,p){fl=null;ctl.target.copy(t);cam.position.copy(p);}
+// ---------- explode
+function explodeOffsets(k){
+  for(const g of Object.values(G)){if(g.proc)continue;
+    const h=g.home,o=new THREE.Vector3();
+    if(SKULL.includes(g.k))o.set(h.x*3.2,(h.y-1.6)*1.6+.12,h.z*3+.1).multiplyScalar(k);
+    else if(g.sys==='nerv'&&g.k!=='nerves')o.set(h.x*2.5,.32+(h.y-1.64)*2,.05+h.z*2).multiplyScalar(k);
+    else if(isOrgSys(g.sys)||['heart'].includes(g.sys)&&!['art','vein'].includes(g.k)||g.k==='spleen'){o.set(h.x*3.2,(h.y-1.17)*1.25,.62+h.z*2).multiplyScalar(k);}
+    else if(g.sys==='musc'){const r=new THREE.Vector3(h.x,0,h.z+.02);r.normalize().multiplyScalar(.28);o.copy(r).multiplyScalar(k);}
+    else if(g.sys==='sens')o.set(h.x*3,.15,.25).multiplyScalar(k);
+    else if(g.sys==='skel'){o.set(0,0,-.12).multiplyScalar(k);}
+    g.mesh.position.copy(h).add(o);
+    if(g.sys==='skin')g.mesh.material.uniforms.o.value=Math.max(0,1-k*2.2);
+    if(g.k==='art'||g.k==='vein')g.mesh.visible=vis.has('heart')&&k<.25;
+  }
+  $('spct').textContent=Math.round(k*100)+'%';
+}
+
+const SHL={org:[['Головной мозг',BRAIN.filter(k=>!['optic'].includes(k))],['Сердце',['ventr','latr','ratr','mitral','tricusp','aortv','pulmvalve']],['Трахея и бронхи',['trachea','bronchi','larynx','epiglottis']],
+  ['Правое лёгкое',['rlung']],['Пищевод',['esoph']],['Левое лёгкое',['llung']],['Печень',['liver']],['Желудок',['stomach']],['Селезёнка',['spleen']],
+  ['Жёлчный пузырь',['gallb']],['Поджелудочная',['pancr']],['Почки',['kidney']],['Тонкая кишка',['smint','duoden']],['Толстая кишка',['colon','rectum','append']],['Мочевой пузырь',['bladder']],
+  ['Надпочечники',['adrenal']],['Тимус',['thymus']],['Глаза',['eye']]],
+ skel:[['Череп',['frontal','parietal','temporal','occipital','sphenoid','ethmoid','maxilla','mandible','zygomatic','nasal','skull_s','teeth']],['Позвоночник',['cerv','thor','lumb','sacrum','discs']],['Грудная клетка',['ribs','costal','sternum']],
+  ['Пояс рук',['clavicle','scapula']],['Кости рук',['humerus','radius','ulna']],['Кисти',['carpal','metacarp','fingers']],['Таз',['hip']],['Кости ног',['femur','patella','tibia','fibula']],['Стопы',['tarsal','metatars','toes']]]};
+let shelf=null,sndOn=true,AC=null;
+function blip(i){if(!sndOn)return;try{AC=AC||new AudioContext();const t=AC.currentTime,o=AC.createOscillator(),gn=AC.createGain();o.type='sine';o.frequency.setValueAtTime(420*Math.pow(1.045,i),t);o.frequency.exponentialRampToValueAtTime(180,t+.16);
+  gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(.35,t+.008);gn.gain.exponentialRampToValueAtTime(.0001,t+.2);o.connect(gn).connect(AC.destination);o.start(t);o.stop(t+.22);}catch(e){}}
+const SHCAM=[V(0,.95,0),V(0,.95,4.6)];
+function shelfBack(){if(!shelf)return;ctl.enableRotate=false;ctl.enableZoom=false;ctl.touches.ONE=THREE.TOUCH.PAN;ctl.mouseButtons.LEFT=THREE.MOUSE.PAN;}
+function shelfCam(flyTo){shelfBack();const [t,p]=SHCAM;if(flyTo)fl={t0:ctl.target.clone(),p0:cam.position.clone(),t1:t.clone(),p1:p.clone(),s:performance.now()};else setView(t.clone(),p.clone());}
+function shelfStart(kind){if(shelf&&shelf.kind===kind)return;shelfReset();closeSheet();shelfCam(false);ctl.update();ctl.enableRotate=false;ctl.enableZoom=false;ctl.autoRotate=false;
+  const list=SHL[kind],Wp=innerWidth,Hp=innerHeight,top=$('tabs').getBoundingClientRect().bottom+10,bot=$('slider').getBoundingClientRect().top-6,Z0=.55,d=SHCAM[1].z-Z0,hh=d*Math.tan(THREE.MathUtils.degToRad(cam.fov/2)),cy=SHCAM[0].y;
+  const k=2*hh/Hp,toW=(px,py)=>V((px/Wp-.5)*2*hh*cam.aspect,cy+(.5-py/Hp)*2*hh,Z0);const availH=bot-top,C=Math.max(3,Math.min(list.length,Math.floor((Wp-16)/104),Math.round(Math.sqrt(list.length*(Wp-16)/availH)))),Rr=Math.ceil(list.length/C),gw=Math.min(Wp-16,C*Math.max(availH/Rr,110)*1.05),gx=(Wp-gw)/2,cw=gw/C,LBL=36;
+  const ch=Math.max((bot-top)/Rr,Math.min(150,cw*1.15));
+  $('shl').innerHTML='';
+  const items=list.map(([ru,keys],i)=>{keys=keys.filter(k=>G[k]);const r=i/C|0,c=i%C,box=new THREE.Box3();for(const k of keys)box.union(G[k].mesh.geometry.boundingBox.clone().translate(G[k].home));
+    const ctr=box.getCenter(V(0,0,0)),sz=box.getSize(V(0,0,0)),y0=top+ch*r,a0=toW(gx+cw*c+cw*.1,y0+6),a1=toW(gx+cw*c+cw*.9,y0+ch-LBL),cell=toW(gx+cw*c+cw/2,(y0+6+y0+ch-LBL)/2);
+    const s=Math.min((a1.x-a0.x)/sz.x,(a0.y-a1.y)/sz.y);const el=document.createElement('div');el.className='shl';el.textContent=ru;$('shl').appendChild(el);
+    return {ru,keys,ctr,s,cell,el,la:toW(gx+cw*c+cw/2,y0+ch-LBL+4),t0:i*.12,land:false};});
+  const over=Math.max(0,(top+ch*Rr)-bot);shelf={kind,items,t:0,dir:1,keys:new Set(items.flatMap(x=>x.keys)),bg:kind==='org'?['skel']:['skin'],scroll:over*k,top,bot};
+  ctl.touches.ONE=THREE.TOUCH.PAN;ctl.mouseButtons.LEFT=THREE.MOUSE.PAN;ctl.enablePan=true;ctl.screenSpacePanning=true;
+  $('shBack').disabled=false;$('shOrg').classList.toggle('on',kind==='org');$('shSk').classList.toggle('on',kind==='skel');
+  if(over>0)toast('Листай вниз — там ещё органы');applyVis();}
+function shelfLabels(){if(!shelf)return;$('slider').hidden=mode!=='explode'||!!iso;if(iso){for(const it of shelf.items)it.el.style.visibility='hidden';return;}for(const it of shelf.items){const v=it.la.clone().project(cam),x=(v.x+1)/2*innerWidth,y=(1-v.y)/2*innerHeight;
+  it.el.style.left=x+'px';it.el.style.top=y+'px';it.el.style.visibility=y<shelf.top-4||y>shelf.bot-16?'hidden':'visible';}}
+function shelfClamp(){if(!shelf)return;const y0=SHCAM[0].y,lo=y0-shelf.scroll;const ty=THREE.MathUtils.clamp(ctl.target.y,lo,y0),dy=ty-ctl.target.y;
+  ctl.target.set(0,ty,0);cam.position.set(0,cam.position.y+dy,SHCAM[1].z);cam.position.y=ty;}
+function shelfPose(){const st=shelf;for(const [i,it] of st.items.entries()){let u=THREE.MathUtils.clamp((st.t-it.t0)/.5,0,1);const c1=1.70158,e=u<=0?0:1+(c1+1)*Math.pow(u-1,3)+c1*Math.pow(u-1,2);
+    if(st.dir>0&&u>=1&&!it.land){it.land=true;it.el.classList.add('on');blip(i);}if(st.dir<0&&u<1&&it.land){it.land=false;it.el.classList.remove('on');}
+    for(const k of it.keys){const g=G[k],tgt=it.cell.clone().add(g.home.clone().sub(it.ctr).multiplyScalar(it.s));g.mesh.position.lerpVectors(g.home,tgt,e);g.mesh.scale.setScalar(1+(it.s-1)*e);}}
+  if(st.dir>0&&!st.user&&st.scroll>0&&!iso){const n=st.items.filter(x=>x.land).length/st.items.length,p=Math.max(0,(n-.4)/.6),e=p*p*(3-2*p),ty=SHCAM[0].y-st.scroll*e;ctl.target.y+=(ty-ctl.target.y)*.12;cam.position.y=ctl.target.y;}
+  const fade=Math.min(1,st.t/.6);const sk=G.skin.mesh.material.uniforms.o;sk.value=st.kind==='skel'?1-.75*fade:1-fade;}
+function shelfReset(){shelf=null;ctl.touches.ONE=THREE.TOUCH.ROTATE;ctl.mouseButtons.LEFT=THREE.MOUSE.ROTATE;ctl.enableZoom=true;for(const g of Object.values(G)){if(g.proc)continue;g.mesh.position.copy(g.home);g.mesh.scale.setScalar(1);}if(G.skin)G.skin.mesh.material.uniforms.o.value=1;$('shl').innerHTML='';$('shBack').disabled=true;
+  $('shOrg').classList.remove('on');$('shSk').classList.remove('on');ctl.enableRotate=true;}
+$('shOrg').onclick=()=>shelfStart('org');$('shSk').onclick=()=>shelfStart('skel');
+$('shBack').onclick=()=>{if(shelf){closeSheet();shelf.dir=-1;}};
+$('shSnd').onclick=()=>{sndOn=!sndOn;$('shSnd').classList.toggle('on',sndOn);$('shSnd').textContent=sndOn?'🔊 Звук':'🔇 Без звука';};
+// ---------- heart flow
+const flowG=new THREE.Group();S.add(flowG);let curves=[];const NP=150;let parts;
+function V(x,y,z){return new THREE.Vector3(x,y,z);}
+function buildFlow(){
+  const small=[[V(.005,1.29,.06),V(.02,1.335,.045),V(.022,1.355,.02),V(-.03,1.35,.005),V(-.085,1.31,0),V(-.06,1.29,-.02),V(.0,1.31,-.02),V(.02,1.318,-.004),V(.04,1.305,.02)],
+               [V(.005,1.29,.06),V(.02,1.335,.045),V(.03,1.355,.02),V(.07,1.35,.005),V(.1,1.31,0),V(.07,1.29,-.02),V(.035,1.31,-.018),V(.022,1.318,-.004),V(.04,1.305,.02)]];
+  const big=[[V(.045,1.29,.035),V(.025,1.335,.03),V(.012,1.375,.0),V(.02,1.35,-.04),V(.02,1.2,-.035),V(.01,1.0,-.02),V(.07,.8,.0),V(.0,.95,.04),V(-.02,1.1,.01),V(-.018,1.25,.015),V(-.014,1.3,.025),V(.005,1.29,.06)],
+             [V(.045,1.29,.035),V(.025,1.335,.03),V(.012,1.375,.0),V(.03,1.46,.01),V(.02,1.6,.02),V(-.03,1.55,.01),V(-.035,1.43,.015),V(-.02,1.35,.02),V(-.014,1.31,.025),V(.005,1.29,.06)]];
+  curves=[...small.map(p=>({c:new THREE.CatmullRomCurve3(p),small:1})),...big.map(p=>({c:new THREE.CatmullRomCurve3(p),small:0}))];
+  parts=new THREE.InstancedMesh(new THREE.SphereGeometry(.0028,8,6),new THREE.MeshBasicMaterial({toneMapped:false}),NP);parts.userData.p=[];
+  for(let i=0;i<NP;i++)parts.userData.p.push({c:i%curves.length,t:Math.random()});flowG.add(parts);
+}
+const cA=new THREE.Color('#ff3030'),cV=new THREE.Color('#3f7bff'),tmpM=new THREE.Matrix4(),tc=new THREE.Color();let circ=2;
+function flow(dt){if(!parts)return;
+  parts.userData.p.forEach((q,i)=>{const cv=curves[q.c];const show=circ===2||cv.small===(circ===0?1:0);
+    q.t=(q.t+dt*(cv.small?.22:.11))%1;const p=cv.c.getPoint(q.t);
+    const art=cv.small?q.t>.45:q.t<.55;tc.copy(art?cA:cV);
+    tmpM.makeScale(show?1:0,show?1:0,show?1:0).setPosition(p);parts.setMatrixAt(i,tmpM);parts.setColorAt(i,tc);});
+  parts.instanceMatrix.needsUpdate=true;parts.instanceColor.needsUpdate=true;}
+// heart labels
+const CO=[['cRA','Правое предсердие',V(-.03,1.318,.03)],['cRV','Правый желудочек',V(.008,1.285,.06)],['cLA','Левое предсердие',V(.042,1.33,-.01)],['cLV','Левый желудочек',V(.055,1.28,.03)],
+ ['aorta','Аорта',V(.006,1.378,.004)],['pulmart','Лёгочный ствол',V(.036,1.362,.03)],['cava','Верхняя полая вена',V(-.024,1.36,.018)],['pulmv','Лёгочные вены',V(.06,1.316,-.012)],
+ ['tricusp','Трёхстворчатый клапан',null,1],['mitral','Двустворчатый клапан',null,1],['aortv','Аортальный клапан',null,1],['pulmvalve','Клапан лёгочного ствола',null,1]];
+const L=1;SC.heart.co=CO;SC.brain.co=[['bfront','Лобная доля',null,0,L],['prec','Передняя центральная извилина',null,0,L],['postc','Задняя центральная извилина',null,0,L],['bpar','Теменная доля',null,0,L],
+ ['btemp','Височная доля',null,0,L],['bocc','Затылочная доля',null,0,L],['cbl','Мозжечок',null,0,L],['pons','Мост',null,0],['medulla','Продолговатый мозг',null,0],
+ ['cc','Мозолистое тело',null,1],['thal','Таламус',null,1],['hypoth','Гипоталамус',null,1],['midbr','Средний мозг',null,1],['pituit','Гипофиз',null,1],['pineal','Эпифиз',null,1]];
+SC.kidney.co=[['kcaps','Капсула'],['kcort','Корковое вещество'],['kmed','Мозговое вещество (пирамида)'],['kpap','Почечный сосочек'],['kcalyx','Чашечка'],['kpelv','Лоханка'],['kuret','Мочеточник'],['kart','Почечная артерия'],['kvein','Почечная вена']];
+SC.nephron.co=[['nzc','Корковое вещество'],['nzm','Мозговое вещество'],['nglom','Клубочек'],['ncaps','Капсула нефрона'],['naff','Приносящая артериола'],['neff','Выносящая артериола'],['npct','Каналец 1-го порядка'],['nloop','Петля Генле'],['ndct','Каналец 2-го порядка'],['ncd','Собирательная трубочка'],['ncap','Капилляры']];
+SC.lungs.co=[['ltr','Трахея'],['lbr','Бронхи'],['lrl','Правое лёгкое'],['lll','Левое лёгкое'],['lpl','Плевра'],['ldia','Диафрагма'],['lalv','Альвеолы'],['lcap','Капилляры']];
+SC.spine.co=[["screc", "Болевой рецептор"], ["nsens", "Чувствительный нейрон"], ["scgang", "Спинномозговой узел"], ["scdr", "Задний корешок"], ["scgd", "Задний рог"], ["nint", "Вставочный нейрон"], ["scga", "Передний рог"], ["scw", "Белое вещество"], ["sccan", "Центральный канал"], ["scvr", "Передний корешок"], ["nmot", "Двигательный нейрон"], ["scnrv", "Спинномозговой нерв"], ["scmus", "Мышца"]];
+SC.eye.co=[["ecorn", "Роговица"], ["eaq", "Передняя камера"], ["eiris", "Радужка"], ["epup", "Зрачок"], ["elens", "Хрусталик"], ["ezon", "Ресничные связки"], ["ecil", "Ресничное тело"], ["evit", "Стекловидное тело"], ["eret", "Сетчатка"], ["echor", "Сосудистая оболочка"], ["esclera", "Склера"], ["emac", "Жёлтое пятно"], ["eblind", "Слепое пятно"], ["eopt", "Зрительный нерв"]];
+SC.skin.co=[["skhair", "Волос"], ["skpore", "Пора"], ["skepi", "Эпидермис"], ["skseb", "Сальная железа"], ["skmusc", "Мышца волоса"], ["skfol", "Волосяной фолликул"], ["skderm", "Дерма"], ["skbulb", "Луковица волоса"], ["sksweat", "Потовая железа"], ["skrec", "Рецепторы"], ["skfat", "Гиподерма (жир)"]];
+SC.bone.co=[["bcart", "Суставной хрящ"], ["bspong", "Губчатое вещество"], ["bplate", "Пластинка роста"], ["bcomp", "Компактное вещество"], ["bmar", "Жёлтый костный мозг"], ["bves", "Сосуды"], ["bperi", "Надкостница"], ["bout", "Диафиз"]];
+SC.joints.co=[["jsut", "Шов — неподвижное"], ["jsemi", "Полуподвижное"], ["jdisc", "Хрящевой диск"], ["jsyn", "Сустав — подвижное"], ["jcart", "Суставной хрящ"], ["jcap", "Суставная сумка"]];
+SC.muscle.co=[["mbone", "Кость"], ["mtend", "Сухожилие"], ["mbelly", "Брюшко мышцы"], ["mfasc", "Фасция"], ["mcross", "Пучки (срез)"], ["mbund", "Пучок волокон"], ["mfib", "Мышечное волокно"], ["mmyo", "Миофибриллы"]];
+SC.stomach.co=[["geso", "Пищевод"], ["gser", "Серозная оболочка"], ["gmuc", "Слизистая (складки)"], ["glay", "Слои стенки"], ["gmus", "Мышечная оболочка"], ["gpyl", "Привратник"], ["gduo", "12-перстная кишка"]];
+SC.gland.co=[["gsurf", "Поверхностный эпителий"], ["gcmuc", "Добавочные — слизь"], ["gcpar", "Обкладочные — HCl"], ["gcend", "Эндокринные — гастрин"], ["gcchf", "Главные — пепсиноген"], ["glum", "Просвет железы"]];
+SC.villus.co=[["vvil", "Ворсинки"], ["vepi", "Эпителий"], ["vlam", "Соединительная ткань"], ["vart", "Капилляры (артер.)"], ["vven", "Капилляры (венозн.)"], ["vlym", "Лимфатический капилляр"], ["vcry", "Крипта"], ["vbase", "Стенка кишки"]];
+SC.neuron.co=[["nden", "Дендриты"], ["nbody", "Тело нейрона"], ["nnuc", "Ядро"], ["naxon", "Аксон"], ["nmyel", "Миелиновая оболочка"], ["nranv", "Перехват Ранвье"], ["nsyn", "Синапс с мышцей"], ["nmus", "Мышечные волокна"], ["nepi", "Оболочка нерва"], ["nfas", "Пучки волокон"], ["nves", "Сосуды"]];
+const LITE={heart:[['cRA','cRV','cLA','cLV','aorta','pulmart'],['tricusp','mitral','aortv','pulmvalve','cLV','cRV']],brain:[['bfront','bpar','btemp','bocc','cbl','medulla'],['cc','thal','hypoth','midbr','pituit','cbl']],
+  kidney:[['kcort','kmed','kpelv','kuret','kart','kvein']],nephron:[['nglom','ncaps','npct','nloop','ndct','ncd']],lungs:[['ltr','lrl','lll','ldia','lalv','lcap']],
+  spine:[['screc','nsens','scgang','nint','nmot','scmus']],eye:[['ecorn','eiris','elens','eret','esclera','eopt']],skin:[['skepi','skderm','skfat','skhair','skseb','sksweat']],
+  bone:[['bspong','bcomp','bmar','bperi','bcart','bves']],joints:[['jsut','jsemi','jsyn','jcap']],muscle:[['mtend','mbelly','mbund','mfib','mmyo','mfasc']],stomach:[['geso','gmuc','gmus','gpyl','gduo','glay']],
+  gland:[['gcmuc','gcpar','gcchf','gcend','gsurf','glum']],villus:[['vvil','vepi','vart','vven','vlym','vcry']],neuron:[['nden','nbody','naxon','nmyel','nranv','nsyn']]};
+const SHORT={'Верхняя полая вена':'Полая вена','Клапан лёгочного ствола':'Лёгочный клапан','Трёхстворчатый клапан':'Трёхстворчатый','Двустворчатый клапан':'Двустворчатый','Передняя центральная извилина':'Передняя центр. извилина','Задняя центральная извилина':'Задняя центр. извилина','Мозговое вещество (пирамида)':'Мозговое вещество','Капилляры вокруг канальцев':'Капилляры','Чувствительный нейрон':'Чувствит. нейрон','Двигательный нейрон':'Двигат. нейрон','Спинномозговой нерв':'Спинномозг. нерв','Спинномозговой узел':'Спинномозг. узел'};
+let lblOn=true;const narrow=()=>innerWidth<600;
+const coEl={};for(const sk in SC)for(const [k,t] of SC[sk].co){const d=document.createElement('div');d.className='co';const cc=G[k]?(G[k].hl||baseCol(G[k])):'#fff';d.innerHTML=`<i style="background:${cc}"></i>`+(narrow()&&SHORT[t]||t);d.dataset.c=cc;d.hidden=true;d.onclick=()=>select(k);$('cos').appendChild(d);coEl[sk+k]=d;}
+const latA={};function latAnchor(k){if(latA[k])return latA[k];const g=G[k],p=g.mesh.geometry.attributes.position;let mx=-1e9;for(let i=0;i<p.count;i++)mx=Math.max(mx,p.getX(i));
+  const v=new THREE.Vector3();let n=0;for(let i=0;i<p.count;i++)if(p.getX(i)>mx*.75){v.x+=p.getX(i);v.y+=p.getY(i);v.z+=p.getZ(i);n++;}return latA[k]=v.divideScalar(n).add(g.home);}
+function labels(){const svg=$('co');if(mode!=='heart'||!$('sheet').hidden&&false){svg.innerHTML='';for(const k in coEl)coEl[k].hidden=true;return;}
+  for(const k in coEl)if(!k.startsWith(scn))coEl[k].hidden=true;
+  const W=innerWidth,H=innerHeight,top=162,bot=H-(($('sheet').hidden)?150+(SC[scn].pad||0)+($('stepbox').hidden?0:150):330);const items=[];
+  const lite=LITE[scn]&&(LITE[scn][cut&&LITE[scn][1]?1:0]);for(const [k,t,p,valve,lat] of SC[scn].co){const el=coEl[scn+k];if(valve&&!cut&&sel!==k||!G[k].mesh.visible||k!==sel&&k!==stepK&&(!lblOn||scn==='eye'&&EYE.rays.visible||narrow()&&lite&&!lite.includes(k))){el.hidden=true;continue;}
+    const w=(p||G[k].home).clone();const pos=p?w:G[k].anchor?(G[k].anchorW?G[k].mesh.parent:G[k].mesh.parent).localToWorld(G[k].anchor.clone()):lat&&!cut?latAnchor(k):G[k].mesh.localToWorld(new THREE.Vector3());const v=pos.clone().project(cam);
+    const sx=(v.x+1)/2*W,sy=(1-v.y)/2*H;if(v.z>1||sy<top-20||sy>bot+20){el.hidden=true;continue;}items.push({k,el,sx,sy,side:sx<W*.5?0:1});}
+  let out='';for(const side of [0,1]){const L=items.filter(i=>i.side===side).sort((a,b)=>a.sy-b.sy);let y=top;
+    for(const i of L){i.y=Math.max(i.sy,y);y=i.y+27;}const over=y-27-bot;if(over>0)for(const i of L)i.y-=over;
+    for(const i of L){i.el.hidden=false;i.el.classList.toggle('sel',i.k===sel);const w=i.el.offsetWidth,L=Math.min(W/2-8,Math.max(170,W*.22)+w*.5);const x=side?Math.min(W-8-w,W/2+L-w):Math.max(8,W/2-L);i.el.style.left=x+'px';i.el.style.top=i.y+'px';
+      const ex=side?x:x+w,c=i.k===sel?'#ffd23f':(i.el.dataset.c||'#dfe8ff');
+      out+=`<polyline points="${ex},${i.y} ${ex+(side?-10:10)},${i.y} ${i.sx},${i.sy}" fill="none" stroke="rgba(0,0,0,.75)" stroke-width="3.6"/><polyline points="${ex},${i.y} ${ex+(side?-10:10)},${i.y} ${i.sx},${i.sy}" fill="none" stroke="${c}" stroke-width="1.6"/><circle cx="${i.sx}" cy="${i.sy}" r="4.6" fill="${c}" stroke-width="1.6" stroke="#000" stroke-width=".8"/>`;}}
+  svg.innerHTML=out;}
+// ---------- quiz
+const QP=['frontal','parietal','temporal','occipital','mandible','maxilla','zygomatic','cerv','thor','lumb','sacrum','ribs','sternum','clavicle','scapula','humerus','radius','ulna','carpal','hip','femur','patella','tibia','fibula','tarsal','liver','stomach','smint','colon','pancr','gallb','spleen','kidney','bladder','rlung','llung','trachea','ventr','aorta','hemi','cbl','esoph','duoden','adrenal','diaphr','thymus'];
+let Q={n:0,ok:0,str:0,k:null,lock:false};
+function quizVis(g){const t=G[Q.k];if(!t||g.proc)return false;
+  if(t.sys==='skel')return g.sys==='skel';
+  if(t.sys==='nerv')return g.sys==='nerv'&&g.k!=='nerves'||SKULL.includes(g.k)&&false;
+  return isOrgSys(g.sys)||g.k==='spleen'||['ventr','latr','ratr','aorta','pulmart','cava','pulmv'].includes(g.k)||g.k==='skin'||(['thor','lumb','sacrum','hip','cerv'].includes(g.k));}
+function nextQ(){Q.lock=false;Q.n++;if(Q.n>10){Q.n=1;Q.ok=0;}
+  let k;do k=QP[Math.random()*QP.length|0];while(k===Q.k);Q.k=k;const t=G[k];
+  const same=QP.filter(x=>x!==k&&G[x].sys===t.sys),other=QP.filter(x=>x!==k&&G[x].sys!==t.sys);
+  const opts=[k,...shuf(same).slice(0,3)];while(opts.length<4)opts.push(shuf(other)[0]);
+  $('qn').textContent=`Вопрос ${Q.n} / 10`;$('qs').textContent=`🔥 ${Q.str} подряд · ✅ ${Q.ok}`;
+  const o=$('qo');o.innerHTML='';for(const x of shuf(opts)){const b=document.createElement('button');b.textContent=G[x].ru;b.onclick=()=>ans(b,x);o.appendChild(b);}
+  for(const g of Object.values(G))if(!g.mesh.material.isShaderMaterial){g.mesh.material.opacity=g.k===k?1:.5;g.mesh.material.depthWrite=g.k===k;g.mesh.material.emissive.set('#000');}
+  applyVis();for(const g of Object.values(G))if(!g.mesh.material.isShaderMaterial){g.mesh.material.opacity=g.k===k?1:.5;g.mesh.material.color.set(g.k===k?'#ff8a3d':(GCOL[g.k]||COL[g.sys]));}
+  fly(t,THREE.MathUtils.clamp(t.size*4,1.05,2.6));}
+function ans(b,x){if(Q.lock)return;Q.lock=true;const ok=x===Q.k;if(ok){Q.ok++;Q.str++;b.classList.add('good');}else{Q.str=0;b.classList.add('bad');[...$('qo').children].find(e=>e.textContent===G[Q.k].ru).classList.add('good');}
+  $('qs').textContent=`🔥 ${Q.str} подряд · ✅ ${Q.ok}`;setTimeout(nextQ,ok?700:1500);}
+const shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]);
+// ---------- modes
+function setMode(m){if(m!=='heart'){hemi.intensity=.6;rim.intensity=2.2;key.intensity=1.6;camL.intensity=.5;}mode=m;sel=null;iso=null;$('sheet').hidden=true;
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('chips').style.visibility=m==='atlas'?'visible':'hidden';$('slider').hidden=m!=='explode';$('q').hidden=m!=='quiz';$('legend').hidden=true;
+  flowG.visible=m==='heart'&&flowOn&&scn==='heart';beat=m==='heart'&&scn==='heart';$('hbar').hidden=m!=='heart';$('orgs').hidden=m!=='heart';shelfReset();
+  for(const g of Object.values(G))if(!g.mesh.material.isShaderMaterial)g.mesh.material.color.set(baseCol(g));
+  $('sub').textContent={atlas:'тапни на любой орган',explode:'разложим тело по полочкам',heart:SC[scn].sub,quiz:'10 вопросов · на скорость'}[m];
+  if(m==='heart'){setScene(scn);}
+  else if(m==='quiz'){Q={n:0,ok:0,str:0,k:null};nextQ();}
+  else if(m==='explode'){shelfCam(false);ctl.autoRotate=false;}
+  else {setView(BODY,V(.9,1.05,3.4));ctl.autoRotate=m==='atlas';}
+  applyVis();}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+function setCut(on){cut=on;if(on)$('cutd').value=SC[scn].def;cutPlane.normal.set(...SC[scn].n);$('bcut').classList.toggle('on',on);$('cutrow').hidden=!on;cutPlane.constant=on?cutZ():1;applyVis();}
+const cutZ=()=>{const [a,b]=SC[scn].rng;return a-$('cutd').value/100*(a-b);};
+$('bcut').onclick=()=>setCut(!cut);
+function camFit(t,p,box){const T=V(...t),P=V(...p),dir=P.clone().sub(T).normalize(),tv=Math.tan(THREE.MathUtils.degToRad(cam.fov)/2);
+  const d=Math.max(box[0]/2/(tv*cam.aspect),box[1]/2/(tv*.6));return [T,T.clone().add(dir.multiplyScalar(d))];}
+const BOX={heart:[.2,.26],brain:[.22,.2],kidney:[1.3,1.6],nephron:[2.1,3.0],spine:[3.4,2.8],eye:[2.4,2.2],skin:[2.6,2.9],lungs:[5.5,3.9],bone:[1.3,3.1],joints:[1.7,2.7],muscle:[4.3,2.0],stomach:[2.6,2.6],gland:[2.6,2.6],villus:[3.3,2.4],neuron:[5.6,2.5]};
+function setScene(k){scn=k;sel=null;$('sheet').hidden=true;cut=false;$('bcut').classList.remove('on');$('cutrow').hidden=true;cutPlane.constant=1;
+  if(k==='heart'&&!parts)buildFlow();beat=k==='heart';const hh=k==='heart';$('bflow').hidden=!hh;$('bcirc').hidden=!hh;$('hleg').hidden=!hh;$('bcol').hidden=k!=='brain';$('bfire').hidden=k!=='spine'&&k!=='neuron';$('bfire').textContent=k==='neuron'?'⚡ Пустить импульс':'⚡ Запустить рефлекс';$('brays').hidden=$('bexp').hidden=k!=='eye';EYE.setExplode(false);$('bexp').classList.remove('on');$('bbreath').hidden=k!=='lungs';EYE.rays.visible=false;$('brays').classList.remove('on');$('bcut').hidden=!!SC[k].nocut;$('bneph').hidden=k!=='kidney';$('steps').hidden=$('nleg').hidden=k!=='nephron';$('stepbox').hidden=true;stepK=null;NEPH.setEmph(0);
+  document.querySelectorAll('#orgs button[data-s]').forEach(b=>b.classList.toggle('on',b.dataset.s===k));$('sub').textContent=SC[k].sub;
+  for(const g of Object.values(G))if(!g.mesh.material.isShaderMaterial)g.mesh.material.color.set(baseCol(g));
+  if(k==='eye'){cut=true;cutPlane.normal.set(0,0,-1);cutPlane.constant=0;}
+  const LOW=k!=='heart'&&k!=='brain';rim.intensity=LOW?.35:2.2;hemi.intensity=LOW?1.15:.6;S.environmentIntensity=LOW?.6:1;key.intensity=LOW?1.0:1.6;camL.intensity=LOW?1.1:.5;
+  const [t,p]=camFit(...SC[k].cam,BOX[k]);setView(t,p);applyVis();}
+document.querySelectorAll('#orgs button[data-s]').forEach(b=>b.onclick=()=>setScene(b.dataset.s));
+document.querySelectorAll('#orgs .soon').forEach(b=>b.onclick=()=>{const t=document.createElement('div');t.className='toast';t.textContent='В разработке — скоро будет';document.body.appendChild(t);setTimeout(()=>t.remove(),1500);});
+$('bneph').onclick=()=>setScene('nephron');
+LNG.onPhase=i=>{if(mode!=='heart'||scn!=='lungs')return;const s=BREATH[i];$('stepbox').hidden=false;$('stt').textContent=s.t;$('stx').textContent=s.x;$('stw').textContent=s.w;};
+$('bbreath').onclick=()=>{const on=LNG.toggle();$('bbreath').classList.toggle('on',on);};
+$('blbl').onclick=()=>{lblOn=!lblOn;$('blbl').classList.toggle('on',lblOn);toast(lblOn?'Подписи включены':'Подписи скрыты — тапни орган, чтобы узнать название');};
+SPN.onStage=i=>{const s=REFLEX[i];stepK=['screc','nsens','nint','nmot','scmus'][i];$('stepbox').hidden=false;$('stt').textContent=s.t;$('stx').textContent=s.x;$('stw').textContent=s.w;applyVis();};
+$('bfire').onclick=()=>{sel=null;$('sheet').hidden=true;if(scn==='neuron'){NEU.fire();const s={t:'Проведение импульса',x:'Импульс бежит по аксону скачками — от одного перехвата Ранвье к другому, потому что миелин изолирует волокно. В синапсе медиатор передаёт сигнал на мышцу.',w:'По миелиновым волокнам импульс идёт быстрее, чем по безмиелиновым.'};$('stepbox').hidden=false;$('stt').textContent=s.t;$('stx').textContent=s.x;$('stw').textContent=s.w;}else SPN.fire();};
+$('bexp').onclick=()=>{const on=!EYE.exploded;EYE.setExplode(on);$('bexp').classList.toggle('on',on);EYE.rays.visible=false;$('brays').classList.remove('on');cut=!on;applyVis();
+  const [t,p]=on?camFit(...off(EYE.root.position,[[-.4,0,0],[1.4,1.1,3]]),[6.0,2.4]):camFit(...SC.eye.cam,BOX.eye);fl={t0:ctl.target.clone(),p0:cam.position.clone(),t1:t,p1:p,s:performance.now()};};
+$('brays').onclick=()=>{const on=!EYE.rays.visible;EYE.rays.visible=on;$('brays').classList.toggle('on',on);const [t,p]=on?camFit(...off(EYE.root.position,[[-.75,.15,0],[-.45,.3,3]]),[5.3,2.4]):camFit(...SC.eye.cam,BOX.eye);fl={t0:ctl.target.clone(),p0:cam.position.clone(),t1:t,p1:p,s:performance.now()};};
+$('steps').innerHTML=STEPS.map((s,i)=>`<button class="btn" data-i="${i}">${s.t.split(' ')[0]} ${['Фильтр.','Всасыв.','Секреция','Моча'][i]}</button>`).join('');
+$('steps').querySelectorAll('button').forEach(b=>b.onclick=()=>step(+b.dataset.i));
+function step(i){const s=STEPS[i];stepK=s.k;sel=null;$('sheet').hidden=true;NEPH.setEmph(i+1);$('stepbox').hidden=false;$('stt').textContent=s.t;$('stx').textContent=s.x;$('stw').textContent=s.w;
+  $('steps').querySelectorAll('button').forEach((b,j)=>b.classList.toggle('on',j===i));const [t,p]=camFit(...off(NEPH.root.position,s.cam),[[.64,.7],[1.58,2.2],[.84,.8],[1.58,2.4]][i]);fl={t0:ctl.target.clone(),p0:cam.position.clone(),t1:t,p1:p,s:performance.now()};applyVis();}
+$('bcol').onclick=()=>{colOn=!colOn;$('bcol').classList.toggle('on',colOn);applyVis();};$('cutd').oninput=()=>{cutPlane.constant=cutZ();};
+$('bflow').onclick=()=>{flowOn=!flowOn;flowG.visible=flowOn;$('bflow').classList.toggle('on',flowOn);};
+$('bcirc').onclick=()=>{circ=(circ+1)%3;$('bcirc').textContent=['⟳ Малый круг','⟳ Большой круг','⟳ Оба круга'][circ];
+  if(circ===1)fly({mesh:{getWorldPosition:v=>v.set(.01,1.25,0)},size:.5},1.5);else fly({mesh:{getWorldPosition:v=>v.set(.022,1.312,.02)},size:.25},.8);};
+// ---------- loop
+let last=performance.now();
+function loop(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=now;
+  if(fl){const k=Math.min(1,(now-fl.s)/700),e=1-Math.pow(1-k,3);ctl.target.lerpVectors(fl.t0,fl.t1,e);cam.position.lerpVectors(fl.p0,fl.p1,e);if(k>=1)fl=null;}
+  if(shelf){const st=shelf;st.t+=dt*st.dir*(st.dir<0?1.8:1);shelfPose();if(st.dir<0&&st.t<=0){shelfReset();applyVis();}}
+  if(beat){const t=now/1000*1.2%1,pv=Math.exp(-Math.pow((t-.35)/.07,2)),pa=Math.exp(-Math.pow((t-.15)/.06,2));
+    G.ventr.mesh.scale.setScalar(1-.07*pv);G.latr.mesh.scale.setScalar(1-.08*pa);G.ratr.mesh.scale.setScalar(1-.08*pa);flow(dt);} else {G.ventr.mesh.scale.setScalar(1);G.latr.mesh.scale.setScalar(1);G.ratr.mesh.scale.setScalar(1);}
+  if(mode==='quiz'&&G[Q.k]){G[Q.k].mesh.material.emissive.set('#ff6a00');G[Q.k].mesh.material.emissiveIntensity=.35+.35*Math.sin(now/180);}
+  flowG.visible=mode==='heart'&&scn==='heart'&&flowOn&&!sel;if(mode==='heart'&&scn==='nephron')NEPH.update(dt);if(mode==='heart'&&scn==='spine')SPN.update(dt);if(mode==='heart'&&scn==='lungs')LNG.update(dt);if(mode==='heart'&&scn==='villus')VIL.update(dt);if(mode==='heart'&&scn==='eye')EYE.update(dt);if(mode==='heart'&&scn==='neuron')NEU.update(dt);ctl.update();if(shelf&&!iso&&!fl)shelfClamp();R.render(S,cam);shelfLabels();labels();requestAnimationFrame(loop);}
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();R.setSize(innerWidth,innerHeight);});
+$('cnt').textContent=`${seen.size} / ${TOTAL} изучено`;chips();setMode(QS.get('scn')?'heart':(QS.get('m')||'atlas'));if(QS.get('scn')&&SC[QS.get('scn')])setScene(QS.get('scn'));
+document.querySelector('.back').onclick=()=>{if(EMB)try{parent.postMessage({hb:'anat-close'},'*');}catch(e){} else history.back();};if(EMB)try{parent.postMessage({hb:'anat-ready'},'*');}catch(e){}
+window.APP={get shelf(){return shelf},setScene,setCut,select,setMode,G,setView,cam,ctl,shelfStart,circ:c=>{circ=c;}};
+requestAnimationFrame(loop);
+</script></body></html>
