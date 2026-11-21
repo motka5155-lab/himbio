@@ -867,6 +867,53 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
 /* ── v3.1: «Мой план 80+» (PRO) ── */
 .plan-card { position: relative; display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 14px; width: 100%; margin: 0 0 16px; padding: 14px 14px 14px 12px; border-radius: 18px; border: 1.5px solid var(--ink); background: var(--paper); box-shadow: var(--shadow); color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
 .plan-card:active { transform: scale(.99); }
+/* v4.18: модуль «Задание 29: ОВР» */
+.ov-mode-note { margin: -4px 0 12px; font-size: 13.5px; line-height: 1.4; color: var(--ink-2); max-width: 620px; }
+.ov-prog { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.ov-prog i { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
+.ov-lab { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: center; width: 100%; max-width: 520px; margin: 0 0 18px; padding: 12px 14px; border-radius: 16px; cursor: pointer; text-align: left; font: inherit;
+  border: 1.5px solid rgba(77, 225, 255, .5); background: linear-gradient(160deg, #13224A, #070C18 75%); color: #E6F0FF; }
+.ov-lab span { grid-row: span 2; font-size: 26px; }
+.ov-lab b { font: 700 15px/1.2 var(--font-body); }
+.ov-lab small { font-size: 12.5px; color: #A9BCDD; }
+.ov-card { text-align: left; }
+.ov-eq { font-size: clamp(16px, 4.3vw, 21px); line-height: 1.5; text-align: center; overflow-wrap: anywhere; }
+.ov-cond { margin: 4px 0 6px; font-size: 13.5px; color: var(--ink-2); text-align: center; }
+.ov-steps { display: grid; gap: 10px; max-width: 720px; }
+.ov-st { display: grid; gap: 8px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1.5px solid var(--accent); }
+.ov-st > b { font: 600 15px/1.3 var(--font-body); }
+.ov-st.done { gap: 2px; border: 1px solid var(--line); background: var(--ok-soft); }
+.ov-st.done > b { color: var(--ok); font-size: 14px; }
+.ov-st.done span { font-size: 13.5px; line-height: 1.45; }
+.ov-tip { margin: -2px 0 0; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
+.ov-chs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ov-chs small { font-size: 12.5px; color: var(--ink-2); margin-right: 2px; }
+.ov-ch { min-width: 44px; min-height: 40px; padding: 8px 12px; border-radius: 11px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); font: 600 15px/1.2 var(--font-body); cursor: pointer; }
+.ov-ch.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.ov-ch:active { transform: scale(.96); }
+.ov-row { display: grid; gap: 4px; padding: 6px 0; border-top: 1px dashed var(--line); }
+.ov-row > span { font-size: 14px; }
+.ov-row.ok > span { color: var(--ok); }
+.ov-bal { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--paper); border: 1px solid var(--line); }
+.ov-hl { font: 600 15.5px/1.5 var(--font-body); }
+.ov-mul { font: 700 15px var(--font-body); color: var(--accent); white-space: nowrap; }
+.ov-coefs { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 6px; }
+.ov-co { display: grid; justify-items: center; gap: 4px; }
+.ov-stp { display: inline-flex; align-items: center; border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper); }
+.ov-stp button { width: 32px; height: 36px; border: 0; background: transparent; color: var(--ink); font: 700 18px var(--font-body); cursor: pointer; }
+.ov-stp b { min-width: 22px; text-align: center; font: 800 16px var(--font-body); color: var(--accent); }
+.ov-f { font: 600 15px var(--font-body); }
+.ov-plus, .ov-arr { padding-bottom: 2px; font: 600 16px var(--font-body); color: var(--ink-2); }
+.ov-atoms { display: flex; flex-wrap: wrap; gap: 5px; }
+.ov-atoms span { padding: 4px 8px; border-radius: 8px; font: 600 12.5px var(--font-body); }
+.ov-atoms .ok { background: var(--ok-soft); color: var(--ok); }
+.ov-atoms .bad { background: var(--bad-soft); color: var(--bad); }
+.ov-final { display: grid; gap: 6px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.ov-final p { margin: 0; font-size: 14px; line-height: 1.45; }
+.ov-eqk { font-size: clamp(15px, 4vw, 19px) !important; line-height: 1.5; overflow-wrap: anywhere; }
+.ov-k { color: var(--accent); font-weight: 800; }
+.ov-flash { max-width: 720px; margin: 10px 0 0; }
+.ov-flash.shake { animation: shake .35s; }
 /* v4.17.1: закреплённая плашка 3D-лаборатории по химии */
 .chl-pin { position: relative; display: block; width: 100%; margin: 0 0 16px; padding: 0; border: 0; border-radius: 20px; overflow: hidden; cursor: pointer; text-align: left; font: inherit;
   background: linear-gradient(160deg, #13224A, #070C18 70%); color: #E6F0FF; box-shadow: 0 0 0 1.5px rgba(77, 225, 255, .45), 0 12px 32px rgba(10, 25, 60, .32); }
@@ -1437,7 +1484,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.17.2</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.18</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1500,6 +1547,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <section class="view" id="v-izomeriya" hidden></section>
   <section class="view" id="v-check" hidden></section>
   <section class="view" id="v-raschet" hidden></section>
+  <section class="view" id="v-ovr" hidden></section>
   <section class="view" id="v-nauka" hidden></section>
   <section class="view" id="v-kl-teor" hidden></section>
   <section class="view" id="v-kl-del" hidden></section>
@@ -1514,7 +1562,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <div class="toast" id="toast" role="status" hidden></div>
 
   <footer class="foot">
-    <p>Версия 4.16. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
+    <p>Версия 4.18. Тренажёр сделал выпускник, сдающий ЕГЭ по химии и биологии. Реакции проверены вручную.</p>
   </footer>
 </div>
 
@@ -1528,6 +1576,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   const MODULES = {
     chem: [
       { group: "3D-лаборатория", id: "probirki", lab: "chem", title: "Пробирки: химия в 3D", desc: "Капаешь реактивы сам и смотришь, что будет: задание 24 «различи вещества», ОВР в трёх средах (KMnO₄, K₂Cr₂O₇) и свободные опыты. Каждая новая реакция — в твою коллекцию.", st: "85 реакций · 3 режима", ready: true, rel: "2026-11-17" },
+      { group: "ЕГЭ · вторая часть", id: "ovr", title: "Задание 29: ОВР", desc: "Электронный баланс по шагам: степени окисления, окислитель и восстановитель, множители, коэффициенты. 30 реакций: KMnO₄ и K₂Cr₂O₇ в разных средах, HNO₃, H₂SO₄ (конц.), H₂O₂. Режим «как на ЕГЭ» — сам выбираешь вещества и продукты.", st: "30 реакций · 2 режима", ready: true, rel: "2026-11-18" },
       { group: "ЕГЭ · вторая часть", id: "z32", title: "Задание 32: цепочки", desc: "Цепочки превращений органики как на ЕГЭ. Решаешь по шагам, тренажёр проверяет и объясняет ошибки.", st: "74 цепочки · готово", ready: true, rel: "2026-10-21" },
       { group: "ЕГЭ · первая часть", id: "lechat", title: "Задание 22: химическое равновесие", desc: "Принцип Ле Шателье на ползунке: куда сместится равновесие при нагреве, давлении, концентрации, катализаторе.", st: "25 равновесий · бесконечные задания", ready: true, rel: "2026-10-31" },
       { group: "ЕГЭ · первая часть", id: "raschet", title: "Задания 26–28: расчётные задачи", desc: "Растворы, термохимия, расчёт по уравнению с выходом и примесями. Вводишь ответ числом — потом пошаговое решение.", st: "бесконечные задачи · числа каждый раз новые", ready: true, rel: "2026-11-08" },
@@ -2058,6 +2107,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     const chemQuiz = state.subject === "chem" && state.tab === "quiz" && state.module === "mapquiz";
     const showK = state.subject === "chem" && state.tab === "quiz" && state.module !== "mapquiz";
     const showR = state.subject === "chem" && state.tab === "learn" && state.module === "raschet";
+    const showOV = state.subject === "chem" && state.tab === "learn" && state.module === "ovr";
     const showN = state.subject === "bio" && state.tab === "learn" && state.module === "nauka";
     const showKT = state.subject === "bio" && state.tab === "learn" && state.module === "kl-teor";
     const showDL = state.subject === "bio" && state.tab === "learn" && state.module === "kl-del";
@@ -2085,6 +2135,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vI.hidden = !showI;
     vK.hidden = !showK;
     vR.hidden = !showR;
+    vOV.hidden = !showOV;
     vN.hidden = !showN;
     vKT.hidden = !showKT;
     vDL.hidden = !showDL;
@@ -2098,7 +2149,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     if (!showNK) cancelAnimationFrame(DNL.raf);
     vOG.hidden = !showOG;
     if (!showOG) cancelAnimationFrame(OGL.raf);
-    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showN || showKT || showDL || showVD || showBK || showFM || showUL || showNK || showOG || state.tab === "traps";
+    vList.hidden = showMap || showZ || showC || showL || showG || showE || showH || showI || showK || showR || showOV || showN || showKT || showDL || showVD || showBK || showFM || showUL || showNK || showOG || state.tab === "traps";
     vTraps.hidden = state.tab !== "traps";
 
     if (showMap) {
@@ -2128,6 +2179,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       else if (showI) iRender();
       else if (showK) kRender();
       else if (showR) rRender();
+      else if (showOV) ovRender();
       else if (showN) nRender();
       else if (showKT) ktRender();
       else if (showDL) dlRender();
@@ -2171,14 +2223,14 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   window.hbOpen3D = hbOpen3D;
   /* v4.17: «Пробирки» — 3D-лаборатория по химии, chemlab.js грузится только по требованию */
   let chlBusy = false;
-  async function hbOpenChem(how, mode) {
+  async function hbOpenChem(how, mode, ovr) {
     if (chlBusy) return; chlBusy = true;
     const ld = document.createElement("div"); ld.className = "l3d-load";
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Расставляю пробирки…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./chemlab.js?v=4171");
-      await m.open({ mode, onClose: () => { chlBusy = false; } });
+      const m = await import("./chemlab.js?v=4180");
+      await m.open({ mode, ovr, toBalance: (k) => { if (window.hbOvrStart) window.hbOvrStart(k); }, onClose: () => { chlBusy = false; } });
       ld.remove(); hbGoalOnce("chemlab_open", { how });
     } catch (e) {
       chlBusy = false;
@@ -2576,6 +2628,347 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     vR.querySelector('[data-r="list2"]').addEventListener("click", back);
     vR.querySelector('[data-r="again"]').addEventListener("click", () => { RR.run = { qs: rNew(10), k: 0, ok: 0 }; rRun(); zScroll(vR); });
   }
+
+  /* ════════ v4.18: ОВР — задание 29 ЕГЭ ════════
+     Два режима. «Пошагово»: дано уравнение без коэффициентов → какие элементы меняют степень окисления → степени окисления → окислитель →
+     электронный баланс → коэффициенты (проверка по каждому элементу). «Как на ЕГЭ»: из перечня выбрать вещества → во что перейдут окислитель
+     и восстановитель → баланс → коэффициенты. Чисто решённая реакция идёт в общий счётчик верных ответов (hbRight). */
+  const vOV = document.getElementById("v-ovr");
+  const OVK = "hb.ovr29.v1";
+  let ovs = {};
+  try { ovs = JSON.parse(localStorage.getItem(OVK) || "{}") || {}; } catch (e) { ovs = {}; }
+  if (!ovs.done) ovs.done = {};
+  function ovSave() { try { localStorage.setItem(OVK, JSON.stringify(ovs)); } catch (e) {} }
+  /* реакции: r — исходные, p — продукты, k — коэффициенты (по порядку r, затем p); ox / red — окислитель и восстановитель:
+     sp — вещество, el — элемент, a → b — степени окисления, n — атомов в строке баланса, to — продукт, L/R — запись строки баланса,
+     part — вещество одновременно среда (не всё идёт на окисление/восстановление), pc — сколько атомов элемента в продукте меняли степень;
+     rl — подписи (конц./разб.), cond — признак для формулировки «как на ЕГЭ», oxAlt / redAlt — неверные продукты, lab — набор в «Пробирках» */
+  const OVR29 = [
+    { id: "mn_so3_a", r: ["KMnO4", "Na2SO3", "H2SO4"], p: ["MnSO4", "Na2SO4", "K2SO4", "H2O"], k: [2, 5, 3, 2, 5, 1, 3], med: "кислая среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnSO4" }, red: { sp: "Na2SO3", el: "S", a: 4, b: 6, n: 1, to: "Na2SO4" },
+      cond: "раствор обесцвечивается", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["S", "Na2S"], lab: "mn_so3" },
+    { id: "mn_so3_n", r: ["KMnO4", "Na2SO3", "H2O"], p: ["MnO2", "Na2SO4", "KOH"], k: [2, 3, 1, 2, 3, 2], med: "нейтральная среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 4, n: 1, to: "MnO2" }, red: { sp: "Na2SO3", el: "S", a: 4, b: 6, n: 1, to: "Na2SO4" },
+      cond: "выпадает бурый осадок", oxAlt: ["MnSO4", "K2MnO4"], redAlt: ["S", "Na2S"], lab: "mn_so3" },
+    { id: "mn_so3_b", r: ["KMnO4", "Na2SO3", "KOH"], p: ["K2MnO4", "Na2SO4", "H2O"], k: [2, 1, 2, 2, 1, 1], med: "щелочная среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 6, n: 1, to: "K2MnO4" }, red: { sp: "Na2SO3", el: "S", a: 4, b: 6, n: 1, to: "Na2SO4" },
+      cond: "раствор становится зелёным", oxAlt: ["MnO2", "MnSO4"], redAlt: ["S", "Na2S"], lab: "mn_so3" },
+    { id: "mn_ki_a", r: ["KMnO4", "KI", "H2SO4"], p: ["MnSO4", "I2", "K2SO4", "H2O"], k: [2, 10, 8, 2, 5, 6, 8], med: "кислая среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnSO4" }, red: { sp: "KI", el: "I", a: -1, b: 0, n: 2, to: "I2", L: "2I^{-1}", R: "I2^{0}" },
+      cond: "образуется простое вещество, раствор буреет", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["KIO3", "HI"], lab: "mn_ki" },
+    { id: "mn_h2o2_a", r: ["KMnO4", "H2O2", "H2SO4"], p: ["MnSO4", "O2", "K2SO4", "H2O"], k: [2, 5, 3, 2, 5, 1, 8], med: "кислая среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnSO4" }, red: { sp: "H2O2", el: "O", a: -1, b: 0, n: 2, to: "O2", L: "2O^{-1}", R: "O2^{0}" },
+      cond: "выделяется газ, раствор обесцвечивается", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["H2O", "H2"], lab: "mn_h2o2" },
+    { id: "mn_fe_a", r: ["KMnO4", "FeSO4", "H2SO4"], p: ["MnSO4", "Fe2(SO4)3", "K2SO4", "H2O"], k: [2, 10, 8, 2, 5, 1, 8], med: "кислая среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnSO4" }, red: { sp: "FeSO4", el: "Fe", a: 2, b: 3, n: 2, to: "Fe2(SO4)3", L: "2Fe^{+2}", R: "2Fe^{+3}" },
+      cond: "раствор обесцвечивается", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["Fe(OH)3", "Fe"], lab: "fe" },
+    { id: "mn_hcl", r: ["KMnO4", "HCl"], p: ["KCl", "MnCl2", "Cl2", "H2O"], k: [2, 16, 2, 2, 5, 8], med: "HCl — и восстановитель, и среда", rl: { HCl: "HCl (конц.)" },
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnCl2" }, red: { sp: "HCl", el: "Cl", a: -1, b: 0, n: 2, to: "Cl2", L: "2Cl^{-1}", R: "Cl2^{0}", part: 1 },
+      cond: "выделяется жёлто-зелёный газ", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["HClO", "KClO3"] },
+    { id: "cr_so3_a", r: ["K2Cr2O7", "Na2SO3", "H2SO4"], p: ["Cr2(SO4)3", "Na2SO4", "K2SO4", "H2O"], k: [1, 3, 4, 1, 3, 1, 4], med: "кислая среда",
+      ox: { sp: "K2Cr2O7", el: "Cr", a: 6, b: 3, n: 2, to: "Cr2(SO4)3", L: "2Cr^{+6}", R: "2Cr^{+3}" }, red: { sp: "Na2SO3", el: "S", a: 4, b: 6, n: 1, to: "Na2SO4" },
+      cond: "окраска раствора меняется с оранжевой на зелёную", oxAlt: ["K2CrO4", "Cr(OH)3"], redAlt: ["S", "Na2S"], lab: "cr_so3" },
+    { id: "cr_ki_a", r: ["K2Cr2O7", "KI", "H2SO4"], p: ["Cr2(SO4)3", "I2", "K2SO4", "H2O"], k: [1, 6, 7, 1, 3, 4, 7], med: "кислая среда",
+      ox: { sp: "K2Cr2O7", el: "Cr", a: 6, b: 3, n: 2, to: "Cr2(SO4)3", L: "2Cr^{+6}", R: "2Cr^{+3}" }, red: { sp: "KI", el: "I", a: -1, b: 0, n: 2, to: "I2", L: "2I^{-1}", R: "I2^{0}" },
+      cond: "образуется простое вещество", oxAlt: ["K2CrO4", "Cr(OH)3"], redAlt: ["KIO3", "HI"], lab: "cr_ki" },
+    { id: "cr_fe_a", r: ["K2Cr2O7", "FeSO4", "H2SO4"], p: ["Cr2(SO4)3", "Fe2(SO4)3", "K2SO4", "H2O"], k: [1, 6, 7, 1, 3, 1, 7], med: "кислая среда",
+      ox: { sp: "K2Cr2O7", el: "Cr", a: 6, b: 3, n: 2, to: "Cr2(SO4)3", L: "2Cr^{+6}", R: "2Cr^{+3}" }, red: { sp: "FeSO4", el: "Fe", a: 2, b: 3, n: 2, to: "Fe2(SO4)3", L: "2Fe^{+2}", R: "2Fe^{+3}" },
+      cond: "окраска раствора меняется с оранжевой на зелёную", oxAlt: ["K2CrO4", "Cr(OH)3"], redAlt: ["Fe(OH)3", "Fe"], lab: "fe" },
+    { id: "cr_hcl", r: ["K2Cr2O7", "HCl"], p: ["KCl", "CrCl3", "Cl2", "H2O"], k: [1, 14, 2, 2, 3, 7], med: "HCl — и восстановитель, и среда", rl: { HCl: "HCl (конц.)" },
+      ox: { sp: "K2Cr2O7", el: "Cr", a: 6, b: 3, n: 2, to: "CrCl3", L: "2Cr^{+6}", R: "2Cr^{+3}" }, red: { sp: "HCl", el: "Cl", a: -1, b: 0, n: 2, to: "Cl2", L: "2Cl^{-1}", R: "Cl2^{0}", part: 1 },
+      cond: "выделяется жёлто-зелёный газ", oxAlt: ["K2CrO4", "Cr(OH)3"], redAlt: ["HClO", "KClO3"] },
+    { id: "cr_h2s", r: ["K2Cr2O7", "H2S", "H2SO4"], p: ["Cr2(SO4)3", "S", "K2SO4", "H2O"], k: [1, 3, 4, 1, 3, 1, 7], med: "кислая среда",
+      ox: { sp: "K2Cr2O7", el: "Cr", a: 6, b: 3, n: 2, to: "Cr2(SO4)3", L: "2Cr^{+6}", R: "2Cr^{+3}" }, red: { sp: "H2S", el: "S", a: -2, b: 0, n: 1, to: "S" },
+      cond: "выпадает жёлтый осадок", oxAlt: ["K2CrO4", "Cr(OH)3"], redAlt: ["SO2", "H2SO4"] },
+    { id: "cu_hno3k", r: ["Cu", "HNO3"], p: ["Cu(NO3)2", "NO2", "H2O"], k: [1, 4, 1, 2, 2], med: "концентрированная кислота", rl: { HNO3: "HNO3 (конц.)" },
+      ox: { sp: "HNO3", el: "N", a: 5, b: 4, n: 1, to: "NO2", part: 1 }, red: { sp: "Cu", el: "Cu", a: 0, b: 2, n: 1, to: "Cu(NO3)2" },
+      cond: "выделяется бурый газ", oxAlt: ["NO", "N2"], redAlt: ["CuO", "Cu2O"] },
+    { id: "cu_hno3r", r: ["Cu", "HNO3"], p: ["Cu(NO3)2", "NO", "H2O"], k: [3, 8, 3, 2, 4], med: "разбавленная кислота", rl: { HNO3: "HNO3 (разб.)" },
+      ox: { sp: "HNO3", el: "N", a: 5, b: 2, n: 1, to: "NO", part: 1 }, red: { sp: "Cu", el: "Cu", a: 0, b: 2, n: 1, to: "Cu(NO3)2" },
+      cond: "выделяется бесцветный газ, который буреет на воздухе", oxAlt: ["NO2", "NH4NO3"], redAlt: ["CuO", "Cu2O"] },
+    { id: "cu_h2so4", r: ["Cu", "H2SO4"], p: ["CuSO4", "SO2", "H2O"], k: [1, 2, 1, 1, 2], med: "концентрированная кислота, нагревание", rl: { H2SO4: "H2SO4 (конц.)" },
+      ox: { sp: "H2SO4", el: "S", a: 6, b: 4, n: 1, to: "SO2", part: 1 }, red: { sp: "Cu", el: "Cu", a: 0, b: 2, n: 1, to: "CuSO4" },
+      cond: "выделяется газ с резким запахом", oxAlt: ["H2S", "S"], redAlt: ["CuO", "Cu2O"] },
+    { id: "mg_hno3", r: ["Mg", "HNO3"], p: ["Mg(NO3)2", "NH4NO3", "H2O"], k: [4, 10, 4, 1, 3], med: "очень разбавленная кислота", rl: { HNO3: "HNO3 (оч. разб.)" },
+      ox: { sp: "HNO3", el: "N", a: 5, b: -3, n: 1, to: "NH4NO3", part: 1, pc: 1 }, red: { sp: "Mg", el: "Mg", a: 0, b: 2, n: 1, to: "Mg(NO3)2" },
+      cond: "газ не выделяется", oxAlt: ["NO2", "NO"], redAlt: ["MgO", "Mg(OH)2"] },
+    { id: "zn_hno3", r: ["Zn", "HNO3"], p: ["Zn(NO3)2", "N2O", "H2O"], k: [4, 10, 4, 1, 5], med: "разбавленная кислота", rl: { HNO3: "HNO3 (разб.)" },
+      ox: { sp: "HNO3", el: "N", a: 5, b: 1, n: 2, to: "N2O", L: "2N^{+5}", R: "2N^{+1}", part: 1 }, red: { sp: "Zn", el: "Zn", a: 0, b: 2, n: 1, to: "Zn(NO3)2" },
+      cond: "выделяется газ — оксид азота(I)", oxAlt: ["NO2", "NH4NO3"], redAlt: ["ZnO", "Zn(OH)2"] },
+    { id: "c_hno3", r: ["C", "HNO3"], p: ["CO2", "NO2", "H2O"], k: [1, 4, 1, 4, 2], med: "концентрированная кислота, нагревание", rl: { HNO3: "HNO3 (конц.)" },
+      ox: { sp: "HNO3", el: "N", a: 5, b: 4, n: 1, to: "NO2" }, red: { sp: "C", el: "C", a: 0, b: 4, n: 1, to: "CO2" },
+      cond: "выделяются два газа, один из них бурый", oxAlt: ["NO", "N2"], redAlt: ["CO", "CH4"] },
+    { id: "p_hno3", r: ["P", "HNO3"], p: ["H3PO4", "NO2", "H2O"], k: [1, 5, 1, 5, 1], med: "концентрированная кислота", rl: { HNO3: "HNO3 (конц.)" },
+      ox: { sp: "HNO3", el: "N", a: 5, b: 4, n: 1, to: "NO2" }, red: { sp: "P", el: "P", a: 0, b: 5, n: 1, to: "H3PO4" },
+      cond: "выделяется бурый газ", oxAlt: ["NO", "N2"], redAlt: ["P2O3", "PH3"] },
+    { id: "ki_h2so4", r: ["KI", "H2SO4"], p: ["I2", "H2S", "K2SO4", "H2O"], k: [8, 5, 4, 1, 4, 4], med: "концентрированная кислота", rl: { H2SO4: "H2SO4 (конц.)" },
+      ox: { sp: "H2SO4", el: "S", a: 6, b: -2, n: 1, to: "H2S", part: 1 }, red: { sp: "KI", el: "I", a: -1, b: 0, n: 2, to: "I2", L: "2I^{-1}", R: "I2^{0}" },
+      cond: "выделяется газ с запахом тухлых яиц", oxAlt: ["SO2", "S"], redAlt: ["KIO3", "HI"] },
+    { id: "zn_h2so4", r: ["Zn", "H2SO4"], p: ["ZnSO4", "H2S", "H2O"], k: [4, 5, 4, 1, 4], med: "концентрированная кислота", rl: { H2SO4: "H2SO4 (конц.)" },
+      ox: { sp: "H2SO4", el: "S", a: 6, b: -2, n: 1, to: "H2S", part: 1 }, red: { sp: "Zn", el: "Zn", a: 0, b: 2, n: 1, to: "ZnSO4" },
+      cond: "выделяется газ с запахом тухлых яиц", oxAlt: ["SO2", "H2"], redAlt: ["ZnO", "Zn(OH)2"] },
+    { id: "fe_ki", r: ["FeCl3", "KI"], p: ["FeCl2", "I2", "KCl"], k: [2, 2, 2, 1, 2], med: "раствор",
+      ox: { sp: "FeCl3", el: "Fe", a: 3, b: 2, n: 1, to: "FeCl2" }, red: { sp: "KI", el: "I", a: -1, b: 0, n: 2, to: "I2", L: "2I^{-1}", R: "I2^{0}" },
+      cond: "раствор буреет", oxAlt: ["Fe", "Fe(OH)3"], redAlt: ["KIO3", "HI"] },
+    { id: "fe_h2s", r: ["FeCl3", "H2S"], p: ["FeCl2", "S", "HCl"], k: [2, 1, 2, 1, 2], med: "раствор",
+      ox: { sp: "FeCl3", el: "Fe", a: 3, b: 2, n: 1, to: "FeCl2" }, red: { sp: "H2S", el: "S", a: -2, b: 0, n: 1, to: "S" },
+      cond: "выпадает жёлтый осадок", oxAlt: ["Fe", "FeS"], redAlt: ["SO2", "H2SO4"] },
+    { id: "ki_h2o2", r: ["KI", "H2O2", "H2SO4"], p: ["I2", "K2SO4", "H2O"], k: [2, 1, 1, 1, 1, 2], med: "кислая среда",
+      ox: { sp: "H2O2", el: "O", a: -1, b: -2, n: 2, to: "H2O", L: "2O^{-1}", R: "2O^{-2}" }, red: { sp: "KI", el: "I", a: -1, b: 0, n: 2, to: "I2", L: "2I^{-1}", R: "I2^{0}" },
+      cond: "раствор буреет", oxAlt: ["O2", "H2"], redAlt: ["KIO3", "HI"] },
+    { id: "fe_h2o2", r: ["FeSO4", "H2O2", "H2SO4"], p: ["Fe2(SO4)3", "H2O"], k: [2, 1, 1, 1, 2], med: "кислая среда",
+      ox: { sp: "H2O2", el: "O", a: -1, b: -2, n: 2, to: "H2O", L: "2O^{-1}", R: "2O^{-2}" }, red: { sp: "FeSO4", el: "Fe", a: 2, b: 3, n: 2, to: "Fe2(SO4)3", L: "2Fe^{+2}", R: "2Fe^{+3}" },
+      cond: "бледно-зелёный раствор желтеет", oxAlt: ["O2", "H2"], redAlt: ["Fe(OH)3", "Fe"], lab: "fe" },
+    { id: "no2_mn", r: ["NaNO2", "KMnO4", "H2SO4"], p: ["NaNO3", "MnSO4", "K2SO4", "H2O"], k: [5, 2, 3, 5, 2, 1, 3], med: "кислая среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnSO4" }, red: { sp: "NaNO2", el: "N", a: 3, b: 5, n: 1, to: "NaNO3" },
+      cond: "раствор обесцвечивается", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["NO", "N2"] },
+    { id: "no2_ki", r: ["NaNO2", "KI", "H2SO4"], p: ["NO", "I2", "K2SO4", "Na2SO4", "H2O"], k: [2, 2, 2, 2, 1, 1, 1, 2], med: "кислая среда",
+      ox: { sp: "NaNO2", el: "N", a: 3, b: 2, n: 1, to: "NO" }, red: { sp: "KI", el: "I", a: -1, b: 0, n: 2, to: "I2", L: "2I^{-1}", R: "I2^{0}" },
+      cond: "выделяется бесцветный газ, раствор буреет", oxAlt: ["NaNO3", "NH3"], redAlt: ["KIO3", "HI"] },
+    { id: "cr_br2", r: ["K3[Cr(OH)6]", "Br2", "KOH"], p: ["K2CrO4", "KBr", "H2O"], k: [2, 3, 4, 2, 6, 8], med: "щелочная среда",
+      ox: { sp: "Br2", el: "Br", a: 0, b: -1, n: 2, to: "KBr", L: "Br2^{0}", R: "2Br^{-1}" }, red: { sp: "K3[Cr(OH)6]", el: "Cr", a: 3, b: 6, n: 1, to: "K2CrO4" },
+      cond: "раствор из зелёного становится жёлтым", oxAlt: ["KBrO3", "HBr"], redAlt: ["K2Cr2O7", "Cr(OH)3"] },
+    { id: "mn_h2s", r: ["KMnO4", "H2S", "H2SO4"], p: ["MnSO4", "S", "K2SO4", "H2O"], k: [2, 5, 3, 2, 5, 1, 8], med: "кислая среда",
+      ox: { sp: "KMnO4", el: "Mn", a: 7, b: 2, n: 1, to: "MnSO4" }, red: { sp: "H2S", el: "S", a: -2, b: 0, n: 1, to: "S" },
+      cond: "раствор обесцвечивается, выпадает жёлтый осадок", oxAlt: ["MnO2", "K2MnO4"], redAlt: ["SO2", "H2SO4"] },
+    { id: "cuo_nh3", r: ["CuO", "NH3"], p: ["Cu", "N2", "H2O"], k: [3, 2, 3, 1, 3], med: "нагревание",
+      ox: { sp: "CuO", el: "Cu", a: 2, b: 0, n: 1, to: "Cu" }, red: { sp: "NH3", el: "N", a: -3, b: 0, n: 2, to: "N2", L: "2N^{-3}", R: "N2^{0}" },
+      cond: "чёрный порошок становится красным", oxAlt: ["Cu2O", "Cu(OH)2"], redAlt: ["NO", "NO2"] },
+  ];
+  const OV_OS = { Mn: [2, 4, 6, 7], Cr: [0, 3, 6], S: [-2, 0, 4, 6], N: [-3, 0, 1, 2, 3, 4, 5], Fe: [0, 2, 3], I: [-1, 0, 5], Cl: [-1, 0, 1, 5, 7], O: [-2, -1, 0],
+    Cu: [0, 1, 2], Zn: [0, 2], Mg: [0, 2], C: [-4, 0, 2, 4], P: [-3, 0, 3, 5], Br: [-1, 0, 5] };
+  const OV_SAFE = ["K2SO4", "MgO", "SiO2", "KF", "CaCO3", "K3PO4", "Al2O3", "BaSO4"];   /* в перечне «как на ЕГЭ»: ни с чем из реакций не дают ОВР */
+  /* разбор формулы на атомы: K3[Cr(OH)6], Fe2(SO4)3 */
+  function ovAtoms(f) {
+    const st = [{}]; let i = 0;
+    while (i < f.length) {
+      const ch = f[i];
+      if (ch === "(" || ch === "[") { st.push({}); i++; }
+      else if (ch === ")" || ch === "]") { i++; let d = ""; while (/\d/.test(f[i] || "")) d += f[i++]; const t = st.pop(), m = d ? +d : 1; for (const a in t) st[st.length - 1][a] = (st[st.length - 1][a] || 0) + t[a] * m; }
+      else if (/[A-Z]/.test(ch)) { let e = ch; i++; while (/[a-z]/.test(f[i] || "")) e += f[i++]; let d = ""; while (/\d/.test(f[i] || "")) d += f[i++]; st[st.length - 1][e] = (st[st.length - 1][e] || 0) + (d ? +d : 1); }
+      else i++;
+    }
+    return st[0];
+  }
+  const ovGcd = (a, b) => (b ? ovGcd(b, a % b) : a);
+  const ovE = (h) => Math.abs(h.a - h.b) * h.n;
+  function ovMult(R) { const eo = ovE(R.ox), er = ovE(R.red), l = eo * er / ovGcd(eo, er); return [l / eo, l / er]; }
+  const ovSign = (x) => (x > 0 ? "+" + x : String(x));
+  const ovHalf = (h, isOx) => chem(`${h.L || (h.n > 1 ? h.n : "") + h.el + "^{" + ovSign(h.a) + "}"} ${isOx ? "+" : "−"} ${ovE(h)}e → ${h.R || (h.n > 1 ? h.n : "") + h.el + "^{" + ovSign(h.b) + "}"}`);
+  const ovTr = (h) => chem(`${h.el}^{${ovSign(h.a)}} → ${h.el}^{${ovSign(h.b)}}`);
+  const ovLbl = (R, f) => chem((R.rl && R.rl[f]) || f);
+  function ovEq(R, withK) {
+    const side = (arr, off) => arr.map((f, i) => `${withK && R.k[off + i] > 1 ? `<b class="ov-k">${R.k[off + i]}</b>` : ""}${withK ? chem(f) : ovLbl(R, f)}`).join(" + ");
+    return `${side(R.r, 0)} → ${side(R.p, R.r.length)}`;
+  }
+  /* баланс по элементам при коэффициентах c */
+  function ovCheck(R, c) {
+    const L = {}, Rr = {};
+    R.r.forEach((f, i) => { const a = ovAtoms(f); for (const e in a) L[e] = (L[e] || 0) + a[e] * c[i]; });
+    R.p.forEach((f, i) => { const a = ovAtoms(f); for (const e in a) Rr[e] = (Rr[e] || 0) + a[e] * c[R.r.length + i]; });
+    const els = [...new Set([...Object.keys(L), ...Object.keys(Rr)])];
+    return els.map(e => ({ e, l: L[e] || 0, r: Rr[e] || 0, ok: (L[e] || 0) === (Rr[e] || 0) }));
+  }
+  const ovElems = (R) => [...new Set([...R.r, ...R.p].flatMap(f => Object.keys(ovAtoms(f))))];
+  const OVR_ = { run: null, mode: ovs.mode || "step" };
+  /* шаги: step — el (элементы), st (степени), ox (окислитель), e (баланс), k (коэффициенты); ege — pick (вещества), oxp, redp (продукты), e, k */
+  function ovNew(n) {
+    const left = sShuf(OVR29.filter(R => !ovs.done[R.id])), rest = sShuf(OVR29.filter(R => ovs.done[R.id]));
+    return [...left, ...rest].slice(0, n).map(R => {
+      const T = { R, mode: OVR_.mode, s: 0, err: 0, ans: {}, c: R.r.concat(R.p).map(() => 1) };
+      T.steps = T.mode === "ege" ? ["pick", "oxp", "redp", "e", "k"] : ["el", "st", "ox", "e", "k"];
+      if (T.mode === "ege") {
+        T.list = sShuf([...R.r, ...sShuf(OV_SAFE.filter(x => !R.r.includes(x) && !R.p.includes(x))).slice(0, Math.max(2, 6 - R.r.length))]);
+        T.oxOpts = sShuf([R.ox.to, ...R.oxAlt]); T.redOpts = sShuf([R.red.to, ...R.redAlt]);
+      }
+      T.elOpts = ovElems(R);
+      const stOpt = (el, v) => { const all = OV_OS[el] || [v]; return [...new Set([v, ...sShuf(all.filter(x => x !== v)).slice(0, 3)])].sort((a, b) => a - b); };
+      T.st = [[R.ox, "a"], [R.ox, "b"], [R.red, "a"], [R.red, "b"]].map(([h, w]) => ({ h, w, v: h[w], opts: stOpt(h.el, h[w]) }));
+      const [mo, mr] = ovMult(R);
+      T.e = [{ h: R.ox, ox: 1, v: ovE(R.ox), m: mo }, { h: R.red, ox: 0, v: ovE(R.red), m: mr }].map(x => ({ ...x, eOpts: [...new Set([x.v, 1, 2, 3, 5, 6, 8].filter(y => y > 0))].sort((a, b) => a - b).slice(0, 6), mOpts: [...new Set([x.m, 1, 2, 3, 4, 5, 6])].sort((a, b) => a - b).slice(0, 6) }));
+      return T;
+    });
+  }
+  function ovRender() {
+    if (OVR_.run) return ovRun();
+    const n = Object.keys(ovs.done).length, kinds = [["step", "Пошагово"], ["ege", "Как на ЕГЭ"]];
+    vOV.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-o="back">← к модулям</button><h2 class="mod-title">ОВР: задание 29</h2></div>
+      <p class="intro">Составляешь уравнение окислительно-восстановительной реакции так, как его проверяют на ЕГЭ: степени окисления → окислитель и восстановитель → электронный баланс → коэффициенты. Ошибся — тренажёр покажет, в каком элементе не сходится.</p>
+      <div class="h-chips">${kinds.map(([k, t]) => `<button type="button" class="h-chip${OVR_.mode === k ? " on" : ""}" data-ok="${k}">${t}</button>`).join("")}</div>
+      <p class="ov-mode-note">${OVR_.mode === "ege" ? "Как в задании 29: из перечня выбираешь вещества, сам решаешь, во что перейдут окислитель и восстановитель, и уравниваешь." : "Уравнение уже дано без коэффициентов. Проходишь все шаги электронного баланса — хорошо для начала."}</p>
+      <div class="l-start"><p class="cd-total">Решено чисто: <b>${n}</b> из ${OVR29.length} реакций</p><div class="ov-prog"><i style="width:${Math.round(n / OVR29.length * 100)}%"></i></div>
+        <button type="button" class="btn primary" data-o="go">Начать: 5 реакций</button></div>
+      <button type="button" class="ov-lab" data-o="lab"><span>🧪</span><b>Увидеть ОВР вживую</b><small>KMnO₄ и K₂Cr₂O₇ в трёх средах — в 3D-лаборатории «Пробирки»</small></button>
+      <h3 class="cd-h">Шпаргалка: во что переходит</h3>
+      <div class="l-rules">
+        <div><b>KMnO₄ (Mn⁺⁷)</b><span>кислая → Mn²⁺ (MnSO₄, MnCl₂), раствор обесцвечивается · нейтральная → MnO₂, бурый осадок · щелочная → K₂MnO₄, зелёный раствор</span></div>
+        <div><b>K₂Cr₂O₇ / K₂CrO₄ (Cr⁺⁶)</b><span>кислая → Cr³⁺ (Cr₂(SO₄)₃, CrCl₃) · нейтральная → Cr(OH)₃ · щелочная → K₃[Cr(OH)₆]. Обратно: Cr⁺³ в щёлочи окисляется до K₂CrO₄</span></div>
+        <div><b>HNO₃</b><span>конц. + Cu, Ag, неметаллы → NO₂ · разб. + Cu → NO · разб. + активные металлы (Zn, Mg) → N₂O, N₂ · очень разб. + активные → NH₄NO₃. Fe, Al, Cr пассивируются конц. кислотой на холоде</span></div>
+        <div><b>H₂SO₄ (конц.)</b><span>малоактивные металлы (Cu), неметаллы → SO₂ · активные металлы (Zn, Mg) и KI → S или H₂S. Разбавленная окисляет только своим H⁺ → H₂</span></div>
+        <div><b>H₂O₂</b><span>окислитель → H₂O (O⁻¹ → O⁻²) с KI, FeSO₄ · восстановитель → O₂ (O⁻¹ → O⁰) с KMnO₄, K₂Cr₂O₇</span></div>
+        <div><b>Восстановители</b><span>S⁻² (H₂S, сульфиды) → S · SO₃²⁻ → SO₄²⁻ · I⁻ → I₂ · Br⁻ → Br₂ · Cl⁻ (конц. HCl) → Cl₂ · Fe²⁺ → Fe³⁺ · NO₂⁻ → NO₃⁻ · NH₃ → N₂ · металлы → катионы</span></div>
+        <div><b>Как уравнивать</b><span>1) степени окисления 2) электроны: окислитель принимает, восстановитель отдаёт 3) множители — НОК 4) переносишь множители к окислителю и восстановителю 5) металлы → кислотные остатки → водород → проверка по кислороду</span></div>
+      </div>`;
+    vOV.querySelector('[data-o="back"]').addEventListener("click", () => go({ tab: "learn", module: null }));
+    vOV.querySelectorAll("[data-ok]").forEach(b => b.addEventListener("click", () => { OVR_.mode = b.dataset.ok; ovs.mode = OVR_.mode; ovSave(); ovRender(); }));
+    vOV.querySelector('[data-o="go"]').addEventListener("click", () => { OVR_.run = { qs: ovNew(5), k: 0, ok: 0 }; ovRun(); zScroll(vOV); });
+    vOV.querySelector('[data-o="lab"]').addEventListener("click", () => { if (window.hbOpenChem) window.hbOpenChem("ovr29", "ovr"); });
+  }
+  const ovChip = (attr, val, html, cls = "") => `<button type="button" class="ov-ch${cls}" ${attr}="${esc(String(val))}">${html}</button>`;
+  function ovStepHtml(T, name, active) {
+    const R = T.R, A = T.ans;
+    if (name === "el") {
+      const sel = A.el || [];
+      if (!active) return `<div class="ov-st done"><b>Меняют степень окисления</b><span>${chem(R.ox.el)} и ${chem(R.red.el)}</span></div>`;
+      return `<div class="ov-st"><b>1. Отметь элементы, которые меняют степень окисления</b><div class="ov-chs">${T.elOpts.map(e => ovChip("data-el", e, chem(e), sel.includes(e) ? " on" : "")).join("")}</div>
+        <div class="actions"><button type="button" class="btn primary" data-o="elok" ${sel.length ? "" : "disabled"}>Проверить</button></div></div>`;
+    }
+    if (name === "st") {
+      const rows = T.st.map((q, i) => {
+        const where = q.w === "a" ? q.h.sp : q.h.to, got = A.st && A.st[i];
+        return `<div class="ov-row${got != null ? " ok" : ""}"><span>${chem(q.h.el)} в ${chem(where)}${q.h.pc ? " <small>(в катионе)</small>" : ""}</span><div class="ov-chs">${got != null ? `<span class="ov-ch on">${ovSign(got)}</span>` : q.opts.map(v => ovChip("data-st", i + ":" + v, ovSign(v))).join("")}</div></div>`;
+      }).join("");
+      if (!active) return `<div class="ov-st done"><b>Степени окисления</b><span>${ovTr(R.ox)} · ${ovTr(R.red)}</span></div>`;
+      return `<div class="ov-st"><b>2. Степени окисления — до и после реакции</b>${rows}</div>`;
+    }
+    if (name === "ox") {
+      if (!active) return `<div class="ov-st done"><b>Окислитель — ${chem(R.ox.sp)}</b><span>принимает электроны: ${ovTr(R.ox)}. Восстановитель — ${chem(R.red.sp)}: ${ovTr(R.red)}</span></div>`;
+      return `<div class="ov-st"><b>3. Какое вещество — окислитель?</b><p class="ov-tip">Окислитель принимает электроны: степень окисления его элемента понижается.</p><div class="ov-chs">${R.r.map(f => ovChip("data-ox", f, chem(f))).join("")}</div></div>`;
+    }
+    if (name === "pick") {
+      const sel = A.pick || [];
+      if (!active) return `<div class="ov-st done"><b>Вещества</b><span>${R.r.map(f => ovLbl(R, f)).join(" + ")}</span></div>`;
+      return `<div class="ov-st"><b>Перечень веществ</b><p class="ov-tip">Выбери все вещества, между которыми протекает окислительно-восстановительная реакция, в ходе которой ${esc(R.cond)}. Не забудь вещество, которое создаёт среду, если оно нужно.</p>
+        <div class="ov-chs">${T.list.map(f => ovChip("data-pk", f, ovLbl(R, f), sel.includes(f) ? " on" : "")).join("")}</div>
+        <div class="actions"><button type="button" class="btn primary" data-o="pkok" ${sel.length >= 2 ? "" : "disabled"}>Проверить</button></div></div>`;
+    }
+    if (name === "oxp" || name === "redp") {
+      const h = name === "oxp" ? R.ox : R.red, opts = name === "oxp" ? T.oxOpts : T.redOpts;
+      if (!active) return `<div class="ov-st done"><b>${name === "oxp" ? "Окислитель" : "Восстановитель"} ${chem(h.sp)} → ${chem(h.to)}</b><span>${ovTr(h)}</span></div>`;
+      return `<div class="ov-st"><b>${name === "oxp" ? "Окислитель" : "Восстановитель"} — ${chem(h.sp)}. Во что ${chem(h.el)} перейдёт здесь?</b><p class="ov-tip">Условия: ${esc(R.med)}.</p><div class="ov-chs">${opts.map(f => ovChip("data-pr", f, chem(f))).join("")}</div></div>`;
+    }
+    if (name === "e") {
+      const got = A.e || {};
+      const line = (x, j) => {
+        const L = chem(x.h.L || (x.h.n > 1 ? x.h.n : "") + x.h.el + "^{" + ovSign(x.h.a) + "}"), Rr = chem(x.h.R || (x.h.n > 1 ? x.h.n : "") + x.h.el + "^{" + ovSign(x.h.b) + "}");
+        const eV = got["e" + j], mV = got["m" + j];
+        return `<div class="ov-bal"><span class="ov-hl">${L} ${x.ox ? "+" : "−"} ${eV != null ? `<b>${eV}</b>` : "?"}e → ${Rr}</span><span class="ov-mul">× ${mV != null ? `<b>${mV}</b>` : "?"}</span></div>
+          ${eV == null ? `<div class="ov-chs"><small>электронов ${x.ox ? "принимает" : "отдаёт"}:</small>${x.eOpts.map(v => ovChip("data-e", j + ":e:" + v, v)).join("")}</div>`
+            : mV == null && got["e" + (1 - j)] != null ? `<div class="ov-chs"><small>множитель:</small>${x.mOpts.map(v => ovChip("data-e", j + ":m:" + v, "× " + v)).join("")}</div>` : ""}`;
+      };
+      if (!active) return `<div class="ov-st done"><b>Электронный баланс</b>${T.e.map((x, j) => `<span class="ov-hl">${ovHalf(x.h, x.ox)} <b>| ${x.m}</b></span>`).join("")}</div>`;
+      return `<div class="ov-st"><b>${T.mode === "ege" ? "" : "4. "}Электронный баланс</b><p class="ov-tip">Сколько электронов принимает окислитель и отдаёт восстановитель? Множители — чтобы отданных было столько же, сколько принятых (через НОК).</p>${T.e.map(line).join("")}</div>`;
+    }
+    if (name === "k") {
+      if (!active) return `<div class="ov-st done"><b>Коэффициенты расставлены</b><span>все элементы сходятся</span></div>`;
+      const all = R.r.concat(R.p), nR = R.r.length, chk = A.kchk;
+      const cell = (f, i) => `<span class="ov-co"><span class="ov-stp"><button type="button" data-kd="${i}" aria-label="меньше">−</button><b>${T.c[i]}</b><button type="button" data-ku="${i}" aria-label="больше">+</button></span><span class="ov-f">${chem(f)}</span></span>`;
+      return `<div class="ov-st"><b>${T.mode === "ege" ? "" : "5. "}Коэффициенты</b><p class="ov-tip">Сначала перенеси множители к окислителю и восстановителю и к их продуктам, потом уравняй металлы, кислотные остатки, водород. Кислород — для проверки.</p>
+        <div class="ov-coefs">${all.map((f, i) => (i === nR ? `<span class="ov-arr">→</span>` : i > 0 ? `<span class="ov-plus">+</span>` : "") + cell(f, i)).join("")}</div>
+        ${chk ? `<div class="ov-atoms">${chk.map(x => `<span class="${x.ok ? "ok" : "bad"}">${chem(x.e)} ${x.l}${x.ok ? " ✓" : ` ≠ ${x.r}`}</span>`).join("")}</div>${A.kmsg ? `<p class="fb wrong">${A.kmsg}</p>` : ""}` : ""}
+        <div class="actions"><button type="button" class="btn primary" data-o="kok">Проверить</button></div></div>`;
+    }
+    return "";
+  }
+  function ovRun() {
+    const r = OVR_.run;
+    if (r.k >= r.qs.length) return ovEnd();
+    const T = r.qs[r.k], R = T.R, fin = T.s >= T.steps.length;
+    const head = T.mode === "ege"
+      ? `<p class="ov-cond">Задание 29 · условие: <b>${esc(R.cond)}</b></p>`
+      : `<p class="rc-eq ov-eq">${ovEq(R, false)}</p><p class="ov-cond">${esc(R.med)}</p>`;
+    vOV.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-o="list">← ОВР</button></div>
+      <div class="cd-top"><span class="num">Реакция ${r.k + 1} из ${r.qs.length} · ${T.mode === "ege" ? "как на ЕГЭ" : "пошагово"}</span><span class="score">чисто: ${r.ok}</span></div>
+      ${cBar(r.k, r.qs.length)}
+      <div class="l-card ov-card">${head}</div>
+      <div class="ov-steps">${T.steps.slice(0, Math.min(T.s + 1, T.steps.length)).map((st, i) => ovStepHtml(T, st, i === T.s && !fin)).join("")}</div>
+      ${T.flash ? `<p class="fb wrong ov-flash">${T.flash}</p>` : ""}
+      ${fin ? `<div class="z-ex"><p class="fb ${T.err ? "wrong" : "good"}">${T.err ? `Решено, но с ошибками (${T.err}) — в счёт не идёт. Попадётся ещё раз позже.` : "Чисто! Как на экзамене 🔥"}</p>
+        <div class="ov-final"><span class="num">Ответ</span><p class="ov-eqk">${ovEq(R, true)}</p>${T.e.map(x => `<p class="ov-hl">${ovHalf(x.h, x.ox)} <b>| ${x.m}</b></p>`).join("")}
+          <p>Окислитель — ${chem(R.ox.sp)} (${chem(R.ox.el + "^{" + ovSign(R.ox.a) + "}")}), восстановитель — ${chem(R.red.sp)} (${chem(R.red.el + "^{" + ovSign(R.red.a) + "}")}).</p></div>
+        <div class="actions"><button type="button" class="btn primary" data-o="next">${r.k + 1 < r.qs.length ? "Дальше" : "Итог"}</button>${R.lab ? `<button type="button" class="btn" data-o="see">🧪 Увидеть в пробирке</button>` : ""}</div></div>` : ""}`;
+    vOV.querySelector('[data-o="list"]').addEventListener("click", () => { OVR_.run = null; ovRender(); zScroll(vOV); });
+    const bad = (msg) => { T.err++; T.flash = msg; haptic("error"); ovRun(); const f = vOV.querySelector(".ov-flash"); if (f) f.classList.add("shake"); };
+    const next = () => { T.flash = ""; T.s++; haptic("success"); if (T.s >= T.steps.length) ovDone(T); ovRun(); const st = vOV.querySelectorAll(".ov-st"); const last = vOV.querySelector(".z-ex") || st[st.length - 1]; if (last) zScroll(last, 140); };
+    const A = T.ans;
+    vOV.querySelectorAll("[data-el]").forEach(b => b.addEventListener("click", () => { const e = b.dataset.el; A.el = A.el || []; A.el = A.el.includes(e) ? A.el.filter(x => x !== e) : [...A.el, e]; T.flash = ""; ovRun(); }));
+    const elok = vOV.querySelector('[data-o="elok"]');
+    if (elok) elok.addEventListener("click", () => {
+      const want = [R.ox.el, R.red.el].sort().join(), got = (A.el || []).slice().sort().join();
+      if (got === want) next();
+      else { const miss = [R.ox.el, R.red.el].filter(e => !(A.el || []).includes(e)), extra = (A.el || []).filter(e => e !== R.ox.el && e !== R.red.el);
+        bad(extra.length ? `${extra.map(chem).join(", ")} — степень окисления не меняется.${miss.length ? " И одного элемента не хватает." : ""}` : "Не все: меняют степень окисления два элемента."); }
+    });
+    vOV.querySelectorAll("[data-st]").forEach(b => b.addEventListener("click", () => {
+      const [i, v] = b.dataset.st.split(":").map(Number), q = T.st[i];
+      if (v === q.v) { A.st = A.st || []; A.st[i] = v; T.flash = ""; if (T.st.every((_, j) => A.st[j] != null)) next(); else { haptic("light"); ovRun(); } }
+      else bad(`${chem(q.h.el)} в ${chem(q.w === "a" ? q.h.sp : q.h.to)} — не ${ovSign(v)}. Посчитай: сумма степеней окисления в веществе равна нулю.`);
+    }));
+    vOV.querySelectorAll("[data-ox]").forEach(b => b.addEventListener("click", () => {
+      if (b.dataset.ox === R.ox.sp) next();
+      else bad(b.dataset.ox === R.red.sp ? `${chem(R.red.sp)} — восстановитель: ${chem(R.red.el)} отдаёт электроны, степень окисления растёт.` : `${chem(b.dataset.ox)} здесь создаёт среду, степени окисления в нём не меняются.`);
+    }));
+    vOV.querySelectorAll("[data-pk]").forEach(b => b.addEventListener("click", () => { const f = b.dataset.pk; A.pick = A.pick || []; A.pick = A.pick.includes(f) ? A.pick.filter(x => x !== f) : [...A.pick, f]; T.flash = ""; ovRun(); }));
+    const pkok = vOV.querySelector('[data-o="pkok"]');
+    if (pkok) pkok.addEventListener("click", () => {
+      const got = (A.pick || []).slice().sort().join(), want = R.r.slice().sort().join();
+      if (got === want) next();
+      else { const extra = (A.pick || []).filter(f => !R.r.includes(f)), miss = R.r.filter(f => !(A.pick || []).includes(f));
+        bad(extra.length ? `${extra.map(chem).join(", ")} — в этой реакции не участвует.` : `Не хватает вещества${miss.length > 1 ? "" : ""}: ${miss.length === 1 && (R.r.length > 2) ? "подумай, что создаёт среду" : "нужен и окислитель, и восстановитель"}.`); }
+    });
+    vOV.querySelectorAll("[data-pr]").forEach(b => b.addEventListener("click", () => {
+      const st = T.steps[T.s], h = st === "oxp" ? R.ox : R.red;
+      if (b.dataset.pr === h.to) next(); else bad(`Не ${chem(b.dataset.pr)}. Смотри на условия: ${esc(R.med)}. Подсказка — в шпаргалке модуля.`);
+    }));
+    vOV.querySelectorAll("[data-e]").forEach(b => b.addEventListener("click", () => {
+      const [j, kind, v] = b.dataset.e.split(":"), x = T.e[+j], want = kind === "e" ? x.v : x.m;
+      A.e = A.e || {};
+      if (+v === want) { A.e[kind + j] = +v; T.flash = ""; if (["e0", "e1", "m0", "m1"].every(k => A.e[k] != null)) next(); else { haptic("light"); ovRun(); } }
+      else bad(kind === "e" ? `${x.ox ? "Принимает" : "Отдаёт"} не ${v}. Разница степеней окисления × число атомов: |${ovSign(x.h.a)} − (${ovSign(x.h.b)})| × ${x.h.n}.` : `Множитель не ${v}: найди НОК ${T.e[0].v} и ${T.e[1].v} и раздели на число электронов.`);
+    }));
+    vOV.querySelectorAll("[data-ku],[data-kd]").forEach(b => b.addEventListener("click", () => {
+      const i = +(b.dataset.ku ?? b.dataset.kd); T.c[i] = Math.max(1, Math.min(20, T.c[i] + (b.dataset.ku != null ? 1 : -1))); A.kchk = null; A.kmsg = ""; haptic("light"); ovRun();
+    }));
+    const kok = vOV.querySelector('[data-o="kok"]');
+    if (kok) kok.addEventListener("click", () => {
+      const chk = ovCheck(R, T.c), allOk = chk.every(x => x.ok), g = T.c.reduce((a, b) => ovGcd(a, b)), same = T.c.every((v, i) => v === R.k[i]);
+      A.kchk = chk;
+      if (same) { A.kmsg = ""; next(); }
+      else if (allOk && g > 1) { A.kmsg = `Баланс сходится, но коэффициенты можно сократить на ${g}. В ответе — наименьшие целые.`; T.err++; haptic("error"); ovRun(); }
+      else { A.kmsg = allOk ? "Атомы сходятся, но электронный баланс нарушен — проверь коэффициенты у окислителя и восстановителя." : "Не сходится там, где красное. Начни с множителей из баланса."; T.err++; haptic("error"); ovRun(); zScroll(vOV.querySelector(".ov-atoms"), 160); }
+    });
+    const nx = vOV.querySelector('[data-o="next"]');
+    if (nx) nx.addEventListener("click", () => { r.k++; ovRun(); zScroll(vOV); });
+    const see = vOV.querySelector('[data-o="see"]');
+    if (see) see.addEventListener("click", () => { if (window.hbOpenChem) window.hbOpenChem("ovr29", "ovr", R.lab); });
+  }
+  function ovDone(T) {
+    if (T.err) return;
+    OVR_.run.ok++;
+    ovs.done[T.R.id] = 1; ovSave();
+    hbRight("ovr29", null, "ovr29:" + T.R.id);
+  }
+  function ovEnd() {
+    const r = OVR_.run, n = Object.keys(ovs.done).length;
+    vOV.innerHTML = `
+      <div class="z-head"><button type="button" class="back" data-o="list">← ОВР</button></div>
+      <div class="z-res"><span class="num">Итог</span><p class="final">${r.ok} из ${r.qs.length}</p>
+        <p>${r.ok === r.qs.length ? "Все реакции чисто 🔥" : "Реакции с ошибками вернутся в следующих подходах."} Всего решено чисто: <b>${n}</b> из ${OVR29.length}.</p>
+        <div class="actions"><button type="button" class="btn primary" data-o="again">Ещё 5 реакций</button><button type="button" class="btn" data-o="list2">Шпаргалка</button></div></div>`;
+    const back = () => { OVR_.run = null; ovRender(); zScroll(vOV); };
+    vOV.querySelector('[data-o="list"]').addEventListener("click", back);
+    vOV.querySelector('[data-o="list2"]').addEventListener("click", back);
+    vOV.querySelector('[data-o="again"]').addEventListener("click", () => { OVR_.run = { qs: ovNew(5), k: 0, ok: 0 }; ovRun(); zScroll(vOV); });
+  }
+  window.__ovr29 = { OVR29, ovCheck, ovMult, ovAtoms, ovE, start: (mode, ids) => { OVR_.mode = mode || OVR_.mode; OVR_.run = { qs: ovNew(5), k: 0, ok: 0 }; if (ids) OVR_.run.qs = ids.map(id => ovNew(30).find(T => T.R.id === id)); ovRun(); }, run: () => OVR_.run };
+  /* начать сразу с нужной реакции — из «Пробирок» («Уравнять») */
+  window.hbOvrStart = (labKey) => {
+    go({ subject: "chem", tab: "learn", module: "ovr" }, { noScroll: true });
+    const pool = OVR29.filter(R => R.lab === labKey);
+    if (pool.length) { OVR_.mode = "step"; OVR_.run = { qs: ovNew(30).filter(T => T.R.lab === labKey).slice(0, 3), k: 0, ok: 0 }; ovRun(); zScroll(vOV); }
+  };
 
   /* ════════ v4.0: БИОЛОГИЯ · Раздел 1 «Биология как наука» — задание 1 ЕГЭ (таблица с пропуском) ════════ */
   const vN = document.getElementById("v-nauka");
@@ -6451,6 +6844,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "nk") go({ subject: "bio", module: "kl-nk" }, { noScroll: true });
   else if (h === "org") go({ subject: "bio", module: "kl-org" }, { noScroll: true });
   else if (h === "plan" || h === "planp") { go({}, { noScroll: true }); planShow(h === "planp" ? "push" : "bot"); }   /* planp — кнопка «Забрать планер» в сообщении бота */
+  else if (h === "ovr") go({ subject: "chem", module: "ovr" }, { noScroll: true });
   else if (h === "probirki" || h === "probovr" || h === "problab" || h === "prob24") { go({ subject: "chem" }, { noScroll: true }); hbOpenChem("start", { probovr: "ovr", problab: "lab", prob24: "task" }[h]); }
   else if (h === "cell3d") { go({ subject: "bio", module: "kl-org" }, { noScroll: true }); hbOpen3D("start"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }

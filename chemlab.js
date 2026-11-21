@@ -3,7 +3,7 @@
 import * as THREE from "./vendor/three-r160/three.module.min.js";
 import { OrbitControls } from "./vendor/three-r160/OrbitControls.js";
 import { RoomEnvironment } from "./vendor/three-r160/RoomEnvironment.js";
-import { SUBS, REAGS, react, PAIRS, makeTask, canTell, OVR, ovTruth, collection, colKey } from "./chemdata.js?v=4171";
+import { SUBS, REAGS, react, PAIRS, makeTask, canTell, OVR, ovTruth, collection, colKey } from "./chemdata.js?v=4180";
 
 const CSS = `
 :host { all: initial; position: fixed; inset: 0; z-index: 3000; display: block;
@@ -738,7 +738,7 @@ export async function open(opts = {}) {
   const OK_KEY = "hb.chl.ovr"; let ovDone = {}; try { ovDone = JSON.parse(localStorage.getItem(OK_KEY) || "{}") || {}; } catch (e) { ovDone = {}; }
   let OV = { i: 0, done: false, pick: [null, null, null] };
   // начать с первого непройденного набора
-  { const k = OVR.findIndex((o) => !ovDone[o.key]); OV.i = k < 0 ? 0 : k; }
+  { const k = OVR.findIndex((o) => !ovDone[o.key]); OV.i = k < 0 ? 0 : k; const want = opts.ovr ? OVR.findIndex((o) => o.key === opts.ovr) : -1; if (want >= 0) OV.i = want; }
   const MED_W = { H2SO4: "Кислая", H2O: "Нейтральная", KOH: "Щелочная" };
   const sameOx = (o) => o.oxs.every((x) => x === o.oxs[0]), sameSub = (o) => o.subs.every((x) => x === o.subs[0]);
   const rowName = (o, i) => sameSub(o) ? `капнем ${htmlF(REAGS[o.oxs[i]].f)}` : sameOx(o) ? MED_W[SUBS[o.subs[i]].med] : `${MED_W[SUBS[o.subs[i]].med]} + ${htmlF(REAGS[o.oxs[i]].f)}`;
@@ -769,6 +769,7 @@ export async function open(opts = {}) {
       ${OV.done ? `${picked ? `<div class="fb ${ok === 3 ? "ok" : "bad"}"><b>${ok === 3 ? "Все три угадал ✓" : `Угадал ${ok} из 3`}</b></div>` : ""}
       <div class="log">${tubes.map((T, i) => `<div><b class="f">${i + 1} · ${rowName(o, i)}</b>: ${esc(T.obs || "без видимых изменений")}${T.eq ? `<span class="eq">${esc(T.eq)}</span>` : ""}</div>`).join("")}</div>
       <div class="fb ok"><b>Запомни</b><p>${esc(o.rule)}</p></div>
+      ${opts.toBalance && o.key !== "chrom" ? `<div class="row"><button type="button" class="btn" id="ovbal">✍️ Уравнять эту реакцию — электронный баланс</button></div>` : ""}
       <div class="row"><button type="button" class="btn" id="ovfresh">🧪 Ещё раз</button>${OV.i + 1 < OVR.length ? `<button type="button" class="btn primary" id="ovnext">Следующий набор →</button>` : `<button type="button" class="btn primary" id="ovfirst">К первому набору</button>`}</div>` : ""}`;
     sbody.querySelectorAll("[data-ov]").forEach((b) => (b.onclick = () => { if (busy) return; OV.i = +b.dataset.ov; buzz("select"); startOvr(); sheet.scrollTo({ top: 0 }); }));
     sbody.querySelectorAll("[data-pi]").forEach((b) => (b.onclick = () => { if (busy) return; const i = +b.dataset.pi; OV.pick[i] = OV.pick[i] === b.dataset.pc ? null : b.dataset.pc; buzz("select"); renderOvr(); }));
@@ -780,6 +781,7 @@ export async function open(opts = {}) {
         try { if (n === 3 && window.hbLab && window.hbLab.right) window.hbLab.right("chlovr", null, "chlovr:" + o.key); } catch (e) {} }
       renderOvr(); setTimeout(() => { const lg = sbody.querySelector(".log"); if (lg) sheet.scrollTo({ top: lg.offsetTop - 60, behavior: "smooth" }); }, 80);
     };
+    const bl = $("#ovbal"); if (bl) bl.onclick = () => { if (busy) return; const key = o.key; close(); opts.toBalance(key); };
     const fb = $("#ovfresh"); if (fb) fb.onclick = () => { if (!busy) { startOvr(); sheet.scrollTo({ top: 0 }); } };
     const nb = $("#ovnext"); if (nb) nb.onclick = () => { if (busy) return; OV.i++; startOvr(); sheet.scrollTo({ top: 0 }); };
     const f1 = $("#ovfirst"); if (f1) f1.onclick = () => { if (busy) return; OV.i = 0; startOvr(); sheet.scrollTo({ top: 0 }); };
