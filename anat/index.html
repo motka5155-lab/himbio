@@ -2,9 +2,36 @@
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <title>Анатомия 3D — прототип</title>
+<script>(()=>{let t=null;try{t=localStorage.getItem("hb.anat.theme")}catch(e){}const q=new URLSearchParams(location.search).get("theme");document.documentElement.dataset.theme=(q==="dark"||q==="light")?q:(t==="dark"?"dark":"light")})()</script>
 <style>
 :root{--bg:#04060c;--panel:rgba(14,20,34,.82);--line:rgba(120,170,255,.16);--txt:#eaf1ff;--mut:#8b9bb8;--acc:#4fd6ff;--hot:#ff8a3d;--good:#3ee08f;--bad:#ff5a6a}
 [hidden]{display:none!important}
+/* Светлая тема (по умолчанию). Тёмная — html[data-theme=dark], переключатель ◐ вверху, выбор помнится. */
+html[data-theme=light]{--bg:#eef3fa;--panel:rgba(255,255,255,.88);--line:rgba(23,33,58,.13);--txt:#17213A;--mut:#56627D;--acc:#0b8ec4;--hot:#e0601a;--good:#24804E;--bad:#C0392B;color-scheme:light}
+html[data-theme=light] #bg{background:radial-gradient(120% 70% at 50% 38%,#ffffff 0%,#e9f0f9 50%,#d5dfed 100%)}
+html[data-theme=light] #bg:after{background:repeating-linear-gradient(90deg,rgba(40,90,170,.10) 0 1px,transparent 1px 46px),repeating-linear-gradient(0deg,rgba(40,90,170,.10) 0 1px,transparent 1px 46px)}
+html[data-theme=light] .tabs button.on,html[data-theme=light] .hbar .btn.on{background:#17213A;color:#fff;box-shadow:none}
+html[data-theme=light] .chip.on{color:var(--txt);border-color:rgba(23,33,58,.3)}
+html[data-theme=light] .grab{background:rgba(23,33,58,.22)}
+html[data-theme=light] .btn{background:#fff;color:var(--txt)}
+html[data-theme=light] .btn.hot{background:linear-gradient(180deg,#ff9a4d,#ff6a2a);color:#fff}
+html[data-theme=light] #steps .btn.on{background:#ffd23f;color:#1a1300}
+html[data-theme=light] .shl{color:#17213A}
+html[data-theme=light] .opts button{background:#fff;color:var(--txt)}
+html[data-theme=light] .legend .pill,html[data-theme=light] .orgs button,html[data-theme=light] .stepbox p{color:var(--txt)}
+html[data-theme=light] .orgs button.on{background:#ffd23f;color:#1a1300}
+html[data-theme=light] .co{background:rgba(255,255,255,.94);border-color:rgba(23,33,58,.16);color:#17213A;box-shadow:0 2px 8px rgba(23,33,58,.12)}
+html[data-theme=light] .co i{box-shadow:0 0 0 1.5px rgba(23,33,58,.25)}
+html[data-theme=light] .co.sel{background:#ffd23f;color:#1a1300;border-color:#e0b400}
+html[data-theme=light] .lbl{background:rgba(255,255,255,.9);border-color:rgba(23,33,58,.14);color:#17213A}
+html[data-theme=light] .credit{color:rgba(86,98,125,.7)}
+html[data-theme=light] .trap{background:rgba(224,96,26,.08);border-color:rgba(224,96,26,.3)}
+html[data-theme=light] .tag{background:rgba(11,142,196,.1)}
+.thm{font-size:18px!important}
+/* В «Разбери» снизу панель «Органы / Скелет / Собрать» — карточка органа встаёт над ней, а не поверх */
+body:has(#slider:not([hidden])) .sheet{bottom:calc(env(safe-area-inset-bottom) + 84px);max-height:calc(48vh - 26px)}
+@media (min-width:900px){body:has(#slider:not([hidden])) .sheet{bottom:92px;max-height:calc(100vh - 220px)}}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:15px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
 #bg{position:fixed;inset:0;background:radial-gradient(120% 70% at 50% 38%,#11233f 0%,#071022 45%,#03050a 100%)}
@@ -70,12 +97,12 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 @media (min-width:700px){.tabs{left:50%;right:auto;width:560px;transform:translateX(-50%)}
  .hbar,.slider,.q,.chips,.legend{left:50%!important;right:auto!important;width:min(600px,calc(100% - 20px));transform:translateX(-50%)}
  .chips>*:first-child,.orgs>*:first-child{margin-left:auto}.chips>*:last-child,.orgs>*:last-child{margin-right:auto}.top{max-width:900px;margin:0 auto}}
-@media (min-width:900px){.sheet{left:auto;right:16px;width:380px;bottom:16px;top:auto;max-height:calc(100vh - 140px)}.sheet.off{transform:translateX(20px)}
+@media (min-width:900px){.sheet{left:auto;right:16px;width:380px;bottom:92px;top:auto;max-height:calc(100vh - 220px)}.sheet.off{transform:translateX(20px)}
  .stepbox{max-height:none}.sheet.mini{width:340px}}
 </style></head><body>
 <div id="bg"></div>
 <div class="load" id="load">Загружаю тело… <span id="lp"></span></div>
-<div class="top"><button class="back">‹</button><div class="ttl"><b>Анатомия 3D</b><span id="sub">тапни на любой орган</span></div><span class="pill" id="cnt">0 / 92 изучено</span></div>
+<div class="top"><button class="back">‹</button><div class="ttl"><b>Анатомия 3D</b><span id="sub">тапни на любой орган</span></div><button class="back thm" id="thm" type="button" aria-label="Светлая или тёмная тема" title="Светлая / тёмная тема">🌙</button><span class="pill" id="cnt">0 / 92 изучено</span></div>
 <div class="tabs" id="tabs"><button data-m="atlas" class="on">Атлас</button><button data-m="explode">Разбери</button><button data-m="heart">Органы</button><button data-m="quiz">Угадай</button></div>
 <div class="orgs" id="orgs" hidden><button data-s="heart" class="on">❤️ Сердце</button><button data-s="brain">🧠 Мозг</button><button data-s="kidney">🫘 Почка</button><button data-s="nephron">🔬 Нефрон</button><button data-s="lungs">🫁 Лёгкие</button><button data-s="stomach">🍽 Желудок</button><button data-s="gland">🧫 Железа желудка</button><button data-s="villus">🌿 Ворсинки</button><button data-s="eye">👁 Глаз</button><button data-s="spine">⚡ Рефлекс</button><button data-s="neuron">🧬 Нейрон и нерв</button><button data-s="skin">🧴 Кожа</button><button data-s="bone">🦴 Кость</button><button data-s="joints">🦵 Суставы</button><button data-s="muscle">💪 Мышца</button></div>
 <div class="credit">3D-модели: BodyParts3D, © DBCLS</div>
@@ -201,9 +228,9 @@ function applyVis(){
     if(mode==='heart'){const sc=SC[scn];op=sc.op(g);if(cut&&sc.cutHide.includes(g.k)&&g.k!==sel)on=false;g.mesh.visible=on;m.clippingPlanes=cut&&sc.clip.includes(g.k)?[cutPlane]:null;m.color.set(sc.col&&colOn&&sc.col[g.k]||baseCol(g));}
     if(mode==='explode'&&shelf&&!shelf.keys.has(g.k))op=.1;
     if(sel&&g.k!==sel&&mode!=='quiz')op=Math.min(op,mode==='heart'?(WALLS.includes(g.k)&&cut?.55:.2):.14);if(mode==='heart'&&g.k===sel&&CAV.includes(g.k))op=.9;
-    m.opacity=op;m.depthWrite=op>.5;m.emissive.set(g.k===sel?(g.hl||GCOL[g.k]||COL[g.sys]):'#000');m.emissiveIntensity=g.k===sel?.35:0;m.needsUpdate=true;
+    m.opacity=op;m.depthWrite=op>.5;const hi=g.k===sel&&!iso;m.emissive.set(hi?(g.hl||GCOL[g.k]||COL[g.sys]):'#000');m.emissiveIntensity=hi?.35:0;m.needsUpdate=true;
   }
-  const gk=sel||(mode==='heart'?stepK:null);glow(gk&&G[gk]&&G[gk].mesh.visible?gk:null);for(const k in PROC)PROC[k].root.visible=mode==='heart'&&scn===k;{
+  const gk=iso?null:(sel||(mode==='heart'?stepK:null));glow(gk&&G[gk]&&G[gk].mesh.visible?gk:null);   /* «Показать отдельно» — без жёлтой подсветки, чтобы видно строение */for(const k in PROC)PROC[k].root.visible=mode==='heart'&&scn===k;{
   }
 }
 // ---------- chips
@@ -366,9 +393,12 @@ function labels(){const svg=$('co');if(mode!=='heart'||!$('sheet').hidden&&false
   let out='';for(const side of [0,1]){const L=items.filter(i=>i.side===side).sort((a,b)=>a.sy-b.sy);let y=top;
     for(const i of L){i.y=Math.max(i.sy,y);y=i.y+27;}const over=y-27-bot;if(over>0)for(const i of L)i.y-=over;
     for(const i of L){i.el.hidden=false;i.el.classList.toggle('sel',i.k===sel);const w=i.el.offsetWidth,L=Math.min(W/2-8,Math.max(170,W*.22)+w*.5);const x=side?Math.min(W-8-w,W/2+L-w):Math.max(8,W/2-L);i.el.style.left=x+'px';i.el.style.top=i.y+'px';
-      const ex=side?x:x+w,c=i.k===sel?'#ffd23f':(i.el.dataset.c||'#dfe8ff');
-      out+=`<polyline points="${ex},${i.y} ${ex+(side?-10:10)},${i.y} ${i.sx},${i.sy}" fill="none" stroke="rgba(0,0,0,.75)" stroke-width="3.6"/><polyline points="${ex},${i.y} ${ex+(side?-10:10)},${i.y} ${i.sx},${i.sy}" fill="none" stroke="${c}" stroke-width="1.6"/><circle cx="${i.sx}" cy="${i.sy}" r="4.6" fill="${c}" stroke-width="1.6" stroke="#000" stroke-width=".8"/>`;}}
+      const ex=side?x:x+w,LT=document.documentElement.dataset.theme==='light',c=i.k===sel?(LT?'#e0a800':'#ffd23f'):(i.el.dataset.c||(LT?'#17213A':'#dfe8ff'));
+      out+=`<polyline points="${ex},${i.y} ${ex+(side?-10:10)},${i.y} ${i.sx},${i.sy}" fill="none" stroke="${LT?'rgba(255,255,255,.95)':'rgba(0,0,0,.75)'}" stroke-width="3.6"/><polyline points="${ex},${i.y} ${ex+(side?-10:10)},${i.y} ${i.sx},${i.sy}" fill="none" stroke="${c}" stroke-width="1.6"/><circle cx="${i.sx}" cy="${i.sy}" r="4.6" fill="${c}" stroke-width="1.6" stroke="${LT?'#fff':'#000'}" stroke-width=".8"/>`;}}
   svg.innerHTML=out;}
+// ---------- тема: светлая / тёмная (◐ вверху), выбор помнится
+$('thm').onclick=()=>{const d=document.documentElement,t=d.dataset.theme==='light'?'dark':'light';d.dataset.theme=t;$('thm').textContent=t==='light'?'🌙':'☀️';try{localStorage.setItem('hb.anat.theme',t)}catch(e){}};
+$('thm').textContent=document.documentElement.dataset.theme==='light'?'🌙':'☀️';
 // ---------- quiz
 const QP=['frontal','parietal','temporal','occipital','mandible','maxilla','zygomatic','cerv','thor','lumb','sacrum','ribs','sternum','clavicle','scapula','humerus','radius','ulna','carpal','hip','femur','patella','tibia','fibula','tarsal','liver','stomach','smint','colon','pancr','gallb','spleen','kidney','bladder','rlung','llung','trachea','ventr','aorta','hemi','cbl','esoph','duoden','adrenal','diaphr','thymus'];
 let Q={n:0,ok:0,str:0,k:null,lock:false};

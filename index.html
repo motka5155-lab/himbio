@@ -1490,7 +1490,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.20</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.21</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -2251,7 +2251,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   function hbOpenAnat(how, scn) {
     if (anOv) return; hbDay();
     anOv = document.createElement("div"); anOv.className = "anat-ov";
-    anOv.innerHTML = '<div class="l3d-load"><div class="l3d-load-in"><div class="spin"></div><b>Загружаю тело человека…</b><span>В первый раз — несколько секунд</span></div></div><iframe title="Анатомия 3D" allow="fullscreen" src="anat/index.html?embed=1&v=419' + (scn ? "&scn=" + scn : "") + '"></iframe>';
+    anOv.innerHTML = '<div class="l3d-load"><div class="l3d-load-in"><div class="spin"></div><b>Загружаю тело человека…</b><span>В первый раз — несколько секунд</span></div></div><iframe title="Анатомия 3D" allow="fullscreen" src="anat/index.html?embed=1&v=421' + (scn ? "&scn=" + scn : "") + '"></iframe>';
     document.body.appendChild(anOv); document.body.style.overflow = "hidden";
     try { if (window.hbPE) window.hbPE("anat", how); } catch (e) {}
   }
