@@ -1446,10 +1446,10 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <li><i>✓</i><span>Все темы ФИПИ по химии и биологии уже внесены и рассчитаны по часам.</span></li>
       <li><i>✓</i><span>Автопересчёт: график сам адаптируется, если отстал или пропустил неделю.</span></li>
       <li><i>✓</i><span>Встроенные циклы повторений (П1–П3) сложных тем.</span></li>
+      <li><i>✓</i><span>Лист «Родителю»: светофор «успевает или отстаёт» — мама или папа видят прогресс с телефона.</span></li>
     </ul>
     <p class="plan-price"><b>490 ₽</b><s>1 200 ₽</s><span>−59%</span></p>
     <button type="button" class="btn primary plan-buy" id="plan-buy">Забрать систему подготовки</button>
-    <p class="plan-note">Оплата и доступ — через Tribute в Телеграме</p>
   </div>
 </div>
 
@@ -1490,7 +1490,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.19</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.20</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -2266,7 +2266,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   const l3dCard = (topic, title, sub) => `<button type="button" class="l3d-cta" data-l3d="${topic}"><span class="l3d-cta-art" aria-hidden="true"></span><span class="l3d-cta-txt"><i>Новое</i><b>${title}</b><small>${sub}</small></span><span class="l3d-cta-go">Открыть</span></button>`;
   document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-l3d]"); if (b) hbOpen3D("module", b.dataset.l3d); });
   /* v4.14: настоящие скриншоты планера — галерея в окне, по тапу во весь экран с увеличением */
-  const PLAN_SHOTS = [["1", "Мой план 80+ — что внутри"], ["2", "«Сегодня»: прогресс, отставание, темы недели"], ["3", "«План»: все темы по неделям до ЕГЭ"],
+  const PLAN_SHOTS = [["1", "Мой план 80+ — что внутри"], ["7", "«Родителю»: видно, успевает ли ребёнок"], ["2", "«Сегодня»: прогресс, отставание, темы недели"], ["3", "«План»: все темы по неделям до ЕГЭ"],
     ["4", "«Темы»: кодификатор ФИПИ, отметки и повторения"], ["5", "«Старт»: настройка за 3 минуты"], ["6", "«Инструкция»: что где лежит"]];
   const planImg = (k) => "plan/" + k + ".jpg?v=1";
   const planTrack = document.getElementById("plan-track"), planDots = document.getElementById("plan-dots");
