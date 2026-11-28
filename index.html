@@ -1490,7 +1490,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   <header class="app-head">
     <div class="brand">
       <h1>Химбио без зубрёжки</h1>
-      <span class="ver" id="ver">v4.21</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
+      <span class="ver" id="ver">v4.22</span><button type="button" class="fs-btn" id="fsbtn" hidden>⛶ На весь экран</button>
     </div>
     <div class="subj" role="group" aria-label="Предмет">
       <button type="button" id="s-chem" aria-pressed="true">Химия</button>
@@ -1581,7 +1581,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   /* ════════ МОДУЛИ ПРИЛОЖЕНИЯ ════════ */
   const MODULES = {
     chem: [
-      { group: "3D-лаборатория", id: "probirki", lab: "chem", title: "Пробирки: химия в 3D", desc: "Капаешь реактивы сам и смотришь, что будет: задание 24 «различи вещества», ОВР в трёх средах (KMnO₄, K₂Cr₂O₇) и свободные опыты. Каждая новая реакция — в твою коллекцию.", st: "85 реакций · 3 режима", ready: true, rel: "2026-11-17" },
+      { group: "3D-лаборатория", id: "probirki", lab: "chem", title: "Пробирки: химия в 3D", desc: "Новое: живые осадки, газ из пробирки, пламя — и игра «Пары» на время. Капаешь реактивы сам: задание 24 «различи вещества», ОВР в трёх средах и свободные опыты с вопросом «что ты видишь?». Каждая новая реакция — в твою коллекцию.", st: "85 реакций · 4 режима", ready: true, rel: "2026-11-29" },
       { group: "ЕГЭ · вторая часть", id: "ovr", title: "Задание 29: ОВР", desc: "Электронный баланс по шагам: степени окисления, окислитель и восстановитель, множители, коэффициенты. 30 реакций: KMnO₄ и K₂Cr₂O₇ в разных средах, HNO₃, H₂SO₄ (конц.), H₂O₂. Режим «как на ЕГЭ» — сам выбираешь вещества и продукты.", st: "30 реакций · 2 режима", ready: true, rel: "2026-11-18" },
       { group: "ЕГЭ · вторая часть", id: "z32", title: "Задание 32: цепочки", desc: "Цепочки превращений органики как на ЕГЭ. Решаешь по шагам, тренажёр проверяет и объясняет ошибки.", st: "74 цепочки · готово", ready: true, rel: "2026-10-21" },
       { group: "ЕГЭ · первая часть", id: "lechat", title: "Задание 22: химическое равновесие", desc: "Принцип Ле Шателье на ползунке: куда сместится равновесие при нагреве, давлении, концентрации, катализаторе.", st: "25 равновесий · бесконечные задания", ready: true, rel: "2026-10-31" },
@@ -2236,7 +2236,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
     ld.innerHTML = '<div class="l3d-load-in"><div class="spin"></div><b>Расставляю пробирки…</b><span>В первый раз — пара секунд</span></div>';
     document.body.appendChild(ld);
     try {
-      const m = await import("./chemlab.js?v=4180");
+      const m = await import("./chemlab.js?v=4220");
       await m.open({ mode, ovr, toBalance: (k) => { if (window.hbOvrStart) window.hbOvrStart(k); }, onClose: () => { chlBusy = false; } });
       ld.remove(); hbGoalOnce("chemlab_open", { how });
     } catch (e) {
@@ -6854,7 +6854,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
       <div class="traps">${list.map(([h, p]) => `<article class="trap-card"><div class="top"><b>${h}</b></div><p>${p}</p></article>`).join("")}</div>`).join("");
   }
 
-  /* старт: #probirki (#probovr, #problab, #prob24), #organika, #quiz, #lovushki, #bio, #r8, #z32, #cards, #lechat, #gidroliz, #elektroliz, #uglevodorody, #izomeriya */
+  /* старт: #probirki (#probovr, #problab, #prob24, #probpary), #organika, #quiz, #lovushki, #bio, #r8, #z32, #cards, #lechat, #gidroliz, #elektroliz, #uglevodorody, #izomeriya */
   const h = window.HB_START || location.hash.slice(1);
   const mh = /^r(\d{1,2})$/.exec(h);
   if (h === "quiz") go({ tab: "quiz" }, { noScroll: true });
@@ -6881,7 +6881,7 @@ mark.h-new { color: inherit; background: var(--ok-soft); border-radius: 5px; pad
   else if (h === "plan" || h === "planp") { go({}, { noScroll: true }); planShow(h === "planp" ? "push" : "bot"); }   /* planp — кнопка «Забрать планер» в сообщении бота */
   else if (h === "ovr") go({ subject: "chem", module: "ovr" }, { noScroll: true });
   else if (h === "anat" || String(h || "").startsWith("anat-")) { go({ subject: "bio" }, { noScroll: true }); hbOpenAnat("start", h.split("-")[1]); }
-  else if (h === "probirki" || h === "probovr" || h === "problab" || h === "prob24") { go({ subject: "chem" }, { noScroll: true }); hbOpenChem("start", { probovr: "ovr", problab: "lab", prob24: "task" }[h]); }
+  else if (h === "probirki" || h === "probovr" || h === "problab" || h === "prob24" || h === "probpary") { go({ subject: "chem" }, { noScroll: true }); hbOpenChem("start", { probovr: "ovr", problab: "lab", prob24: "task", probpary: "pairs" }[h]); }
   else if (h === "cell3d") { go({ subject: "bio", module: "kl-org" }, { noScroll: true }); hbOpen3D("start"); }
   else if (mh && R[+mh[1]]) { go({ module: "organika" }, { noScroll: true, keepSelection: true }); selectEdge(+mh[1]); }
   else go({}, { noScroll: true });

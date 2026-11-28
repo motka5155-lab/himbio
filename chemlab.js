@@ -3,6 +3,10 @@
 import * as THREE from "./vendor/three-r160/three.module.min.js";
 import { OrbitControls } from "./vendor/three-r160/OrbitControls.js";
 import { RoomEnvironment } from "./vendor/three-r160/RoomEnvironment.js";
+import { EffectComposer } from "./vendor/three-r160/EffectComposer.js";
+import { RenderPass } from "./vendor/three-r160/RenderPass.js";
+import { UnrealBloomPass } from "./vendor/three-r160/UnrealBloomPass.js";
+import { OutputPass } from "./vendor/three-r160/OutputPass.js";
 import { SUBS, REAGS, react, PAIRS, makeTask, canTell, OVR, ovTruth, collection, colKey } from "./chemdata.js?v=4180";
 
 const CSS = `
@@ -57,8 +61,10 @@ const CSS = `
 .modes { position: absolute; left: 50%; transform: translateX(-50%); top: calc(var(--tg-top, env(safe-area-inset-top, 0px)) + 62px); display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .modes { max-width: calc(100% - 24px); overflow-x: auto; scrollbar-width: none; }
 .modes::-webkit-scrollbar { display: none; }
-.modes button { border: 0; background: none; color: var(--ink-2); font: 600 13px var(--font-body); padding: 8px 12px; border-radius: 10px; cursor: pointer; white-space: nowrap; }
+.modes button { border: 0; background: none; color: var(--ink-2); font: 600 13px var(--font-body); padding: 8px 10px; border-radius: 10px; cursor: pointer; white-space: nowrap; }
 .modes button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+@media (max-width: 430px) { .modes { gap: 2px; padding: 3px; } .modes button { padding: 7px 8px; font-size: 12px; } }
+@media (max-width: 350px) { .modes button { padding: 7px 6px; font-size: 11px; } }
 .sheet { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: min(720px, 100%); max-height: 40%; overflow: auto; padding: 10px 16px 14px; transition: max-height .3s ease; padding-bottom: calc(var(--tg-bottom, env(safe-area-inset-bottom, 0px)) + 14px);
   background: var(--glass); border: 1px solid var(--glass-line); border-bottom: 0; border-radius: 20px 20px 0 0; box-shadow: 0 -8px 30px rgba(23,33,58,.12); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .sheet.full { max-height: 78%; }
@@ -82,6 +88,24 @@ const CSS = `
 .chip.mini { padding: 6px 9px; font-size: 12.5px; border-radius: 10px; }
 .chip.mini.right { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); opacity: 1; }
 .chip.mini.wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); opacity: 1; }
+.oq { margin: 6px 0 4px; padding: 12px; border-radius: 16px; background: var(--accent-soft); border: 1.5px solid var(--accent); }
+.oq .h { margin-top: 0; }
+.chip.ok { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); opacity: 1; }
+.chip.bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); opacity: 1; }
+.oqr { margin: 10px 0 0; font: 500 14px/1.45 var(--font-body); color: var(--ink); }
+.oqr .eq { display: block; margin-top: 6px; }
+.modes .nw { font: 700 8.5px var(--font-mono); font-style: normal; color: var(--accent); vertical-align: super; margin-left: 2px; }
+.modes button[aria-pressed="true"] .nw { color: inherit; }
+.pstat { display: flex; gap: 8px; margin: 8px 0 10px; }
+.pstat div { flex: 1; background: var(--stage-1); border: 1.5px solid var(--line); border-radius: 12px; padding: 7px 9px; font: 500 11px var(--font-body); color: var(--ink-2); }
+.pstat b { display: block; font: 700 16px var(--font-display, var(--font-body)); color: var(--ink); }
+.pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pc { text-align: left; border: 1.5px solid var(--line); background: var(--stage-1); color: var(--ink); border-radius: 14px; padding: 10px 11px; min-height: 64px; font: 600 13.5px/1.35 var(--font-body); cursor: pointer; transition: transform .15s, border-color .15s; }
+.pc em { display: block; font: 600 9.5px var(--font-mono); font-style: normal; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 3px; }
+.pc.sel { border-color: var(--accent); background: var(--accent-soft); transform: scale(1.02); }
+.pc.done { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); opacity: .85; cursor: default; }
+.pc.bad { border-color: var(--bad); background: var(--bad-soft); animation: pshake .35s; }
+@keyframes pshake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-5px) } 75% { transform: translateX(5px) } }
 .chip.mini.truth { border-color: var(--ok); border-style: dashed; color: var(--ok); opacity: 1; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
 .hint { font-size: 12px; color: var(--ink-2); }
@@ -121,7 +145,7 @@ const HTML = `<div class="app" id="app" data-look="lab">
     <button class="ibtn" id="lookBtn" type="button" aria-label="Сменить стиль">☾</button>
   </header>
   <div class="toast" id="toast" role="status"></div>
-  <nav class="modes" id="modes"><button type="button" data-mode="lab">Лаборантская</button><button type="button" data-mode="task">Задание 24</button><button type="button" data-mode="ovr">ОВР по средам</button></nav>
+  <nav class="modes" id="modes"><button type="button" data-mode="lab">Лаборантская</button><button type="button" data-mode="task">Задание 24</button><button type="button" data-mode="ovr">ОВР · среда</button><button type="button" data-mode="pairs">Пары<i class="nw">NEW</i></button></nav>
   <section class="sheet" id="sheet"><button class="grip" id="grip" type="button" aria-label="Развернуть карточку" aria-expanded="false"></button><div class="res" id="res"></div><div id="sbody"></div></section>
   <section class="colv" id="colv" hidden></section>
 </div>`;
@@ -168,6 +192,14 @@ export async function open(opts = {}) {
   const controls = new OrbitControls(camera, renderer.domElement);
   Object.assign(controls, { enableDamping: true, dampingFactor: 0.085, enablePan: false, rotateSpeed: 0.7, zoomSpeed: 0.9,
     minDistance: 7, maxDistance: 22, minPolarAngle: 0.55, maxPolarAngle: 1.42, minAzimuthAngle: -1.0, maxAzimuthAngle: 1.0 });
+  // свечение растворов, пламени и осадков (bloom); на слабых устройствах — без него
+  let composer = null, bloom = null;
+  try {
+    composer = new EffectComposer(renderer); composer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    composer.addPass(new RenderPass(scene, camera));
+    bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.45, 0.72); composer.addPass(bloom);
+    composer.addPass(new OutputPass());
+  } catch (e) { composer = null; }
   const TARGET = new V3(0, 4.3, -0.4);
   controls.target.copy(TARGET);
 
@@ -177,8 +209,8 @@ export async function open(opts = {}) {
     lab: { exposure: 1.0, hemi: ["#ffffff", "#9aa3b2", 0.85], key: 1.9, glassEdge: "#8A97B8", glow: 0 },
     night: { exposure: 1.05, hemi: ["#7fa6ff", "#05080f", 0.35], key: 0.45, glassEdge: "#4DE1FF", glow: 1 },
   };
-  let LOOK = "lab";
-  try { const q = localStorage.getItem("hb.chl.look"); if (LOOKS[q]) LOOK = q; } catch (e) {}
+  let LOOK = "night";
+  try { const q = localStorage.getItem("hb.chl.look2"); if (LOOKS[q]) LOOK = q; } catch (e) {}
   if (opts.look && LOOKS[opts.look]) LOOK = opts.look;
 
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -262,7 +294,14 @@ export async function open(opts = {}) {
     return p;
   }
   function liquidGeo(h) { return new THREE.LatheGeometry(tubeProfile(TR * 0.9, h, true), 40); }
-  const PN = 420, BN = 70;
+  const PN = 2600, BN = 260, GN = 320;
+  // мягкая «хлопьевидная» точка для осадка и газа
+  const SPR = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"); const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.5, "rgba(255,255,255,.8)"); gr.addColorStop(1, "rgba(255,255,255,0)"); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+  const pointCloud = (n, size, opts = {}) => { const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+    if (opts.vc) geo.setAttribute("color", new THREE.BufferAttribute(new Float32Array(n * 3), 3)); geo.setDrawRange(0, 0);
+    const m = new THREE.Points(geo, new THREE.PointsMaterial({ size, map: SPR, vertexColors: !!opts.vc, transparent: true, opacity: opts.op ?? 1, depthWrite: false, blending: opts.add ? THREE.AdditiveBlending : THREE.NormalBlending }));
+    m.frustumCulled = false; return m; };
   // «серебряное зеркало»: полосы отражений, как на хроме
   const chromeTex = (() => { const c = document.createElement("canvas"); c.width = 256; c.height = 8; const g = c.getContext("2d"); const gr = g.createLinearGradient(0, 0, 256, 0);
     [[0, "#5E6672"], [0.12, "#F7F9FC"], [0.2, "#9AA3B0"], [0.38, "#E9EDF3"], [0.5, "#4B525D"], [0.62, "#DCE1E8"], [0.78, "#FFFFFF"], [0.88, "#7D8693"], [1, "#5E6672"]].forEach(([o, col]) => gr.addColorStop(o, col));
@@ -281,7 +320,11 @@ export async function open(opts = {}) {
     const mirMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, map: chromeTex, metalness: 0.75, roughness: 0.12, transparent: true, opacity: 0, envMapIntensity: 1.8, side: THREE.DoubleSide, depthWrite: false });
     const mirror = new THREE.Mesh(new THREE.LatheGeometry(tubeProfile(TR * 0.93, FILL0 + 0.35, false), 48), mirMat); mirror.renderOrder = 4; g.add(mirror);
     const pMat = new THREE.MeshStandardMaterial({ roughness: 0.75, metalness: 0, transparent: true, opacity: 1 });
-    const parts = new THREE.InstancedMesh(flakeG, pMat, PN); parts.instanceMatrix.setUsage(THREE.DynamicDrawUsage); parts.count = 0; parts.renderOrder = 3; parts.frustumCulled = false; g.add(parts);
+    const parts = new THREE.InstancedMesh(flakeG, pMat, 1); parts.count = 0; parts.visible = false; g.add(parts);
+    const ppts = pointCloud(PN, 0.1, { vc: true }); ppts.renderOrder = 3; g.add(ppts);
+    const gpts = pointCloud(GN, 0.26, { op: 0.22 }); gpts.renderOrder = 7; g.add(gpts);
+    const pops = pointCloud(40, 0.07, { op: 0.8, add: true }); pops.renderOrder = 8; g.add(pops);
+    const splash = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.012, 8, 40), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false })); splash.rotation.x = Math.PI / 2; splash.visible = false; g.add(splash);
     const bMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, transmission: 0.7, transparent: true, opacity: 0.55, depthWrite: false });
     const bubbles = new THREE.InstancedMesh(sphereG, bMat, BN); bubbles.count = 0; bubbles.renderOrder = 4; bubbles.frustumCulled = false; g.add(bubbles);
     // этикетка на самой пробирке (как полоска лейкопластыря): буква или среда + формула — подписи больше не налезают друг на друга
@@ -289,7 +332,7 @@ export async function open(opts = {}) {
     const tagT = new THREE.CanvasTexture(tagC); tagT.colorSpace = THREE.SRGBColorSpace; tagT.anisotropy = 4;
     const tag = new THREE.Mesh(new THREE.CylinderGeometry(TR + 0.015, TR + 0.015, 1.5, 32, 1, true, -0.85, 1.7), new THREE.MeshStandardMaterial({ map: tagT, roughness: 0.8, transparent: true }));
     tag.position.y = TH - 1.55; tag.renderOrder = 6; g.add(tag);
-    const T = { g, letter, liquid, liqMat, cloud, cloudMat, mirror, mirMat, parts, pMat, bubbles, level: FILL0, sub: null, tagC, tagT,
+    const T = { g, letter, liquid, liqMat, cloud, cloudMat, mirror, mirMat, parts, pMat, bubbles, ppts, gpts, pops, splash, G: [], spl: 0, level: FILL0, sub: null, tagC, tagT,
       P: [], B: [], gasT: 0, colNow: new THREE.Color(0xE8F3FA), colTo: new THREE.Color(0xE8F3FA), cloudTo: 0, mirTo: 0, pptCol: new THREE.Color(0xffffff), pptTo: null, label: null, obs: "", smell: "" };
     return T;
   }
@@ -313,6 +356,20 @@ export async function open(opts = {}) {
   /* спиртовки (нагрев) */
   // спиртовка стоит прямо под пробиркой: пламя касается дна
   const lampLiq = new THREE.MeshStandardMaterial({ color: 0x9FD3F0, transparent: true, opacity: 0.55, roughness: 0.2 });
+  // живое пламя: шум по высоте, синее ядро, тёплые языки, растворяется вверху
+  const FLAME_MAT = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    uniforms: { t: { value: 0 }, cOut: { value: new THREE.Color(0xff9a3a) } },
+    vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader: `varying vec2 vUv;uniform float t;uniform vec3 cOut;
+    float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+    float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
+    void main(){vec2 p=vUv;p.x-=.5;float y=p.y;float nz=fbm(vec2(p.x*4.,y*3.-t*3.2));float nz2=fbm(vec2(p.x*7.+3.,y*5.-t*5.));
+     float w=mix(.2,.015,pow(y,.85))*(.75+.5*nz);float xs=p.x+(nz2-.5)*.12*y;
+     float body=smoothstep(w,w*.15,abs(xs))*smoothstep(0.,.06,y)*smoothstep(1.,.45,y+(nz-.5)*.35);
+     float core=smoothstep(.07,.0,abs(p.x))*smoothstep(0.,.04,y)*smoothstep(.32,.12,y);
+     vec3 blue=vec3(.25,.45,1.);vec3 col=mix(blue,cOut,smoothstep(.05,.35,y));col=mix(col,vec3(.55,.7,1.),core*.7);
+     float a=body*.95+core*.5;gl_FragColor=vec4(col*a*1.2,a);}` });
   function makeLamp(x) {
     const g = new THREE.Group(); g.position.set(x, 0, 0); scene.add(g);
     const body = new THREE.Mesh(lathe([[0.0001, 0], [0.62, 0], [0.66, 0.08], [0.66, 0.42], [0.5, 0.66], [0.2, 0.78], [0.0001, 0.78]], 28), decoGlass); g.add(body);
@@ -320,8 +377,7 @@ export async function open(opts = {}) {
     const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.19, 0.3, 16), new THREE.MeshStandardMaterial({ color: 0xBFC6D4, metalness: 0.7, roughness: 0.3 })); neck.position.y = 0.9; g.add(neck);
     const wick = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.16, 8), new THREE.MeshStandardMaterial({ color: 0x3A3027, roughness: 0.9 })); wick.position.y = 1.1; g.add(wick);
     const fl = new THREE.Group(); fl.position.y = 1.16; g.add(fl);
-    const outer = new THREE.Mesh(new THREE.SphereGeometry(0.17, 16, 12), new THREE.MeshBasicMaterial({ color: 0xFFA43A, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false })); outer.scale.set(1, 2.6, 1); outer.position.y = 0.3; fl.add(outer);
-    const inner = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 10), new THREE.MeshBasicMaterial({ color: 0x5AA0FF, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false })); inner.scale.set(1, 1.8, 1); inner.position.y = 0.12; fl.add(inner);
+    const flame = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 1.5), FLAME_MAT); flame.position.y = 0.62; flame.renderOrder = 9; fl.add(flame); fl.userData.flame = flame;
     const light = new THREE.PointLight(0xffa040, 0, 5); light.position.y = 0.4; fl.add(light);
     g.visible = false; light.removeFromParent(); light.position.set(x, 1.6, 0.5); scene.add(light);
     return { g, fl, light };
@@ -385,7 +441,7 @@ export async function open(opts = {}) {
   const dropMat = new THREE.MeshPhysicalMaterial({ color: 0xE8F3FA, roughness: 0.05, transmission: 0.6, transparent: true, opacity: 0.85 });
 
   function setLook(l) {
-    LOOK = l; app.dataset.look = l; try { localStorage.setItem("hb.chl.look", l); } catch (e) {}
+    LOOK = l; app.dataset.look = l; try { localStorage.setItem("hb.chl.look2", l); } catch (e) {}
     const L = LOOKS[l]; renderer.toneMappingExposure = L.exposure;
     hemi.color.set(L.hemi[0]); hemi.groundColor.set(L.hemi[1]); hemi.intensity = L.hemi[2]; key.intensity = L.key; rimL.intensity = l === "night" ? 1.4 : 0.6;
     wallMat.map = TEX[l].wall; wallMat.needsUpdate = true; benchMat.map = TEX[l].top; benchMat.needsUpdate = true;
@@ -393,26 +449,29 @@ export async function open(opts = {}) {
     rims.forEach((r) => { r.material.uniforms.uC.value.set(L.glassEdge); r.material.uniforms.uA.value = l === "night" ? 1.25 : 0.7; r.material.blending = l === "night" ? THREE.AdditiveBlending : THREE.NormalBlending; r.material.needsUpdate = true; });
     glassMat.opacity = l === "night" ? 0.12 : 0.3;
     allTubes.forEach((t) => { t.liqMat.emissiveIntensity = l === "night" ? 0.55 : 0; t.pMat.emissiveIntensity = l === "night" ? 0.35 : 0; });
+    if (bloom) { bloom.strength = l === "night" ? 0.32 : 0.12; bloom.threshold = l === "night" ? 0.86 : 0.95; bloom.radius = 0.35; }
     tubes.forEach(drawTag);
     $("#lookBtn").textContent = l === "night" ? "☀" : "☾";
   }
 
   /* ───────── состояние пробирки и эффекты ───────── */
-  const COLORLESS = new THREE.Color(0xE8F3FA);
+  const COLORLESS = new THREE.Color(0xE8F3FA); const HSL = {};
   const tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpS = new V3(), tmpP = new V3();
   function baseColor(sub) { const s = SUBS[sub]; return s && s.liq ? new THREE.Color(s.liq) : COLORLESS.clone(); }
   function setLevel(T, h) { T.level = h; T.liquid.geometry.dispose(); T.liquid.geometry = liquidGeo(h); T.cloud.geometry.dispose(); T.cloud.geometry = liquidGeo(h * 0.98); }
   function resetTube(T, sub) {
-    T.sub = sub; setLevel(T, FILL0); T.P = []; T.B = []; T.gasT = 0; T.parts.count = 0; T.bubbles.count = 0;
+    T.sub = sub; setLevel(T, FILL0); T.P = []; T.B = []; T.G = []; T.gasT = 0; T.parts.count = 0; T.bubbles.count = 0;
     const c = baseColor(sub); T.colNow.copy(c); T.colTo.copy(c); T.cloudTo = SUBS[sub] && SUBS[sub].op ? 0.18 : 0; T.cloudMat.opacity = T.cloudTo; T.cloudMat.color.copy(c);
     T.mirTo = 0; T.mirMat.opacity = 0; T.obs = ""; T.smell = ""; T.n = {}; T.reag = null; T.pptTo = null;
   }
   function spawnPpt(T, color, shape = "fine", amount = 1) {
-    const n = Math.round((shape === "curd" ? 220 : shape === "gel" ? 200 : 320) * amount), c = new THREE.Color(color);
+    const n = Math.round((shape === "curd" ? 1100 : shape === "gel" ? 900 : 1700) * amount), c = new THREE.Color(color);
+    T.ppts.material.size = shape === "gel" ? 0.16 : shape === "curd" ? 0.13 : 0.095;
     T.pptCol.copy(c); T.pMat.color.copy(c); T.pMat.emissive.copy(c); T.pMat.opacity = shape === "gel" ? 0.8 : 1;
     for (let i = 0; i < n && T.P.length < PN; i++) {
       const a = Math.random() * Math.PI * 2, r = Math.random() * TR * 0.35;
-      T.P.push({ x: Math.cos(a) * r, y: T.level - 0.08 - Math.random() * 0.35, z: Math.sin(a) * r, vx: (Math.random() - 0.5) * 1.1, vy: -0.2 - Math.random() * 0.9, vz: (Math.random() - 0.5) * 1.1,
+      const v = 0.82 + Math.random() * 0.36;
+      T.P.push({ cr: Math.min(1, c.r * v), cg: Math.min(1, c.g * v), cb: Math.min(1, c.b * v), x: Math.cos(a) * r, y: T.level - 0.08 - Math.random() * 0.35, z: Math.sin(a) * r, vx: (Math.random() - 0.5) * 1.1, vy: -0.2 - Math.random() * 0.9, vz: (Math.random() - 0.5) * 1.1,
         s: (shape === "curd" ? 0.03 + Math.random() * 0.045 : shape === "gel" ? 0.035 + Math.random() * 0.04 : 0.016 + Math.random() * 0.018), life: 0, rest: false, fade: 1,
         q: new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random() * 6, Math.random() * 6, Math.random() * 6)), k: [0.7 + Math.random() * 0.6, 0.4 + Math.random() * 0.4, 0.7 + Math.random() * 0.6], sink: 0.7 + Math.random() * 0.9 });
     }
@@ -461,12 +520,13 @@ export async function open(opts = {}) {
   let busy = false;
   async function runDrops(rk, which = [0, 1], heat = false) {
     if (busy) return []; busy = true; buzz("select");
-    const R = REAGS[rk], out = [];
+    const R = REAGS[rk], out = [], list = which.map((i) => tubes[i]).filter(Boolean), m0 = mode;
+    try {
     const b = bottles.find((x) => x.userData.rk === rk) || bottles[0];
     pip.userData.fill.material.color.set(R.ppt || R.liq || "#E8F3FA"); dropMat.color.set(R.ppt || R.liq || "#E8F3FA");
     if (b) { await moveTo(new V3(b.position.x, 2.75, b.position.z), 650); await tween(260, (k) => (pip.position.y = 2.75 - 0.5 * Math.sin(Math.PI * k))); }
-    for (const i of which) {
-      const T = tubes[i];
+    for (const T of list) {
+      if (mode !== m0 || !tubes.includes(T)) break;
       await moveTo(new V3(T.g.position.x, TUBE_Y + TH + 0.65, 0), 700);
       for (let d = 0; d < 3; d++) {
         const m = new THREE.Mesh(sphereG, dropMat); m.scale.set(0.07, 0.1, 0.07); m.position.set(T.g.position.x, TUBE_Y + TH + 0.55, 0); scene.add(m);
@@ -474,10 +534,11 @@ export async function open(opts = {}) {
         await tween(150, () => {});
       }
       await tween(420, () => {});
+      if (mode !== m0 || !tubes.includes(T)) break;
       out.push(dropInto(T, rk, heat));
     }
     await moveTo(PIP_HOME, 750, -1.25);
-    busy = false;
+    } finally { busy = false; }
     return out;
   }
 
@@ -524,7 +585,7 @@ export async function open(opts = {}) {
   };
   function renderRes() {
     const short = (T) => T.sh || (T.obs.includes(" — ") ? T.obs.split(" — ").pop() : T.obs).split(/[,:.(]/)[0].trim();
-    resEl.innerHTML = tubes.filter((T) => T.obs).map((T) => { const s = SUBS[T.sub] || {}, nm = T.tagOx ? plainF(T.tagOx) : s.med ? MED_SHORT[s.med] : T.letter;
+    resEl.innerHTML = tubes.filter((T) => T.obs && !T.hide).map((T) => { const s = SUBS[T.sub] || {}, nm = T.tagOx ? plainF(T.tagOx) : s.med ? MED_SHORT[s.med] : T.letter;
       return `<span><i style="background:${swatch(T)}"></i>${esc(nm)}<em>${esc(short(T))}${T.smell ? " · 👃" : ""}</em></span>`; }).join("");
   }
   function showObs(T) { renderRes(); }
@@ -569,13 +630,13 @@ export async function open(opts = {}) {
   function stepTube(T, dt) {
     T.colNow.lerp(T.colTo, Math.min(1, dt * 1.6));
     const colored = Math.abs(T.colNow.r - COLORLESS.r) + Math.abs(T.colNow.g - COLORLESS.g) + Math.abs(T.colNow.b - COLORLESS.b);
-    T.liqMat.color.copy(T.colNow); T.liqMat.emissive.copy(T.colNow).multiplyScalar(LOOK === "night" ? 0.45 * Math.min(1, colored * 1.5) : 0);
+    T.liqMat.color.copy(T.colNow); T.colNow.getHSL(HSL); T.liqMat.emissive.copy(T.colNow).multiplyScalar(LOOK === "night" ? (0.12 + 0.5 * HSL.s) * Math.min(1, colored * 1.5) : 0.04 * HSL.s);
     T.liqMat.opacity = 0.48 + Math.min(0.46, colored * 0.75); T.liqMat.transmission = 0.6 - Math.min(0.5, colored * 0.8);
     T.cloudMat.opacity += (T.cloudTo - T.cloudMat.opacity) * Math.min(1, dt * 2.2);
     T.mirMat.opacity += (T.mirTo - T.mirMat.opacity) * Math.min(1, dt * 0.7);
     if (T.pptTo) { T.pptCol.lerp(T.pptTo, Math.min(1, dt * 0.8)); T.pMat.color.copy(T.pptCol); T.pMat.emissive.copy(T.pptCol); }
     // частицы осадка: опускаются и ложатся на дно горкой
-    let n = 0;
+    let n = 0; const pa = T.ppts.geometry.attributes.position.array, ca = T.ppts.geometry.attributes.color.array;
     const floor = (x, z) => { const r = Math.hypot(x, z) / (TR * 0.86); return TR * 0.9 - Math.sqrt(Math.max(0, 1 - Math.min(1, r) ** 2)) * TR * 0.9 + 0.03; };
     for (const p of T.P) {
       if (p.dis) { p.fade -= dt * 0.9; if (p.fade <= 0) continue; }
@@ -586,32 +647,44 @@ export async function open(opts = {}) {
         const f = floor(p.x, p.z) + p.s * 0.5;
         if (p.y <= f) { p.rest = true; p.y = f + Math.random() * Math.min(0.28, 0.04 + T.P.length / 1400); }
       }
-      tmpP.set(p.x, p.y, p.z); const s = p.s * (p.dis ? Math.max(0, p.fade) : 1); tmpS.set(s * p.k[0], s * p.k[1], s * p.k[2]);
-      tmpM.compose(tmpP, p.q, tmpS); T.parts.setMatrixAt(n++, tmpM);
+      if (p.dis && Math.random() > p.fade) continue;
+      if (n < PN) { pa[n * 3] = p.x; pa[n * 3 + 1] = p.y; pa[n * 3 + 2] = p.z; ca[n * 3] = T.pptTo ? T.pptCol.r : p.cr; ca[n * 3 + 1] = T.pptTo ? T.pptCol.g : p.cg; ca[n * 3 + 2] = T.pptTo ? T.pptCol.b : p.cb; n++; }
     }
     T.P = T.P.filter((p) => !(p.dis && p.fade <= 0));
-    T.parts.count = n; T.parts.instanceMatrix.needsUpdate = true;
+    T.ppts.geometry.setDrawRange(0, n); T.ppts.geometry.attributes.position.needsUpdate = true; T.ppts.geometry.attributes.color.needsUpdate = true;
     // пузырьки газа
-    if (T.gasT > 0) { T.gasT -= dt; for (let k = 0; k < 3 && T.B.length < BN; k++) T.B.push({ x: (Math.random() - 0.5) * TR, y: 0.15 + Math.random() * 0.3, z: (Math.random() - 0.5) * TR, v: 0.9 + Math.random() * 1.2, s: 0.025 + Math.random() * 0.045 }); }
+    if (T.gasT > 0) { T.gasT -= dt; for (let k = 0; k < 7 && T.B.length < BN; k++) T.B.push({ x: (Math.random() - 0.5) * TR, y: 0.15 + Math.random() * 0.3, z: (Math.random() - 0.5) * TR, v: 0.9 + Math.random() * 1.2, s: 0.025 + Math.random() * 0.045 }); }
     if (T.boil) { if (Math.random() < dt * 8 && T.B.length < BN) T.B.push({ x: (Math.random() - 0.5) * TR * 0.8, y: 0.12, z: (Math.random() - 0.5) * TR * 0.8, v: 0.6 + Math.random() * 0.5, s: 0.02 + Math.random() * 0.02 }); }
     let m = 0;
-    for (const b of T.B) { b.y += b.v * dt; b.x += Math.sin(tAll * 7 + b.y * 5) * 0.004; if (b.y > T.level - 0.03) { b.dead = true; continue; } tmpP.set(b.x, b.y, b.z); tmpS.setScalar(b.s); tmpM.compose(tmpP, tmpQ, tmpS); T.bubbles.setMatrixAt(m++, tmpM); }
+    for (const b of T.B) { b.y += b.v * dt; b.x += Math.sin(tAll * 7 + b.y * 5) * 0.004; if (b.y > T.level - 0.03) { b.dead = true; if (T.G.length < GN && Math.random() < 0.7) T.G.push({ x: b.x, y: T.level, z: b.z, v: 1.6 + Math.random() * 1.2, a: Math.random() * 6.28, w: Math.random() * 6 }); continue; } tmpP.set(b.x, b.y, b.z); tmpS.setScalar(b.s); tmpM.compose(tmpP, tmpQ, tmpS); T.bubbles.setMatrixAt(m++, tmpM); }
     T.B = T.B.filter((b) => !b.dead); T.bubbles.count = m; T.bubbles.instanceMatrix.needsUpdate = true;
+    // газ над раствором: поднимается по пробирке и выходит из горлышка
+    const ga = T.gpts.geometry.attributes.position.array; let gn = 0;
+    for (const q of T.G) { q.y += q.v * dt; const out = q.y > TH; const sp = out ? Math.min(1.6, (q.y - TH) * 0.6) : 0;
+      if (q.y > TH + 2.4) { q.dead = true; continue; }
+      const rr = Math.hypot(q.x, q.z), lim = TR * 0.8; if (!out && rr > lim) { q.x *= lim / rr; q.z *= lim / rr; }
+      ga[gn * 3] = q.x + Math.cos(q.a + tAll) * sp; ga[gn * 3 + 1] = q.y; ga[gn * 3 + 2] = q.z + Math.sin(q.a + tAll) * sp; gn++; }
+    T.G = T.G.filter((q) => !q.dead); T.gpts.geometry.setDrawRange(0, gn); T.gpts.geometry.attributes.position.needsUpdate = true;
+    const pp = T.pops.geometry.attributes.position.array, popOn = T.gasT > 0 ? 40 : 0;
+    for (let i = 0; i < popOn; i++) { const k = (tAll * 2.3 + i * 0.137) % 1, a = i * 2.4, r = Math.sqrt((i * 0.618) % 1) * TR * 0.8; pp[i * 3] = Math.cos(a) * r; pp[i * 3 + 1] = T.level + 0.03 + k * 0.12; pp[i * 3 + 2] = Math.sin(a) * r; }
+    T.pops.geometry.setDrawRange(0, popOn); T.pops.geometry.attributes.position.needsUpdate = true;
+    // всплеск от капли
+    if (T.spl > 0) { T.spl = Math.max(0, T.spl - dt * 1.4); const f = 1 - T.spl; T.splash.visible = T.spl > 0; T.splash.position.y = T.level + 0.02; T.splash.scale.setScalar(1 + f * 3.2); T.splash.material.opacity = 0.85 * T.spl; } else T.splash.visible = false;
   }
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now; tAll += dt;
     for (let i = anims.length - 1; i >= 0; i--) { const a = anims[i], k = Math.min(1, (now - a.t0) / a.ms); a.fn(k); if (k >= 1) { anims.splice(i, 1); a.res(); } }
-    for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.vy -= 18 * dt; d.m.position.y += d.vy * dt; if (d.m.position.y <= d.stop) { scene.remove(d.m); drops.splice(i, 1); } }
+    for (let i = drops.length - 1; i >= 0; i--) { const d = drops[i]; d.vy -= 18 * dt; d.m.position.y += d.vy * dt; if (d.m.position.y <= d.stop) { scene.remove(d.m); drops.splice(i, 1); if (d.T) d.T.spl = 1; } }
     tubes.forEach((T) => stepTube(T, dt));
-    lamps.forEach((L) => { if (!L.g.visible) return; const f = 1 + Math.sin(tAll * 23) * 0.06 + Math.sin(tAll * 37) * 0.04; L.fl.scale.set(1, f, 1); L.light.intensity = LOOK === "night" ? 2.2 * f : 1.2 * f; });
-    controls.update(); renderer.render(scene, camera); updateLabels();
+    FLAME_MAT.uniforms.t.value = tAll; lamps.forEach((L) => { if (!L.g.visible) return; const f = 1 + Math.sin(tAll * 23) * 0.06 + Math.sin(tAll * 37) * 0.04; L.fl.userData.flame.quaternion.copy(camera.quaternion); L.light.intensity = LOOK === "night" ? 2.2 * f : 1.2 * f; });
+    controls.update(); if (composer) composer.render(); else renderer.render(scene, camera); updateLabels();
     if (alive) raf = requestAnimationFrame(frame);
   }
 
   // камера: вся сцена (склянки, штатив, пробирки с подписями) помещается между шапкой и карточкой снизу
   const SCENE_W = 10.2, SCENE_H = 8.9;
   function size() {
-    const w = stage.clientWidth || 1, h = stage.clientHeight || 1; renderer.setSize(w, h, false); camera.aspect = w / h;
+    const w = stage.clientWidth || 1, h = stage.clientHeight || 1; renderer.setSize(w, h, false); if (composer) composer.setSize(w, h); camera.aspect = w / h;
     // на широком экране карточка стоит панелью справа: сцена — всё, что слева от неё, под шапкой
     const wide = matchMedia("(min-width: 900px) and (orientation: landscape)").matches, sr = stage.getBoundingClientRect();
     const panelPx = wide ? sr.right - sheet.getBoundingClientRect().left + 8 : 0;
@@ -624,11 +697,13 @@ export async function open(opts = {}) {
     controls.minDistance = d * 0.55; controls.maxDistance = d * 1.35;
     camera.updateProjectionMatrix();
   }
-  const ro = new ResizeObserver(size); ro.observe(stage); ro.observe(sheet);
+  const ro = new ResizeObserver(size);
+ ro.observe(stage); ro.observe(sheet);
 
   /* ───────── режимы ───────── */
   let lastMode = null; try { lastMode = localStorage.getItem("hb.chl.mode"); } catch (e) {}
-  let mode = ["lab", "task", "ovr"].includes(opts.mode) ? opts.mode : ["lab", "task", "ovr"].includes(lastMode) ? lastMode : "task";
+  const MODES = ["lab", "task", "ovr", "pairs"];
+  let mode = MODES.includes(opts.mode) ? opts.mode : MODES.includes(lastMode) ? lastMode : "task";
   let heat = false;
   const setHeat = (on) => { heat = on; lamps.forEach((L) => { L.g.visible = on; if (!on) L.light.intensity = 0; }); tubes.forEach((T) => (T.boil = on)); };
 
@@ -646,7 +721,7 @@ export async function open(opts = {}) {
     setHeat(false); placeBottles(q.opts); renderTask();
   }
   const fChip = (rk) => `<span class="f">${htmlF(REAGS[rk].f)}</span><small>${esc(REAGS[rk].name)}</small>`;
-  function renderTask() {
+  function renderTask() { if (mode !== "task") return;
     const q = run.qs[run.i], A = SUBS[q.a], B = SUBS[q.b];
     $("#ttl").textContent = "Задание 24";
     if (q.fin) return;
@@ -709,29 +784,87 @@ export async function open(opts = {}) {
   }
 
   // «Лаборантская»
-  const LAB = { a: "CuSO4", b: "FeCl3", r: "NaOH" };
+  const LAB = { a: "CuSO4", b: "FeCl3", r: "NaOH", q: null };
+  // «Что ты видишь?»: после капли сначала назови признак, потом откроется запись реакции
+  const noF = (x) => x.replace(/\s+[A-Z(][\w₀-₉()⁺⁻²³·\[\]]*.*$/u, "").trim();
+  const OBS_POOL = () => [...new Set(COL.map((c) => noF(shortT(c.e))).filter((x) => x && !/[A-Za-z]/.test(x) && !/·|избытк/.test(x) && x.length >= 9))];
+  function makeObsQ(T) {
+    const e = T.lastE; if (!e || e.weak || e.k === "none") return null;
+    const right = noF(shortT(e)); const pool = OBS_POOL().filter((x) => x !== right);
+    // отвлекающие: сначала того же типа (осадок к осадку), чтобы было не угадать по слову
+    const same = pool.filter((x) => (e.k === "ppt" || e.k === "gasppt") ? /осад/.test(x) : e.k === "gas" ? /газ/.test(x) : !/осад|газ/.test(x));
+    const pick = (arr, n) => { const a = arr.slice(); const out = []; while (a.length && out.length < n) out.push(a.splice(Math.floor(Math.random() * a.length), 1)[0]); return out; };
+    const wrong = pick(same, 2); if (wrong.length < 2) wrong.push(...pick(pool.filter((x) => !wrong.includes(x)), 2 - wrong.length));
+    const opts = pick([right, ...wrong], 3);
+    return { T, right, opts, ans: null };
+  }
   const subOpts = (sel) => [["in", "Неорганические"], ["org", "Органические"]].map(([g, t]) => `<optgroup label="${t}">${Object.entries(SUBS).filter(([, s]) => s.g === g).map(([k, s]) => `<option value="${k}" ${k === sel ? "selected" : ""}>${plainF(s.f)} — ${s.name}</option>`).join("")}</optgroup>`).join("");
   function startLab() {
     resetTube(tubes[0], LAB.a); resetTube(tubes[1], LAB.b); tubes.forEach((T) => { nameTube(T, true); clearObs(T); });
     setHeat(false); placeBottles([LAB.r]); renderLab();
   }
-  function renderLab() {
+  function renderLab() { if (mode !== "lab") return;
     $("#ttl").textContent = "Лаборантская";
-    const eqs = tubes.filter((T) => T.obs).map((T) => `<div><b class="f">${T.letter} · ${htmlF(SUBS[T.sub].f)}</b>: ${esc(T.obs)}${T.eq ? `<span class="eq">${esc(T.eq)}</span>` : ""}</div>`).join("");
+    const eqs = tubes.filter((T) => T.obs && !T.hide).map((T) => `<div><b class="f">${T.letter} · ${htmlF(SUBS[T.sub].f)}</b>: ${esc(T.obs)}${T.eq ? `<span class="eq">${esc(T.eq)}</span>` : ""}</div>`).join("");
     sbody.innerHTML = `<span class="num">Свободные опыты</span>
+      ${LAB.q ? `<div class="oq"><div class="h">Что ты видишь в пробирке ${LAB.q.T.letter}?</div><div class="chips wrap">${LAB.q.opts.map((o) => `<button type="button" class="chip${LAB.q.ans ? (o === LAB.q.right ? " ok" : o === LAB.q.ans ? " bad" : "") : ""}" data-oq="${esc(o)}" ${LAB.q.ans ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>${LAB.q.ans ? `<p class="oqr">${LAB.q.ans === LAB.q.right ? "✓ Верно — " : "Не совсем: "}${esc(LAB.q.T.obs)}${LAB.q.T.eq ? `<span class="eq">${esc(LAB.q.T.eq)}</span>` : ""}</p>` : ""}</div>` : ""}
       <div class="two" style="margin-top:8px"><label>Пробирка А<select id="sa">${subOpts(LAB.a)}</select></label><label>Пробирка Б<select id="sb">${subOpts(LAB.b)}</select></label></div>
       <div class="h">Реактив</div>
       <div class="chips">${Object.keys(REAGS).filter((rk) => !REAGS[rk].ovrOnly).map((rk) => `<button type="button" class="chip" data-lr="${rk}" aria-pressed="${LAB.r === rk}">${fChip(rk)}</button>`).join("")}</div>
       <div class="row"><button type="button" class="btn primary" data-d="0">Капнуть в А</button><button type="button" class="btn primary" data-d="1">Капнуть в Б</button><button type="button" class="btn" data-d="2">В обе</button>
-        <button type="button" class="btn" id="heat" aria-pressed="${heat}">🔥 ${heat ? "Греется" : "Нагреть"}</button><button type="button" class="btn" id="fresh">🧪 Чистые пробирки</button></div>
+        <button type="button" class="btn" id="heat" aria-pressed="${heat}">🔥 ${heat ? "Греется" : "Нагреть"}</button><button type="button" class="btn" id="fresh">🧪 Чистые пробирки</button><button type="button" class="btn" id="oqOff" aria-pressed="${LAB.ask !== false}">👁 «Что видишь?» ${LAB.ask !== false ? "вкл" : "выкл"}</button></div>
       <div class="log">${eqs}</div>`;
     $("#sa").onchange = (e) => { LAB.a = e.target.value; resetTube(tubes[0], LAB.a); nameTube(tubes[0], true); clearObs(tubes[0]); renderLab(); };
     $("#sb").onchange = (e) => { LAB.b = e.target.value; resetTube(tubes[1], LAB.b); nameTube(tubes[1], true); clearObs(tubes[1]); renderLab(); };
     sbody.querySelectorAll("[data-lr]").forEach((b) => (b.onclick = () => { LAB.r = b.dataset.lr; placeBottles([LAB.r]); buzz("select"); renderLab(); }));
-    sbody.querySelectorAll("[data-d]").forEach((b) => (b.onclick = async () => { const d = +b.dataset.d; await runDrops(LAB.r, d === 2 ? [0, 1] : [d], heat); renderLab(); }));
+    sbody.querySelectorAll("[data-d]").forEach((b) => (b.onclick = async () => { const d = +b.dataset.d; LAB.q = null; tubes.forEach((T) => (T.hide = false));
+      const which = d === 2 ? [0, 1] : [d]; const pre = which.map((i) => tubes[i].obs);
+      await runDrops(LAB.r, which, heat);
+      if (LAB.ask !== false && which.length === 1) { const T = tubes[which[0]]; await new Promise((r) => setTimeout(r, 260)); const q = makeObsQ(T); if (q && T.obs !== pre[0]) { LAB.q = q; T.hide = true; renderRes(); } }
+      renderLab(); }));
+    sbody.querySelectorAll("[data-oq]").forEach((b) => (b.onclick = () => { const q = LAB.q; if (!q || q.ans) return; q.ans = b.dataset.oq; q.T.hide = false; buzz(q.ans === q.right ? "success" : "error"); renderRes(); renderLab(); }));
+    const skip = $("#oqOff"); if (skip) skip.onclick = () => { LAB.ask = !(LAB.ask !== false); if (LAB.q) { LAB.q.T.hide = false; LAB.q = null; renderRes(); } renderLab(); };
     $("#heat").onclick = () => { setHeat(!heat); tubes.forEach((T) => { if (!T.reag) return; const e = react(T.sub, T.reag, { heat, n: T.n[T.reag] }); if (e.t !== T.obs) { applyEffect(T, e, T.reag); showObs(T); } }); renderLab(); };
     $("#fresh").onclick = () => { resetTube(tubes[0], LAB.a); resetTube(tubes[1], LAB.b); tubes.forEach(clearObs); renderLab(); };
     requestAnimationFrame(size);
+  }
+
+  // «Пары»: признак ↔ реакция на время; найденная пара сразу проигрывается в пробирке
+  const PK = "hb.chl.pairs"; let pBest = 0; try { pBest = +localStorage.getItem(PK) || 0; } catch (e) {}
+  let PR = null, prTimer = 0;
+  function newPairs() {
+    const pool = COL.filter((c) => !c.heat && ["ppt", "gas", "col", "decol", "gasppt", "mirror"].includes(c.e.k) && SUBS[c.s] && REAGS[c.r] && !REAGS[c.r].ovrOnly && !SUBS[c.s].med && colKey(react(c.s, c.r, { heat: false, n: 1 })) === c.key);
+    const used = new Set(), pick = [];
+    for (const c of pool.slice().sort(() => Math.random() - 0.5)) { const o = noF(shortT(c.e)); if (!o || /[A-Za-z]/.test(o) || o.split(" ").length < 2 || o.length < 9 || /·|избытк/.test(o) || used.has(o)) continue; used.add(o); pick.push({ c, o }); if (pick.length === 4) break; }
+    const cards = []; pick.forEach((p, i) => { cards.push({ i, side: "o", txt: p.o }); cards.push({ i, side: "r", txt: `${htmlF(SUBS[p.c.s].f)} + ${htmlF(REAGS[p.c.r].f)}` }); });
+    PR = { pick, cards: cards.sort(() => Math.random() - 0.5), sel: null, done: new Set(), err: 0, t0: performance.now(), end: 0, bad: null, slot: 0 };
+  }
+  function startPairs() { setHeat(false); tubes.forEach((T) => { resetTube(T, "NaCl"); nameTube(T, false); clearObs(T); }); placeBottles([]); newPairs(); renderPairs(); clearInterval(prTimer); prTimer = setInterval(() => { if (mode !== "pairs" || !alive) return clearInterval(prTimer); const el = $("#prT"); if (el && PR && !PR.end) el.textContent = fmtT(performance.now() - PR.t0); }, 250); }
+  const fmtT = (ms) => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+  function renderPairs() { if (mode !== "pairs") return;
+    $("#ttl").textContent = "Пары";
+    const P = PR, n = P.done.size, fin = n === P.pick.length;
+    sbody.innerHTML = `<span class="num">Признак ↔ реакция · найди все пары</span>
+      <div class="pstat"><div><b>${n}/${P.pick.length}</b>пар</div><div><b id="prT">${fmtT((P.end || performance.now()) - P.t0)}</b>время</div><div><b>${P.err}</b>${P.err === 1 ? "ошибка" : "ошибок"}</div>${pBest ? `<div><b>${fmtT(pBest)}</b>рекорд</div>` : ""}</div>
+      <div class="pgrid">${P.cards.map((c, k) => `<button type="button" class="pc${P.done.has(c.i) ? " done" : ""}${P.sel === k ? " sel" : ""}${P.bad && P.bad.includes(k) ? " bad" : ""}" data-pc="${k}" ${P.done.has(c.i) ? "disabled" : ""}><em>${c.side === "o" ? "признак" : "реакция"}</em>${c.side === "o" ? esc(c.txt) : c.txt}</button>`).join("")}</div>
+      ${fin ? `<p class="oqr">🎉 Все пары за <b>${fmtT(P.end - P.t0)}</b>${P.err ? `, ошибок: ${P.err}` : " — без ошибок!"}</p><div class="row"><button type="button" class="btn primary" id="prNew">Ещё раунд</button></div>` : ""}`;
+    sbody.querySelectorAll("[data-pc]").forEach((b) => (b.onclick = () => pickCard(+b.dataset.pc)));
+    const nb = $("#prNew"); if (nb) nb.onclick = () => startPairs();
+    requestAnimationFrame(size);
+  }
+  async function pickCard(k) {
+    const P = PR; if (busy || P.done.has(P.cards[k].i)) return;
+    if (P.sel === null || P.sel === k) { P.sel = P.sel === k ? null : k; buzz("select"); return renderPairs(); }
+    const a = P.cards[P.sel], b = P.cards[k];
+    if (a.i === b.i && a.side !== b.side) {
+      P.done.add(a.i); P.sel = null; buzz("success"); if (P.done.size === P.pick.length) { P.end = performance.now(); const t = P.end - P.t0; if (!P.err && (!pBest || t < pBest)) { pBest = t; try { localStorage.setItem(PK, String(t)); } catch (e) {} } }
+      renderPairs();
+      // показать реакцию: по очереди в пробирке А и Б
+      const c = P.pick[a.i].c, T = tubes[P.slot % 2], ti = P.slot % 2; P.slot++;
+      resetTube(T, c.s); nameTube(T, true); clearObs(T); placeBottles([c.r]); await runDrops(c.r, [ti], false); renderRes();
+    } else {
+      P.err++; P.bad = [P.sel, k]; P.sel = null; buzz("error"); renderPairs(); setTimeout(() => { if (PR === P) { P.bad = null; renderPairs(); } }, 650);
+    }
   }
 
   // «ОВР · среда»: три пробирки, в каждую капаем окислитель; сначала угадываешь, что увидишь
@@ -750,7 +883,7 @@ export async function open(opts = {}) {
   async function ovRun(o) {
     for (const ox of [...new Set(o.oxs)]) await runDrops(ox, o.oxs.map((x, i) => (x === ox ? i : -1)).filter((i) => i >= 0), false);
   }
-  function renderOvr() {
+  function renderOvr() { if (mode !== "ovr") return;
     const o = OVR[OV.i], S0 = SUBS[o.subs[0]];
     const truth = o.subs.map((_, i) => ovTruth(o, i)), picked = OV.pick.some(Boolean);
     const hit = (i) => OV.pick[i] && truth[i].includes(OV.pick[i]);
@@ -790,9 +923,9 @@ export async function open(opts = {}) {
   }
 
   function setMode(m) {
-    mode = m; try { localStorage.setItem("hb.chl.mode", m); } catch (e) {} allTubes.forEach((T) => (T.tagOx = null)); sh.querySelectorAll("#modes button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === m)));
+    mode = m; try { localStorage.setItem("hb.chl.mode", m); } catch (e) {} allTubes.forEach((T) => (T.tagOx = null)); sh.querySelectorAll("#modes button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === m))); { const ab = sh.querySelector(`#modes button[data-mode="${m}"]`); if (ab) ab.scrollIntoView({ block: "nearest", inline: "nearest" }); }
     layout(m === "ovr" ? 3 : 2);
-    if (m === "task") { if (!run) newRun(); startQ(); } else if (m === "ovr") startOvr(); else startLab();
+    if (m === "task") { if (!run) newRun(); startQ(); } else if (m === "ovr") startOvr(); else if (m === "pairs") startPairs(); else startLab();
   }
   sh.querySelectorAll("#modes button").forEach((b) => (b.onclick = () => setMode(b.dataset.mode)));
 
